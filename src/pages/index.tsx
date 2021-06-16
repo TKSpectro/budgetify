@@ -1,38 +1,25 @@
-import { gql } from '@apollo/client';
-import client from '../utils/apollo';
+import Link from 'next/link';
 
-export default function Home({ countries }) {
+export default function Home() {
   return (
     <div>
-      <p className="text-xl mb-4">Static-Props</p>
-      {countries.map((country) => (
-        <div key={country.code}>
-          <h3>{country.name}</h3>
-          <p>
-            {country.code} - {country.emoji}
-          </p>
-        </div>
-      ))}
+      <ul>
+        <li>
+          <Link href="/example/static">
+            <a>Static-Props</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/example/server-side">
+            <a>Server-Side-Props</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/example/client-side">
+            <a>Client-Side-Only</a>
+          </Link>
+        </li>
+      </ul>
     </div>
   );
-}
-
-export async function getStaticProps() {
-  const { data } = await client.query({
-    query: gql`
-      query Countries {
-        countries {
-          code
-          name
-          emoji
-        }
-      }
-    `,
-  });
-
-  return {
-    props: {
-      countries: data.countries.slice(0, 4),
-    },
-  };
 }

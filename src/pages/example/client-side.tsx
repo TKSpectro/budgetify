@@ -1,5 +1,5 @@
-import ClientOnly from '../components/ClientOnly';
-import Countries from '../components/Countries';
+import ClientOnly from '../../components/ClientOnly';
+import Countries from '../../components/Countries';
 
 export default function ClientSide() {
   return (
