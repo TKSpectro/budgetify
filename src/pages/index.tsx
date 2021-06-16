@@ -4,6 +4,7 @@ import client from '../utils/apollo';
 export default function Home({ countries }) {
   return (
     <div>
+      <p className="text-xl mb-4">Static-Props</p>
       {countries.map((country) => (
         <div key={country.code}>
           <h3>{country.name}</h3>
