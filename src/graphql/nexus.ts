@@ -7,21 +7,13 @@
 
 
 
-declare global {
-  interface NexusGenCustomOutputProperties<TypeName extends string> {
-    crud: NexusPrisma<TypeName, 'crud'>
-    model: NexusPrisma<TypeName, 'model'>
-  }
-}
+
 
 declare global {
   interface NexusGen extends NexusGenTypes {}
 }
 
 export interface NexusGenInputs {
-  CompanyWhereUniqueInput: { // input type
-    id?: number | null; // Int
-  }
 }
 
 export interface NexusGenEnums {
@@ -37,10 +29,10 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Company: { // root type
-    description: string; // String!
-    id: number; // Int!
-    name: string; // String!
-    symbol: string; // String!
+    description?: string | null; // String
+    id?: number | null; // Int
+    name?: string | null; // String
+    symbol?: string | null; // String
   }
   Query: {};
 }
@@ -57,10 +49,10 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
   Company: { // field return type
-    description: string; // String!
-    id: number; // Int!
-    name: string; // String!
-    symbol: string; // String!
+    description: string | null; // String
+    id: number | null; // Int
+    name: string | null; // String
+    symbol: string | null; // String
   }
   Query: { // field return type
     company: NexusGenRootTypes['Company'] | null; // Company
@@ -80,11 +72,6 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
-  Query: {
-    company: { // args
-      where: NexusGenInputs['CompanyWhereUniqueInput']; // CompanyWhereUniqueInput!
-    }
-  }
 }
 
 export interface NexusGenAbstractTypeMembers {
@@ -95,7 +82,7 @@ export interface NexusGenTypeInterfaces {
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = keyof NexusGenInputs;
+export type NexusGenInputNames = never;
 
 export type NexusGenEnumNames = never;
 

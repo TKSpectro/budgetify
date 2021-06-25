@@ -1,11 +1,14 @@
-import Head from 'next/head';
-
 import { useQuery, gql } from '@apollo/client';
 import { initializeApollo } from '../utils/apollo';
 
 const MyQuery = gql`
   query MyQuery {
-    name
+    company {
+      id
+      name
+      symbol
+      description
+    }
   }
 `;
 
