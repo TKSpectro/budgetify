@@ -1,11 +1,38 @@
-import { makeSchema, queryType } from '@nexus/schema';
+import { makeSchema, objectType, queryType } from 'nexus';
+import { nexusSchemaPrisma } from 'nexus-plugin-prisma/schema';
+import path from 'path';
 
-const Query = queryType({
+const Company = objectType({
+  name: 'Company',
   definition(t) {
-    t.string('name', { resolve: () => 'John Doe' });
+    t.model.id();
+    t.model.symbol();
+    t.model.name();
+    t.model.description();
   },
 });
 
-const types = { Query };
+const Query = queryType({
+  definition(t) {
+    t.crud.company();
+  },
+});
 
-export const schema = makeSchema({ types });
+const types = { Query, Company };
+
+export const schema = makeSchema({
+  types,
+  plugins: [nexusSchemaPrisma({ experimentalCRUD: true })],
+  outputs: {
+    schema: path.join(process.cwd(), 'schema.graphql'),
+    typegen: path.join(process.cwd(), 'nexus.ts'),
+  },
+
+  // typegenAutoConfig: {
+  //   contextType: 'Context.Context',
+  //   sources: [
+  //     { source: '@prisma/client', alias: 'prisma' },
+  //     { source: require.resolve('../utils/context'), alias: 'Context' },
+  //   ],
+  // },
+});
