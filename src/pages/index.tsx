@@ -1,25 +1,36 @@
-import Link from 'next/link';
+import Head from 'next/head';
+
+import { useQuery, gql } from '@apollo/client';
+import { initializeApollo } from '../utils/apollo';
+
+const MyQuery = gql`
+  query MyQuery {
+    name
+  }
+`;
 
 export default function Home() {
+  const { data, loading, error } = useQuery(MyQuery);
+
+  if (loading) return <span>loading...</span>;
+
   return (
     <div>
-      <ul>
-        <li>
-          <Link href="/example/static">
-            <a>Static-Props</a>
-          </Link>
-        </li>
-        <li>
-          <Link href="/example/server-side">
-            <a>Server-Side-Props</a>
-          </Link>
-        </li>
-        <li>
-          <Link href="/example/client-side">
-            <a>Client-Side-Only</a>
-          </Link>
-        </li>
-      </ul>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const apolloClient = initializeApollo();
+
+  await apolloClient.query({
+    query: MyQuery,
+  });
+
+  return {
+    props: {
+      initialApolloState: apolloClient.cache.extract(),
+    },
+  };
 }
