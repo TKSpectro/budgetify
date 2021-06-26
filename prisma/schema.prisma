@@ -19,19 +19,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Company {
-  id          Int    @id @default(autoincrement())
-  symbol      String
-  name        String
-  description String
-}
-
 model User {
   id              String      @id @default(uuid())
   firstname       String
   lastname        String
   email           String      @unique
-  hashedPassword  Bytes
+  hashedPassword  String
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
   households      Household[]

@@ -3,11 +3,9 @@ import { initializeApollo } from '../utils/apollo';
 
 const MyQuery = gql`
   query MyQuery {
-    company {
+    category {
       id
       name
-      symbol
-      description
     }
   }
 `;
