@@ -1,6 +1,15 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// all models have the same basic template structure
+// model  {
+//   id
+//   own attributes
+//   createdAt
+//   updatedAt
+//   relations
+// }
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -15,4 +24,67 @@ model Company {
   symbol      String
   name        String
   description String
+}
+
+model User {
+  id              String      @id @default(uuid())
+  firstname       String
+  lastname        String
+  email           String      @unique
+  hashedPassword  Bytes
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  households      Household[]
+  invites         Invite[]
+  ownedHouseholds Household[] @relation("Owner")
+  payments        Payment[]
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  payments  Payment[]
+}
+
+model Payment {
+  id          String    @id @default(uuid())
+  name        String
+  value       Decimal
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  category    Category  @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  user        User?     @relation(fields: [userId], references: [id])
+  userId      String?
+  household   Household @relation(fields: [householdId], references: [id])
+  householdId String
+}
+
+model Household {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  owner     User      @relation("Owner", fields: [ownerId], references: [id])
+  ownerId   String
+  members   User[]
+  invites   Invite[]
+  payments  Payment[]
+}
+
+model Invite {
+  id           String    @id @default(uuid())
+  validUntil   DateTime
+  wasUsed      Boolean
+  invitedEmail String
+  link         String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  sender       User      @relation(fields: [senderId], references: [id])
+  senderId     String
+  household    Household @relation(fields: [householdId], references: [id])
+  householdId  String
 }
