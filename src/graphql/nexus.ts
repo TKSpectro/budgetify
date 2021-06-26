@@ -106,6 +106,12 @@ export interface NexusGenArgTypes {
       name: string; // String!
     }
   }
+  Query: {
+    category: { // args
+      id?: string | null; // String
+      name?: string | null; // String
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {

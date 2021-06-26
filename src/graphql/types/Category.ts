@@ -22,8 +22,17 @@ export const CategoryQuery = extendType({
     });
     t.field('category', {
       type: 'Category',
-      resolve() {
-        return prisma.category.findFirst();
+      args: {
+        id: stringArg(),
+        name: stringArg(),
+      },
+      resolve(_, { id, name }) {
+        return prisma.category.findFirst({
+          where: {
+            id: id || undefined,
+            name: name || undefined,
+          },
+        });
       },
     });
   },
