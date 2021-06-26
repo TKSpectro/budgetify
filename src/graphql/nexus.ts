@@ -49,6 +49,7 @@ export interface NexusGenObjects {
     name?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
+  Mutation: {};
   Query: {};
 }
 
@@ -69,7 +70,12 @@ export interface NexusGenFieldTypes {
     name: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
+  Mutation: { // field return type
+    createCategory: NexusGenRootTypes['Category']; // Category!
+    removeCategory: NexusGenRootTypes['Category']; // Category!
+  }
   Query: { // field return type
+    categories: Array<NexusGenRootTypes['Category'] | null>; // [Category]!
     category: NexusGenRootTypes['Category'] | null; // Category
   }
 }
@@ -81,12 +87,25 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     updatedAt: 'DateTime'
   }
+  Mutation: { // field return type name
+    createCategory: 'Category'
+    removeCategory: 'Category'
+  }
   Query: { // field return type name
+    categories: 'Category'
     category: 'Category'
   }
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    createCategory: { // args
+      name: string; // String!
+    }
+    removeCategory: { // args
+      name: string; // String!
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {
