@@ -1,5 +1,5 @@
 import { useQuery, gql } from '@apollo/client';
-import { initializeApollo } from '../utils/apollo';
+import { initializeApollo } from '@/utils/apollo';
 
 const MyQuery = gql`
   query MyQuery {

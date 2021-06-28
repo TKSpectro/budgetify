@@ -1,5 +1,5 @@
 import { objectType, extendType, nonNull, stringArg } from 'nexus';
-import prisma from '../../utils/prisma';
+import prisma from '@/utils/prisma';
 
 export const Category = objectType({
   name: 'Category',

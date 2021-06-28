@@ -1,3 +1,3 @@
-export * from '../customTypes';
+export * from '@/graphql/customTypes';
 
 export * from './Category';

@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import client from '../../utils/apollo';
+import client from '@/utils/apollo';
 
 export default function Home({ countries }) {
   return (
