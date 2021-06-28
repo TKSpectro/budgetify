@@ -1,7 +1,8 @@
 import { gql } from '@apollo/client';
-import { useApollo } from '@/utils/apollo';
+import { initializeApollo } from '@/utils/apollo';
+import { Category } from '@/graphql/__generated__/types';
 
-export default function Home({ categories }) {
+export default function Home({ categories }: { categories: Category[] }) {
   return (
     <div>
       <p className="text-xl mb-4">Static-Props</p>
@@ -9,7 +10,8 @@ export default function Home({ categories }) {
         <div key={category.id}>
           <h3>{category.name}</h3>
           <p>
-            {category.id} - {category.createdAt}
+            {/* TODO Find out why createdAt and updatedAt are apparently null/undefined */}
+            {category.id} - {category.createdAt} - {category.updatedAt}
           </p>
         </div>
       ))}
@@ -18,7 +20,7 @@ export default function Home({ categories }) {
 }
 
 export async function getStaticProps() {
-  const client = useApollo();
+  const client = initializeApollo();
   const { data } = await client.query({
     query: gql`
       query Categories {
@@ -29,7 +31,7 @@ export async function getStaticProps() {
       }
     `,
   });
-
+  const cat: Category[] = data.categories;
   return {
     props: {
       categories: data.categories.slice(0, 4),
