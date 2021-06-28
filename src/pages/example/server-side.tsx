@@ -1,15 +1,15 @@
 import { gql } from '@apollo/client';
-import client from '@/utils/apollo';
+import { initializeApollo } from '@/utils/apollo';
 
-export default function Home({ countries }) {
+export default function Home({ categories }) {
   return (
     <div>
       <p className="text-xl mb-4">Server-side-props</p>
-      {countries.map((country) => (
-        <div key={country.code}>
-          <h3>{country.name}</h3>
+      {categories.map((category) => (
+        <div key={category.id}>
+          <h3>{category.name}</h3>
           <p>
-            {country.code} - {country.emoji}
+            {category.id} - {category.createdAt}
           </p>
         </div>
       ))}
@@ -18,13 +18,13 @@ export default function Home({ countries }) {
 }
 
 export async function getServerSideProps() {
+  const client = initializeApollo();
   const { data } = await client.query({
     query: gql`
-      query Countries {
-        countries {
-          code
+      query Categories {
+        categories {
+          id
           name
-          emoji
         }
       }
     `,
@@ -32,7 +32,7 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      countries: data.countries.slice(0, 4),
+      categories: data.categories.slice(0, 4),
     },
   };
 }
