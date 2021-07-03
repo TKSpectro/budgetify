@@ -1,3 +1,4 @@
+import { gql } from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -15,11 +16,12 @@ export type Scalars = {
 
 export type Category = {
   __typename?: 'Category';
-  createdAt: Scalars['DateTime'];
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
+
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -27,9 +29,11 @@ export type Mutation = {
   removeCategory: Category;
 };
 
+
 export type MutationCreateCategoryArgs = {
   name: Scalars['String'];
 };
+
 
 export type MutationRemoveCategoryArgs = {
   name: Scalars['String'];
@@ -40,6 +44,7 @@ export type Query = {
   categories: Array<Maybe<Category>>;
   category?: Maybe<Category>;
 };
+
 
 export type QueryCategoryArgs = {
   id?: Maybe<Scalars['String']>;
