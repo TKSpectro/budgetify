@@ -32,6 +32,7 @@ export function initializeApollo(initialState = {}) {
     _apolloClient.cache.restore(initialState);
   }
 
+  // server-side
   if (typeof window === 'undefined') {
     return _apolloClient;
   }

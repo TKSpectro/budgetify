@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
+// TODO: Maybe use faker lib for generating random data
+
 async function main() {
   const cat1 = await prisma.category.create({
     data: {
