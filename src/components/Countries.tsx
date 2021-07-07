@@ -26,14 +26,14 @@ export default function Countries() {
 
   return (
     <div>
-      {countries.map((country) => (
+      {/* {countries.map((country: Country) => (
         <div key={country.code}>
           <h3>{country.name}</h3>
           <p>
             {country.code} - {country.emoji}
           </p>
         </div>
-      ))}
+      ))} */}
     </div>
   );
 }

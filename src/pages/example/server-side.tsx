@@ -1,7 +1,8 @@
 import { gql } from '@apollo/client';
 import { initializeApollo } from '@/utils/apollo';
+import { Category } from '~/graphql/__generated__/types';
 
-export default function Home({ categories }) {
+export default function Home({ categories }: { categories: Category[] }) {
   return (
     <div>
       <p className="text-xl mb-4">Server-side-props</p>
