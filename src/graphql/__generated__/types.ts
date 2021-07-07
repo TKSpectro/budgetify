@@ -16,10 +16,11 @@ export type Scalars = {
 
 export type Category = {
   __typename?: 'Category';
-  id?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  name: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+  payments?: Maybe<Array<Maybe<Payment>>>;
 };
 
 
@@ -37,6 +38,18 @@ export type MutationCreateCategoryArgs = {
 
 export type MutationRemoveCategoryArgs = {
   name: Scalars['String'];
+};
+
+export type Payment = {
+  __typename?: 'Payment';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  value: Scalars['Float'];
+  description?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  categoryId: Scalars['String'];
+  category?: Maybe<Category>;
 };
 
 export type Query = {

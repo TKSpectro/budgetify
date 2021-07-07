@@ -4,3 +4,4 @@
 export * from '@/graphql/customTypes';
 
 export * from './Category';
+export * from './Payment';

@@ -1,13 +1,24 @@
 import { objectType, extendType, nonNull, stringArg } from 'nexus';
 import prisma from '@/utils/prisma';
+import { Payment } from '.';
 
 export const Category = objectType({
   name: 'Category',
   definition(t) {
-    t.string('id');
-    t.string('name');
+    t.nonNull.string('id');
+    t.nonNull.string('name');
     t.nonNull.field('createdAt', { type: 'DateTime' });
     t.nonNull.field('updatedAt', { type: 'DateTime' });
+    t.list.field('payments', {
+      type: Payment,
+      resolve(root) {
+        return prisma.payment.findMany({
+          where: {
+            categoryId: root.id || undefined,
+          },
+        });
+      },
+    });
   },
 });
 

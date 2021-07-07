@@ -45,11 +45,20 @@ export interface NexusGenScalars {
 export interface NexusGenObjects {
   Category: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
-    id?: string | null; // String
-    name?: string | null; // String
+    id: string; // String!
+    name: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Mutation: {};
+  Payment: { // root type
+    categoryId: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    description?: string | null; // String
+    id: string; // String!
+    name: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    value: number; // Float!
+  }
   Query: {};
 }
 
@@ -66,13 +75,24 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 export interface NexusGenFieldTypes {
   Category: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
-    id: string | null; // String
-    name: string | null; // String
+    id: string; // String!
+    name: string; // String!
+    payments: Array<NexusGenRootTypes['Payment'] | null> | null; // [Payment]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Mutation: { // field return type
     createCategory: NexusGenRootTypes['Category']; // Category!
     removeCategory: NexusGenRootTypes['Category']; // Category!
+  }
+  Payment: { // field return type
+    category: NexusGenRootTypes['Category'] | null; // Category
+    categoryId: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    description: string | null; // String
+    id: string; // String!
+    name: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    value: number; // Float!
   }
   Query: { // field return type
     categories: Array<NexusGenRootTypes['Category'] | null>; // [Category]!
@@ -85,11 +105,22 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     id: 'String'
     name: 'String'
+    payments: 'Payment'
     updatedAt: 'DateTime'
   }
   Mutation: { // field return type name
     createCategory: 'Category'
     removeCategory: 'Category'
+  }
+  Payment: { // field return type name
+    category: 'Category'
+    categoryId: 'String'
+    createdAt: 'DateTime'
+    description: 'String'
+    id: 'String'
+    name: 'String'
+    updatedAt: 'DateTime'
+    value: 'Float'
   }
   Query: { // field return type name
     categories: 'Category'
