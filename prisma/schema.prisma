@@ -44,7 +44,7 @@ model Category {
 model Payment {
   id          String    @id @default(uuid())
   name        String
-  value       Decimal
+  value       Float
   description String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

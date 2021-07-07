@@ -6,3 +6,5 @@
 */
 -- DropTable
 DROP TABLE "Company";
+-- AlterTable
+ALTER TABLE "Payment" ALTER COLUMN "value" SET DATA TYPE DOUBLE PRECISION;
