@@ -10,7 +10,7 @@ export default function Home({ categories }: { categories: Category[] }) {
         <div key={category.id}>
           <h3>{category.name}</h3>
           <p>
-            {category.id} - {category.createdAt}
+            {category.id} - {new Date(category.createdAt).toLocaleString()}
           </p>
         </div>
       ))}
@@ -26,6 +26,8 @@ export async function getServerSideProps() {
         categories {
           id
           name
+          createdAt
+          updatedAt
         }
       }
     `,

@@ -6,6 +6,8 @@ const MyQuery = gql`
     category {
       id
       name
+      createdAt
+      updatedAt
     }
   }
 `;

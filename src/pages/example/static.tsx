@@ -27,6 +27,8 @@ export async function getStaticProps() {
         categories {
           id
           name
+          createdAt
+          updatedAt
         }
       }
     `,
