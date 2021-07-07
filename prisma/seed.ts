@@ -73,7 +73,27 @@ async function main() {
   const pay1 = await prisma.payment.create({
     data: {
       name: 'pay1',
-      value: 20.02,
+      value: 20.01,
+      categoryId: cat1.id,
+      userId: usr1.id,
+      householdId: hou1.id,
+    },
+  });
+
+  const pay2 = await prisma.payment.create({
+    data: {
+      name: 'pay2',
+      value: 40.02,
+      categoryId: cat1.id,
+      userId: usr1.id,
+      householdId: hou1.id,
+    },
+  });
+
+  const pay3 = await prisma.payment.create({
+    data: {
+      name: 'pay3',
+      value: 60.03,
       categoryId: cat1.id,
       userId: usr1.id,
       householdId: hou1.id,
