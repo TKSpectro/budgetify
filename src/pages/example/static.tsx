@@ -10,7 +10,6 @@ export default function Home({ categories }: { categories: Category[] }) {
         <div key={category.id}>
           <h3>{category.name}</h3>
           <p>
-            {/* TODO Find out why createdAt and updatedAt are apparently null/undefined */}
             {category.id} - {category.createdAt} - {category.updatedAt}
           </p>
         </div>
