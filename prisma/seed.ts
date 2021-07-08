@@ -1,9 +1,26 @@
 import { PrismaClient } from '@prisma/client';
+import faker from 'faker';
+
 const prisma = new PrismaClient();
 
-// TODO: Maybe use faker lib for generating random data
-
 async function main() {
+  // create 50 users
+  let users = [];
+  for (let i = 0; i < 50; i++) {
+    // create the name before so we can use it for the email faking
+    let firstname = faker.name.firstName();
+    let lastname = faker.name.lastName();
+
+    users[i] = await prisma.user.create({
+      data: {
+        firstname,
+        lastname,
+        email: faker.internet.email(firstname, lastname, 'budgetifyTest.prisma'),
+        hashedPassword: faker.internet.password(16),
+      },
+    });
+  }
+
   const cat1 = await prisma.category.create({
     data: {
       name: 'cat1',
@@ -20,40 +37,22 @@ async function main() {
     },
   });
 
-  const usr1 = await prisma.user.create({
-    data: {
-      firstname: 'John',
-      lastname: 'Doe',
-      email: 'john.doe@mail.com',
-      hashedPassword: 'password',
-    },
-  });
-
-  const usr2 = await prisma.user.create({
-    data: {
-      firstname: 'Steve',
-      lastname: 'Smith',
-      email: 'steve.smith@mail.com',
-      hashedPassword: 'password',
-    },
-  });
-
   const hou1 = await prisma.household.create({
     data: {
       name: 'hou1',
-      ownerId: usr1.id,
+      ownerId: users[0].id,
     },
   });
 
   const hou2 = await prisma.household.create({
     data: {
       name: 'hou2',
-      ownerId: usr2.id,
+      ownerId: users[1].id,
     },
   });
 
   const usr1new = await prisma.user.update({
-    where: { id: usr1.id },
+    where: { id: users[0].id },
     data: {
       households: {
         connect: { id: hou1.id },
@@ -62,7 +61,7 @@ async function main() {
   });
 
   const usr1new2 = await prisma.user.update({
-    where: { id: usr1.id },
+    where: { id: users[1].id },
     data: {
       households: {
         connect: { id: hou2.id },
@@ -75,7 +74,7 @@ async function main() {
       name: 'pay1',
       value: 20.01,
       categoryId: cat1.id,
-      userId: usr1.id,
+      userId: users[0].id,
       householdId: hou1.id,
     },
   });
@@ -85,7 +84,7 @@ async function main() {
       name: 'pay2',
       value: 40.02,
       categoryId: cat1.id,
-      userId: usr1.id,
+      userId: users[0].id,
       householdId: hou1.id,
     },
   });
@@ -95,7 +94,7 @@ async function main() {
       name: 'pay3',
       value: 60.03,
       categoryId: cat1.id,
-      userId: usr1.id,
+      userId: users[0].id,
       householdId: hou1.id,
     },
   });
