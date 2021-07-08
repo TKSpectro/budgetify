@@ -24,6 +24,34 @@ export type Category = {
 };
 
 
+export type Household = {
+  __typename?: 'Household';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  ownerId: Scalars['String'];
+  owner?: Maybe<User>;
+  members?: Maybe<Array<Maybe<User>>>;
+  invites?: Maybe<Array<Maybe<Invite>>>;
+  payments?: Maybe<Array<Maybe<Payment>>>;
+};
+
+export type Invite = {
+  __typename?: 'Invite';
+  id: Scalars['String'];
+  validUntil: Scalars['DateTime'];
+  wasUsed: Scalars['Boolean'];
+  invitedEmail: Scalars['String'];
+  link: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  senderId: Scalars['String'];
+  sender?: Maybe<User>;
+  householdId: Scalars['String'];
+  household?: Maybe<Household>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createCategory: Category;
@@ -50,6 +78,10 @@ export type Payment = {
   updatedAt: Scalars['DateTime'];
   categoryId: Scalars['String'];
   category?: Maybe<Category>;
+  userId?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
+  householdId: Scalars['String'];
+  household?: Maybe<Household>;
 };
 
 export type Query = {
@@ -62,4 +94,19 @@ export type Query = {
 export type QueryCategoryArgs = {
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['String'];
+  firstname: Scalars['String'];
+  lastname: Scalars['String'];
+  email: Scalars['String'];
+  hashedPassword: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  payments?: Maybe<Array<Maybe<Payment>>>;
+  households?: Maybe<Array<Maybe<Household>>>;
+  invites?: Maybe<Array<Maybe<Invite>>>;
+  ownedHouseholds?: Maybe<Array<Maybe<Household>>>;
 };

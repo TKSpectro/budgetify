@@ -15,6 +15,32 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+type Household {
+  createdAt: DateTime!
+  id: String!
+  invites: [Invite]
+  members: [User]
+  name: String!
+  owner: User
+  ownerId: String!
+  payments: [Payment]
+  updatedAt: DateTime!
+}
+
+type Invite {
+  createdAt: DateTime!
+  household: Household
+  householdId: String!
+  id: String!
+  invitedEmail: String!
+  link: String!
+  sender: User
+  senderId: String!
+  updatedAt: DateTime!
+  validUntil: DateTime!
+  wasUsed: Boolean!
+}
+
 type Mutation {
   createCategory(name: String!): Category!
   removeCategory(name: String!): Category!
@@ -25,13 +51,31 @@ type Payment {
   categoryId: String!
   createdAt: DateTime!
   description: String
+  household: Household
+  householdId: String!
   id: String!
   name: String!
   updatedAt: DateTime!
+  user: User
+  userId: String
   value: Float!
 }
 
 type Query {
   categories: [Category]!
   category(id: String, name: String): Category
+}
+
+type User {
+  createdAt: DateTime!
+  email: String!
+  firstname: String!
+  hashedPassword: String!
+  households: [Household]
+  id: String!
+  invites: [Invite]
+  lastname: String!
+  ownedHouseholds: [Household]
+  payments: [Payment]
+  updatedAt: DateTime!
 }

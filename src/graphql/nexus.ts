@@ -49,17 +49,46 @@ export interface NexusGenObjects {
     name: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
+  Household: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    name: string; // String!
+    ownerId: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  Invite: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    householdId: string; // String!
+    id: string; // String!
+    invitedEmail: string; // String!
+    link: string; // String!
+    senderId: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    validUntil: NexusGenScalars['DateTime']; // DateTime!
+    wasUsed: boolean; // Boolean!
+  }
   Mutation: {};
   Payment: { // root type
     categoryId: string; // String!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description?: string | null; // String
+    householdId: string; // String!
     id: string; // String!
     name: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    userId?: string | null; // String
     value: number; // Float!
   }
   Query: {};
+  User: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    email: string; // String!
+    firstname: string; // String!
+    hashedPassword: string; // String!
+    id: string; // String!
+    lastname: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -80,6 +109,30 @@ export interface NexusGenFieldTypes {
     payments: Array<NexusGenRootTypes['Payment'] | null> | null; // [Payment]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
+  Household: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    invites: Array<NexusGenRootTypes['Invite'] | null> | null; // [Invite]
+    members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    name: string; // String!
+    owner: NexusGenRootTypes['User'] | null; // User
+    ownerId: string; // String!
+    payments: Array<NexusGenRootTypes['Payment'] | null> | null; // [Payment]
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  Invite: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    household: NexusGenRootTypes['Household'] | null; // Household
+    householdId: string; // String!
+    id: string; // String!
+    invitedEmail: string; // String!
+    link: string; // String!
+    sender: NexusGenRootTypes['User'] | null; // User
+    senderId: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    validUntil: NexusGenScalars['DateTime']; // DateTime!
+    wasUsed: boolean; // Boolean!
+  }
   Mutation: { // field return type
     createCategory: NexusGenRootTypes['Category']; // Category!
     removeCategory: NexusGenRootTypes['Category']; // Category!
@@ -89,14 +142,31 @@ export interface NexusGenFieldTypes {
     categoryId: string; // String!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string | null; // String
+    household: NexusGenRootTypes['Household'] | null; // Household
+    householdId: string; // String!
     id: string; // String!
     name: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    user: NexusGenRootTypes['User'] | null; // User
+    userId: string | null; // String
     value: number; // Float!
   }
   Query: { // field return type
     categories: Array<NexusGenRootTypes['Category'] | null>; // [Category]!
     category: NexusGenRootTypes['Category'] | null; // Category
+  }
+  User: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    email: string; // String!
+    firstname: string; // String!
+    hashedPassword: string; // String!
+    households: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
+    id: string; // String!
+    invites: Array<NexusGenRootTypes['Invite'] | null> | null; // [Invite]
+    lastname: string; // String!
+    ownedHouseholds: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
+    payments: Array<NexusGenRootTypes['Payment'] | null> | null; // [Payment]
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
 }
 
@@ -108,6 +178,30 @@ export interface NexusGenFieldTypeNames {
     payments: 'Payment'
     updatedAt: 'DateTime'
   }
+  Household: { // field return type name
+    createdAt: 'DateTime'
+    id: 'String'
+    invites: 'Invite'
+    members: 'User'
+    name: 'String'
+    owner: 'User'
+    ownerId: 'String'
+    payments: 'Payment'
+    updatedAt: 'DateTime'
+  }
+  Invite: { // field return type name
+    createdAt: 'DateTime'
+    household: 'Household'
+    householdId: 'String'
+    id: 'String'
+    invitedEmail: 'String'
+    link: 'String'
+    sender: 'User'
+    senderId: 'String'
+    updatedAt: 'DateTime'
+    validUntil: 'DateTime'
+    wasUsed: 'Boolean'
+  }
   Mutation: { // field return type name
     createCategory: 'Category'
     removeCategory: 'Category'
@@ -117,14 +211,31 @@ export interface NexusGenFieldTypeNames {
     categoryId: 'String'
     createdAt: 'DateTime'
     description: 'String'
+    household: 'Household'
+    householdId: 'String'
     id: 'String'
     name: 'String'
     updatedAt: 'DateTime'
+    user: 'User'
+    userId: 'String'
     value: 'Float'
   }
   Query: { // field return type name
     categories: 'Category'
     category: 'Category'
+  }
+  User: { // field return type name
+    createdAt: 'DateTime'
+    email: 'String'
+    firstname: 'String'
+    hashedPassword: 'String'
+    households: 'Household'
+    id: 'String'
+    invites: 'Invite'
+    lastname: 'String'
+    ownedHouseholds: 'Household'
+    payments: 'Payment'
+    updatedAt: 'DateTime'
   }
 }
 

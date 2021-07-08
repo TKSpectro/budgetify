@@ -3,5 +3,8 @@
 
 export * from '@/graphql/customTypes';
 
+export * from './User';
 export * from './Category';
 export * from './Payment';
+export * from './Household';
+export * from './Invite';

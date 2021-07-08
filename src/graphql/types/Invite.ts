@@ -1,34 +1,24 @@
 import { objectType, extendType, nonNull, stringArg } from 'nexus';
 import prisma from '@/utils/prisma';
-import { Category, Household, User } from '.';
+import { Household, User } from '.';
 
-export const Payment = objectType({
-  name: 'Payment',
+export const Invite = objectType({
+  name: 'Invite',
   definition(t) {
     t.nonNull.string('id');
-    t.nonNull.string('name');
-    t.nonNull.float('value');
-    t.string('description');
+    t.nonNull.field('validUntil', { type: 'DateTime' });
+    t.nonNull.boolean('wasUsed');
+    t.nonNull.string('invitedEmail');
+    t.nonNull.string('link');
     t.nonNull.field('createdAt', { type: 'DateTime' });
     t.nonNull.field('updatedAt', { type: 'DateTime' });
-    t.nonNull.string('categoryId');
-    t.field('category', {
-      type: Category,
-      resolve(root) {
-        return prisma.category.findUnique({
-          where: {
-            id: root.categoryId || undefined,
-          },
-        });
-      },
-    });
-    t.string('userId');
-    t.field('user', {
+    t.nonNull.string('senderId');
+    t.field('sender', {
       type: User,
       resolve(root) {
         return prisma.user.findUnique({
           where: {
-            id: root.userId || undefined,
+            id: root.senderId || undefined,
           },
         });
       },
