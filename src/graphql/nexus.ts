@@ -43,6 +43,9 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  AuthToken: { // root type
+    token: string; // String!
+  }
   Category: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
@@ -102,6 +105,9 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  AuthToken: { // field return type
+    token: string; // String!
+  }
   Category: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
@@ -135,7 +141,9 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createCategory: NexusGenRootTypes['Category']; // Category!
+    login: NexusGenRootTypes['AuthToken']; // AuthToken!
     removeCategory: NexusGenRootTypes['Category']; // Category!
+    signup: NexusGenRootTypes['AuthToken']; // AuthToken!
   }
   Payment: { // field return type
     category: NexusGenRootTypes['Category'] | null; // Category
@@ -171,6 +179,9 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  AuthToken: { // field return type name
+    token: 'String'
+  }
   Category: { // field return type name
     createdAt: 'DateTime'
     id: 'String'
@@ -204,7 +215,9 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createCategory: 'Category'
+    login: 'AuthToken'
     removeCategory: 'Category'
+    signup: 'AuthToken'
   }
   Payment: { // field return type name
     category: 'Category'
@@ -244,8 +257,18 @@ export interface NexusGenArgTypes {
     createCategory: { // args
       name: string; // String!
     }
+    login: { // args
+      email: string; // String!
+      password: string; // String!
+    }
     removeCategory: { // args
       name: string; // String!
+    }
+    signup: { // args
+      email: string; // String!
+      firstname: string; // String!
+      lastname: string; // String!
+      password: string; // String!
     }
   }
   Query: {

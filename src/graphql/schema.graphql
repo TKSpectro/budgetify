@@ -2,6 +2,10 @@
 ### Do not make changes to this file directly
 
 
+type AuthToken {
+  token: String!
+}
+
 type Category {
   createdAt: DateTime!
   id: String!
@@ -43,7 +47,9 @@ type Invite {
 
 type Mutation {
   createCategory(name: String!): Category!
+  login(email: String!, password: String!): AuthToken!
   removeCategory(name: String!): Category!
+  signup(email: String!, firstname: String!, lastname: String!, password: String!): AuthToken!
 }
 
 type Payment {

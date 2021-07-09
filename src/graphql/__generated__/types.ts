@@ -14,6 +14,11 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type AuthToken = {
+  __typename?: 'AuthToken';
+  token: Scalars['String'];
+};
+
 export type Category = {
   __typename?: 'Category';
   id: Scalars['String'];
@@ -54,8 +59,24 @@ export type Invite = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  signup: AuthToken;
+  login: AuthToken;
   createCategory: Category;
   removeCategory: Category;
+};
+
+
+export type MutationSignupArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+  firstname: Scalars['String'];
+  lastname: Scalars['String'];
+};
+
+
+export type MutationLoginArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 
