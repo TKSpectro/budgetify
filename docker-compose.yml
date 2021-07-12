@@ -1,0 +1,15 @@
+version: '3.1'
+
+volumes:
+  db_vol:
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=budgetify
+      - POSTGRES_PASSWORD=budgetify
+    volumes:
+      - db_vol:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
