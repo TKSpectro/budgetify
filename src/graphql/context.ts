@@ -5,8 +5,8 @@ import { AuthenticationError } from 'apollo-server-micro';
 export function context({ req, res }: { req: NextApiRequest; res: NextApiResponse }) {
   // Get the user token from the header and if it exists split it up
   let token: any;
-  token = req.headers.authorization;
-
+  //token = req.headers.authorization;
+  token = req.cookies.token;
   if (token) {
     try {
       token = jwt.verify(token, process.env.JWT_SECRET!);
