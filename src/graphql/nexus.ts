@@ -162,6 +162,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     categories: Array<NexusGenRootTypes['Category'] | null>; // [Category]!
     category: NexusGenRootTypes['Category'] | null; // Category
+    me: NexusGenRootTypes['User'] | null; // User
   }
   User: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -236,6 +237,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     categories: 'Category'
     category: 'Category'
+    me: 'User'
   }
   User: { // field return type name
     createdAt: 'DateTime'

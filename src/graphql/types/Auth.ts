@@ -2,6 +2,8 @@ import { objectType, extendType, nonNull, stringArg } from 'nexus';
 import prisma from '@/utils/prisma';
 import { compareSync, hashSync } from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { User } from '.';
+import { AuthenticationError } from 'apollo-server-micro';
 
 export const AuthToken = objectType({
   name: 'AuthToken',
@@ -10,32 +12,35 @@ export const AuthToken = objectType({
   },
 });
 
-// export const CategoryQuery = extendType({
-//   type: 'Query',
-//   definition(t) {
-//     t.nonNull.list.field('categories', {
-//       type: 'Category',
-//       resolve() {
-//         return prisma.category.findMany();
-//       },
-//     });
-//     t.field('category', {
-//       type: 'Category',
-//       args: {
-//         id: stringArg(),
-//         name: stringArg(),
-//       },
-//       resolve(_, { id, name }) {
-//         return prisma.category.findFirst({
-//           where: {
-//             id: id || undefined,
-//             name: name || undefined,
-//           },
-//         });
-//       },
-//     });
-//   },
-// });
+export const AuthQuery = extendType({
+  type: 'Query',
+  definition(t) {
+    t.field('me', {
+      type: User,
+      async resolve(_, __, ctx) {
+        try {
+          const user = await prisma.user.findUnique({
+            where: {
+              id: ctx.user.id || undefined,
+            },
+          });
+
+          if (!user) {
+            return null;
+          }
+
+          // filter out the hashed password from the response
+          return {
+            ...user,
+            hashedPassword: '',
+          };
+        } catch (error) {
+          throw new AuthenticationError('You are not logged in.');
+        }
+      },
+    });
+  },
+});
 
 export const AuthMutation = extendType({
   type: 'Mutation',
@@ -71,7 +76,7 @@ export const AuthMutation = extendType({
         email: nonNull(stringArg()),
         password: nonNull(stringArg()),
       },
-      async resolve(_, args) {
+      async resolve(_, args, ctx) {
         const user = await prisma.user.findUnique({
           where: {
             email: args.email,
@@ -85,8 +90,16 @@ export const AuthMutation = extendType({
           throw new Error('Authorization Error');
         }
 
+        const token = jwt.sign({ id, email }, process.env.JWT_SECRET!, { expiresIn: '30d' });
+        // console.log('ContextResponse: ', ctx.res.req.cookies.set('token', token));
+        // ctx.res.cookie('token', token, {
+        //   httpOnly: true,
+        //   secure: process.env.NODE_ENV === 'production',
+        //   maxAge: 1000 * 60 * 60 * 24 * 30, // 30days -> should be same as the token itself
+        // });
+
         return {
-          token: jwt.sign({ id, email }, process.env.JWT_SECRET!, { expiresIn: '30d' }),
+          token,
         };
       },
     });

@@ -107,6 +107,7 @@ export type Payment = {
 
 export type Query = {
   __typename?: 'Query';
+  me?: Maybe<User>;
   categories: Array<Maybe<Category>>;
   category?: Maybe<Category>;
 };

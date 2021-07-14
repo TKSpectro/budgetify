@@ -70,6 +70,7 @@ type Payment {
 type Query {
   categories: [Category]!
   category(id: String, name: String): Category
+  me: User
 }
 
 type User {
