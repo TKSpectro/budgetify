@@ -90,16 +90,8 @@ export const AuthMutation = extendType({
           throw new Error('Authorization Error');
         }
 
-        const token = jwt.sign({ id, email }, process.env.JWT_SECRET!, { expiresIn: '30d' });
-        // console.log('ContextResponse: ', ctx.res.req.cookies.set('token', token));
-        // ctx.res.cookie('token', token, {
-        //   httpOnly: true,
-        //   secure: process.env.NODE_ENV === 'production',
-        //   maxAge: 1000 * 60 * 60 * 24 * 30, // 30days -> should be same as the token itself
-        // });
-
         return {
-          token,
+          token: jwt.sign({ id, email }, process.env.JWT_SECRET!, { expiresIn: '30d' }),
         };
       },
     });
