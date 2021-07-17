@@ -1,19 +1,14 @@
-import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '@/utils/apollo';
-
-import '../styles.css';
-
+import { ApolloProvider } from '@apollo/client';
 import type { AppProps } from 'next/app';
-import { CookiesProvider } from 'react-cookie';
+import '../styles.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const client = useApollo(pageProps.initialApolloState);
 
   return (
     <ApolloProvider client={client}>
-      <CookiesProvider>
-        <Component {...pageProps} />
-      </CookiesProvider>
+      <Component {...pageProps} />
     </ApolloProvider>
   );
 }

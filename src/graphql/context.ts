@@ -1,21 +1,18 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import jwt from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server-micro';
+import jwt from 'jsonwebtoken';
+import type { NextApiRequest } from 'next';
 
-export function context({ req, res }: { req: NextApiRequest; res: NextApiResponse }) {
-  // Get the user token from the header and if it exists split it up
-  let token: any;
-  //token = req.headers.authorization;
-  token = req.cookies.token;
-  if (token) {
-    try {
-      token = jwt.verify(token, process.env.JWT_SECRET!);
-    } catch (error) {
-      throw new AuthenticationError('Authentication token is invalid, please log in again.');
-    }
+export function context(req: NextApiRequest) {
+  const token = req.headers.authorization || null;
+
+  if (!process.env.JWT_SECRET) {
+    throw new AuthenticationError('Server is not setup correctly');
   }
 
-  const user = { id: token ? token.id : null, email: token ? token.email : null };
+  let user: string | jwt.JwtPayload = {};
+  if (token) {
+    user = jwt.verify(token, process.env.JWT_SECRET);
+  }
 
-  return { user, req, res };
+  return { user };
 }

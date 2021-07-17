@@ -1,25 +1,15 @@
 import { ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
-import { useMemo } from 'react';
 import { setContext } from '@apollo/client/link/context';
+import { useMemo } from 'react';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-// const authLink = setContext((_, { headers }) => {
-//   // get the authentication token from cookies if it exists
-//   const token = document.cookie
-//     ? document.cookie
-//         .split('; ')
-//         .find((row) => row.startsWith('token='))
-//         .split('=')[1]
-//     : '';
-//   // return the headers to the context so httpLink can read them
-//   return {
-//     headers: {
-//       ...headers,
-//       authorization: token,
-//     },
-//   };
-// });
+// This should only be used inside client side functions
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('authToken');
+
+  return { headers: { ...headers, Authorization: token ? token : '' } };
+});
 
 // Create a link that is either server or client based
 function createIsomorphicLink() {
@@ -31,9 +21,7 @@ function createIsomorphicLink() {
   } else {
     //client
     const { HttpLink } = require('@apollo/client/link/http');
-
-    //return authLink.concat(new HttpLink({ uri: '/api/graphql', credentials: 'same-origin' }));
-    return new HttpLink({ uri: '/api/graphql', credentials: 'same-origin' });
+    return authLink.concat(new HttpLink({ uri: '/api/graphql', credentials: 'same-origin' }));
   }
 }
 

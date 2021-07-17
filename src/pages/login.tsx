@@ -1,6 +1,6 @@
-import { useMutation, gql, useQuery } from '@apollo/client';
 import { initializeApollo } from '@/utils/apollo';
-import { useCookies } from 'react-cookie';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import { useEffect } from 'react';
 
 const LoginMutation = gql`
   mutation Login {
@@ -25,45 +25,39 @@ const MeQuery = gql`
 export default function Login() {
   const [loginFunc, { data: loginData }] = useMutation(LoginMutation);
   const { loading, error, data: me } = useQuery(MeQuery);
-  const [cookie, setCookie, removeCookie] = useCookies(['token']);
 
-  // Not logged in
-  if (!cookie.token) {
+  function logoutHandler() {
+    localStorage.removeItem('authToken');
+  }
+
+  function loginHandler() {
     loginFunc();
   }
 
-  function logoutHandler() {
-    removeCookie('token');
-  }
+  // When the loginMutation goes through we add the token to the local storage
+  useEffect(() => {
+    if (loginData) {
+      localStorage.setItem('authToken', loginData.login.token);
+    }
+    return () => {};
+  }, [loginData]);
 
-  if (loginData?.login?.token) {
-    setCookie('token', loginData.login.token, {
-      sameSite: 'lax',
-      //httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 3600 * 24 * 30, // 30days -> should be same as the token itself
-    });
-  }
+  return (
+    <div>
+      {loading && <span>loading...</span>}
+      {error && <pre>{error.message}</pre>}
+      {me && <pre>{JSON.stringify(me.me, null, 2)}</pre>}
 
-  if (loading) return <span>loading...</span>;
-  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
-  if (me)
-    return (
-      <>
-        <pre>{JSON.stringify(me, null, 2)}</pre>
-        <button onClick={logoutHandler}>Logout</button>
-      </>
-    );
-
-  return <div>{/* <pre>{JSON.stringify(data, null, 2)}</pre> */}</div>;
+      <div>
+        <button onClick={loginHandler}>Login</button>
+      </div>
+      <button onClick={logoutHandler}>Logout</button>
+    </div>
+  );
 }
 
 export async function getStaticProps() {
   const apolloClient = initializeApollo();
-
-  /*await apolloClient.mutate({
-    mutation: LoginMutation,
-  });*/
 
   return {
     props: {

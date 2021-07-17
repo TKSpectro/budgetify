@@ -1,9 +1,9 @@
-import { objectType, extendType, nonNull, stringArg } from 'nexus';
 import prisma from '@/utils/prisma';
+import { AuthenticationError } from 'apollo-server-micro';
 import { compareSync, hashSync } from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { extendType, nonNull, objectType, stringArg } from 'nexus';
 import { User } from '.';
-import { AuthenticationError } from 'apollo-server-micro';
 
 export const AuthToken = objectType({
   name: 'AuthToken',
@@ -66,8 +66,10 @@ export const AuthMutation = extendType({
         });
         const { id, email } = user;
 
-        // TODO: Need to check if the secret is actually set
-        return { token: jwt.sign({ id, email }, process.env.JWT_SECRET!, { expiresIn: '30d' }) };
+        if (!process.env.JWT_SECRET) {
+          throw new AuthenticationError('Server is not setup correctly');
+        }
+        return { token: jwt.sign({ id, email }, process.env.JWT_SECRET, { expiresIn: '30d' }) };
       },
     });
     t.nonNull.field('login', {
