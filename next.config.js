@@ -37,7 +37,11 @@ const securityHeaders = [
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  securityHeaders,
+  webpack: (config) => {
+    config.experiments = { topLevelAwait: true };
+    return config;
+  },
+  //securityHeaders,
 };
 
 module.exports = nextConfig;
