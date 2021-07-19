@@ -2,7 +2,7 @@ import { AuthenticationError } from 'apollo-server-micro';
 import jwt from 'jsonwebtoken';
 import type { NextApiRequest } from 'next';
 
-export function context(req: NextApiRequest) {
+export function context({ req }: { req: NextApiRequest }) {
   const token = req.headers.authorization || null;
 
   if (!process.env.JWT_SECRET) {
