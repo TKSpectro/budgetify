@@ -1,5 +1,5 @@
-import { objectType, extendType, nonNull, stringArg } from 'nexus';
 import prisma from '@/utils/prisma';
+import { extendType, objectType } from 'nexus';
 import { Invite, Payment, User } from '.';
 
 export const Household = objectType({
@@ -23,35 +23,31 @@ export const Household = objectType({
     t.list.field('members', {
       type: User,
       resolve(root) {
-        return prisma.user.findMany({
-          where: {
-            households: {
-              some: {
-                id: { equals: root.id || undefined },
-              },
-            },
-          },
-        });
+        return prisma.household.findUnique({ where: { id: root.id || undefined } }).members();
       },
     });
     t.list.field('invites', {
       type: Invite,
       resolve(root) {
-        return prisma.invite.findMany({
-          where: {
-            householdId: root.id || undefined,
-          },
-        });
+        return prisma.household.findUnique({ where: { id: root.id || undefined } }).invites();
       },
     });
     t.list.field('payments', {
       type: Payment,
       resolve(root) {
-        return prisma.payment.findMany({
-          where: {
-            userId: root.id || undefined,
-          },
-        });
+        return prisma.household.findUnique({ where: { id: root.id || undefined } }).payments();
+      },
+    });
+  },
+});
+
+export const HouseholdQuery = extendType({
+  type: 'Query',
+  definition(t) {
+    t.list.field('households', {
+      type: Household,
+      resolve() {
+        return prisma.household.findMany();
       },
     });
   },

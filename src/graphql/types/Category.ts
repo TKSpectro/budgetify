@@ -1,5 +1,5 @@
-import { objectType, extendType, nonNull, stringArg } from 'nexus';
 import prisma from '@/utils/prisma';
+import { extendType, nonNull, objectType, stringArg } from 'nexus';
 import { Payment } from '.';
 
 export const Category = objectType({
@@ -12,11 +12,7 @@ export const Category = objectType({
     t.list.field('payments', {
       type: Payment,
       resolve(root) {
-        return prisma.payment.findMany({
-          where: {
-            categoryId: root.id || undefined,
-          },
-        });
+        return prisma.category.findUnique({ where: { id: root.id || undefined } }).payments();
       },
     });
   },

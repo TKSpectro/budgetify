@@ -110,6 +110,7 @@ export type Query = {
   me?: Maybe<User>;
   categories: Array<Maybe<Category>>;
   category?: Maybe<Category>;
+  households?: Maybe<Array<Maybe<Household>>>;
 };
 
 
