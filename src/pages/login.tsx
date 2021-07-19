@@ -10,6 +10,14 @@ const LoginMutation = gql`
   }
 `;
 
+const SignupMutation = gql`
+  mutation Signup {
+    signup(email: "jennycat", password: "feedme", firstname: "Tom", lastname: "Kapp") {
+      token
+    }
+  }
+`;
+
 const MeQuery = gql`
   query Me {
     me {
@@ -24,6 +32,7 @@ const MeQuery = gql`
 
 export default function Login() {
   const [loginFunc, { data: loginData }] = useMutation(LoginMutation);
+  const [signupFunc, { data: signupData }] = useMutation(SignupMutation);
   const { loading, error, data: me } = useQuery(MeQuery);
 
   function logoutHandler() {
@@ -34,6 +43,10 @@ export default function Login() {
     loginFunc();
   }
 
+  function signupHandler() {
+    signupFunc();
+  }
+
   // When the loginMutation goes through we add the token to the local storage
   useEffect(() => {
     if (loginData) {
@@ -41,6 +54,14 @@ export default function Login() {
     }
     return () => {};
   }, [loginData]);
+
+  // When the signupMutation goes through we add the token to the local storage
+  useEffect(() => {
+    if (signupData) {
+      localStorage.setItem('authToken', signupData.signup.token);
+    }
+    return () => {};
+  }, [signupData]);
 
   return (
     <div>
@@ -50,6 +71,9 @@ export default function Login() {
 
       <div>
         <button onClick={loginHandler}>Login</button>
+      </div>
+      <div>
+        <button onClick={signupHandler}>Signup</button>
       </div>
       <button onClick={logoutHandler}>Logout</button>
     </div>
