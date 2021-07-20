@@ -1,6 +1,5 @@
 import { initializeApollo } from '@/utils/apollo';
-import { gql, useMutation, useQuery } from '@apollo/client';
-import { useEffect } from 'react';
+import { gql, useQuery } from '@apollo/client';
 
 const LoginMutation = gql`
   mutation Login {
@@ -31,37 +30,39 @@ const MeQuery = gql`
 `;
 
 export default function Login() {
-  const [loginFunc, { data: loginData }] = useMutation(LoginMutation);
-  const [signupFunc, { data: signupData }] = useMutation(SignupMutation);
   const { loading, error, data: me } = useQuery(MeQuery);
 
-  function logoutHandler() {
-    localStorage.removeItem('authToken');
+  async function logoutHandler() {
+    await fetch('http://localhost:3000/api/auth/logout', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    });
   }
 
-  function loginHandler() {
-    loginFunc();
+  async function loginHandler() {
+    await fetch('http://localhost:3000/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({ email: 'jennycat', password: 'feedme' }),
+    });
   }
 
-  function signupHandler() {
-    signupFunc();
+  async function signupHandler() {
+    await fetch('http://localhost:3000/api/auth/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({ email: 'jennycat', password: 'feedme' }),
+    });
   }
-
-  // When the loginMutation goes through we add the token to the local storage
-  useEffect(() => {
-    if (loginData) {
-      localStorage.setItem('authToken', loginData.login.token);
-    }
-    return () => {};
-  }, [loginData]);
-
-  // When the signupMutation goes through we add the token to the local storage
-  useEffect(() => {
-    if (signupData) {
-      localStorage.setItem('authToken', signupData.signup.token);
-    }
-    return () => {};
-  }, [signupData]);
 
   return (
     <div>

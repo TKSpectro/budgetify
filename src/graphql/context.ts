@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import type { NextApiRequest } from 'next';
 
 export function context({ req }: { req: NextApiRequest }) {
-  const token = req.headers.authorization || null;
+  const token = req.cookies.authToken || null;
 
   if (!process.env.JWT_SECRET) {
     throw new AuthenticationError('Server is not setup correctly');
