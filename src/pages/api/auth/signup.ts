@@ -16,17 +16,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     },
     body: JSON.stringify({
       query: `
-        mutation Signup {
-          login(email: "${req.body.email}", password: "${req.body.password}") {
+        mutation {
+          signup(firstname: "${req.body.firstname}",lastname: "${req.body.lastname}",email: "${req.body.email}", password: "${req.body.password}") {
             token
           }
         }`,
     }),
   });
-
   // Use the returned token to set a http-only cookie
   const data = await fetchRes.json();
-  result.token = data.data?.login?.token || '';
+
+  result.token = data.data?.signup?.token || '';
 
   setCookie({ res }, 'authToken', result.token, {
     secure: process.env.NODE_ENV === 'production',
@@ -34,6 +34,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     httpOnly: true,
     path: '/',
   });
+
+  if (data.errors) {
+    res.status(400).json(
+      // Only send specific non-confidential data
+      data.errors.map((error: any) => {
+        // error.locations;
+        // error.extensions;
+        const message = error.message;
+        const path = error.path;
+        return { message, path };
+      }),
+    );
+    return;
+  }
 
   res.status(200).json({});
 }

@@ -56,20 +56,29 @@ export const AuthMutation = extendType({
       async resolve(_, args) {
         args.password = hashSync(args.password, 10);
 
-        const user = await prisma.user.create({
-          data: {
-            email: args.email,
-            hashedPassword: args.password,
-            firstname: args.firstname,
-            lastname: args.lastname,
-          },
-        });
-        const { id, email } = user;
-
         if (!process.env.JWT_SECRET) {
           throw new AuthenticationError('Server is not setup correctly');
         }
-        return { token: jwt.sign({ id, email }, process.env.JWT_SECRET, { expiresIn: '30d' }) };
+
+        try {
+          const user = await prisma.user.create({
+            data: {
+              email: args.email,
+              hashedPassword: args.password,
+              firstname: args.firstname,
+              lastname: args.lastname,
+            },
+          });
+
+          const { id, email } = user;
+
+          return { token: jwt.sign({ id, email }, process.env.JWT_SECRET, { expiresIn: '30d' }) };
+        } catch (error) {
+          // TODO: Figure out which error was thrown
+          throw new AuthenticationError(
+            'Error while signing up. Probably a user exists with the send email',
+          );
+        }
       },
     });
     t.nonNull.field('login', {

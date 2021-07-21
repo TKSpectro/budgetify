@@ -60,7 +60,12 @@ export default function Login() {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      body: JSON.stringify({ email: 'jennycat', password: 'feedme' }),
+      body: JSON.stringify({
+        firstname: 'jenny',
+        lastname: 'cat',
+        email: 'jennycat',
+        password: 'feedme',
+      }),
     });
   }
 
