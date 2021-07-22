@@ -14,12 +14,15 @@ if (!process.env.JWT_SECRET) {
 const server = new ApolloServer({
   schema,
   context,
+  // As of apollo-server-micro@3.0 we need to manually activate the old GraphqlQLPlayground
+  // instead of the new LandingPage
+  // TODO: Look into the LandingPage (is there the same functionality possible with? etc.)
   plugins: [
     process.env.NODE_ENV === 'production'
       ? ApolloServerPluginLandingPageDisabled()
       : ApolloServerPluginLandingPageGraphQLPlayground(),
   ],
-  // Enable performance tracing for development
+  // Enable performance tracing for development -> This is deprecated with apollo-server-micro@3.0
   //tracing: process.env.NODE_ENV === 'development',
 });
 // As of apollo-server-micro@3... we need to await the start of the server

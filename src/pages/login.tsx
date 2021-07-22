@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 const LoginMutation = gql`
   mutation Login {
-    login(email: "jennycat", password: "feedme") {
+    login(email: "tomkaeppler@mail.de", password: "goodPassword") {
       token
     }
   }
@@ -12,7 +12,12 @@ const LoginMutation = gql`
 
 const SignupMutation = gql`
   mutation Signup {
-    signup(email: "jennycat", password: "feedme", firstname: "Tom", lastname: "Kapp") {
+    signup(
+      email: "tomkaeppler@mail.de"
+      password: "goodPassword"
+      firstname: "Tom"
+      lastname: "Käppler"
+    ) {
       token
     }
   }
@@ -56,7 +61,7 @@ export default function Login() {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      body: JSON.stringify({ email: 'jennycat', password: 'feedme' }),
+      body: JSON.stringify({ email: 'tomkaeppler@mail.de', password: 'goodPassword' }),
     });
 
     if (res.status >= 400) {
@@ -76,8 +81,8 @@ export default function Login() {
       body: JSON.stringify({
         firstname: 'jenny',
         lastname: 'cat',
-        email: 'jennycat',
-        password: 'feedme',
+        email: 'tomkaeppler@mail.de',
+        password: 'goodPassword',
       }),
     });
 
@@ -87,6 +92,8 @@ export default function Login() {
 
     // TODO: Redirect to user dashboard if it worked
   }
+
+  // TODO: Build UI and actually send the actual input data instead of fake data
 
   return (
     <div>
