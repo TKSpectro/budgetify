@@ -1,5 +1,6 @@
 import { initializeApollo } from '@/utils/apollo';
 import { gql, useQuery } from '@apollo/client';
+import { useState } from 'react';
 
 const LoginMutation = gql`
   mutation Login {
@@ -31,6 +32,7 @@ const MeQuery = gql`
 
 export default function Login() {
   const { loading, error, data: me } = useQuery(MeQuery);
+  const [resError, setResError] = useState();
 
   async function logoutHandler() {
     await fetch('http://localhost:3000/api/auth/logout', {
@@ -40,10 +42,15 @@ export default function Login() {
         Accept: 'application/json',
       },
     });
+
+    // No need to check for response errors as logout cant fail
+    // If the authCookie cant get deleted the user is logged-out anyways
+
+    // TODO: Redirect to Login
   }
 
   async function loginHandler() {
-    await fetch('http://localhost:3000/api/auth/login', {
+    const res = await fetch('http://localhost:3000/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -51,10 +58,16 @@ export default function Login() {
       },
       body: JSON.stringify({ email: 'jennycat', password: 'feedme' }),
     });
+
+    if (res.status >= 400) {
+      setResError(await res.json());
+    }
+
+    // TODO: Redirect to user dashboard if it worked
   }
 
   async function signupHandler() {
-    await fetch('http://localhost:3000/api/auth/signup', {
+    const res = await fetch('http://localhost:3000/api/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -67,14 +80,20 @@ export default function Login() {
         password: 'feedme',
       }),
     });
+
+    if (res.status >= 400) {
+      setResError(await res.json());
+    }
+
+    // TODO: Redirect to user dashboard if it worked
   }
 
   return (
     <div>
       {loading && <span>loading...</span>}
       {error && <pre>{error.message}</pre>}
+      {resError && <pre>{JSON.stringify(resError, null, 2)}</pre>}
       {me && <pre>{JSON.stringify(me.me, null, 2)}</pre>}
-
       <div>
         <button onClick={loginHandler}>Login</button>
       </div>

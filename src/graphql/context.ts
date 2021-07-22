@@ -19,8 +19,11 @@ export interface Context {
 }
 
 export function context({ req, res }: ContextInput): Context {
+  // Get the token from authToken cookie. This is a secure http-only cookie
+  // and contains the JWT
   const token = req.cookies.authToken || undefined;
 
+  // TODO: Check this before even starting the server
   if (!process.env.JWT_SECRET) {
     throw new AuthenticationError('Server is not setup correctly');
   }
