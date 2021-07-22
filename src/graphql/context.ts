@@ -1,4 +1,3 @@
-import { AuthenticationError } from 'apollo-server-micro';
 import jwt from 'jsonwebtoken';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -23,16 +22,11 @@ export function context({ req, res }: ContextInput): Context {
   // and contains the JWT
   const token = req.cookies.authToken || undefined;
 
-  // TODO: Check this before even starting the server
-  if (!process.env.JWT_SECRET) {
-    throw new AuthenticationError('Server is not setup correctly');
-  }
-
   let user: ContextUser = { id: '', email: '' };
 
   try {
     if (token) {
-      const data = jwt.verify(token, process.env.JWT_SECRET);
+      const data = jwt.verify(token, process.env.JWT_SECRET!);
 
       if (typeof data !== 'string') {
         user.id = data.id;

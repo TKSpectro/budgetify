@@ -4,7 +4,12 @@ import {
   ApolloServerPluginLandingPageDisabled,
   ApolloServerPluginLandingPageGraphQLPlayground,
 } from 'apollo-server-core';
-import { ApolloServer } from 'apollo-server-micro';
+import { ApolloError, ApolloServer } from 'apollo-server-micro';
+
+// Check if the secret used for the JWT encryption was set in the .env file
+if (!process.env.JWT_SECRET) {
+  throw new ApolloError('Server is not setup correctly');
+}
 
 const server = new ApolloServer({
   schema,
