@@ -1,6 +1,8 @@
 import { initializeApollo } from '@/utils/apollo';
 import { gql, useQuery } from '@apollo/client';
 import { useState } from 'react';
+import { Button } from '~/components/UI/Button';
+import { CustomLink } from '~/components/UI/CustomLink';
 
 const LoginMutation = gql`
   mutation Login {
@@ -101,13 +103,13 @@ export default function Login() {
       {error && <pre>{error.message}</pre>}
       {resError && <pre>{JSON.stringify(resError, null, 2)}</pre>}
       {me && <pre>{JSON.stringify(me.me, null, 2)}</pre>}
-      <div>
-        <button onClick={loginHandler}>Login</button>
-      </div>
-      <div>
-        <button onClick={signupHandler}>Signup</button>
-      </div>
-      <button onClick={logoutHandler}>Logout</button>
+
+      <Button isSubmit variant="secondary" onClick={loginHandler}>
+        Login
+      </Button>
+      <Button onClick={signupHandler}>Signup</Button>
+      <Button onClick={logoutHandler}>Logout</Button>
+      <CustomLink href="/">CustomLink</CustomLink>
     </div>
   );
 }
