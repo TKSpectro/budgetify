@@ -1,5 +1,6 @@
 import { useApollo } from '@/utils/apollo';
 import { ApolloProvider } from '@apollo/client';
+import { ThemeProvider } from 'next-themes';
 import type { AppProps } from 'next/app';
 import '../styles.css';
 
@@ -9,7 +10,9 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <ApolloProvider client={client}>
-      <Component {...pageProps} />
+      <ThemeProvider defaultTheme="system" storageKey="theme" attribute="class">
+        <Component {...pageProps} />
+      </ThemeProvider>
     </ApolloProvider>
   );
 }
