@@ -40,7 +40,7 @@ export default function Login() {
   const [resError, setResError] = useState();
 
   async function logoutHandler() {
-    await fetch('http://localhost:3000/api/auth/logout', {
+    await fetch(`${window.location.origin}/api/auth/logout`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export default function Login() {
   }
 
   async function loginHandler() {
-    const res = await fetch('http://localhost:3000/api/auth/login', {
+    const res = await fetch(`${window.location.origin}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export default function Login() {
   }
 
   async function signupHandler() {
-    const res = await fetch('http://localhost:3000/api/auth/signup', {
+    const res = await fetch(`${window.location.origin}/api/auth/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

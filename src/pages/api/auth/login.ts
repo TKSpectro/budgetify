@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   let result = { token: '' };
 
   // Request the actual graphql backend with the login mutation
-  const fetchRes = await fetch('http://localhost:3000/api/graphql', {
+  const fetchRes = await fetch(`${req.headers.origin}/api/graphql`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
