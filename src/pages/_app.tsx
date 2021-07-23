@@ -3,7 +3,8 @@ import { ApolloProvider } from '@apollo/client';
 import type { AppProps } from 'next/app';
 import '../styles.css';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
+  // create the apolloClient when opening the page
   const client = useApollo(pageProps.initialApolloState);
 
   return (
@@ -12,4 +13,4 @@ function MyApp({ Component, pageProps }: AppProps) {
     </ApolloProvider>
   );
 }
-export default MyApp;
+export default App;
