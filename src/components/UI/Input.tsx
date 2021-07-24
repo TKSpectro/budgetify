@@ -1,4 +1,5 @@
 import { ComponentProps, forwardRef } from 'react';
+import { InputError } from './Form';
 
 interface Props extends ComponentProps<'input'> {
   label: string;
@@ -19,6 +20,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
         {...props}
       />
 
+      <InputError name={props.name} />
       {/* TODO: Add Field Errors -> needs to be handled through the form?!} */}
       {/* {errors.firstname && <span>Firstname-Error</span>} */}
     </label>
