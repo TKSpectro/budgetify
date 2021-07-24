@@ -21,8 +21,6 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
       />
 
       <InputError name={props.name} />
-      {/* TODO: Add Field Errors -> needs to be handled through the form?!} */}
-      {/* {errors.firstname && <span>Firstname-Error</span>} */}
     </label>
   );
 });

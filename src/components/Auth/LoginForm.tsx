@@ -1,33 +1,51 @@
+import { useRouter } from 'next/dist/client/router';
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import Form from '../UI/Form';
+import { Input } from '../UI/Input';
 
 type Inputs = {
-  example: string;
-  exampleRequired: string;
+  email: string;
+  password: string;
 };
 
 export default function LoginForm() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const router = useRouter();
+  const form = useForm<Inputs>();
+  const [resError, setResError] = useState();
 
-  console.log(watch('example')); // watch input value by passing the name of it
+  async function onSubmit(data: SubmitHandler<Inputs>) {
+    const res = await fetch(`${window.location.origin}/api/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (res.status >= 400) {
+      setResError(await res.json());
+    }
+
+    if (res.status == 200) {
+      router.push('/');
+    }
+  }
 
   return (
-    /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {/* register your input into the hook by invoking the "register" function */}
-      <input defaultValue="test" {...register('example')} />
+    <Form form={form} onSubmit={onSubmit}>
+      {resError && <pre>{JSON.stringify(resError, null, 2)}</pre>}
 
-      {/* include validation with required or other standard HTML validation rules */}
-      <input {...register('exampleRequired', { required: true })} />
-      {/* errors will return when field validation fails  */}
-      {errors.exampleRequired && <span>This field is required</span>}
+      <Input label="Email" type="email" {...form.register('email', { required: true })} />
+
+      <Input
+        label="Password"
+        type="password"
+        {...form.register('password', { required: true, minLength: 6 })}
+      />
 
       <input type="submit" />
-    </form>
+    </Form>
   );
 }

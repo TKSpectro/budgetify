@@ -1,5 +1,7 @@
-import React from 'react';
+import { useRouter } from 'next/dist/client/router';
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import Form from '../UI/Form';
 import { Input } from '../UI/Input';
 
 type Inputs = {
@@ -10,11 +12,9 @@ type Inputs = {
 };
 
 export default function SignupForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>();
+  const router = useRouter();
+  const form = useForm<Inputs>();
+  const [resError, setResError] = useState();
 
   async function onSubmit(data: SubmitHandler<Inputs>) {
     const res = await fetch(`${window.location.origin}/api/auth/signup`, {
@@ -27,36 +27,39 @@ export default function SignupForm() {
     });
 
     if (res.status >= 400) {
-      //setResError(await res.json());
+      setResError(await res.json());
     }
 
-    // TODO: Redirect to user dashboard if it worked
+    if (res.status == 200) {
+      router.push('/');
+    }
   }
 
   return (
-    /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <Form form={form} onSubmit={onSubmit}>
+      {resError && <pre>{JSON.stringify(resError, null, 2)}</pre>}
+
       <Input
         label="Firstname"
         type="text"
-        {...register('firstname', { required: true, maxLength: 60 })}
+        {...form.register('firstname', { required: true, maxLength: 60 })}
       />
 
       <Input
         label="Lastname"
         type="text"
-        {...register('lastname', { required: true, maxLength: 60 })}
+        {...form.register('lastname', { required: true, maxLength: 60 })}
       />
 
-      <Input label="Email" type="email" {...register('email', { required: true })} />
+      <Input label="Email" type="email" {...form.register('email', { required: true })} />
 
       <Input
         label="Password"
         type="password"
-        {...register('password', { required: true, minLength: 6 })}
+        {...form.register('password', { required: true, minLength: 6 })}
       />
 
       <input type="submit" />
-    </form>
+    </Form>
   );
 }
