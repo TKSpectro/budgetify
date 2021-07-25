@@ -162,6 +162,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     categories: Array<NexusGenRootTypes['Category'] | null>; // [Category]!
     category: NexusGenRootTypes['Category'] | null; // Category
+    household: NexusGenRootTypes['Household'] | null; // Household
     households: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     me: NexusGenRootTypes['User'] | null; // User
   }
@@ -238,6 +239,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     categories: 'Category'
     category: 'Category'
+    household: 'Household'
     households: 'Household'
     me: 'User'
   }
@@ -279,6 +281,9 @@ export interface NexusGenArgTypes {
     category: { // args
       id?: string | null; // String
       name?: string | null; // String
+    }
+    household: { // args
+      id?: string | null; // String
     }
   }
 }

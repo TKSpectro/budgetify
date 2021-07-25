@@ -1,5 +1,5 @@
 import prisma from '@/utils/prisma';
-import { extendType, objectType } from 'nexus';
+import { extendType, objectType, stringArg } from 'nexus';
 import { Invite, Payment, User } from '.';
 
 export const Household = objectType({
@@ -41,15 +41,30 @@ export const Household = objectType({
   },
 });
 
-export const HouseholdQuery = extendType({
+export const HouseholdsQuery = extendType({
   type: 'Query',
   definition(t) {
     t.list.field('households', {
       type: Household,
       resolve(_, __, { user }) {
-        //return prisma.household.findMany();
-        console.log(user);
         return prisma.user.findUnique({ where: { id: user.id || undefined } }).households();
+      },
+    });
+  },
+});
+
+export const HouseholdQuery = extendType({
+  type: 'Query',
+  definition(t) {
+    t.field('household', {
+      type: Household,
+      args: {
+        id: stringArg(),
+      },
+      resolve(_, { id }, { user }) {
+        return prisma.household.findFirst({
+          where: { id: id || undefined, members: { some: { id: user.id } } },
+        });
       },
     });
   },

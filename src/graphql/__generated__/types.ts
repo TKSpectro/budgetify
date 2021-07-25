@@ -111,12 +111,18 @@ export type Query = {
   categories: Array<Maybe<Category>>;
   category?: Maybe<Category>;
   households?: Maybe<Array<Maybe<Household>>>;
+  household?: Maybe<Household>;
 };
 
 
 export type QueryCategoryArgs = {
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryHouseholdArgs = {
+  id?: Maybe<Scalars['String']>;
 };
 
 export type User = {
