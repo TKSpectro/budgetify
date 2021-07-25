@@ -46,8 +46,10 @@ export const HouseholdQuery = extendType({
   definition(t) {
     t.list.field('households', {
       type: Household,
-      resolve() {
-        return prisma.household.findMany();
+      resolve(_, __, { user }) {
+        //return prisma.household.findMany();
+        console.log(user);
+        return prisma.user.findUnique({ where: { id: user.id || undefined } }).households();
       },
     });
   },

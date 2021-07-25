@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { hashSync } from 'bcrypt';
 import faker from 'faker';
 
 const prisma = new PrismaClient();
@@ -21,6 +22,15 @@ async function main() {
     });
   }
 
+  const testUser = await prisma.user.create({
+    data: {
+      firstname: 'tom',
+      lastname: 'test',
+      email: 'tom@mail.com',
+      hashedPassword: hashSync('12345678', 10),
+    },
+  });
+
   const cat1 = await prisma.category.create({
     data: {
       name: 'cat1',
@@ -40,7 +50,7 @@ async function main() {
   const hou1 = await prisma.household.create({
     data: {
       name: 'hou1',
-      ownerId: users[0].id,
+      ownerId: testUser.id,
     },
   });
 
@@ -48,6 +58,15 @@ async function main() {
     data: {
       name: 'hou2',
       ownerId: users[1].id,
+    },
+  });
+
+  const testUsernew = await prisma.user.update({
+    where: { id: testUser.id },
+    data: {
+      households: {
+        connect: { id: hou1.id },
+      },
     },
   });
 

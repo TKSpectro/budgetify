@@ -20,7 +20,9 @@ const server = new ApolloServer({
   plugins: [
     process.env.NODE_ENV === 'production'
       ? ApolloServerPluginLandingPageDisabled()
-      : ApolloServerPluginLandingPageGraphQLPlayground(),
+      : ApolloServerPluginLandingPageGraphQLPlayground({
+          settings: { 'request.credentials': 'include' },
+        }),
   ],
   // Enable performance tracing for development -> This is deprecated with apollo-server-micro@3.0
   //tracing: process.env.NODE_ENV === 'development',
