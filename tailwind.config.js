@@ -1,6 +1,7 @@
 const colors = require('tailwindcss/colors');
 
-const brandColor = colors.blue;
+//const brandColor = colors.blue;
+const brandColor = colors.teal;
 
 module.exports = {
   mode: 'jit',

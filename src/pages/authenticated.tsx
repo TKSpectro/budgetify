@@ -4,7 +4,7 @@ import React from 'react';
 import { Button } from '~/components/UI/Button';
 import { CustomLink } from '~/components/UI/CustomLink';
 import { Context } from '~/graphql/context';
-import { authenticatedRoute } from '~/utils/authRedirect';
+import { authenticatedRoute } from '~/utils/auth';
 
 const MeQuery = gql`
   query MyQuery {
