@@ -1,8 +1,8 @@
-import prisma from '@/utils/prisma';
 import { AuthenticationError } from 'apollo-server-micro';
 import { compareSync, hashSync } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { extendType, nonNull, objectType, stringArg } from 'nexus';
+import prisma from '~/utils/prisma';
 import { User } from '.';
 
 export const AuthToken = objectType({

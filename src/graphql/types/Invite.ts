@@ -1,5 +1,5 @@
-import { objectType, extendType, nonNull, stringArg } from 'nexus';
-import prisma from '@/utils/prisma';
+import { objectType } from 'nexus';
+import prisma from '~/utils/prisma';
 import { Household, User } from '.';
 
 export const Invite = objectType({

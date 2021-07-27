@@ -1,10 +1,10 @@
-import { context } from '@/graphql/context';
-import { schema } from '@/graphql/schema';
 import {
   ApolloServerPluginLandingPageDisabled,
   ApolloServerPluginLandingPageGraphQLPlayground,
 } from 'apollo-server-core';
 import { ApolloError, ApolloServer } from 'apollo-server-micro';
+import { context } from '~/graphql/context';
+import { schema } from '~/graphql/schema';
 
 // Check if the secret used for the JWT encryption was set in the .env file
 if (!process.env.JWT_SECRET) {

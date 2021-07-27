@@ -1,5 +1,5 @@
-import prisma from '@/utils/prisma';
 import { objectType } from 'nexus';
+import prisma from '~/utils/prisma';
 import { Household, Invite, Payment } from '.';
 
 export const User = objectType({

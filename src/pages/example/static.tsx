@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
-import { initializeApollo } from '@/utils/apollo';
-import { Category } from '@/graphql/__generated__/types';
+import { Category } from '~/graphql/__generated__/types';
+import { initializeApollo } from '~/utils/apollo';
 
 export default function Home({ categories }: { categories: Category[] }) {
   return (
