@@ -2,6 +2,7 @@ import { MenuIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { ComponentProps, useState } from 'react';
+import { ThemeSwitch } from '../ThemeSwitch';
 import { Button } from './Button';
 import { CustomLink } from './CustomLink';
 
@@ -58,6 +59,7 @@ export default function Header() {
             <HeaderLink href="/">Features</HeaderLink>
             <HeaderLink href="/">Pricing</HeaderLink>
             <HeaderLink href="/">Contact</HeaderLink>
+            <ThemeSwitch />
             <CustomLink
               href="/auth/login"
               className="p-2 lg:px-4 md:mx-2 text-brand-600 text-center border border-transparent rounded hover:bg-brand-600 hover:text-white transition-colors duration-300"
