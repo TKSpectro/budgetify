@@ -15,7 +15,7 @@ const HouseholdQuery = gql`
   }
 `;
 
-export default function Dashboard() {
+export default function Households() {
   const router = useRouter();
   const { householdId } = router.query;
   const { data, loading, error } = useQuery(HouseholdQuery, {

@@ -55,7 +55,7 @@ export default function Header() {
             <HeaderLink href="/" className="p-2 lg:px-4 md:mx-2 text-white rounded bg-brand-600">
               Home
             </HeaderLink>
-            <HeaderLink href="/household">Dashboard</HeaderLink>
+            <HeaderLink href="/households">Dashboard</HeaderLink>
             <HeaderLink href="/">Features</HeaderLink>
             <HeaderLink href="/">Pricing</HeaderLink>
             <HeaderLink href="/">Contact</HeaderLink>
