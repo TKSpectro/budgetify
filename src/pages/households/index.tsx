@@ -1,6 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
+import Link from 'next/link';
 import React from 'react';
-import { CustomLink } from '~/components/UI/CustomLink';
+import { Container } from '~/components/UI/Container';
 import { Household } from '~/graphql/__generated__/types';
 
 const HouseholdsQuery = gql`
@@ -21,16 +22,24 @@ export default function Dashboard() {
 
   if (loading) return <span>loading...</span>;
 
-  // TODO: build nice looking custom component for one household-list-item thing
+  // TODO: What info should be shown for each household?
+  // Maybe even the net-value of the household?
+  // Add a open button?
+
   return (
-    <div>
+    <Container>
       {data.households.map((household: Household) => {
         return (
-          <div key={household.id}>
-            <CustomLink href={`/household/${household.id}`}>{household.name}</CustomLink>
-          </div>
+          <Link href={`/households/${household.id}`} key={household.id}>
+            <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 rounded-lg hover:cursor-pointer">
+              <div className="text-xl">{household.name}</div>
+              <div>
+                Owner: {household.owner?.firstname} {household.owner?.lastname}
+              </div>
+            </div>
+          </Link>
         );
       })}
-    </div>
+    </Container>
   );
 }
