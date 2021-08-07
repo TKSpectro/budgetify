@@ -7,7 +7,7 @@ import '../styles.css';
 
 function App({ Component, pageProps }: AppProps) {
   // create the apolloClient when opening the page
-  const client = useApollo(pageProps.initialApolloState);
+  const client = useApollo(pageProps.initialClientState);
 
   return (
     <ApolloProvider client={client}>

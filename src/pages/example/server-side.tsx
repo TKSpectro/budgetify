@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
+import { GetServerSideProps } from 'next';
 import { Category } from '~/graphql/__generated__/types';
-import { initializeApollo } from '~/utils/apollo';
+import { preloadQuery } from '~/utils/apollo';
 
 export default function Home({ categories }: { categories: Category[] }) {
   return (
@@ -18,9 +19,8 @@ export default function Home({ categories }: { categories: Category[] }) {
   );
 }
 
-export async function getServerSideProps() {
-  const client = initializeApollo();
-  const { data } = await client.query({
+export const getServerSideProps: GetServerSideProps = async (ctx) =>
+  preloadQuery(ctx, {
     query: gql`
       query Categories {
         categories {
@@ -32,10 +32,3 @@ export async function getServerSideProps() {
       }
     `,
   });
-
-  return {
-    props: {
-      categories: data.categories.slice(0, 4),
-    },
-  };
-}
