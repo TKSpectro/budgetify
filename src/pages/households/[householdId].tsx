@@ -1,6 +1,8 @@
 import { gql, useQuery } from '@apollo/client';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { preloadQuery } from '~/utils/apollo';
 
 const HouseholdQuery = gql`
   query HouseholdQuery($householdId: String) {
@@ -31,29 +33,8 @@ export default function Households() {
   );
 }
 
-// TODO: Figure out how to server side this
-
-// export async function getServerSideProps() {
-//   const client = initializeApollo();
-//   const { data, error } = await client.query({
-//     query: gql`
-//       query HouseholdQuery {
-//         household(id: "3d18f195-d179-400d-a6bc-c4d9c544f9ac") {
-//           id
-//           name
-//           owner {
-//             firstname
-//             lastname
-//           }
-//         }
-//       }
-//     `,
-//   });
-
-//   return {
-//     props: {
-//       household: data.household,
-//       error: error || null,
-//     },
-//   };
-// }
+export const getServerSideProps: GetServerSideProps = async (ctx) =>
+  preloadQuery(ctx, {
+    query: HouseholdQuery,
+    variables: { householdId: ctx.params!.householdId },
+  });
