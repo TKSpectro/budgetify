@@ -1,7 +1,11 @@
+import { gql, useQuery } from '@apollo/client';
 import { MenuIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { ComponentProps, useState } from 'react';
+import { Context } from '~/graphql/context';
+import { preloadQuery } from '~/utils/apollo';
 import { ThemeSwitch } from '../ThemeSwitch';
 import { Button } from './Button';
 import { CustomLink } from './CustomLink';
@@ -21,8 +25,22 @@ export function HeaderLink({ href, ...props }: LinkProps) {
   return <Link href={href!}>{content}</Link>;
 }
 
+const MeQuery = gql`
+  query Me {
+    me {
+      id
+      firstname
+      lastname
+      email
+    }
+  }
+`;
+
 export default function Header() {
   const [navBarCollapsed, setNavBarCollapsed] = useState(false);
+  const { data, loading, error } = useQuery(MeQuery);
+
+  const isLoggedIn = data?.me?.id;
 
   function toggleNavbarHandler() {
     setNavBarCollapsed(!navBarCollapsed);
@@ -52,29 +70,48 @@ export default function Header() {
               hidden: navBarCollapsed === false,
             })}
           >
-            <HeaderLink href="/" className="p-2 lg:px-4 md:mx-2 text-white rounded bg-brand-600">
-              Home
+            <HeaderLink
+              href="/households"
+              className="p-2 lg:px-4 md:mx-2 text-white rounded bg-brand-600"
+            >
+              Dashboard
             </HeaderLink>
-            <HeaderLink href="/households">Dashboard</HeaderLink>
             <HeaderLink href="/">Features</HeaderLink>
             <HeaderLink href="/">Pricing</HeaderLink>
             <HeaderLink href="/">Contact</HeaderLink>
             <ThemeSwitch />
-            <CustomLink
-              href="/auth/login"
-              className="p-2 lg:px-4 md:mx-2 text-brand-600 text-center border border-transparent rounded hover:bg-brand-600 hover:text-white transition-colors duration-300"
-            >
-              Login
-            </CustomLink>
-            <CustomLink
-              href="/auth/signup"
-              className="p-2 lg:px-4 md:mx-2 text-brand-600 text-center border border-solid border-brand-600 rounded hover:bg-brand-600 hover:text-white transition-colors duration-300 mt-1 md:mt-0 md:ml-1"
-            >
-              Signup
-            </CustomLink>
+            {!isLoggedIn && (
+              <CustomLink
+                href="/auth/login"
+                className="p-2 lg:px-4 md:mx-2 text-brand-600 text-center border border-transparent rounded hover:bg-brand-600 hover:text-white transition-colors duration-300"
+              >
+                Login
+              </CustomLink>
+            )}
+            {!isLoggedIn && (
+              <CustomLink
+                href="/auth/signup"
+                className="p-2 lg:px-4 md:mx-2 text-brand-600 text-center border border-solid border-brand-600 rounded hover:bg-brand-600 hover:text-white transition-colors duration-300 mt-1 md:mt-0 md:ml-1"
+              >
+                Signup
+              </CustomLink>
+            )}
+            {isLoggedIn && (
+              <CustomLink
+                href="/profile"
+                className="p-2 lg:px-4 md:mx-2 text-brand-600 text-center border border-transparent rounded hover:bg-brand-600 hover:text-white transition-colors duration-300"
+              >
+                Profile
+              </CustomLink>
+            )}
           </div>
         </div>
       </nav>
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) =>
+  preloadQuery(ctx, {
+    query: MeQuery,
+  });
