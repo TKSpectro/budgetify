@@ -25,7 +25,7 @@ export function HeaderLink({ href, ...props }: LinkProps) {
   return <Link href={href!}>{content}</Link>;
 }
 
-const MeQuery = gql`
+export const MeQuery = gql`
   query Me {
     me {
       id

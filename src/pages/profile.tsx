@@ -1,11 +1,12 @@
-import { gql, useQuery } from '@apollo/client';
-import { useRouter } from 'next/dist/client/router';
-import React from 'react';
-import { Button } from '~/components/UI/Button';
-import { CustomLink } from '~/components/UI/CustomLink';
+import { useQuery } from '@apollo/client';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import { MeQuery } from '~/components/UI/Header';
+import { preloadQuery } from '~/utils/apollo';
+import { CustomLink } from '~/components/UI/CustomLink';
+import { Button } from '~/components/UI/Button';
 
-export default function Home() {
+export default function Profile() {
   const { data, loading, error } = useQuery(MeQuery);
   const router = useRouter();
 
@@ -44,3 +45,6 @@ export default function Home() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) =>
+  preloadQuery(ctx, { query: MeQuery });
