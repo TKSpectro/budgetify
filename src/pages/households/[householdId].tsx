@@ -2,6 +2,8 @@ import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
+import Overview from '~/components/Household/Overview';
+import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 
 const HouseholdQuery = gql`
@@ -12,6 +14,21 @@ const HouseholdQuery = gql`
       owner {
         firstname
         lastname
+      }
+      payments {
+        id
+        name
+        value
+        description
+        category {
+          id
+          name
+        }
+        user {
+          id
+          firstname
+          lastname
+        }
       }
     }
   }
@@ -27,8 +44,19 @@ export default function Households() {
   if (loading) return <span>loading...</span>;
 
   return (
-    <div>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+    <div className="mx-24 mt-12">
+      <div className="text-7xl text-brand-500">{data.household.name}</div>
+      <div className="mt-12 text-4xl">
+        Total balance{' '}
+        {
+          // Add up the value of all payments for the total balance
+          data.household.payments.reduce(
+            (sum: number, payment: Payment) => +sum + +payment.value,
+            0.0,
+          )
+        }
+      </div>
+      <Overview payments={data.household.payments} />
     </div>
   );
 }
