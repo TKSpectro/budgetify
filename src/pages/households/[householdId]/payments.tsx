@@ -1,9 +1,12 @@
 import { gql, useQuery } from '@apollo/client';
+import 'chartjs-adapter-date-fns';
+import { differenceInDays, parseISO } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
+import { genData } from '~/utils/charts';
 
 const Query = gql`
   query HouseholdQuery($householdId: String) {
@@ -19,6 +22,7 @@ const Query = gql`
         name
         value
         description
+        createdAt
         category {
           id
           name
@@ -32,44 +36,18 @@ const Query = gql`
     }
   }
 `;
-const rand = () => Math.round(Math.random() * 20 - 10);
 
-const genData = () => ({
-  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-  datasets: [
-    {
-      label: 'Scale',
-      data: [rand(), rand(), rand(), rand(), rand(), rand()],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)',
-      ],
-      borderWidth: 1,
-    },
-  ],
-});
-
-const options = {
+let paymentChartOptions = {
   scales: {
-    yAxes: [
-      {
-        ticks: {
-          beginAtZero: true,
+    xAxis: {
+      type: 'time',
+      time: {
+        unit: 'month',
+        displayFormats: {
+          quarter: 'MMM YYYY',
         },
       },
-    ],
+    },
   },
 };
 
@@ -80,10 +58,22 @@ export default function Payments() {
     variables: { householdId },
   });
 
+  let addedPaymentValues = 0.0;
+
+  const labels = data.household.payments.map((payment: Payment) => payment.createdAt);
+  const chartData = data.household.payments.map(
+    (payment: Payment) => (addedPaymentValues += payment.value),
+  );
+
+  // If the time period is smaller than 90 days, show the labels in weeks instead of months
+  if (differenceInDays(parseISO(labels[labels.length - 1]), parseISO(labels[0])) < 90) {
+    paymentChartOptions.scales.xAxis.time.unit = 'week';
+  }
+
   return (
     <>
       <div>
-        <Bar data={genData()} options={options} />
+        <Line data={genData(labels, chartData)} options={paymentChartOptions} />
       </div>
       {data.household.payments.map((payment: Payment) => {
         // TODO: Build payment component

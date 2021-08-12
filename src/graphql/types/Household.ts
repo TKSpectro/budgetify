@@ -35,7 +35,9 @@ export const Household = objectType({
     t.list.field('payments', {
       type: Payment,
       resolve(root) {
-        return prisma.household.findUnique({ where: { id: root.id || undefined } }).payments();
+        return prisma.household
+          .findUnique({ where: { id: root.id || undefined } })
+          .payments({ orderBy: { createdAt: 'asc' } });
       },
     });
   },
