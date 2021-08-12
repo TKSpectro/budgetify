@@ -4,6 +4,7 @@ import { differenceInDays, parseISO } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Line } from 'react-chartjs-2';
+import { Container } from '~/components/UI/Container';
 import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { genData } from '~/utils/charts';
@@ -38,6 +39,7 @@ const Query = gql`
 `;
 
 let paymentChartOptions = {
+  responsive: true,
   scales: {
     xAxis: {
       type: 'time',
@@ -71,19 +73,24 @@ export default function Payments() {
   }
 
   return (
-    <>
-      <div>
+    // TODO: Add a date filter
+    <div className="mt-24 md:mx-32">
+      <div className="max-w-[60em] mx-auto">
         <Line data={genData(labels, chartData)} options={paymentChartOptions} />
       </div>
-      {data.household.payments.map((payment: Payment) => {
-        // TODO: Build payment component
-        return (
-          <div key={payment.id}>
-            {payment.name} {payment.value}
-          </div>
-        );
-      })}
-    </>
+      <div className="mt-16">
+        <Container>
+          {data.household.payments.map((payment: Payment) => {
+            // TODO: Build payment component
+            return (
+              <div key={payment.id}>
+                {payment.name} {payment.value}
+              </div>
+            );
+          })}
+        </Container>
+      </div>
+    </div>
   );
 }
 

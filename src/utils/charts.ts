@@ -21,6 +21,7 @@ export const genData = (labels?: string[], chartData?: number[]) => ({
       backgroundColor: ['rgba(255,255,255,0.04)'],
       borderColor: ['rgba(20, 184, 166, 1)'],
       borderWidth: 1,
+      tension: 0.2,
     },
   ],
 });
