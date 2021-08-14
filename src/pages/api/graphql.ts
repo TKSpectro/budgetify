@@ -1,6 +1,6 @@
 import {
-  ApolloServerPluginLandingPageDisabled,
   ApolloServerPluginLandingPageGraphQLPlayground,
+  ApolloServerPluginLandingPageProductionDefault,
 } from 'apollo-server-core';
 import { ApolloError, ApolloServer } from 'apollo-server-micro';
 import { context } from '~/graphql/context';
@@ -16,10 +16,11 @@ const server = new ApolloServer({
   context,
   // As of apollo-server-micro@3.0 we need to manually activate the old GraphqlQLPlayground
   // instead of the new LandingPage
-  // TODO: Look into the LandingPage (is there the same functionality possible with? etc.)
+  // The new landing page uses apollo studio explorer which needs quite some more setup
+  // which is currently not well documented, so we use the old graphqlPlayground
   plugins: [
     process.env.NODE_ENV === 'production'
-      ? ApolloServerPluginLandingPageDisabled()
+      ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
       : ApolloServerPluginLandingPageGraphQLPlayground({
           settings: { 'request.credentials': 'include' },
         }),
