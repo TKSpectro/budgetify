@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { ComponentProps, useState } from 'react';
-import { Context } from '~/graphql/context';
 import { preloadQuery } from '~/utils/apollo';
 import { ThemeSwitch } from '../ThemeSwitch';
 import { Button } from './Button';
@@ -72,7 +71,7 @@ export default function Header() {
           >
             <HeaderLink
               href="/households"
-              className="p-2 lg:px-4 md:mx-2 text-white rounded bg-brand-600"
+              className="p-2 lg:px-4 md:mx-2 text-white rounded bg-brand-500"
             >
               Dashboard
             </HeaderLink>
@@ -83,7 +82,7 @@ export default function Header() {
             {!isLoggedIn && (
               <CustomLink
                 href="/auth/login"
-                className="p-2 lg:px-4 md:mx-2 text-brand-600 text-center border border-transparent rounded hover:bg-brand-600 hover:text-white transition-colors duration-300"
+                className="p-2 lg:px-4 md:mx-2 text-brand-500 text-center border border-transparent rounded hover:bg-brand-600 hover:text-white transition-colors duration-300"
               >
                 Login
               </CustomLink>
@@ -91,7 +90,7 @@ export default function Header() {
             {!isLoggedIn && (
               <CustomLink
                 href="/auth/signup"
-                className="p-2 lg:px-4 md:mx-2 text-brand-600 text-center border border-solid border-brand-600 rounded hover:bg-brand-600 hover:text-white transition-colors duration-300 mt-1 md:mt-0 md:ml-1"
+                className="p-2 lg:px-4 md:mx-2 text-brand-500 text-center border border-solid border-brand-600 rounded hover:bg-brand-600 hover:text-white transition-colors duration-300 mt-1 md:mt-0 md:ml-1"
               >
                 Signup
               </CustomLink>
@@ -99,7 +98,7 @@ export default function Header() {
             {isLoggedIn && (
               <CustomLink
                 href="/profile"
-                className="p-2 lg:px-4 md:mx-2 text-brand-600 text-center border border-transparent rounded hover:bg-brand-600 hover:text-white transition-colors duration-300"
+                className="p-2 lg:px-4 md:mx-2 text-brand-500 text-center border border-transparent rounded hover:bg-brand-600 hover:text-white transition-colors duration-300"
               >
                 Profile
               </CustomLink>
