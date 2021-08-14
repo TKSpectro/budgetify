@@ -175,6 +175,7 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     invites: Array<NexusGenRootTypes['Invite'] | null> | null; // [Invite]
     lastname: string; // String!
+    name: string; // String!
     ownedHouseholds: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     payments: Array<NexusGenRootTypes['Payment'] | null> | null; // [Payment]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -252,6 +253,7 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     invites: 'Invite'
     lastname: 'String'
+    name: 'String'
     ownedHouseholds: 'Household'
     payments: 'Payment'
     updatedAt: 'DateTime'

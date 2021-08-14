@@ -8,6 +8,11 @@ export const User = objectType({
     t.nonNull.string('id');
     t.nonNull.string('firstname');
     t.nonNull.string('lastname');
+    t.nonNull.string('name', {
+      resolve(root) {
+        return root.firstname + ' ' + root.lastname;
+      },
+    });
     t.nonNull.string('email');
     t.nonNull.string('hashedPassword');
     t.nonNull.field('createdAt', { type: 'DateTime' });

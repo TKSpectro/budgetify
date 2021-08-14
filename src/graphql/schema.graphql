@@ -84,6 +84,7 @@ type User {
   id: String!
   invites: [Invite]
   lastname: String!
+  name: String!
   ownedHouseholds: [Household]
   payments: [Payment]
   updatedAt: DateTime!

@@ -130,6 +130,7 @@ export type User = {
   id: Scalars['String'];
   firstname: Scalars['String'];
   lastname: Scalars['String'];
+  name: Scalars['String'];
   email: Scalars['String'];
   hashedPassword: Scalars['String'];
   createdAt: Scalars['DateTime'];
