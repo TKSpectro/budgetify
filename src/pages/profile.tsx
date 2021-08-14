@@ -1,10 +1,11 @@
 import { useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { MeQuery } from '~/components/UI/Header';
-import { preloadQuery } from '~/utils/apollo';
-import { CustomLink } from '~/components/UI/CustomLink';
 import { Button } from '~/components/UI/Button';
+import { Container } from '~/components/UI/Container';
+import { MeQuery } from '~/components/UI/Header';
+import Modal from '~/components/UI/Modal';
+import { preloadQuery } from '~/utils/apollo';
 
 export default function Profile() {
   const { data, loading, error } = useQuery(MeQuery);
@@ -28,21 +29,23 @@ export default function Profile() {
   if (loading) return <span>loading...</span>;
 
   return (
-    <div>
+    <Container>
       <pre>{JSON.stringify(data, null, 2)}</pre>
-      {!data && <div>Not logged in!</div>}
-      {!data && (
-        <div>
-          <CustomLink href="/auth/signup">No Account? No Problem! Signup</CustomLink>
-        </div>
-      )}
-      {!data && (
-        <div>
-          <CustomLink href="/auth/login">Do you already have an account? Login</CustomLink>
-        </div>
-      )}
-      {data && <Button onClick={logoutHandler}>Logout</Button>}
-    </div>
+      <div className="flex">
+        <Modal
+          title="Delete Account"
+          description="If you delete your account all your data will be lost. All households you own will be transferred to another person."
+          submitText="Submit"
+          onSubmit={() => {
+            // TODO: Delete Account
+            console.log('ModalSubmitted');
+          }}
+          buttonText="DELETE ACCOUNT"
+          color="red"
+        />
+        {data && <Button onClick={logoutHandler}>Logout</Button>}
+      </div>
+    </Container>
   );
 }
 
