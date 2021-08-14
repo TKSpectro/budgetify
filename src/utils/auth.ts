@@ -1,9 +1,8 @@
 import jwt from 'jsonwebtoken';
-import { GetServerSidePropsResult } from 'next';
-import { Context } from '~/graphql/context';
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 
 export async function authenticatedRoute(
-  context: Context,
+  context: GetServerSidePropsContext,
   redirect = '/auth/login',
 ): Promise<GetServerSidePropsResult<{}>> {
   let data;

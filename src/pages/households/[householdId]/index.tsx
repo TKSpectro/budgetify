@@ -5,6 +5,7 @@ import React from 'react';
 import Overview from '~/components/Household/Overview';
 import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
+import { authenticatedRoute } from '~/utils/auth';
 
 const HouseholdQuery = gql`
   query HouseholdQuery($householdId: String) {
@@ -61,8 +62,10 @@ export default function Households() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) =>
-  preloadQuery(ctx, {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  authenticatedRoute(ctx);
+  return preloadQuery(ctx, {
     query: HouseholdQuery,
     variables: { householdId: ctx.params!.householdId },
   });
+};

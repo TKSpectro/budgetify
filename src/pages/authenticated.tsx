@@ -1,9 +1,9 @@
 import { gql, useQuery } from '@apollo/client';
+import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/dist/client/router';
 import React from 'react';
 import { Button } from '~/components/UI/Button';
 import { CustomLink } from '~/components/UI/CustomLink';
-import { Context } from '~/graphql/context';
 import { authenticatedRoute } from '~/utils/auth';
 
 const MeQuery = gql`
@@ -59,6 +59,6 @@ export default function Home() {
   );
 }
 
-export async function getServerSideProps(context: Context) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   return authenticatedRoute(context);
 }

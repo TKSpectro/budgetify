@@ -7,6 +7,7 @@ import { Line } from 'react-chartjs-2';
 import { Container } from '~/components/UI/Container';
 import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
+import { authenticatedRoute } from '~/utils/auth';
 import { genData } from '~/utils/charts';
 
 const Query = gql`
@@ -94,8 +95,10 @@ export default function Payments() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) =>
-  preloadQuery(ctx, {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  authenticatedRoute(ctx);
+  return preloadQuery(ctx, {
     query: Query,
     variables: { householdId: ctx.params!.householdId },
   });
+};

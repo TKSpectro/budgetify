@@ -1,10 +1,10 @@
 import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { PropsWithChildren, PropsWithoutRef, PropsWithRef } from 'react';
 import { Container } from '~/components/UI/Container';
 import { Household } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
+import { authenticatedRoute } from '~/utils/auth';
 
 const query = gql`
   query HouseholdsQuery {
@@ -49,7 +49,9 @@ export default function Households() {
     </>
   );
 }
-export const getServerSideProps: GetServerSideProps = async (ctx) =>
-  preloadQuery(ctx, {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  authenticatedRoute(ctx);
+  return preloadQuery(ctx, {
     query: query,
   });
+};

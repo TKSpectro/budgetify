@@ -6,6 +6,7 @@ import { Container } from '~/components/UI/Container';
 import { MeQuery } from '~/components/UI/Header';
 import Modal from '~/components/UI/Modal';
 import { preloadQuery } from '~/utils/apollo';
+import { authenticatedRoute } from '~/utils/auth';
 
 export default function Profile() {
   const { data, loading, error } = useQuery(MeQuery);
@@ -49,5 +50,7 @@ export default function Profile() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) =>
-  preloadQuery(ctx, { query: MeQuery });
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  authenticatedRoute(ctx);
+  return preloadQuery(ctx, { query: MeQuery });
+};
