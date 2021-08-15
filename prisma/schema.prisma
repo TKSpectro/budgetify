@@ -20,32 +20,62 @@ generator client {
 }
 
 model User {
-  id              String      @id @default(uuid())
-  firstname       String
-  lastname        String
-  email           String      @unique
-  hashedPassword  String
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-  households      Household[]
-  invites         Invite[]
-  ownedHouseholds Household[] @relation("Owner")
-  payments        Payment[]
+  id               String             @id @default(uuid())
+  firstname        String
+  lastname         String
+  email            String             @unique
+  hashedPassword   String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  households       Household[]
+  invites          Invite[]
+  ownedHouseholds  Household[]        @relation("Owner")
+  payments         Payment[]
+  RecurringPayment RecurringPayment[]
 }
 
 model Category {
-  id        String    @id @default(uuid())
-  name      String    @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  payments  Payment[]
+  id               String             @id @default(uuid())
+  name             String             @unique
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  payments         Payment[]
+  RecurringPayment RecurringPayment[]
 }
 
 model Payment {
+  id                 String            @id @default(uuid())
+  name               String
+  value              Float
+  description        String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  category           Category          @relation(fields: [categoryId], references: [id])
+  categoryId         String
+  user               User?             @relation(fields: [userId], references: [id])
+  userId             String?
+  household          Household         @relation(fields: [householdId], references: [id])
+  householdId        String
+  recurringPayment   RecurringPayment? @relation(fields: [recurringPaymentId], references: [id])
+  recurringPaymentId String?
+}
+
+enum Interval {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+model RecurringPayment {
   id          String    @id @default(uuid())
   name        String
   value       Float
   description String?
+  interval    Interval  @default(MONTHLY)
+  startDate   DateTime  @default(now())
+  endDate     DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   category    Category  @relation(fields: [categoryId], references: [id])
@@ -54,18 +84,20 @@ model Payment {
   userId      String?
   household   Household @relation(fields: [householdId], references: [id])
   householdId String
+  Payment     Payment[]
 }
 
 model Household {
-  id        String    @id @default(uuid())
-  name      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  owner     User      @relation("Owner", fields: [ownerId], references: [id])
-  ownerId   String
-  members   User[]
-  invites   Invite[]
-  payments  Payment[]
+  id               String             @id @default(uuid())
+  name             String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  owner            User               @relation("Owner", fields: [ownerId], references: [id])
+  ownerId          String
+  members          User[]
+  invites          Invite[]
+  payments         Payment[]
+  RecurringPayment RecurringPayment[]
 }
 
 model Invite {
