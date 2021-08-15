@@ -7,4 +7,5 @@ export * from './Category';
 export * from './Household';
 export * from './Invite';
 export * from './Payment';
+export * from './RecurringPayment';
 export * from './User';

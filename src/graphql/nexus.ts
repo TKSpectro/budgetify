@@ -31,6 +31,7 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
+  Interval: "DAILY" | "MONTHLY" | "QUARTERLY" | "WEEKLY" | "YEARLY"
 }
 
 export interface NexusGenScalars {
@@ -83,6 +84,21 @@ export interface NexusGenObjects {
     value: number; // Float!
   }
   Query: {};
+  RecurringPayment: { // root type
+    categoryId: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    description?: string | null; // String
+    endDate?: NexusGenScalars['DateTime'] | null; // DateTime
+    householdId: string; // String!
+    id: string; // String!
+    interval: NexusGenEnums['Interval']; // Interval!
+    lastBooking?: NexusGenScalars['DateTime'] | null; // DateTime
+    name: string; // String!
+    startDate: NexusGenScalars['DateTime']; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    userId?: string | null; // String
+    value: number; // Float!
+  }
   User: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
@@ -102,7 +118,7 @@ export interface NexusGenUnions {
 
 export type NexusGenRootTypes = NexusGenObjects
 
-export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
+export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
   AuthToken: { // field return type
@@ -140,6 +156,7 @@ export interface NexusGenFieldTypes {
     wasUsed: boolean; // Boolean!
   }
   Mutation: { // field return type
+    bookRecurringPayments: Array<NexusGenRootTypes['RecurringPayment'] | null> | null; // [RecurringPayment]
     createCategory: NexusGenRootTypes['Category']; // Category!
     login: NexusGenRootTypes['AuthToken']; // AuthToken!
     removeCategory: NexusGenRootTypes['Category']; // Category!
@@ -165,6 +182,26 @@ export interface NexusGenFieldTypes {
     household: NexusGenRootTypes['Household'] | null; // Household
     households: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     me: NexusGenRootTypes['User'] | null; // User
+    recurringPayments: Array<NexusGenRootTypes['RecurringPayment'] | null> | null; // [RecurringPayment]
+  }
+  RecurringPayment: { // field return type
+    category: NexusGenRootTypes['Category'] | null; // Category
+    categoryId: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    description: string | null; // String
+    endDate: NexusGenScalars['DateTime'] | null; // DateTime
+    household: NexusGenRootTypes['Household'] | null; // Household
+    householdId: string; // String!
+    id: string; // String!
+    interval: NexusGenEnums['Interval']; // Interval!
+    lastBooking: NexusGenScalars['DateTime'] | null; // DateTime
+    name: string; // String!
+    payments: Array<NexusGenRootTypes['Payment'] | null> | null; // [Payment]
+    startDate: NexusGenScalars['DateTime']; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    user: NexusGenRootTypes['User'] | null; // User
+    userId: string | null; // String
+    value: number; // Float!
   }
   User: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -218,6 +255,7 @@ export interface NexusGenFieldTypeNames {
     wasUsed: 'Boolean'
   }
   Mutation: { // field return type name
+    bookRecurringPayments: 'RecurringPayment'
     createCategory: 'Category'
     login: 'AuthToken'
     removeCategory: 'Category'
@@ -243,6 +281,26 @@ export interface NexusGenFieldTypeNames {
     household: 'Household'
     households: 'Household'
     me: 'User'
+    recurringPayments: 'RecurringPayment'
+  }
+  RecurringPayment: { // field return type name
+    category: 'Category'
+    categoryId: 'String'
+    createdAt: 'DateTime'
+    description: 'String'
+    endDate: 'DateTime'
+    household: 'Household'
+    householdId: 'String'
+    id: 'String'
+    interval: 'Interval'
+    lastBooking: 'DateTime'
+    name: 'String'
+    payments: 'Payment'
+    startDate: 'DateTime'
+    updatedAt: 'DateTime'
+    user: 'User'
+    userId: 'String'
+    value: 'Float'
   }
   User: { // field return type name
     createdAt: 'DateTime'
@@ -262,6 +320,9 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    bookRecurringPayments: { // args
+      secretKey: string; // String!
+    }
     createCategory: { // args
       name: string; // String!
     }
@@ -300,7 +361,7 @@ export type NexusGenObjectNames = keyof NexusGenObjects;
 
 export type NexusGenInputNames = never;
 
-export type NexusGenEnumNames = never;
+export type NexusGenEnumNames = keyof NexusGenEnums;
 
 export type NexusGenInterfaceNames = never;
 

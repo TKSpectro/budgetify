@@ -31,6 +31,15 @@ type Household {
   updatedAt: DateTime!
 }
 
+"""The interval of how often the payment should be booked"""
+enum Interval {
+  DAILY
+  MONTHLY
+  QUARTERLY
+  WEEKLY
+  YEARLY
+}
+
 type Invite {
   createdAt: DateTime!
   household: Household
@@ -46,6 +55,7 @@ type Invite {
 }
 
 type Mutation {
+  bookRecurringPayments(secretKey: String!): [RecurringPayment]
   createCategory(name: String!): Category!
   login(email: String!, password: String!): AuthToken!
   removeCategory(name: String!): Category!
@@ -73,6 +83,27 @@ type Query {
   household(id: String): Household
   households: [Household]
   me: User
+  recurringPayments: [RecurringPayment]
+}
+
+type RecurringPayment {
+  category: Category
+  categoryId: String!
+  createdAt: DateTime!
+  description: String
+  endDate: DateTime
+  household: Household
+  householdId: String!
+  id: String!
+  interval: Interval!
+  lastBooking: DateTime
+  name: String!
+  payments: [Payment]
+  startDate: DateTime!
+  updatedAt: DateTime!
+  user: User
+  userId: String
+  value: Float!
 }
 
 type User {

@@ -42,6 +42,15 @@ export type Household = {
   payments?: Maybe<Array<Maybe<Payment>>>;
 };
 
+/** The interval of how often the payment should be booked */
+export enum Interval {
+  Daily = 'DAILY',
+  Weekly = 'WEEKLY',
+  Monthly = 'MONTHLY',
+  Quarterly = 'QUARTERLY',
+  Yearly = 'YEARLY'
+}
+
 export type Invite = {
   __typename?: 'Invite';
   id: Scalars['String'];
@@ -63,6 +72,7 @@ export type Mutation = {
   login: AuthToken;
   createCategory: Category;
   removeCategory: Category;
+  bookRecurringPayments?: Maybe<Array<Maybe<RecurringPayment>>>;
 };
 
 
@@ -89,6 +99,11 @@ export type MutationRemoveCategoryArgs = {
   name: Scalars['String'];
 };
 
+
+export type MutationBookRecurringPaymentsArgs = {
+  secretKey: Scalars['String'];
+};
+
 export type Payment = {
   __typename?: 'Payment';
   id: Scalars['String'];
@@ -112,6 +127,7 @@ export type Query = {
   category?: Maybe<Category>;
   households?: Maybe<Array<Maybe<Household>>>;
   household?: Maybe<Household>;
+  recurringPayments?: Maybe<Array<Maybe<RecurringPayment>>>;
 };
 
 
@@ -123,6 +139,27 @@ export type QueryCategoryArgs = {
 
 export type QueryHouseholdArgs = {
   id?: Maybe<Scalars['String']>;
+};
+
+export type RecurringPayment = {
+  __typename?: 'RecurringPayment';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  value: Scalars['Float'];
+  description?: Maybe<Scalars['String']>;
+  interval: Interval;
+  startDate: Scalars['DateTime'];
+  endDate?: Maybe<Scalars['DateTime']>;
+  lastBooking?: Maybe<Scalars['DateTime']>;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  categoryId: Scalars['String'];
+  category?: Maybe<Category>;
+  userId?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
+  householdId: Scalars['String'];
+  household?: Maybe<Household>;
+  payments?: Maybe<Array<Maybe<Payment>>>;
 };
 
 export type User = {
