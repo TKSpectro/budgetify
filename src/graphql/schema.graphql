@@ -55,6 +55,11 @@ type Invite {
 }
 
 type Mutation {
+  """
+  This mutation should be called regularly (at least once a day)
+          by a CRON-Job or something of this kind. To book all recurringPayment
+          which need to be booked
+  """
   bookRecurringPayments(secretKey: String!): [RecurringPayment]
   createCategory(name: String!): Category!
   login(email: String!, password: String!): AuthToken!

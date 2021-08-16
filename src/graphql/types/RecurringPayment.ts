@@ -93,6 +93,9 @@ export const RecurringPaymentsMutation = extendType({
   definition(t) {
     t.list.field('bookRecurringPayments', {
       type: RecurringPayment,
+      description: `This mutation should be called regularly (at least once a day)
+        by a CRON-Job or something of this kind. To book all recurringPayment
+        which need to be booked`,
       args: {
         secretKey: nonNull(stringArg()),
       },
@@ -109,33 +112,43 @@ export const RecurringPaymentsMutation = extendType({
           switch (recPayment.interval) {
             case 'DAILY':
               {
-                diff = differenceInDays(new Date(), recPayment.lastBooking || new Date());
+                diff = differenceInDays(new Date(), recPayment.lastBooking || recPayment.startDate);
               }
               break;
             case 'WEEKLY':
               {
-                diff = differenceInWeeks(new Date(), recPayment.lastBooking || new Date());
+                diff = differenceInWeeks(
+                  new Date(),
+                  recPayment.lastBooking || recPayment.startDate,
+                );
               }
               break;
             case 'MONTHLY':
               {
-                diff = differenceInCalendarMonths(new Date(), recPayment.lastBooking || new Date());
+                diff = differenceInCalendarMonths(
+                  new Date(),
+                  recPayment.lastBooking || recPayment.startDate,
+                );
               }
               break;
             case 'QUARTERLY':
               {
-                diff = differenceInQuarters(new Date(), recPayment.lastBooking || new Date());
+                diff = differenceInQuarters(
+                  new Date(),
+                  recPayment.lastBooking || recPayment.startDate,
+                );
               }
               break;
             case 'YEARLY':
               {
-                diff = differenceInYears(new Date(), recPayment.lastBooking || new Date());
+                diff = differenceInYears(
+                  new Date(),
+                  recPayment.lastBooking || recPayment.startDate,
+                );
               }
               break;
           }
           if (diff > 0) {
-            // TODO: Payment has to be booked
-            console.log('booked:', recPayment.id);
             bookedPayments.push(
               await prisma.payment.create({
                 data: {
@@ -144,6 +157,7 @@ export const RecurringPaymentsMutation = extendType({
                   recurringPaymentId: recPayment.id,
                   categoryId: recPayment.categoryId,
                   householdId: recPayment.householdId,
+                  userId: recPayment.userId,
                 },
               }),
             );
