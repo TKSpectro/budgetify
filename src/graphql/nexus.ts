@@ -94,6 +94,7 @@ export interface NexusGenObjects {
     interval: NexusGenEnums['Interval']; // Interval!
     lastBooking?: NexusGenScalars['DateTime'] | null; // DateTime
     name: string; // String!
+    nextBooking?: NexusGenScalars['DateTime'] | null; // DateTime
     startDate: NexusGenScalars['DateTime']; // DateTime!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId?: string | null; // String
@@ -197,6 +198,7 @@ export interface NexusGenFieldTypes {
     interval: NexusGenEnums['Interval']; // Interval!
     lastBooking: NexusGenScalars['DateTime'] | null; // DateTime
     name: string; // String!
+    nextBooking: NexusGenScalars['DateTime'] | null; // DateTime
     payments: Array<NexusGenRootTypes['Payment'] | null> | null; // [Payment]
     startDate: NexusGenScalars['DateTime']; // DateTime!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -297,6 +299,7 @@ export interface NexusGenFieldTypeNames {
     interval: 'Interval'
     lastBooking: 'DateTime'
     name: 'String'
+    nextBooking: 'DateTime'
     payments: 'Payment'
     startDate: 'DateTime'
     updatedAt: 'DateTime'

@@ -12,8 +12,8 @@ export default function Overview({ payments, recurringPayments }: OverviewProps)
   return (
     <div className="flex">
       <PaymentOverview payments={payments} />
-      <MonthOverview payments={payments} />
       <RecurringPaymentOverview recurringPayments={recurringPayments} />
+      <MonthOverview payments={payments} />
     </div>
   );
 }

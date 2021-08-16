@@ -35,6 +35,7 @@ const HouseholdQuery = gql`
         id
         name
         interval
+        nextBooking
       }
     }
   }

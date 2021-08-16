@@ -24,7 +24,7 @@ export default function RecurringPaymentOverview({
           // TODO: Build payment component
           return (
             <div key={recPayment.id}>
-              {recPayment.name} {recPayment.value}
+              {recPayment.name} {new Date(recPayment.nextBooking).toLocaleDateString()}
             </div>
           );
         })}

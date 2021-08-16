@@ -1,4 +1,9 @@
 import {
+  addDays,
+  addMonths,
+  addQuarters,
+  addWeeks,
+  addYears,
   differenceInCalendarMonths,
   differenceInDays,
   differenceInQuarters,
@@ -27,6 +32,7 @@ export const RecurringPayment = objectType({
     t.nonNull.field('startDate', { type: 'DateTime' });
     t.field('endDate', { type: 'DateTime' });
     t.field('lastBooking', { type: 'DateTime' });
+    t.field('nextBooking', { type: 'DateTime' });
     t.nonNull.field('createdAt', { type: 'DateTime' });
     t.nonNull.field('updatedAt', { type: 'DateTime' });
     t.nonNull.string('categoryId');
@@ -109,10 +115,12 @@ export const RecurringPaymentsMutation = extendType({
         const recPayments = await prisma.recurringPayment.findMany();
         for (const recPayment of recPayments) {
           let diff = 0;
+          let nextBooking = new Date();
           switch (recPayment.interval) {
             case 'DAILY':
               {
                 diff = differenceInDays(new Date(), recPayment.lastBooking || recPayment.startDate);
+                nextBooking = addDays(new Date(), 1);
               }
               break;
             case 'WEEKLY':
@@ -121,6 +129,7 @@ export const RecurringPaymentsMutation = extendType({
                   new Date(),
                   recPayment.lastBooking || recPayment.startDate,
                 );
+                nextBooking = addWeeks(new Date(), 1);
               }
               break;
             case 'MONTHLY':
@@ -129,6 +138,7 @@ export const RecurringPaymentsMutation = extendType({
                   new Date(),
                   recPayment.lastBooking || recPayment.startDate,
                 );
+                nextBooking = addMonths(new Date(), 1);
               }
               break;
             case 'QUARTERLY':
@@ -137,6 +147,7 @@ export const RecurringPaymentsMutation = extendType({
                   new Date(),
                   recPayment.lastBooking || recPayment.startDate,
                 );
+                nextBooking = addQuarters(new Date(), 1);
               }
               break;
             case 'YEARLY':
@@ -145,6 +156,7 @@ export const RecurringPaymentsMutation = extendType({
                   new Date(),
                   recPayment.lastBooking || recPayment.startDate,
                 );
+                nextBooking = addYears(new Date(), 1);
               }
               break;
           }
@@ -164,7 +176,7 @@ export const RecurringPaymentsMutation = extendType({
 
             await prisma.recurringPayment.update({
               where: { id: recPayment.id },
-              data: { lastBooking: new Date() },
+              data: { lastBooking: new Date(), nextBooking: nextBooking },
             });
           }
         }

@@ -45,7 +45,7 @@ export const Household = objectType({
       resolve(root) {
         return prisma.household
           .findUnique({ where: { id: root.id || undefined } })
-          .RecurringPayment({ orderBy: { createdAt: 'asc' } });
+          .RecurringPayment({ orderBy: { nextBooking: 'asc' } });
       },
     });
   },

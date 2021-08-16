@@ -104,6 +104,7 @@ type RecurringPayment {
   interval: Interval!
   lastBooking: DateTime
   name: String!
+  nextBooking: DateTime
   payments: [Payment]
   startDate: DateTime!
   updatedAt: DateTime!

@@ -77,6 +77,7 @@ model RecurringPayment {
   startDate   DateTime  @default(now())
   endDate     DateTime?
   lastBooking DateTime?
+  nextBooking DateTime  @default(now())
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   category    Category  @relation(fields: [categoryId], references: [id])

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "RecurringPayment" ADD COLUMN     "nextBooking" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;

@@ -157,6 +157,7 @@ export type RecurringPayment = {
   startDate: Scalars['DateTime'];
   endDate?: Maybe<Scalars['DateTime']>;
   lastBooking?: Maybe<Scalars['DateTime']>;
+  nextBooking?: Maybe<Scalars['DateTime']>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   categoryId: Scalars['String'];
