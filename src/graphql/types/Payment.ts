@@ -26,6 +26,7 @@ export const Payment = objectType({
     t.field('user', {
       type: User,
       resolve(root) {
+        if (!root.userId) return null;
         return prisma.user.findUnique({
           where: {
             id: root.userId || undefined,

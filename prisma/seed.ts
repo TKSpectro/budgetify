@@ -5,9 +5,9 @@ import faker from 'faker';
 const prisma = new PrismaClient();
 
 async function main() {
-  // create 50 users
+  // create 2 users
   let users = [];
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 2; i++) {
     // create the name before so we can use it for the email faking
     let firstname = faker.name.firstName();
     let lastname = faker.name.lastName();
@@ -116,6 +116,10 @@ async function main() {
       userId: users[0].id,
       householdId: hou1.id,
     },
+  });
+
+  const recPay1 = await prisma.recurringPayment.create({
+    data: { name: 'recPay1', value: 25.0, categoryId: cat1.id, householdId: hou1.id },
   });
 }
 
