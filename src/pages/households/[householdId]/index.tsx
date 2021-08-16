@@ -31,6 +31,11 @@ const HouseholdQuery = gql`
           lastname
         }
       }
+      recurringPayments {
+        id
+        name
+        interval
+      }
     }
   }
 `;
@@ -57,7 +62,10 @@ export default function Households() {
           )
         }
       </div>
-      <Overview payments={data.household.payments} />
+      <Overview
+        payments={data.household.payments}
+        recurringPayments={data.household.recurringPayments}
+      />
     </div>
   );
 }

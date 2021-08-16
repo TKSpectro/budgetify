@@ -28,6 +28,7 @@ type Household {
   owner: User
   ownerId: String!
   payments: [Payment]
+  recurringPayments: [RecurringPayment]
   updatedAt: DateTime!
 }
 

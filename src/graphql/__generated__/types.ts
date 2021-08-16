@@ -40,6 +40,7 @@ export type Household = {
   members?: Maybe<Array<Maybe<User>>>;
   invites?: Maybe<Array<Maybe<Invite>>>;
   payments?: Maybe<Array<Maybe<Payment>>>;
+  recurringPayments?: Maybe<Array<Maybe<RecurringPayment>>>;
 };
 
 /** The interval of how often the payment should be booked */
@@ -72,6 +73,11 @@ export type Mutation = {
   login: AuthToken;
   createCategory: Category;
   removeCategory: Category;
+  /**
+   * This mutation should be called regularly (at least once a day)
+   *         by a CRON-Job or something of this kind. To book all recurringPayment
+   *         which need to be booked
+   */
   bookRecurringPayments?: Maybe<Array<Maybe<RecurringPayment>>>;
 };
 

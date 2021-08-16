@@ -1,6 +1,6 @@
 import { extendType, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
-import { Invite, Payment, User } from '.';
+import { Invite, Payment, RecurringPayment, User } from '.';
 
 export const Household = objectType({
   name: 'Household',
@@ -38,6 +38,14 @@ export const Household = objectType({
         return prisma.household
           .findUnique({ where: { id: root.id || undefined } })
           .payments({ orderBy: { createdAt: 'asc' } });
+      },
+    });
+    t.list.field('recurringPayments', {
+      type: RecurringPayment,
+      resolve(root) {
+        return prisma.household
+          .findUnique({ where: { id: root.id || undefined } })
+          .RecurringPayment({ orderBy: { createdAt: 'asc' } });
       },
     });
   },
