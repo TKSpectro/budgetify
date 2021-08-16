@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { ThemeSwitch } from '~/components/ThemeSwitch';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
 import { MeQuery } from '~/components/UI/Header';
@@ -32,6 +33,9 @@ export default function Profile() {
   return (
     <Container>
       <pre>{JSON.stringify(data, null, 2)}</pre>
+      <div>
+        <ThemeSwitch />
+      </div>
       <div className="flex">
         <Modal
           title="Delete Account"

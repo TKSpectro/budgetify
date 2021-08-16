@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { Button } from './UI/Button';
 
 // TODO: Really shitty implementation -> build a actual nice looking switch
 export function ThemeSwitch() {
@@ -16,8 +17,8 @@ export function ThemeSwitch() {
   }
 
   return (
-    <button type="button" onClick={handleChange}>
-      Theme
-    </button>
+    <Button type="button" onClick={handleChange}>
+      ThemeSwitch
+    </Button>
   );
 }

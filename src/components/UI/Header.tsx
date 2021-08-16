@@ -5,7 +5,6 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { ComponentProps, useState } from 'react';
 import { preloadQuery } from '~/utils/apollo';
-import { ThemeSwitch } from '../ThemeSwitch';
 import { Button } from './Button';
 import { CustomLink } from './CustomLink';
 
@@ -78,7 +77,6 @@ export default function Header() {
             <HeaderLink href="/">Features</HeaderLink>
             <HeaderLink href="/">Pricing</HeaderLink>
             <HeaderLink href="/">Contact</HeaderLink>
-            <ThemeSwitch />
             {!isLoggedIn && (
               <CustomLink
                 href="/auth/login"
