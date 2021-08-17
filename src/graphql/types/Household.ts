@@ -1,4 +1,4 @@
-import { extendType, objectType, stringArg } from 'nexus';
+import { extendType, intArg, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
 import { Invite, Payment, RecurringPayment, User } from '.';
 
@@ -34,18 +34,26 @@ export const Household = objectType({
     });
     t.list.field('payments', {
       type: Payment,
-      resolve(root) {
-        return prisma.household
-          .findUnique({ where: { id: root.id || undefined } })
-          .payments({ orderBy: { createdAt: 'asc' } });
+      args: { skip: intArg(), limit: intArg() },
+      resolve(root, args) {
+        return prisma.household.findUnique({ where: { id: root.id || undefined } }).payments({
+          orderBy: { createdAt: 'asc' },
+          skip: args.skip || undefined,
+          take: args.limit || undefined,
+        });
       },
     });
     t.list.field('recurringPayments', {
       type: RecurringPayment,
-      resolve(root) {
+      args: { skip: intArg(), limit: intArg() },
+      resolve(root, args) {
         return prisma.household
           .findUnique({ where: { id: root.id || undefined } })
-          .RecurringPayment({ orderBy: { nextBooking: 'asc' } });
+          .RecurringPayment({
+            orderBy: { nextBooking: 'asc' },
+            skip: args.skip || undefined,
+            take: args.limit || undefined,
+          });
       },
     });
   },

@@ -43,6 +43,18 @@ export type Household = {
   recurringPayments?: Maybe<Array<Maybe<RecurringPayment>>>;
 };
 
+
+export type HouseholdPaymentsArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+};
+
+
+export type HouseholdRecurringPaymentsArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+};
+
 /** The interval of how often the payment should be booked */
 export enum Interval {
   Daily = 'DAILY',

@@ -324,6 +324,16 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
+  Household: {
+    payments: { // args
+      limit?: number | null; // Int
+      skip?: number | null; // Int
+    }
+    recurringPayments: { // args
+      limit?: number | null; // Int
+      skip?: number | null; // Int
+    }
+  }
   Mutation: {
     bookRecurringPayments: { // args
       secretKey: string; // String!

@@ -27,8 +27,8 @@ type Household {
   name: String!
   owner: User
   ownerId: String!
-  payments: [Payment]
-  recurringPayments: [RecurringPayment]
+  payments(limit: Int, skip: Int): [Payment]
+  recurringPayments(limit: Int, skip: Int): [RecurringPayment]
   updatedAt: DateTime!
 }
 
