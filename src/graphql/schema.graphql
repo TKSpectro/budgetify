@@ -84,6 +84,11 @@ type Payment {
 }
 
 type Query {
+  """
+  Returns all households available in the database. 
+        Can only be queried by admin accounts.
+  """
+  allHouseholds: [Household]
   categories: [Category]!
   category(id: String, name: String): Category
   household(id: String): Household

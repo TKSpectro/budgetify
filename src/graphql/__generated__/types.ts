@@ -144,6 +144,11 @@ export type Query = {
   categories: Array<Maybe<Category>>;
   category?: Maybe<Category>;
   households?: Maybe<Array<Maybe<Household>>>;
+  /**
+   * Returns all households available in the database.
+   *       Can only be queried by admin accounts.
+   */
+  allHouseholds?: Maybe<Array<Maybe<Household>>>;
   household?: Maybe<Household>;
   recurringPayments?: Maybe<Array<Maybe<RecurringPayment>>>;
 };

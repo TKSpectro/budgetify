@@ -181,6 +181,7 @@ export interface NexusGenFieldTypes {
     value: number; // Float!
   }
   Query: { // field return type
+    allHouseholds: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     categories: Array<NexusGenRootTypes['Category'] | null>; // [Category]!
     category: NexusGenRootTypes['Category'] | null; // Category
     household: NexusGenRootTypes['Household'] | null; // Household
@@ -283,6 +284,7 @@ export interface NexusGenFieldTypeNames {
     value: 'Float'
   }
   Query: { // field return type name
+    allHouseholds: 'Household'
     categories: 'Category'
     category: 'Category'
     household: 'Household'
