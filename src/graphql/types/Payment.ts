@@ -14,6 +14,7 @@ export const Payment = objectType({
     t.nonNull.string('categoryId');
     t.field('category', {
       type: Category,
+      description: 'The category in which the user placed it. (e.g. food, income)',
       resolve(source) {
         return prisma.category.findUnique({
           where: {
@@ -25,6 +26,7 @@ export const Payment = objectType({
     t.string('userId');
     t.field('user', {
       type: User,
+      description: 'The user from which the payment was booked.',
       resolve(source) {
         if (!source.userId) return null;
         return prisma.user.findUnique({
@@ -37,6 +39,7 @@ export const Payment = objectType({
     t.nonNull.string('householdId');
     t.field('household', {
       type: Household,
+      description: 'The household in which the payment was booked.',
       resolve(source) {
         return prisma.household.findUnique({
           where: {

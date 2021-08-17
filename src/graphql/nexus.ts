@@ -131,7 +131,6 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     name: string; // String!
-    payments: Array<NexusGenRootTypes['Payment'] | null> | null; // [Payment]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Household: { // field return type
@@ -182,8 +181,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     allHouseholds: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
-    categories: Array<NexusGenRootTypes['Category'] | null>; // [Category]!
-    category: NexusGenRootTypes['Category'] | null; // Category
+    categories: Array<NexusGenRootTypes['Category'] | null> | null; // [Category]
     household: NexusGenRootTypes['Household'] | null; // Household
     households: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     me: NexusGenRootTypes['User'] | null; // User
@@ -234,7 +232,6 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     id: 'String'
     name: 'String'
-    payments: 'Payment'
     updatedAt: 'DateTime'
   }
   Household: { // field return type name
@@ -286,7 +283,6 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     allHouseholds: 'Household'
     categories: 'Category'
-    category: 'Category'
     household: 'Household'
     households: 'Household'
     me: 'User'
@@ -362,7 +358,7 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
-    category: { // args
+    categories: { // args
       id?: string | null; // String
       name?: string | null; // String
     }

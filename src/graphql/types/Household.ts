@@ -12,6 +12,7 @@ export const Household = objectType({
     t.nonNull.string('ownerId');
     t.field('owner', {
       type: User,
+      description: "The user which has management right's over the household.",
       resolve(source) {
         return prisma.user.findUnique({
           where: {
@@ -22,18 +23,21 @@ export const Household = objectType({
     });
     t.list.field('members', {
       type: User,
+      description: "A list of all user's which have access to this household.",
       resolve(source) {
         return prisma.household.findUnique({ where: { id: source.id || undefined } }).members();
       },
     });
     t.list.field('invites', {
       type: Invite,
+      description: "A list of all invite's for this household.",
       resolve(source) {
         return prisma.household.findUnique({ where: { id: source.id || undefined } }).invites();
       },
     });
     t.list.field('payments', {
       type: Payment,
+      description: "A list of all payment's which where booked into this household.",
       args: { skip: intArg(), limit: intArg() },
       resolve(source, args) {
         return prisma.household.findUnique({ where: { id: source.id || undefined } }).payments({
@@ -45,6 +49,7 @@ export const Household = objectType({
     });
     t.list.field('recurringPayments', {
       type: RecurringPayment,
+      description: "A list of all recurring payment's which will be booked into this household.",
       args: { skip: intArg(), limit: intArg() },
       resolve(source, args) {
         return prisma.household
@@ -59,19 +64,7 @@ export const Household = objectType({
   },
 });
 
-export const HouseholdsQuery = extendType({
-  type: 'Query',
-  definition(t) {
-    t.list.field('households', {
-      type: Household,
-      resolve(_, __, { user }) {
-        return prisma.user.findUnique({ where: { id: user.id || undefined } }).households();
-      },
-    });
-  },
-});
-
-export const AllHouseholdsQuery = extendType({
+export const HouseholdQuery = extendType({
   type: 'Query',
   definition(t) {
     t.list.field('allHouseholds', {
@@ -83,12 +76,12 @@ export const AllHouseholdsQuery = extendType({
         return prisma.household.findMany();
       },
     });
-  },
-});
-
-export const HouseholdQuery = extendType({
-  type: 'Query',
-  definition(t) {
+    t.list.field('households', {
+      type: Household,
+      resolve(_, __, { user }) {
+        return prisma.user.findUnique({ where: { id: user.id || undefined } }).households();
+      },
+    });
     t.field('household', {
       type: Household,
       args: {

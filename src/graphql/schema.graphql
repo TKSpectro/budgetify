@@ -2,6 +2,10 @@
 ### Do not make changes to this file directly
 
 
+"""
+HelperType: Contains a JWT string (JSON-Web-Token) 
+    for the authentication of the user.
+"""
 type AuthToken {
   token: String!
 }
@@ -10,7 +14,6 @@ type Category {
   createdAt: DateTime!
   id: String!
   name: String!
-  payments: [Payment]
   updatedAt: DateTime!
 }
 
@@ -22,17 +25,29 @@ scalar DateTime
 type Household {
   createdAt: DateTime!
   id: String!
+
+  """A list of all invite's for this household."""
   invites: [Invite]
+
+  """A list of all user's which have access to this household."""
   members: [User]
   name: String!
+
+  """The user which has management right's over the household."""
   owner: User
   ownerId: String!
+
+  """A list of all payment's which where booked into this household."""
   payments(limit: Int, skip: Int): [Payment]
+
+  """
+  A list of all recurring payment's which will be booked into this household.
+  """
   recurringPayments(limit: Int, skip: Int): [RecurringPayment]
   updatedAt: DateTime!
 }
 
-"""The interval of how often the payment should be booked"""
+"""HelperType: The interval of how often the payment should be booked."""
 enum Interval {
   DAILY
   MONTHLY
@@ -43,11 +58,19 @@ enum Interval {
 
 type Invite {
   createdAt: DateTime!
+
+  """The household in which the person was invited."""
   household: Household
   householdId: String!
   id: String!
+
+  """The email of the person which was invited."""
   invitedEmail: String!
+
+  """The link which can be used from invited person to use the invite."""
   link: String!
+
+  """The user which sent the invite. (Referrer)"""
   sender: User
   senderId: String!
   updatedAt: DateTime!
@@ -59,25 +82,45 @@ type Mutation {
   """
   This mutation should be called regularly (at least once a day)
           by a CRON-Job or something of this kind. To book all recurringPayment
-          which need to be booked
+          which need to be booked.
   """
   bookRecurringPayments(secretKey: String!): [RecurringPayment]
+
+  """Create a new category. Can just be called by an admin."""
   createCategory(name: String!): Category!
+
+  """
+  This mutation takes the email and password of an existing user.
+        Returns a JWT (JSON-Web-Token) for further authentication with the graphql-api.
+  """
   login(email: String!, password: String!): AuthToken!
+
+  """Remove a new category. Can just be called by an admin."""
   removeCategory(name: String!): Category!
+
+  """
+  This mutation takes the values for a new user as arguments. 
+        Saves them and returns a JWT (JSON-Web-Token) 
+        for further authentication with the graphql-api.
+  """
   signup(email: String!, firstname: String!, lastname: String!, password: String!): AuthToken!
 }
 
 type Payment {
+  """The category in which the user placed it. (e.g. food, income)"""
   category: Category
   categoryId: String!
   createdAt: DateTime!
   description: String
+
+  """The household in which the payment was booked."""
   household: Household
   householdId: String!
   id: String!
   name: String!
   updatedAt: DateTime!
+
+  """The user from which the payment was booked."""
   user: User
   userId: String
   value: Float!
@@ -89,47 +132,76 @@ type Query {
         Can only be queried by admin accounts.
   """
   allHouseholds: [Household]
-  categories: [Category]!
-  category(id: String, name: String): Category
+
+  """All available categories. Filterable by id or name via arguments"""
+  categories(id: String, name: String): [Category]
   household(id: String): Household
   households: [Household]
+
+  """Returns the data of the currently logged in user."""
   me: User
   recurringPayments: [RecurringPayment]
 }
 
 type RecurringPayment {
+  """The category in which the payment will be booked."""
   category: Category
   categoryId: String!
   createdAt: DateTime!
   description: String
   endDate: DateTime
+
+  """The household in which the payment will be booked."""
   household: Household
   householdId: String!
   id: String!
   interval: Interval!
+
+  """The date of when this recurring payment was last booked."""
   lastBooking: DateTime
   name: String!
+
+  """The date of when this recurring payment should be booked next."""
   nextBooking: DateTime
+
+  """All payment's which where booked by this recurring payment."""
   payments: [Payment]
   startDate: DateTime!
   updatedAt: DateTime!
+
+  """The user from whom the payment will be booked."""
   user: User
   userId: String
   value: Float!
 }
 
+"""A user is an account which can join households and create payments"""
 type User {
   createdAt: DateTime!
   email: String!
   firstname: String!
+
+  """The user's safely encrypted password"""
   hashedPassword: String!
+
+  """The household's in which the user is a member."""
   households: [Household]
   id: String!
+
+  """The invite's which where send by the user."""
   invites: [Invite]
+
+  """
+  The user's role. This could be extended to a complete role system in the future
+  """
   isAdmin: Boolean!
   lastname: String!
   name: String!
+
+  """The household's in which the user is the current owner"""
   ownedHouseholds: [Household]
+
+  """All payment's which where done by the user."""
   payments: [Payment]
   updatedAt: DateTime!
 }

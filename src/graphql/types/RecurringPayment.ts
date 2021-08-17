@@ -18,7 +18,7 @@ import { Payment as PaymentType } from '../__generated__/types';
 const Interval = enumType({
   name: 'Interval',
   members: ['DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY'],
-  description: 'The interval of how often the payment should be booked',
+  description: 'HelperType: The interval of how often the payment should be booked.',
 });
 
 export const RecurringPayment = objectType({
@@ -31,13 +31,20 @@ export const RecurringPayment = objectType({
     t.nonNull.field('interval', { type: Interval });
     t.nonNull.field('startDate', { type: 'DateTime' });
     t.field('endDate', { type: 'DateTime' });
-    t.field('lastBooking', { type: 'DateTime' });
-    t.field('nextBooking', { type: 'DateTime' });
+    t.field('lastBooking', {
+      type: 'DateTime',
+      description: 'The date of when this recurring payment was last booked.',
+    });
+    t.field('nextBooking', {
+      type: 'DateTime',
+      description: 'The date of when this recurring payment should be booked next.',
+    });
     t.nonNull.field('createdAt', { type: 'DateTime' });
     t.nonNull.field('updatedAt', { type: 'DateTime' });
     t.nonNull.string('categoryId');
     t.field('category', {
       type: Category,
+      description: 'The category in which the payment will be booked.',
       resolve(source) {
         return prisma.category.findUnique({
           where: {
@@ -49,6 +56,7 @@ export const RecurringPayment = objectType({
     t.string('userId');
     t.field('user', {
       type: User,
+      description: 'The user from whom the payment will be booked.',
       resolve(source) {
         if (!source.userId) return null;
         return prisma.user.findUnique({
@@ -61,6 +69,7 @@ export const RecurringPayment = objectType({
     t.nonNull.string('householdId');
     t.field('household', {
       type: Household,
+      description: 'The household in which the payment will be booked.',
       resolve(source) {
         return prisma.household.findUnique({
           where: {
@@ -71,6 +80,7 @@ export const RecurringPayment = objectType({
     });
     t.list.field('payments', {
       type: Payment,
+      description: "All payment's which where booked by this recurring payment.",
       resolve(source) {
         return prisma.payment.findMany({
           where: {
@@ -82,7 +92,7 @@ export const RecurringPayment = objectType({
   },
 });
 
-export const RecurringPaymentsQuery = extendType({
+export const RecurringPaymentQuery = extendType({
   type: 'Query',
   definition(t) {
     t.list.field('recurringPayments', {
@@ -94,14 +104,14 @@ export const RecurringPaymentsQuery = extendType({
   },
 });
 
-export const RecurringPaymentsMutation = extendType({
+export const RecurringPaymentMutation = extendType({
   type: 'Mutation',
   definition(t) {
     t.list.field('bookRecurringPayments', {
       type: RecurringPayment,
       description: `This mutation should be called regularly (at least once a day)
         by a CRON-Job or something of this kind. To book all recurringPayment
-        which need to be booked`,
+        which need to be booked.`,
       args: {
         secretKey: nonNull(stringArg()),
       },

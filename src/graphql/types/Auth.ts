@@ -7,6 +7,8 @@ import { User } from '.';
 
 export const AuthToken = objectType({
   name: 'AuthToken',
+  description: `HelperType: Contains a JWT string (JSON-Web-Token) 
+    for the authentication of the user.`,
   definition(t) {
     t.nonNull.string('token');
   },
@@ -17,6 +19,7 @@ export const AuthQuery = extendType({
   definition(t) {
     t.field('me', {
       type: User,
+      description: 'Returns the data of the currently logged in user.',
       async resolve(_, __, ctx) {
         try {
           const user = await prisma.user.findUnique({
@@ -47,6 +50,9 @@ export const AuthMutation = extendType({
   definition(t) {
     t.nonNull.field('signup', {
       type: AuthToken,
+      description: `This mutation takes the values for a new user as arguments. 
+      Saves them and returns a JWT (JSON-Web-Token) 
+      for further authentication with the graphql-api.`,
       args: {
         email: nonNull(stringArg()),
         password: nonNull(stringArg()),
@@ -55,10 +61,6 @@ export const AuthMutation = extendType({
       },
       async resolve(_, args) {
         args.password = hashSync(args.password, 10);
-
-        if (!process.env.JWT_SECRET) {
-          throw new AuthenticationError('Server is not setup correctly');
-        }
 
         try {
           const user = await prisma.user.create({
@@ -73,7 +75,7 @@ export const AuthMutation = extendType({
           const { id, email, isAdmin } = user;
 
           return {
-            token: jwt.sign({ id, email, isAdmin }, process.env.JWT_SECRET, { expiresIn: '30d' }),
+            token: jwt.sign({ id, email, isAdmin }, process.env.JWT_SECRET!, { expiresIn: '30d' }),
           };
         } catch (error) {
           // TODO: Figure out which error was thrown
@@ -85,6 +87,8 @@ export const AuthMutation = extendType({
     });
     t.nonNull.field('login', {
       type: AuthToken,
+      description: `This mutation takes the email and password of an existing user.
+      Returns a JWT (JSON-Web-Token) for further authentication with the graphql-api.`,
       args: {
         email: nonNull(stringArg()),
         password: nonNull(stringArg()),
