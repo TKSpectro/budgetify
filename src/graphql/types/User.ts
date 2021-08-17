@@ -15,6 +15,7 @@ export const User = objectType({
     });
     t.nonNull.string('email');
     t.nonNull.string('hashedPassword');
+    t.nonNull.boolean('isAdmin');
     t.nonNull.field('createdAt', { type: 'DateTime' });
     t.nonNull.field('updatedAt', { type: 'DateTime' });
     t.list.field('payments', {

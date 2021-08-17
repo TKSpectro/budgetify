@@ -106,6 +106,7 @@ export interface NexusGenObjects {
     firstname: string; // String!
     hashedPassword: string; // String!
     id: string; // String!
+    isAdmin: boolean; // Boolean!
     lastname: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
@@ -214,6 +215,7 @@ export interface NexusGenFieldTypes {
     households: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     id: string; // String!
     invites: Array<NexusGenRootTypes['Invite'] | null> | null; // [Invite]
+    isAdmin: boolean; // Boolean!
     lastname: string; // String!
     name: string; // String!
     ownedHouseholds: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
@@ -315,6 +317,7 @@ export interface NexusGenFieldTypeNames {
     households: 'Household'
     id: 'String'
     invites: 'Invite'
+    isAdmin: 'Boolean'
     lastname: 'String'
     name: 'String'
     ownedHouseholds: 'Household'

@@ -121,6 +121,7 @@ type User {
   households: [Household]
   id: String!
   invites: [Invite]
+  isAdmin: Boolean!
   lastname: String!
   name: String!
   ownedHouseholds: [Household]

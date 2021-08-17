@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 export interface ContextUser {
   id: string;
   email: string;
+  isAdmin: boolean;
 }
 
 export interface ContextInput {
@@ -22,7 +23,7 @@ export function context({ req, res }: ContextInput): Context {
   // and contains the JWT
   const token = req.cookies.authToken || undefined;
 
-  let user: ContextUser = { id: '', email: '' };
+  let user: ContextUser = { id: '', email: '', isAdmin: false };
 
   try {
     if (token) {
@@ -31,6 +32,7 @@ export function context({ req, res }: ContextInput): Context {
       if (typeof data !== 'string') {
         user.id = data.id;
         user.email = data.email;
+        user.isAdmin = data.isAdmin;
       }
     }
   } catch (error) {

@@ -189,6 +189,7 @@ export type User = {
   name: Scalars['String'];
   email: Scalars['String'];
   hashedPassword: Scalars['String'];
+  isAdmin: Scalars['Boolean'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   payments?: Maybe<Array<Maybe<Payment>>>;
