@@ -70,9 +70,11 @@ export const AuthMutation = extendType({
             },
           });
 
-          const { id, email } = user;
+          const { id, email, isAdmin } = user;
 
-          return { token: jwt.sign({ id, email }, process.env.JWT_SECRET, { expiresIn: '30d' }) };
+          return {
+            token: jwt.sign({ id, email, isAdmin }, process.env.JWT_SECRET, { expiresIn: '30d' }),
+          };
         } catch (error) {
           // TODO: Figure out which error was thrown
           throw new AuthenticationError(
@@ -96,13 +98,13 @@ export const AuthMutation = extendType({
         if (!user) {
           throw new Error('Authorization Error');
         }
-        const { id, email, hashedPassword } = user;
+        const { id, email, hashedPassword, isAdmin } = user;
         if (!compareSync(args.password, hashedPassword)) {
           throw new Error('Authorization Error');
         }
 
         return {
-          token: jwt.sign({ id, email }, process.env.JWT_SECRET!, { expiresIn: '30d' }),
+          token: jwt.sign({ id, email, isAdmin }, process.env.JWT_SECRET!, { expiresIn: '30d' }),
         };
       },
     });

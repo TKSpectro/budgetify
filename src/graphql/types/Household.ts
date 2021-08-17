@@ -64,6 +64,7 @@ export const HouseholdsQuery = extendType({
   definition(t) {
     t.list.field('households', {
       type: Household,
+      authorize: (_, __, ctx) => ctx.user.isAdmin,
       resolve(_, __, { user }) {
         return prisma.user.findUnique({ where: { id: user.id || undefined } }).households();
       },
