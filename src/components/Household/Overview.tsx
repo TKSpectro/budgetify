@@ -10,7 +10,7 @@ interface OverviewProps {
 
 export default function Overview({ payments, recurringPayments }: OverviewProps) {
   return (
-    <div className="flex">
+    <div className="grid lg:grid-cols-3 lg:gap-4">
       <PaymentOverview payments={payments} />
       <RecurringPaymentOverview recurringPayments={recurringPayments} />
       <MonthOverview payments={payments} />

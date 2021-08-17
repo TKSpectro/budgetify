@@ -16,7 +16,7 @@ const HouseholdQuery = gql`
         firstname
         lastname
       }
-      payments {
+      payments(limit: 4) {
         id
         name
         value
@@ -31,7 +31,7 @@ const HouseholdQuery = gql`
           lastname
         }
       }
-      recurringPayments {
+      recurringPayments(limit: 4) {
         id
         name
         interval
@@ -48,10 +48,11 @@ export default function Households() {
     variables: { householdId },
   });
 
+  if (error) return <div>{JSON.stringify(error, null, 2)}</div>;
   if (loading) return <span>loading...</span>;
 
   return (
-    <div className="mx-24 mt-12">
+    <div className="mt-12 mx-4 sm:mx-24">
       <div className="text-7xl text-brand-500">{data.household.name}</div>
       <div className="mt-12 text-4xl">
         Total balance{' '}
