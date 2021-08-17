@@ -9,8 +9,8 @@ export const User = objectType({
     t.nonNull.string('firstname');
     t.nonNull.string('lastname');
     t.nonNull.string('name', {
-      resolve(root) {
-        return root.firstname + ' ' + root.lastname;
+      resolve(source) {
+        return source.firstname + ' ' + source.lastname;
       },
     });
     t.nonNull.string('email');
@@ -19,26 +19,26 @@ export const User = objectType({
     t.nonNull.field('updatedAt', { type: 'DateTime' });
     t.list.field('payments', {
       type: Payment,
-      resolve(root) {
-        return prisma.user.findUnique({ where: { id: root.id || undefined } }).payments();
+      resolve(source) {
+        return prisma.user.findUnique({ where: { id: source.id || undefined } }).payments();
       },
     });
     t.list.field('households', {
       type: Household,
-      resolve(root) {
-        return prisma.user.findUnique({ where: { id: root.id || undefined } }).households();
+      resolve(source) {
+        return prisma.user.findUnique({ where: { id: source.id || undefined } }).households();
       },
     });
     t.list.field('invites', {
       type: Invite,
-      resolve(root) {
-        return prisma.user.findUnique({ where: { id: root.id || undefined } }).invites();
+      resolve(source) {
+        return prisma.user.findUnique({ where: { id: source.id || undefined } }).invites();
       },
     });
     t.list.field('ownedHouseholds', {
       type: Household,
-      resolve(root) {
-        return prisma.user.findUnique({ where: { id: root.id || undefined } }).ownedHouseholds();
+      resolve(source) {
+        return prisma.user.findUnique({ where: { id: source.id || undefined } }).ownedHouseholds();
       },
     });
   },

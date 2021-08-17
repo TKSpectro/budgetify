@@ -11,8 +11,8 @@ export const Category = objectType({
     t.nonNull.field('updatedAt', { type: 'DateTime' });
     t.list.field('payments', {
       type: Payment,
-      resolve(root) {
-        return prisma.category.findUnique({ where: { id: root.id || undefined } }).payments();
+      resolve(source) {
+        return prisma.category.findUnique({ where: { id: source.id || undefined } }).payments();
       },
     });
   },

@@ -38,10 +38,10 @@ export const RecurringPayment = objectType({
     t.nonNull.string('categoryId');
     t.field('category', {
       type: Category,
-      resolve(root) {
+      resolve(source) {
         return prisma.category.findUnique({
           where: {
-            id: root.categoryId || undefined,
+            id: source.categoryId || undefined,
           },
         });
       },
@@ -49,11 +49,11 @@ export const RecurringPayment = objectType({
     t.string('userId');
     t.field('user', {
       type: User,
-      resolve(root) {
-        if (!root.userId) return null;
+      resolve(source) {
+        if (!source.userId) return null;
         return prisma.user.findUnique({
           where: {
-            id: root.userId || undefined,
+            id: source.userId || undefined,
           },
         });
       },
@@ -61,20 +61,20 @@ export const RecurringPayment = objectType({
     t.nonNull.string('householdId');
     t.field('household', {
       type: Household,
-      resolve(root) {
+      resolve(source) {
         return prisma.household.findUnique({
           where: {
-            id: root.householdId || undefined,
+            id: source.householdId || undefined,
           },
         });
       },
     });
     t.list.field('payments', {
       type: Payment,
-      resolve(root) {
+      resolve(source) {
         return prisma.payment.findMany({
           where: {
-            recurringPaymentId: root.id || undefined,
+            recurringPaymentId: source.id || undefined,
           },
         });
       },

@@ -15,10 +15,10 @@ export const Invite = objectType({
     t.nonNull.string('senderId');
     t.field('sender', {
       type: User,
-      resolve(root) {
+      resolve(source) {
         return prisma.user.findUnique({
           where: {
-            id: root.senderId || undefined,
+            id: source.senderId || undefined,
           },
         });
       },
@@ -26,10 +26,10 @@ export const Invite = objectType({
     t.nonNull.string('householdId');
     t.field('household', {
       type: Household,
-      resolve(root) {
+      resolve(source) {
         return prisma.household.findUnique({
           where: {
-            id: root.householdId || undefined,
+            id: source.householdId || undefined,
           },
         });
       },

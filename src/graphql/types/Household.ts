@@ -12,31 +12,31 @@ export const Household = objectType({
     t.nonNull.string('ownerId');
     t.field('owner', {
       type: User,
-      resolve(root) {
+      resolve(source) {
         return prisma.user.findUnique({
           where: {
-            id: root.ownerId || undefined,
+            id: source.ownerId || undefined,
           },
         });
       },
     });
     t.list.field('members', {
       type: User,
-      resolve(root) {
-        return prisma.household.findUnique({ where: { id: root.id || undefined } }).members();
+      resolve(source) {
+        return prisma.household.findUnique({ where: { id: source.id || undefined } }).members();
       },
     });
     t.list.field('invites', {
       type: Invite,
-      resolve(root) {
-        return prisma.household.findUnique({ where: { id: root.id || undefined } }).invites();
+      resolve(source) {
+        return prisma.household.findUnique({ where: { id: source.id || undefined } }).invites();
       },
     });
     t.list.field('payments', {
       type: Payment,
       args: { skip: intArg(), limit: intArg() },
-      resolve(root, args) {
-        return prisma.household.findUnique({ where: { id: root.id || undefined } }).payments({
+      resolve(source, args) {
+        return prisma.household.findUnique({ where: { id: source.id || undefined } }).payments({
           orderBy: { createdAt: 'asc' },
           skip: args.skip || undefined,
           take: args.limit || undefined,
@@ -46,9 +46,9 @@ export const Household = objectType({
     t.list.field('recurringPayments', {
       type: RecurringPayment,
       args: { skip: intArg(), limit: intArg() },
-      resolve(root, args) {
+      resolve(source, args) {
         return prisma.household
-          .findUnique({ where: { id: root.id || undefined } })
+          .findUnique({ where: { id: source.id || undefined } })
           .RecurringPayment({
             orderBy: { nextBooking: 'asc' },
             skip: args.skip || undefined,
