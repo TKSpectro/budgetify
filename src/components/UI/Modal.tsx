@@ -10,7 +10,7 @@ export interface ModalProps {
   color: 'brand' | 'red';
 }
 
-export default function Modal({
+export function Modal({
   title,
   description,
   submitText = 'SAVE CHANGES',

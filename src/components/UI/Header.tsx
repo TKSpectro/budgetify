@@ -34,7 +34,7 @@ export const MeQuery = gql`
   }
 `;
 
-export default function Header() {
+export function Header() {
   const [navBarCollapsed, setNavBarCollapsed] = useState(false);
   const { data, loading, error } = useQuery(MeQuery);
 

@@ -2,10 +2,11 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { ThemeSwitch } from '~/components/ThemeSwitch';
+import { Alert } from '~/components/UI/Alert';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
 import { MeQuery } from '~/components/UI/Header';
-import Modal from '~/components/UI/Modal';
+import { Modal } from '~/components/UI/Modal';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 
@@ -50,7 +51,7 @@ export default function Profile() {
   return (
     <Container>
       {/* // TODO: Build a error message popover */}
-      {deleteUserError && <div className="text-red-500">{deleteUserError.message}</div>}
+      {deleteUserError && <Alert type="error" message={deleteUserError.message} />}
       <pre>{JSON.stringify(data, null, 2)}</pre>
       <div>
         <ThemeSwitch />

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Container } from '~/components/UI/Container';
 import { CustomLink } from '~/components/UI/CustomLink';
-import Form from '~/components/UI/Form';
+import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
 
 type Inputs = {

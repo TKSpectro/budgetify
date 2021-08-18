@@ -1,7 +1,7 @@
 import { ApolloProvider } from '@apollo/client';
 import { ThemeProvider } from 'next-themes';
 import type { AppProps } from 'next/app';
-import Header from '~/components/UI/Header';
+import { Header } from '~/components/UI/Header';
 import { useApollo } from '~/utils/apollo';
 import '../styles.css';
 

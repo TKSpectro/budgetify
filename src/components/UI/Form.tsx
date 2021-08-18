@@ -28,7 +28,7 @@ interface Props<T extends FieldValues = any> extends Omit<ComponentProps<'form'>
   onSubmit: SubmitHandler<T>;
 }
 
-export default function Form({ form, onSubmit, children, ...props }: Props) {
+export function Form({ form, onSubmit, children, ...props }: Props) {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} {...props}>
