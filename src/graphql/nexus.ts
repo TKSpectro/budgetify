@@ -332,8 +332,10 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Household: {
     payments: { // args
+      endDate?: string | null; // String
       limit?: number | null; // Int
       skip?: number | null; // Int
+      startDate?: string | null; // String
     }
     recurringPayments: { // args
       limit?: number | null; // Int

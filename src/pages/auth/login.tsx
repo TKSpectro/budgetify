@@ -40,13 +40,9 @@ export default function Login() {
       <Form form={form} onSubmit={onSubmit}>
         {resError && <pre>{JSON.stringify(resError, null, 2)}</pre>}
 
-        <Input label="Email" type="email" {...form.register('email', { required: true })} />
+        <Input label="Email" type="email" {...form.register('email', {})} />
 
-        <Input
-          label="Password"
-          type="password"
-          {...form.register('password', { required: true, minLength: 6 })}
-        />
+        <Input label="Password" type="password" {...form.register('password', {})} />
 
         <input type="submit" />
       </Form>

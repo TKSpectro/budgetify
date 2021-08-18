@@ -38,9 +38,16 @@ export const Household = objectType({
     t.list.field('payments', {
       type: Payment,
       description: "A list of all payment's which where booked into this household.",
-      args: { skip: intArg(), limit: intArg() },
+      args: { skip: intArg(), limit: intArg(), startDate: stringArg(), endDate: stringArg() },
       resolve(source, args) {
         return prisma.household.findUnique({ where: { id: source.id || undefined } }).payments({
+          where: {
+            createdAt: {
+              gte: args.startDate ? new Date(args.startDate) : undefined,
+              lte: args.endDate ? new Date(args.endDate) : undefined,
+            },
+          },
+
           orderBy: { createdAt: 'asc' },
           skip: args.skip || undefined,
           take: args.limit || undefined,
@@ -78,7 +85,7 @@ export const HouseholdQuery = extendType({
     });
     t.list.field('households', {
       type: Household,
-      resolve(_, __, { user }) {
+      resolve(_, args, { user }) {
         return prisma.user.findUnique({ where: { id: user.id || undefined } }).households();
       },
     });
