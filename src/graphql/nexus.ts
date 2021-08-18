@@ -161,6 +161,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     bookRecurringPayments: Array<NexusGenRootTypes['RecurringPayment'] | null> | null; // [RecurringPayment]
     createCategory: NexusGenRootTypes['Category']; // Category!
+    createPayment: NexusGenRootTypes['Payment']; // Payment!
     login: NexusGenRootTypes['AuthToken']; // AuthToken!
     removeCategory: NexusGenRootTypes['Category']; // Category!
     signup: NexusGenRootTypes['AuthToken']; // AuthToken!
@@ -262,6 +263,7 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     bookRecurringPayments: 'RecurringPayment'
     createCategory: 'Category'
+    createPayment: 'Payment'
     login: 'AuthToken'
     removeCategory: 'Category'
     signup: 'AuthToken'
@@ -342,6 +344,13 @@ export interface NexusGenArgTypes {
     }
     createCategory: { // args
       name: string; // String!
+    }
+    createPayment: { // args
+      categoryId: string; // String!
+      description?: string | null; // String
+      householdId: string; // String!
+      name: string; // String!
+      value: number; // Int!
     }
     login: { // args
       email: string; // String!

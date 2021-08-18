@@ -108,6 +108,8 @@ export type Mutation = {
   createCategory: Category;
   /** Remove a new category. Can just be called by an admin. */
   removeCategory: Category;
+  /** Create a new payment. Need to be logged in. */
+  createPayment: Payment;
   /**
    * This mutation should be called regularly (at least once a day)
    *         by a CRON-Job or something of this kind. To book all recurringPayment
@@ -141,10 +143,20 @@ export type MutationRemoveCategoryArgs = {
 };
 
 
+export type MutationCreatePaymentArgs = {
+  name: Scalars['String'];
+  value: Scalars['Int'];
+  description?: Maybe<Scalars['String']>;
+  categoryId: Scalars['String'];
+  householdId: Scalars['String'];
+};
+
+
 export type MutationBookRecurringPaymentsArgs = {
   secretKey: Scalars['String'];
 };
 
+/** A payment is a NOT changeable booking with a specific value. */
 export type Payment = {
   __typename?: 'Payment';
   id: Scalars['String'];
@@ -182,7 +194,7 @@ export type Query = {
 
 
 export type QueryCategoriesArgs = {
-  id: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
 };
 

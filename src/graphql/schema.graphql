@@ -89,6 +89,9 @@ type Mutation {
   """Create a new category. Can just be called by an admin."""
   createCategory(name: String!): Category!
 
+  """Create a new payment. Need to be logged in."""
+  createPayment(categoryId: String!, description: String, householdId: String!, name: String!, value: Int!): Payment!
+
   """
   This mutation takes the email and password of an existing user.
         Returns a JWT (JSON-Web-Token) for further authentication with the graphql-api.
@@ -106,6 +109,7 @@ type Mutation {
   signup(email: String!, firstname: String!, lastname: String!, password: String!): AuthToken!
 }
 
+"""A payment is a NOT changeable booking of a specific value."""
 type Payment {
   """The category in which the user placed it. (e.g. food, income)"""
   category: Category
