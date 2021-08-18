@@ -1,5 +1,6 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ThemeSwitch } from '~/components/ThemeSwitch';
 import { Alert } from '~/components/UI/Alert';
@@ -49,25 +50,30 @@ export default function Profile() {
 
   if (loading) return <span>loading...</span>;
   return (
-    <Container>
-      {/* // TODO: Build a error message popover */}
-      {deleteUserError && <Alert type="error" message={deleteUserError.message} />}
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-      <div>
-        <ThemeSwitch />
-      </div>
-      <div className="flex">
-        <Modal
-          title="Delete Account"
-          description="If you delete your account all your data will be lost. All households you own will be transferred to another person."
-          submitText="Submit"
-          onSubmit={deleteUser}
-          buttonText="DELETE ACCOUNT"
-          color="red"
-        />
-        {data && <Button onClick={logoutHandler}>Logout</Button>}
-      </div>
-    </Container>
+    <>
+      <Head>
+        <title>Profile | budgetify</title>
+      </Head>
+      <Container>
+        {/* // TODO: Build a error message popover */}
+        {deleteUserError && <Alert type="error" message={deleteUserError.message} />}
+        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <div>
+          <ThemeSwitch />
+        </div>
+        <div className="flex">
+          <Modal
+            title="Delete Account"
+            description="If you delete your account all your data will be lost. All households you own will be transferred to another person."
+            submitText="Submit"
+            onSubmit={deleteUser}
+            buttonText="DELETE ACCOUNT"
+            color="red"
+          />
+          {data && <Button onClick={logoutHandler}>Logout</Button>}
+        </div>
+      </Container>
+    </>
   );
 }
 

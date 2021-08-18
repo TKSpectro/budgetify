@@ -1,3 +1,12 @@
+import Head from 'next/head';
+
 export default function RecurringPayments() {
-  return <div>recurring payments</div>;
+  return (
+    <>
+      <Head>
+        <title>Recurring Payments | budgetify</title>
+      </Head>
+      <div>recurring payments</div>
+    </>
+  );
 }

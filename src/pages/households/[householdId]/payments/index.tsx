@@ -2,6 +2,7 @@ import { gql, useQuery } from '@apollo/client';
 import 'chartjs-adapter-date-fns';
 import { differenceInDays, parseISO } from 'date-fns';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Line } from 'react-chartjs-2';
 import { Container } from '~/components/UI/Container';
@@ -74,24 +75,29 @@ export default function Payments() {
   }
 
   return (
-    // TODO: Add a date filter
-    <div className="mt-24 md:mx-32">
-      <div className="max-w-[60em] mx-auto">
-        <Line data={genData(labels, chartData)} options={paymentChartOptions} />
+    <>
+      <Head>
+        <title>Payments | budgetify</title>
+      </Head>
+      {/* // TODO: Add a date filter */}
+      <div className="mt-24 md:mx-32">
+        <div className="max-w-[60em] mx-auto">
+          <Line data={genData(labels, chartData)} options={paymentChartOptions} />
+        </div>
+        <div className="mt-16">
+          <Container>
+            {data.household.payments.map((payment: Payment) => {
+              // TODO: Build payment component
+              return (
+                <div key={payment.id}>
+                  {payment.name} {payment.value}
+                </div>
+              );
+            })}
+          </Container>
+        </div>
       </div>
-      <div className="mt-16">
-        <Container>
-          {data.household.payments.map((payment: Payment) => {
-            // TODO: Build payment component
-            return (
-              <div key={payment.id}>
-                {payment.name} {payment.value}
-              </div>
-            );
-          })}
-        </Container>
-      </div>
-    </div>
+    </>
   );
 }
 

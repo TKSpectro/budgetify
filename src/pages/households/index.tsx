@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import Link from 'next/link';
 import { Container } from '~/components/UI/Container';
 import { Household } from '~/graphql/__generated__/types';
@@ -29,6 +30,9 @@ export default function Households() {
 
   return (
     <>
+      <Head>
+        <title>Dashboard | budgetify</title>
+      </Head>
       {/* TODO: Use a Error message component for errors */}
       {error && <div>{JSON.stringify(error, null, 2)}</div>}
       <Container>

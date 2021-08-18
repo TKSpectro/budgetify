@@ -1,5 +1,6 @@
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/dist/client/router';
+import Head from 'next/head';
 import React from 'react';
 import { Button } from '~/components/UI/Button';
 import { CustomLink } from '~/components/UI/CustomLink';
@@ -28,6 +29,9 @@ export default function Home() {
 
   return (
     <div>
+      <Head>
+        <title>budgetify</title>
+      </Head>
       <pre>{JSON.stringify(data, null, 2)}</pre>
       {!data && <div>Not logged in!</div>}
       {!data && (
