@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Overview from '~/components/Household/Overview';
@@ -55,6 +56,9 @@ export default function Households() {
 
   return (
     <div className="mt-12 mx-4 sm:mx-24">
+      <Head>
+        <title>{data.household.name + ' | ' + 'budgetify'}</title>
+      </Head>
       <div className="text-7xl text-brand-500">{data.household.name}</div>
       <div className="mt-12 text-4xl">
         Total balance{' '}
