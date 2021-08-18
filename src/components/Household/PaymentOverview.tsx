@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { Payment } from '~/graphql/__generated__/types';
 import { Container } from '../UI/Container';
 import { CustomLink } from '../UI/CustomLink';
+import PaymentItem from './PaymentItem';
 
 interface PaymentOverviewProps {
   payments: Payment[];
@@ -17,17 +18,12 @@ export default function PaymentOverview({ payments }: PaymentOverviewProps) {
         <CurrencyDollarIcon className="h-8 w-8 inline-block" />
         &nbsp;Payments
       </div>
-      <div className="mt-8">
+      <div className="my-8">
         {payments?.map((payment: Payment) => {
-          // TODO: Build payment component
-          return (
-            <div key={payment.id}>
-              {payment.name} {payment.value}
-            </div>
-          );
+          return <PaymentItem payment={payment} key={payment.id}></PaymentItem>;
         })}
       </div>
-      <div className="mt-8 text-xl">
+      <div className="absolute bottom-4 text-xl">
         <CustomLink href={router.asPath + '/payments'}>
           <CurrencyDollarIcon className="w-5 h-5 mb-1 inline-block" />
           All Payments

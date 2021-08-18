@@ -1,9 +1,9 @@
 import { CurrencyDollarIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { RecurringPayment } from '~/graphql/__generated__/types';
+import RecurringPaymentItem from '../Household/RecurringPaymentItem';
 import { Container } from '../UI/Container';
 import { CustomLink } from '../UI/CustomLink';
-
 interface RecurringPaymentOverviewProps {
   recurringPayments: RecurringPayment[];
 }
@@ -21,15 +21,15 @@ export default function RecurringPaymentOverview({
       </div>
       <div className="mt-8">
         {recurringPayments?.map((recPayment: RecurringPayment) => {
-          // TODO: Build payment component
           return (
-            <div key={recPayment.id}>
-              {recPayment.name} {new Date(recPayment.nextBooking).toLocaleDateString()}
-            </div>
+            <RecurringPaymentItem
+              recurringPayment={recPayment}
+              key={recPayment.id}
+            ></RecurringPaymentItem>
           );
         })}
       </div>
-      <div className="mt-8 text-xl">
+      <div className="absolute bottom-4 text-xl">
         <CustomLink href={router.asPath + '/payments/recurring'}>
           <CurrencyDollarIcon className="w-5 h-5 mb-1 inline-block" />
           All planned Payments

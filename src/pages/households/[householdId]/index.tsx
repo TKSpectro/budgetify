@@ -21,6 +21,7 @@ const HouseholdQuery = gql`
         name
         value
         description
+        createdAt
         category {
           id
           name
@@ -34,6 +35,7 @@ const HouseholdQuery = gql`
       recurringPayments(limit: 4) {
         id
         name
+        value
         interval
         nextBooking
       }
