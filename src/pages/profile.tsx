@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { ThemeSwitch } from '~/components/ThemeSwitch';
@@ -9,9 +9,27 @@ import Modal from '~/components/UI/Modal';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 
+const DELETE_USER_QUERY = gql`
+  mutation DeleteUser {
+    deleteUser {
+      id
+    }
+  }
+`;
+
 export default function Profile() {
   const { data, loading, error } = useQuery(MeQuery);
   const router = useRouter();
+
+  const [deleteUser, { error: deleteUserError }] = useMutation(DELETE_USER_QUERY, {
+    onCompleted: () => {
+      logoutHandler();
+    },
+    onError: (error) => {
+      // Do nothing so the page does not throw an error and we just show the
+      // error to the user, as the component gets render automatically
+    },
+  });
 
   async function logoutHandler() {
     await fetch(`${window.location.origin}/api/auth/logout`, {
@@ -29,9 +47,10 @@ export default function Profile() {
   }
 
   if (loading) return <span>loading...</span>;
-
   return (
     <Container>
+      {/* // TODO: Build a error message popover */}
+      {deleteUserError && <div className="text-red-500">{deleteUserError.message}</div>}
       <pre>{JSON.stringify(data, null, 2)}</pre>
       <div>
         <ThemeSwitch />
@@ -41,10 +60,7 @@ export default function Profile() {
           title="Delete Account"
           description="If you delete your account all your data will be lost. All households you own will be transferred to another person."
           submitText="Submit"
-          onSubmit={() => {
-            // TODO: Delete Account
-            console.log('ModalSubmitted');
-          }}
+          onSubmit={deleteUser}
           buttonText="DELETE ACCOUNT"
           color="red"
         />

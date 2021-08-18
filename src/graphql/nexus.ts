@@ -162,6 +162,7 @@ export interface NexusGenFieldTypes {
     bookRecurringPayments: Array<NexusGenRootTypes['RecurringPayment'] | null> | null; // [RecurringPayment]
     createCategory: NexusGenRootTypes['Category']; // Category!
     createPayment: NexusGenRootTypes['Payment']; // Payment!
+    deleteUser: NexusGenRootTypes['User']; // User!
     login: NexusGenRootTypes['AuthToken']; // AuthToken!
     removeCategory: NexusGenRootTypes['Category']; // Category!
     signup: NexusGenRootTypes['AuthToken']; // AuthToken!
@@ -264,6 +265,7 @@ export interface NexusGenFieldTypeNames {
     bookRecurringPayments: 'RecurringPayment'
     createCategory: 'Category'
     createPayment: 'Payment'
+    deleteUser: 'User'
     login: 'AuthToken'
     removeCategory: 'Category'
     signup: 'AuthToken'

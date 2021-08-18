@@ -92,6 +92,9 @@ type Mutation {
   """Create a new payment. Need to be logged in."""
   createPayment(categoryId: String!, description: String, householdId: String!, name: String!, value: Int!): Payment!
 
+  """Deletes a user and removes all references to it. Need to be logged in."""
+  deleteUser: User!
+
   """
   This mutation takes the email and password of an existing user.
         Returns a JWT (JSON-Web-Token) for further authentication with the graphql-api.

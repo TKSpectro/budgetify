@@ -1,4 +1,5 @@
-import { objectType } from 'nexus';
+import { ApolloError } from 'apollo-server-micro';
+import { extendType, objectType } from 'nexus';
 import prisma from '~/utils/prisma';
 import { Household, Invite, Payment } from '.';
 
@@ -48,6 +49,35 @@ export const User = objectType({
       description: "The household's in which the user is the current owner",
       resolve(source) {
         return prisma.user.findUnique({ where: { id: source.id || undefined } }).ownedHouseholds();
+      },
+    });
+  },
+});
+
+export const UserMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.nonNull.field('deleteUser', {
+      type: User,
+      description: 'Deletes a user and removes all references to it. Need to be logged in.',
+      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      async resolve(_, __, ctx) {
+        // The only NonNull UserReference is the owner of households, get them from the db
+        // and if the user is the owner of some households cancel the deletion.
+        // If the user has no owner roles, just delete the account.
+        const households = await prisma.household.findMany({
+          where: { ownerId: ctx.user.id },
+        });
+
+        // Prisma always returns an array. So we can just check for then length of it,
+        // if the length is 0 the user does not own any households
+        if (households.length > 0) {
+          throw new ApolloError(
+            `You are the owner of ${households.length} households. Please go to each household and give another user the owner role.`,
+          );
+        }
+
+        return prisma.user.delete({ where: { id: ctx.user.id } });
       },
     });
   },

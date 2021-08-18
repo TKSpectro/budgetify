@@ -116,6 +116,8 @@ export type Mutation = {
    *         which need to be booked.
    */
   bookRecurringPayments?: Maybe<Array<Maybe<RecurringPayment>>>;
+  /** Deletes a user and removes all references to it. Need to be logged in. */
+  deleteUser: User;
 };
 
 
@@ -156,7 +158,7 @@ export type MutationBookRecurringPaymentsArgs = {
   secretKey: Scalars['String'];
 };
 
-/** A payment is a NOT changeable booking with a specific value. */
+/** A payment is a NOT changeable booking of a specific value. */
 export type Payment = {
   __typename?: 'Payment';
   id: Scalars['String'];
