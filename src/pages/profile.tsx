@@ -55,7 +55,6 @@ export default function Profile() {
         <title>Profile | budgetify</title>
       </Head>
       <Container>
-        {/* // TODO: Build a error message popover */}
         {deleteUserError && <Alert type="error" message={deleteUserError.message} />}
         <pre>{JSON.stringify(data, null, 2)}</pre>
         <div>

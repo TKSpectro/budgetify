@@ -44,8 +44,6 @@ export function Header() {
     setNavBarCollapsed(!navBarCollapsed);
   }
 
-  // TODO: Use custom Button and Link components
-
   return (
     <div className="header-2 bg-gray-200 dark:bg-gray-800 border-b-2 border-gray-400 dark:border-gray-700">
       <nav className="py-2 md:py-4">
