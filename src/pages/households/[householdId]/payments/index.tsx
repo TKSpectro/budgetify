@@ -21,15 +21,11 @@ type DateFilterInput = {
   endDate: Date;
 };
 
-const Query = gql`
-  query HouseholdQuery($householdId: String, $startDate: String, $endDate: String) {
+const HOUSEHOLD_PAYMENT_QUERY = gql`
+  query HOUSEHOLD_PAYMENT_QUERY($householdId: String, $startDate: String, $endDate: String) {
     household(id: $householdId) {
       id
       name
-      owner {
-        firstname
-        lastname
-      }
       payments(startDate: $startDate, endDate: $endDate) {
         id
         name
@@ -71,7 +67,7 @@ export default function Payments() {
   const [resError, setResError] = useState();
 
   const { householdId } = router.query;
-  const { data, loading, error, refetch } = useQuery(Query, {
+  const { data, loading, error, refetch } = useQuery(HOUSEHOLD_PAYMENT_QUERY, {
     variables: {
       householdId,
       startDate: form.getValues('startDate') || undefined,
@@ -152,7 +148,7 @@ export default function Payments() {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
   return preloadQuery(ctx, {
-    query: Query,
+    query: HOUSEHOLD_PAYMENT_QUERY,
     variables: {
       householdId: ctx.params!.householdId,
       startDate: subMonths(new Date(), 12),

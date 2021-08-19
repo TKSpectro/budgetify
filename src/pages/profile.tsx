@@ -6,7 +6,7 @@ import { ThemeSwitch } from '~/components/ThemeSwitch';
 import { Alert } from '~/components/UI/Alert';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
-import { MeQuery } from '~/components/UI/Header';
+import { ME_QUERY } from '~/components/UI/Header';
 import { Modal } from '~/components/UI/Modal';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -20,7 +20,7 @@ const DELETE_USER_QUERY = gql`
 `;
 
 export default function Profile() {
-  const { data, client, loading, error } = useQuery(MeQuery);
+  const { data, client, loading, error } = useQuery(ME_QUERY);
   const router = useRouter();
 
   const [deleteUser, { error: deleteUserError }] = useMutation(DELETE_USER_QUERY, {
@@ -81,5 +81,5 @@ export default function Profile() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
-  return preloadQuery(ctx, { query: MeQuery });
+  return preloadQuery(ctx, { query: ME_QUERY });
 };

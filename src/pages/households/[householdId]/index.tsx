@@ -8,8 +8,8 @@ import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 
-const HouseholdQuery = gql`
-  query HouseholdQuery($householdId: String) {
+const HOUSEHOLD_QUERY = gql`
+  query HOUSEHOLD_QUERY($householdId: String) {
     household(id: $householdId) {
       id
       name
@@ -21,17 +21,7 @@ const HouseholdQuery = gql`
         id
         name
         value
-        description
         createdAt
-        category {
-          id
-          name
-        }
-        user {
-          id
-          firstname
-          lastname
-        }
       }
       recurringPayments(limit: 4) {
         id
@@ -47,7 +37,7 @@ const HouseholdQuery = gql`
 export default function Households() {
   const router = useRouter();
   const { householdId } = router.query;
-  const { data, loading, error } = useQuery(HouseholdQuery, {
+  const { data, loading, error } = useQuery(HOUSEHOLD_QUERY, {
     variables: { householdId },
   });
 
@@ -81,7 +71,7 @@ export default function Households() {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
   return preloadQuery(ctx, {
-    query: HouseholdQuery,
+    query: HOUSEHOLD_QUERY,
     variables: { householdId: ctx.params!.householdId },
   });
 };

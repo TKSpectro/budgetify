@@ -23,8 +23,8 @@ export function HeaderLink({ href, ...props }: LinkProps) {
   return <Link href={href!}>{content}</Link>;
 }
 
-export const MeQuery = gql`
-  query Me {
+export const ME_QUERY = gql`
+  query ME_QUERY {
     me {
       id
       firstname
@@ -36,7 +36,7 @@ export const MeQuery = gql`
 
 export function Header() {
   const [navBarCollapsed, setNavBarCollapsed] = useState(false);
-  const { data, loading, error } = useQuery(MeQuery);
+  const { data, loading, error } = useQuery(ME_QUERY);
 
   const isLoggedIn = data?.me?.id;
 
@@ -108,5 +108,5 @@ export function Header() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) =>
   preloadQuery(ctx, {
-    query: MeQuery,
+    query: ME_QUERY,
   });

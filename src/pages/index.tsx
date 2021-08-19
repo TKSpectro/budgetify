@@ -2,10 +2,10 @@ import { useQuery } from '@apollo/client';
 import Head from 'next/head';
 import React from 'react';
 import { CustomLink } from '~/components/UI/CustomLink';
-import { MeQuery } from '~/components/UI/Header';
+import { ME_QUERY } from '~/components/UI/Header';
 
 export default function Home() {
-  const { data, loading, error } = useQuery(MeQuery);
+  const { data, loading, error } = useQuery(ME_QUERY);
 
   if (loading) return <span>loading...</span>;
 

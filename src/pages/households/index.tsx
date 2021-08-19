@@ -8,8 +8,8 @@ import { Household } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 
-const query = gql`
-  query HouseholdsQuery {
+const HOUSEHOLD_LIST_QUERY = gql`
+  query HOUSEHOLD_LIST_QUERY {
     households {
       id
       name
@@ -22,7 +22,7 @@ const query = gql`
 `;
 
 export default function Households() {
-  const { data, loading, error } = useQuery(query);
+  const { data, loading, error } = useQuery(HOUSEHOLD_LIST_QUERY);
   if (loading) return <span>loading...</span>;
 
   // TODO: What info should be shown for each household?
@@ -55,6 +55,6 @@ export default function Households() {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
   return preloadQuery(ctx, {
-    query: query,
+    query: HOUSEHOLD_LIST_QUERY,
   });
 };
