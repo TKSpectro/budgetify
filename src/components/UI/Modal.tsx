@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { Button } from './Button';
+import { Button, ButtonProps } from './Button';
 
-export interface ModalProps {
+export interface ModalProps extends ButtonProps {
   title: string;
   description: string;
   submitText?: string;
   onSubmit?: any;
   buttonText: string;
-  color: 'brand' | 'red';
+  buttonClassName: string;
 }
 
 export function Modal({
@@ -15,19 +15,16 @@ export function Modal({
   description,
   submitText = 'SAVE CHANGES',
   buttonText,
-  color,
+  buttonClassName,
+  variant,
   ...props
 }: ModalProps) {
   const [showModal, setShowModal] = useState(false);
   return (
     <>
-      <button
-        className={`bg-${color}-500 text-white active:bg-${color}-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}
-        type="button"
-        onClick={() => setShowModal(true)}
-      >
+      <Button className={buttonClassName} variant={variant} onClick={() => setShowModal(true)}>
         {buttonText}
-      </button>
+      </Button>
       {showModal ? (
         <>
           <div

@@ -20,7 +20,7 @@ const DELETE_USER_QUERY = gql`
 `;
 
 export default function Profile() {
-  const { data, loading, error } = useQuery(MeQuery);
+  const { data, client, loading, error } = useQuery(MeQuery);
   const router = useRouter();
 
   const [deleteUser, { error: deleteUserError }] = useMutation(DELETE_USER_QUERY, {
@@ -45,6 +45,9 @@ export default function Profile() {
     // No need to check for response errors as logout cant fail
     // If the authCookie cant get deleted the user is logged-out anyways
 
+    // Clear apollo client cache -> remove user data from cache
+    client.resetStore();
+
     router.push('/auth/login');
   }
 
@@ -57,20 +60,20 @@ export default function Profile() {
       <Container>
         {deleteUserError && <Alert type="error" message={deleteUserError.message} />}
         <pre>{JSON.stringify(data, null, 2)}</pre>
-        <div>
+        <div className="my-4">
           <ThemeSwitch />
         </div>
-        <div className="flex">
-          <Modal
-            title="Delete Account"
-            description="If you delete your account all your data will be lost. All households you own will be transferred to another person."
-            submitText="Submit"
-            onSubmit={deleteUser}
-            buttonText="DELETE ACCOUNT"
-            color="red"
-          />
-          {data && <Button onClick={logoutHandler}>Logout</Button>}
-        </div>
+
+        <Modal
+          title="Delete Account"
+          description="If you delete your account all your data will be lost. All households you own will be transferred to another person."
+          submitText="Submit"
+          onSubmit={deleteUser}
+          buttonText="DELETE ACCOUNT"
+          variant="danger"
+          buttonClassName="mr-4"
+        />
+        {data && <Button onClick={logoutHandler}>Logout</Button>}
       </Container>
     </>
   );
