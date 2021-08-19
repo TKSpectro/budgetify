@@ -4,8 +4,11 @@ declare global {
   var __globalPrisma__: PrismaClient;
 }
 
+// We can import the prisma client anywhere in our application from this place
+// to get access to a new or already existing instance of prisma.
 export let prisma: PrismaClient;
 
+// Depending on the environment we can log different prisma outputs
 if (process.env.NODE_ENV === 'production') {
   prisma = new PrismaClient({
     log: ['warn', 'error'],

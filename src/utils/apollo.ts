@@ -10,6 +10,7 @@ interface ApolloClientParameters {
 }
 
 // Call this function to get access to a apollo client for queries to graphql
+// Technically not needed because we cant just use preloadQuery for this
 export function initializeApollo({ initialState, headers }: ApolloClientParameters) {
   let nextClient = apolloClient;
 
@@ -63,6 +64,7 @@ export async function preloadQuery(
   });
 
   try {
+    // Wait for all queries to be finished
     await Promise.all(queries.map((queryOptions) => client.query(queryOptions)));
     return {
       props: {
