@@ -1,4 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
+import { endOfMonth, startOfMonth } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -9,7 +10,7 @@ import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 
 const HOUSEHOLD_QUERY = gql`
-  query HOUSEHOLD_QUERY($householdId: String) {
+  query HOUSEHOLD_QUERY($householdId: String, $startDate: String, $endDate: String) {
     household(id: $householdId) {
       id
       name
@@ -22,6 +23,18 @@ const HOUSEHOLD_QUERY = gql`
         name
         value
         createdAt
+        category {
+          id
+          name
+        }
+      }
+      thisMonthsPayments: payments(startDate: $startDate, endDate: $endDate) {
+        name
+        value
+        createdAt
+        category {
+          name
+        }
       }
       recurringPayments(limit: 4) {
         id
@@ -38,7 +51,11 @@ export default function Households() {
   const router = useRouter();
   const { householdId } = router.query;
   const { data, loading, error } = useQuery(HOUSEHOLD_QUERY, {
-    variables: { householdId },
+    variables: {
+      householdId,
+      startDate: startOfMonth(new Date()).toISOString(),
+      endDate: endOfMonth(new Date()).toISOString(),
+    },
   });
 
   if (error) return <div>{JSON.stringify(error, null, 2)}</div>;
@@ -63,6 +80,7 @@ export default function Households() {
       <Overview
         payments={data.household.payments}
         recurringPayments={data.household.recurringPayments}
+        monthPayments={data.household.thisMonthsPayments}
       />
     </div>
   );
@@ -72,6 +90,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
   return preloadQuery(ctx, {
     query: HOUSEHOLD_QUERY,
-    variables: { householdId: ctx.params!.householdId },
+    variables: {
+      householdId: ctx.params!.householdId,
+      startDate: startOfMonth(new Date()).toISOString(),
+      endDate: endOfMonth(new Date()).toISOString(),
+    },
   });
 };
