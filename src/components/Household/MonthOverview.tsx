@@ -8,21 +8,6 @@ interface MonthOverviewProps {
   monthPayments: Payment[];
 }
 
-let monthlyOverviewChartOptions = {
-  responsive: true,
-  // https://www.chartjs.org/docs/latest/configuration/tooltip.html#label-callback
-  plugins: {
-    tooltip: {
-      callbacks: {
-        label: function (context: TooltipItemContext) {
-          // Change tooltip text. e.g.:" Category 1: 100€"
-          return ' ' + context.label + ': ' + context.parsed + '€';
-        },
-      },
-    },
-  },
-};
-
 export default function MonthOverview({ monthPayments: payments }: MonthOverviewProps) {
   // TODO: Find out if there is a nicer way to accomplish this
   // Create a array of this type. Need to initialize it but then remove the needed init value again.
@@ -83,7 +68,23 @@ export default function MonthOverview({ monthPayments: payments }: MonthOverview
         <TagIcon className="h-8 w-8 inline-block" />
         &nbsp;This Month
       </div>
-      <Doughnut data={monthlyOverviewChartData} options={monthlyOverviewChartOptions} />
+      <Doughnut
+        data={monthlyOverviewChartData}
+        options={{
+          responsive: true,
+          // https://www.chartjs.org/docs/latest/configuration/tooltip.html#label-callback
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function (context: TooltipItemContext) {
+                  // Change tooltip text. e.g.:" Category 1: 100€"
+                  return ' ' + context.label + ': ' + context.parsed + '€';
+                },
+              },
+            },
+          },
+        }}
+      />
       <div className="mt-8">
         Overall {monthOverall} €
         <br />
