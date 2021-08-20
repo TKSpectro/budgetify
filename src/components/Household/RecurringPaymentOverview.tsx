@@ -19,7 +19,7 @@ export default function RecurringPaymentOverview({
         <CurrencyDollarIcon className="h-8 w-8 inline-block" />
         &nbsp;Next payments
       </div>
-      <div className="mt-8">
+      <div className="my-8">
         {recurringPayments?.map((recPayment: RecurringPayment) => {
           return (
             <RecurringPaymentItem
