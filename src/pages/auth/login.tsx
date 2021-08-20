@@ -1,9 +1,11 @@
+import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/dist/client/router';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Container } from '~/components/UI/Container';
 import { CustomLink } from '~/components/UI/CustomLink';
 import { Form } from '~/components/UI/Form';
+import { ME_QUERY } from '~/components/UI/Header';
 import { Input } from '~/components/UI/Input';
 
 type Inputs = {
@@ -12,6 +14,8 @@ type Inputs = {
 };
 
 export default function Login() {
+  const { refetch } = useQuery(ME_QUERY);
+
   const router = useRouter();
   const form = useForm<Inputs>();
   const [resError, setResError] = useState();
@@ -31,6 +35,9 @@ export default function Login() {
     }
 
     if (res.status == 200) {
+      // Refetch the me query so the cache gets update with the newly logged in user
+      await refetch();
+
       router.push('/');
     }
   }

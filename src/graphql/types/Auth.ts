@@ -18,28 +18,31 @@ export const AuthQuery = extendType({
   type: 'Query',
   definition(t) {
     t.field('me', {
-      type: User,
-      description: 'Returns the data of the currently logged in user.',
+      type: User || null,
+      description:
+        'Returns the data of the currently logged in user. Returns null if no user is logged in',
       async resolve(_, __, ctx) {
-        try {
-          const user = await prisma.user.findUnique({
-            where: {
-              id: ctx.user.id || undefined,
-            },
-          });
-
-          if (!user) {
-            return null;
-          }
-
-          // filter out the hashed password from the response
-          return {
-            ...user,
-            hashedPassword: '',
-          };
-        } catch (error) {
-          throw new AuthenticationError('You are not logged in.');
+        // User is not logged in.
+        if (!ctx.user?.id) {
+          return null;
         }
+
+        // Find the user by the id saved in the context
+        const user = await prisma.user.findUnique({
+          where: {
+            id: ctx.user.id || undefined,
+          },
+        });
+
+        if (!user) {
+          return null;
+        }
+
+        // filter out the hashed password from the response
+        return {
+          ...user,
+          hashedPassword: '',
+        };
       },
     });
   },

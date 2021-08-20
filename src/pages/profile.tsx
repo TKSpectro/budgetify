@@ -1,4 +1,4 @@
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -20,8 +20,10 @@ const DELETE_USER_QUERY = gql`
 `;
 
 export default function Profile() {
-  const { data, client, loading, error } = useQuery(ME_QUERY);
+  const { data, loading, error } = useQuery(ME_QUERY);
   const router = useRouter();
+
+  const client = useApolloClient();
 
   const [deleteUser, { error: deleteUserError }] = useMutation(DELETE_USER_QUERY, {
     onCompleted: () => {
@@ -52,6 +54,7 @@ export default function Profile() {
   }
 
   if (loading) return <span>loading...</span>;
+  if (error) return <div></div>;
   return (
     <>
       <Head>
