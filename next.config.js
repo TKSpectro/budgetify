@@ -46,7 +46,7 @@ const securityHeaders = [
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
   {
     key: 'Permissions-Policy',
-    value: 'origin-when-cross-origin',
+    value: 'geolocation=()',
   },
 ];
 
