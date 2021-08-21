@@ -18,7 +18,7 @@ const HOUSEHOLD_QUERY = gql`
         firstname
         lastname
       }
-      payments(limit: 4) {
+      payments(limit: 6) {
         id
         name
         value
@@ -36,7 +36,7 @@ const HOUSEHOLD_QUERY = gql`
           name
         }
       }
-      recurringPayments(limit: 4) {
+      recurringPayments(limit: 6) {
         id
         name
         value
@@ -62,7 +62,7 @@ export default function Households() {
   if (loading) return <span>loading...</span>;
 
   return (
-    <div className="mt-12 mx-4 sm:mx-24">
+    <div className="my-12 mx-4 sm:mx-24">
       <Head>
         <title>{data.household.name + ' | ' + 'budgetify'}</title>
       </Head>

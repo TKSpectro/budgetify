@@ -11,7 +11,7 @@ interface OverviewProps {
 
 export default function Overview({ payments, recurringPayments, monthPayments }: OverviewProps) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-4">
+    <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-16">
       <PaymentOverview payments={payments} />
       <RecurringPaymentOverview recurringPayments={recurringPayments} />
       <MonthOverview monthPayments={monthPayments} />
