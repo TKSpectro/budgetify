@@ -4,6 +4,7 @@ import { ComponentProps } from 'react';
 
 export interface LinkProps extends ComponentProps<'a'> {
   noUnderline?: boolean;
+  href: string;
 }
 
 export function CustomLink({ noUnderline = false, href, ...props }: LinkProps) {

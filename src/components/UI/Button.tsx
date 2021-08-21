@@ -3,18 +3,10 @@ import { ComponentProps } from 'react';
 
 export interface ButtonProps extends ComponentProps<'button'> {
   variant?: 'primary' | 'secondary' | 'danger' | 'transparent';
-  isSubmit?: true | false;
   className?: string;
 }
 
-// TODO: Handle submit
-
-export function Button({
-  variant = 'primary',
-  isSubmit = false,
-  className,
-  ...props
-}: ButtonProps) {
+export function Button({ variant = 'primary', className, ...props }: ButtonProps) {
   return (
     <button
       className={clsx(

@@ -127,6 +127,7 @@ export default function Payments() {
         </div>
 
         <div className="mt-16">
+          <Button onClick={() => router.push(router.asPath + '/newPayment')}>New Payment</Button>
           <Container>
             {data.household
               ? data.household.payments.map((payment: Payment) => {

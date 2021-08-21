@@ -354,7 +354,7 @@ export interface NexusGenArgTypes {
       description?: string | null; // String
       householdId: string; // String!
       name: string; // String!
-      value: number; // Int!
+      value: number; // Float!
     }
     login: { // args
       email: string; // String!
