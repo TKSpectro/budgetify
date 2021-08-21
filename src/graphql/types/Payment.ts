@@ -1,5 +1,5 @@
 import { ApolloError } from 'apollo-server-micro';
-import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
+import { extendType, floatArg, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
 import { Category, Household, User } from '.';
 
@@ -62,7 +62,7 @@ export const PaymentMutation = extendType({
       authorize: (_, __, ctx) => (ctx.user ? true : false),
       args: {
         name: nonNull(stringArg()),
-        value: nonNull(intArg()),
+        value: nonNull(floatArg()),
         description: stringArg(),
         categoryId: nonNull(stringArg()),
         householdId: nonNull(stringArg()),

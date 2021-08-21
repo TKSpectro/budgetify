@@ -90,7 +90,7 @@ type Mutation {
   createCategory(name: String!): Category!
 
   """Create a new payment. Need to be logged in."""
-  createPayment(categoryId: String!, description: String, householdId: String!, name: String!, value: Int!): Payment!
+  createPayment(categoryId: String!, description: String, householdId: String!, name: String!, value: Float!): Payment!
 
   """Deletes a user and removes all references to it. Need to be logged in."""
   deleteUser: User!
