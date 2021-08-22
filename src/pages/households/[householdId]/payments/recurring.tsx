@@ -38,8 +38,6 @@ export default function RecurringPayments() {
     },
   });
 
-  console.log(data);
-
   return (
     <>
       <Head>

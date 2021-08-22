@@ -1,10 +1,10 @@
 import { gql, useQuery } from '@apollo/client';
 import 'chartjs-adapter-date-fns';
-import { addDays, differenceInDays, parseISO, subMonths } from 'date-fns';
+import { differenceInDays, parseISO } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { useForm } from 'react-hook-form';
 import { Alert } from '~/components/UI/Alert';
@@ -65,7 +65,6 @@ let paymentChartOptions = {
 export default function Payments() {
   const router = useRouter();
   const form = useForm<DateFilterInput>();
-  const [resError, setResError] = useState();
 
   const { householdId } = router.query;
   const { data, loading, error, refetch } = useQuery(HOUSEHOLD_PAYMENT_QUERY, {
@@ -108,7 +107,6 @@ export default function Payments() {
 
       <div className="mt-8 md:mx-32">
         <Form form={form} onSubmit={onDateFilterSubmit}>
-          {resError && <pre>{JSON.stringify(resError, null, 2)}</pre>}
           <div className="mx-8 md:mx-0 md:grid md: grid-cols-3">
             <Input
               className="mx-4"
@@ -159,8 +157,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     query: HOUSEHOLD_PAYMENT_QUERY,
     variables: {
       householdId: ctx.params!.householdId,
-      startDate: subMonths(new Date(), 12),
-      endDate: addDays(new Date(), 1),
+      startDate: undefined,
+      endDate: undefined,
     },
   });
 };
