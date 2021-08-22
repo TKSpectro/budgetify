@@ -1,8 +1,11 @@
 import { gql, useQuery } from '@apollo/client';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Container } from '~/components/UI/Container';
 import { RecurringPayment } from '~/graphql/__generated__/types';
+import { preloadQuery } from '~/utils/apollo';
+import { authenticatedRoute } from '~/utils/auth';
 
 const HOUSEHOLD_RECURRING_PAYMENTS_QUERY = gql`
   query HOUSEHOLD_RECURRING_PAYMENTS_QUERY($householdId: String) {
@@ -41,7 +44,7 @@ export default function RecurringPayments() {
       </Head>
       <div className="mt-16">
         <Container>
-          {data.household
+          {data?.household
             ? data.household.recurringPayments.map((recPayment: RecurringPayment) => {
                 // TODO: Build recurring payment component
                 return (
@@ -56,3 +59,11 @@ export default function RecurringPayments() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  authenticatedRoute(ctx);
+  return preloadQuery(ctx, {
+    query: HOUSEHOLD_RECURRING_PAYMENTS_QUERY,
+    variables: { householdId: ctx.params!.householdId },
+  });
+};
