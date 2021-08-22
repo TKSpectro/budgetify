@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { useForm } from 'react-hook-form';
+import { Alert } from '~/components/UI/Alert';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
 import { Form } from '~/components/UI/Form';
@@ -129,6 +130,12 @@ export default function Payments() {
         <div className="mt-16">
           <Button onClick={() => router.push(router.asPath + '/newPayment')}>New Payment</Button>
           <Container>
+            {error || !data?.household?.payments ? (
+              <Alert
+                message="Could not find any recurring messages. Please create a new one"
+                type="warning"
+              />
+            ) : null}
             {data.household
               ? data.household.payments.map((payment: Payment) => {
                   // TODO: Build payment component

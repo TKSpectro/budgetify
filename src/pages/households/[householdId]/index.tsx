@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Overview from '~/components/Household/Overview';
+import { Alert } from '~/components/UI/Alert';
 import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -66,12 +67,15 @@ export default function Households() {
       <Head>
         <title>{data.household.name + ' | ' + 'budgetify'}</title>
       </Head>
+      {error || !data?.household?.payments ? (
+        <Alert message="Could not find any payments. Please create your first one." type="error" />
+      ) : null}
       <div className="text-7xl text-brand-500">{data.household.name}</div>
       <div className="mt-12 text-4xl">
         Total balance{' '}
         {
           // Add up the value of all payments for the total balance
-          data.household.payments.reduce(
+          data?.household?.payments.reduce(
             (sum: number, payment: Payment) => +sum + +payment.value,
             0.0,
           )

@@ -34,9 +34,11 @@ export default function Households() {
       <Head>
         <title>Dashboard | budgetify</title>
       </Head>
-      {error && <Alert message="Could not load household." type="error" />}
       <Container>
-        {data.households.map((household: Household) => {
+        {error || !data?.households ? (
+          <Alert message="Could not load household." type="error" />
+        ) : null}
+        {data?.households?.map((household: Household) => {
           return (
             <Link href={`/households/${household.id}`} passHref key={household.id}>
               <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer">

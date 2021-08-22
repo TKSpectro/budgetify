@@ -2,6 +2,7 @@ import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { Alert } from '~/components/UI/Alert';
 import { Container } from '~/components/UI/Container';
 import { RecurringPayment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
@@ -37,6 +38,8 @@ export default function RecurringPayments() {
     },
   });
 
+  console.log(data);
+
   return (
     <>
       <Head>
@@ -44,6 +47,12 @@ export default function RecurringPayments() {
       </Head>
       <div className="mt-16">
         <Container>
+          {error || data?.household?.recurringPayments.length === 0 ? (
+            <Alert
+              message="Could not find any recurring messages. Please create a new one"
+              type="warning"
+            />
+          ) : null}
           {data?.household
             ? data.household.recurringPayments.map((recPayment: RecurringPayment) => {
                 // TODO: Build recurring payment component
