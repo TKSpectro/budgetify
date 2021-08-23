@@ -7,14 +7,16 @@ import { ComponentProps, useState } from 'react';
 import { preloadQuery } from '~/utils/apollo';
 import { Button } from './Button';
 
-export interface LinkProps extends ComponentProps<'a'> {}
+interface HeaderLinkProps extends ComponentProps<'a'> {}
 
-export function HeaderLink({ href, ...props }: LinkProps) {
+export function HeaderLink({ href, ...props }: HeaderLinkProps) {
   // TODO: Check for currently active link with router.url? to highlight on which page you currently are
 
   const content = (
     <a
-      className="p-2 lg:px-4 md:mx-2 text-gray-600 dark:text-gray-200 rounded hover:bg-gray-700 hover:text-gray-700 transition-colors duration-300"
+      className={clsx(
+        'p-2 lg:px-4 md:mx-2 text-gray-600 dark:text-gray-200 rounded hover:bg-gray-700 hover:text-gray-700 transition-colors duration-300',
+      )}
       {...props}
     />
   );
@@ -48,7 +50,12 @@ export function Header() {
       <nav className="py-2 md:py-4">
         <div className="container px-4 mx-auto md:flex md:items-center">
           <div className="flex justify-between items-center">
-            <Link href="/">budgetify</Link>
+            <HeaderLink
+              className="text-2xl text-brand-500 dark:text-brand-500 font-medium"
+              href="/"
+            >
+              budgetify
+            </HeaderLink>
 
             <div className="md:hidden">
               <Button onClick={toggleNavbarHandler}>
