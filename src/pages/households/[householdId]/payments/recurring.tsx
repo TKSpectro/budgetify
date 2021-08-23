@@ -4,6 +4,8 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Alert } from '~/components/UI/Alert';
 import { Container } from '~/components/UI/Container';
+import { Error } from '~/components/UI/Error';
+import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
 import { RecurringPayment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -38,29 +40,33 @@ export default function RecurringPayments() {
     },
   });
 
+  const recurringPayments = data?.household?.recurringPayments || [];
+
   return (
     <>
       <Head>
         <title>Recurring Payments | budgetify</title>
       </Head>
+
       <div className="mt-16">
         <Container>
-          {error || data?.household?.recurringPayments.length === 0 ? (
+          <Error title="Failed to load recurring messages" error={error} />
+          {loading && <LoadingAnimation />}
+          {!loading && !error && recurringPayments.length === 0 ? (
             <Alert
               message="Could not find any recurring messages. Please create a new one"
               type="warning"
             />
-          ) : null}
-          {data?.household
-            ? data.household.recurringPayments.map((recPayment: RecurringPayment) => {
-                // TODO: Build recurring payment component
-                return (
-                  <div key={recPayment.id}>
-                    {recPayment.name} {recPayment.value}
-                  </div>
-                );
-              })
-            : null}
+          ) : (
+            recurringPayments.map((recPayment: RecurringPayment) => {
+              // TODO: Build recurring payment component
+              return (
+                <div key={recPayment.id}>
+                  {recPayment.name} {recPayment.value}
+                </div>
+              );
+            })
+          )}
         </Container>
       </div>
     </>

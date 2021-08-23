@@ -6,6 +6,8 @@ interface AlertProps {
   type?: 'warning' | 'error';
 }
 
+// TODO: Style this component more like the Error
+
 export function Alert({ message, type, ...props }: AlertProps) {
   const [showAlert, setShowAlert] = useState(true);
   return (
