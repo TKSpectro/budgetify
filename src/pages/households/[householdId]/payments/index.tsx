@@ -12,6 +12,7 @@ import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
+import { Link } from '~/components/UI/Link';
 import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -126,6 +127,9 @@ export default function Payments() {
         </div>
 
         <div className="mt-16">
+          <Link href={router.asPath + '/newPayment'} asButton>
+            New Payment
+          </Link>
           <Button onClick={() => router.push(router.asPath + '/newPayment')}>New Payment</Button>
           <Container>
             {error || !data?.household?.payments ? (

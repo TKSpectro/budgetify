@@ -3,10 +3,10 @@ import { useRouter } from 'next/dist/client/router';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Container } from '~/components/UI/Container';
-import { CustomLink } from '~/components/UI/CustomLink';
 import { Form } from '~/components/UI/Form';
 import { ME_QUERY } from '~/components/UI/Header';
 import { Input } from '~/components/UI/Input';
+import { Link } from '~/components/UI/Link';
 
 type Inputs = {
   email: string;
@@ -54,7 +54,7 @@ export default function Login() {
         <input type="submit" />
       </Form>
 
-      <CustomLink href="/auth/signup">No Account? No Problem! Signup</CustomLink>
+      <Link href="/auth/signup">No Account? No Problem! Signup</Link>
     </Container>
   );
 }

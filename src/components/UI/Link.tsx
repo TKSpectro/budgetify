@@ -1,22 +1,24 @@
 import clsx from 'clsx';
-import Link from 'next/link';
+import { default as NextLink } from 'next/link';
 import { ComponentProps } from 'react';
 
 export interface LinkProps extends ComponentProps<'a'> {
   noUnderline?: boolean;
+  asButton?: boolean;
   href: string;
 }
 
-export function CustomLink({ noUnderline = false, href, ...props }: LinkProps) {
+export function Link({ noUnderline = false, asButton = false, href, ...props }: LinkProps) {
   const content = (
     <a
       className={clsx(
         'text-gray-900 dark:text-gray-100 underline font-medium  hover:text-opacity-80',
         { 'no-underline': noUnderline },
+        { 'bg-brand-500 items-center justify-center px-6 py-3 rounded no-underline': asButton },
       )}
       {...props}
     />
   );
 
-  return <Link href={href!}>{content}</Link>;
+  return <NextLink href={href!}>{content}</NextLink>;
 }

@@ -7,9 +7,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
-import { CustomLink } from '~/components/UI/CustomLink';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
+import { Link } from '~/components/UI/Link';
 import { Category, MutationCreatePaymentArgs } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -87,7 +87,7 @@ export default function NewPayment() {
       <Container>
         Created new payment. You will get redirected shortly!
         <br />
-        <CustomLink href={returnUrl}>If not. Click here</CustomLink>
+        <Link href={returnUrl}>If not. Click here</Link>
       </Container>
     );
   }

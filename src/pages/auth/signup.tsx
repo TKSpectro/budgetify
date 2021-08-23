@@ -2,9 +2,9 @@ import { useRouter } from 'next/dist/client/router';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Container } from '~/components/UI/Container';
-import { CustomLink } from '~/components/UI/CustomLink';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
+import { Link } from '~/components/UI/Link';
 
 type Inputs = {
   firstname: string;
@@ -17,7 +17,7 @@ export default function Signup() {
   // return (
   //   <div>
   //     <SignupForm />
-  //     <CustomLink href="/auth/login">Do you already have an account? Login</CustomLink>
+  //     <Link href="/auth/login">Do you already have an account? Login</Link>
   //   </div>
   // );
 
@@ -72,7 +72,7 @@ export default function Signup() {
         <input type="submit" />
       </Form>
 
-      <CustomLink href="/auth/login">Do you already have an account? Login</CustomLink>
+      <Link href="/auth/login">Do you already have an account? Login</Link>
     </Container>
   );
 }

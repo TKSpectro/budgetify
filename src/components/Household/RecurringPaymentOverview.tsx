@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { RecurringPayment } from '~/graphql/__generated__/types';
 import RecurringPaymentItem from '../Household/RecurringPaymentItem';
 import { Container } from '../UI/Container';
-import { CustomLink } from '../UI/CustomLink';
+import { Link } from '../UI/Link';
 interface RecurringPaymentOverviewProps {
   recurringPayments: RecurringPayment[];
 }
@@ -30,10 +30,10 @@ export default function RecurringPaymentOverview({
         })}
       </div>
       <div className="absolute bottom-4 text-xl">
-        <CustomLink href={router.asPath + '/payments/recurring'}>
+        <Link href={router.asPath + '/payments/recurring'}>
           <CurrencyDollarIcon className="w-5 h-5 mb-1 inline-block" />
           All planned Payments
-        </CustomLink>
+        </Link>
       </div>
     </Container>
   );

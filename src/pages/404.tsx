@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { CustomLink } from '~/components/UI/CustomLink';
+import { Link } from '~/components/UI/Link';
 
 export default function Custom404() {
   return (
@@ -16,12 +16,12 @@ export default function Custom404() {
               <div className="text-2xl pb-8 px-12 font-medium">
                 The page you are looking for does not exist. It might have been moved or deleted.
               </div>
-              <CustomLink
+              <Link
                 href="/"
                 className="bg-brand-500 text-white font-semibold px-6 py-3 rounded-md mr-6"
               >
                 HOME
-              </CustomLink>
+              </Link>
             </div>
           </div>
         </div>

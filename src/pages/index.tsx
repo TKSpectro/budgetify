@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client';
 import Head from 'next/head';
 import React from 'react';
-import { CustomLink } from '~/components/UI/CustomLink';
 import { ME_QUERY } from '~/components/UI/Header';
+import { Link } from '~/components/UI/Link';
 
 export default function Home() {
   const { data, loading, error } = useQuery(ME_QUERY);
@@ -18,15 +18,15 @@ export default function Home() {
       {!data && <div>Not logged in!</div>}
       {!data && (
         <div>
-          <CustomLink href="/auth/signup">No Account? No Problem! Signup</CustomLink>
+          <Link href="/auth/signup">No Account? No Problem! Signup</Link>
         </div>
       )}
       {!data && (
         <div>
-          <CustomLink href="/auth/login">Do you already have an account? Login</CustomLink>
+          <Link href="/auth/login">Do you already have an account? Login</Link>
         </div>
       )}
-      {data && <CustomLink href="/profile">Profile</CustomLink>}
+      {data && <Link href="/profile">Profile</Link>}
     </div>
   );
 }

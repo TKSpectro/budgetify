@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { ComponentProps, useState } from 'react';
 import { preloadQuery } from '~/utils/apollo';
 import { Button } from './Button';
-import { CustomLink } from './CustomLink';
 
 export interface LinkProps extends ComponentProps<'a'> {}
 
@@ -49,9 +48,7 @@ export function Header() {
       <nav className="py-2 md:py-4">
         <div className="container px-4 mx-auto md:flex md:items-center">
           <div className="flex justify-between items-center">
-            <CustomLink href="/" className="font-bold text-xl text-brand-400">
-              budgetify
-            </CustomLink>
+            <Link href="/">budgetify</Link>
 
             <div className="md:hidden">
               <Button onClick={toggleNavbarHandler}>
@@ -75,30 +72,9 @@ export function Header() {
             <HeaderLink href="/">Features</HeaderLink>
             <HeaderLink href="/">Pricing</HeaderLink>
             <HeaderLink href="/">Contact</HeaderLink>
-            {!isLoggedIn && (
-              <CustomLink
-                href="/auth/login"
-                className="p-2 lg:px-4 md:mx-2 text-brand-500 text-center border border-transparent rounded hover:bg-brand-600 hover:text-white transition-colors duration-300"
-              >
-                Login
-              </CustomLink>
-            )}
-            {!isLoggedIn && (
-              <CustomLink
-                href="/auth/signup"
-                className="p-2 lg:px-4 md:mx-2 text-brand-500 text-center border border-solid border-brand-600 rounded hover:bg-brand-600 hover:text-white transition-colors duration-300 mt-1 md:mt-0 md:ml-1"
-              >
-                Signup
-              </CustomLink>
-            )}
-            {isLoggedIn && (
-              <CustomLink
-                href="/profile"
-                className="p-2 lg:px-4 md:mx-2 text-brand-500 text-center border border-transparent rounded hover:bg-brand-600 hover:text-white transition-colors duration-300"
-              >
-                Profile
-              </CustomLink>
-            )}
+            {!isLoggedIn && <HeaderLink href="/auth/login">Login</HeaderLink>}
+            {!isLoggedIn && <HeaderLink href="/auth/signup">Signup</HeaderLink>}
+            {isLoggedIn && <HeaderLink href="/profile">Profile</HeaderLink>}
           </div>
         </div>
       </nav>

@@ -2,7 +2,7 @@ import { CurrencyDollarIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { Payment } from '~/graphql/__generated__/types';
 import { Container } from '../UI/Container';
-import { CustomLink } from '../UI/CustomLink';
+import { Link } from '../UI/Link';
 import PaymentItem from './PaymentItem';
 
 interface PaymentOverviewProps {
@@ -24,10 +24,10 @@ export default function PaymentOverview({ payments }: PaymentOverviewProps) {
         })}
       </div>
       <div className="absolute bottom-4 text-xl">
-        <CustomLink href={router.asPath + '/payments'}>
+        <Link href={router.asPath + '/payments'}>
           <CurrencyDollarIcon className="w-5 h-5 mb-1 inline-block" />
           All Payments
-        </CustomLink>
+        </Link>
       </div>
     </Container>
   );
