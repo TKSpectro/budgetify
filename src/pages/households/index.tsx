@@ -4,6 +4,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Alert } from '~/components/UI/Alert';
 import { Container } from '~/components/UI/Container';
+import { Error } from '~/components/UI/Error';
+import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
 import { Household } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -25,6 +27,8 @@ export default function Households() {
   const { data, loading, error } = useQuery(HOUSEHOLD_LIST_QUERY);
   if (loading) return <span>loading...</span>;
 
+  const households = data?.households || [];
+
   // TODO: What info should be shown for each household?
   // Maybe even the net-value of the household?
   // Add a open button?
@@ -35,10 +39,12 @@ export default function Households() {
         <title>Dashboard | budgetify</title>
       </Head>
       <Container>
-        {error || !data?.households ? (
-          <Alert message="Could not load household." type="error" />
+        <Error title="Failed to load recurring messages" error={error} />
+        {loading && <LoadingAnimation />}
+        {!loading && !error && households.length === 0 ? (
+          <Alert message="Could not find any households. Please create or join one." type="error" />
         ) : null}
-        {data?.households?.map((household: Household) => {
+        {households?.map((household: Household) => {
           return (
             <Link href={`/households/${household.id}`} passHref key={household.id}>
               <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer">
