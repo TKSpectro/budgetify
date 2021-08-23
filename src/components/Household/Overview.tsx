@@ -12,9 +12,11 @@ interface OverviewProps {
 export default function Overview({ payments, recurringPayments, monthPayments }: OverviewProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-16">
-      <PaymentOverview payments={payments} />
-      <RecurringPaymentOverview recurringPayments={recurringPayments} />
-      <MonthOverview monthPayments={monthPayments} />
+      {payments.length !== 0 && <PaymentOverview payments={payments} />}
+      {recurringPayments.length !== 0 && (
+        <RecurringPaymentOverview recurringPayments={recurringPayments} />
+      )}
+      {monthPayments.length !== 0 && <MonthOverview monthPayments={monthPayments} />}
     </div>
   );
 }

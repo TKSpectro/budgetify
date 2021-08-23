@@ -6,6 +6,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import Overview from '~/components/Household/Overview';
 import { Alert } from '~/components/UI/Alert';
+import { Error } from '~/components/UI/Error';
+import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
 import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -59,33 +61,47 @@ export default function Households() {
     },
   });
 
-  if (error) return <div>{JSON.stringify(error, null, 2)}</div>;
-  if (loading) return <span>loading...</span>;
+  const household = data?.household;
 
   return (
     <div className="my-12 mx-4 sm:mx-24">
       <Head>
-        <title>{data.household.name + ' | ' + 'budgetify'}</title>
+        <title>{household?.name + ' | ' + 'budgetify'}</title>
       </Head>
-      {error || !data?.household?.payments ? (
-        <Alert message="Could not find any payments. Please create your first one." type="error" />
+      <Error title="Failed to load household" error={error} />
+      {loading && <LoadingAnimation />}
+      {!loading && !household ? (
+        <Alert message="Could not find this household." type="error" />
       ) : null}
-      <div className="text-7xl text-brand-500">{data.household.name}</div>
-      <div className="mt-12 text-4xl">
-        Total balance{' '}
-        {
-          // Add up the value of all payments for the total balance
-          data?.household?.payments.reduce(
-            (sum: number, payment: Payment) => +sum + +payment.value,
-            0.0,
-          )
-        }
-      </div>
-      <Overview
-        payments={data.household.payments}
-        recurringPayments={data.household.recurringPayments}
-        monthPayments={data.household.thisMonthsPayments}
-      />
+      {!error && household && (
+        <>
+          <div className="text-7xl text-brand-500">{data.household.name}</div>
+          <div className="mt-12 mb-4 text-4xl">
+            Total balance{' '}
+            {
+              // Add up the value of all payments for the total balance
+              data?.household?.payments.reduce(
+                (sum: number, payment: Payment) => +sum + +payment.value,
+                0.0,
+              )
+            }
+          </div>
+          {household.payments?.length === 0 ? (
+            <Alert message="Could not find any payments." type="error" />
+          ) : null}
+          {household.recurringPayments?.length === 0 ? (
+            <Alert message="Could not find any recurring payments." type="error" />
+          ) : null}
+          {household.thisMonthsPayments?.length === 0 ? (
+            <Alert message="Could not find any payments this month." type="error" />
+          ) : null}
+          <Overview
+            payments={household.payments}
+            recurringPayments={household.recurringPayments}
+            monthPayments={household.thisMonthsPayments}
+          />
+        </>
+      )}
     </div>
   );
 }
