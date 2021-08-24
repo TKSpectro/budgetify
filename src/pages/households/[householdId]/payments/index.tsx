@@ -7,9 +7,9 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { useForm } from 'react-hook-form';
+import { PaymentTable } from '~/components/Household/Payments/PaymentTable';
 import { Alert } from '~/components/UI/Alert';
 import { Button } from '~/components/UI/Button';
-import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
@@ -136,22 +136,13 @@ export default function Payments() {
             <div className="max-w-[60em] mx-auto">
               <Line data={genData(labels, chartData)} options={paymentChartOptions} />
             </div>
-
-            <div className="mt-16">
+            <div className="my-8">
               <Link href={router.asPath + '/newPayment'} asButton>
                 New Payment
               </Link>
-
-              <Container>
-                {payments.map((payment: Payment) => {
-                  // TODO: Build payment component
-                  return (
-                    <div key={payment.id}>
-                      {payment.name} {payment.value}
-                    </div>
-                  );
-                })}
-              </Container>
+            </div>
+            <div className="my-8">
+              <PaymentTable payments={payments} />
             </div>
           </>
         )}
