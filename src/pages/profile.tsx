@@ -2,7 +2,6 @@ import { gql, useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { ThemeSwitch } from '~/components/ThemeSwitch';
 import { Alert } from '~/components/UI/Alert';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
@@ -63,9 +62,7 @@ export default function Profile() {
       <Container>
         {deleteUserError && <Alert type="error" message={deleteUserError.message} />}
         <pre>{JSON.stringify(data, null, 2)}</pre>
-        <div className="my-4">
-          <ThemeSwitch />
-        </div>
+
         <div className="flex">
           <Modal
             title="Delete Account"

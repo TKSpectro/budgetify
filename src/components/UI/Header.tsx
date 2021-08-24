@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ComponentProps, useState } from 'react';
 import { preloadQuery } from '~/utils/apollo';
+import { ThemeSwitch } from '../ThemeSwitch';
 import { Button } from './Button';
 
 interface HeaderLinkProps extends ComponentProps<'a'> {}
@@ -102,6 +103,7 @@ export function Header() {
             {!isLoggedIn && <HeaderLink href="/auth/login">Login</HeaderLink>}
             {!isLoggedIn && <HeaderLink href="/auth/signup">Signup</HeaderLink>}
             {isLoggedIn && <HeaderLink href="/profile">Profile</HeaderLink>}
+            <ThemeSwitch />
           </div>
         </div>
       </nav>
