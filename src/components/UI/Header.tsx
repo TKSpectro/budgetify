@@ -3,6 +3,7 @@ import { MenuIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { ComponentProps, useState } from 'react';
 import { preloadQuery } from '~/utils/apollo';
 import { Button } from './Button';
@@ -39,6 +40,8 @@ export function Header() {
   const [navBarCollapsed, setNavBarCollapsed] = useState(false);
   const { data, loading, error } = useQuery(ME_QUERY);
 
+  const router = useRouter();
+
   const isLoggedIn = data?.me?.id;
 
   function toggleNavbarHandler() {
@@ -70,15 +73,34 @@ export function Header() {
               hidden: navBarCollapsed === false,
             })}
           >
-            <HeaderLink
-              href="/households"
-              className="p-2 lg:px-4 md:mx-2 text-white rounded bg-brand-500"
-            >
-              Dashboard
-            </HeaderLink>
-            <HeaderLink href="/">Features</HeaderLink>
-            <HeaderLink href="/">Pricing</HeaderLink>
-            <HeaderLink href="/">Contact</HeaderLink>
+            {!router.query.householdId && (
+              <HeaderLink
+                href={'/households'}
+                className="p-2 lg:px-4 md:mx-2 text-white rounded bg-brand-500"
+              >
+                Households
+              </HeaderLink>
+            )}
+            {router.query.householdId && (
+              <>
+                <HeaderLink
+                  href={'/households/' + router.query.householdId}
+                  className="p-2 lg:px-4 md:mx-2 text-white rounded bg-brand-500"
+                >
+                  Dashboard
+                </HeaderLink>
+                <HeaderLink href={'/households/' + router.query.householdId + '/payments'}>
+                  Payments
+                </HeaderLink>
+                <HeaderLink
+                  href={'/households/' + router.query.householdId + '/payments/recurring'}
+                >
+                  Recurring Payments
+                </HeaderLink>
+                <HeaderLink href={'/households'}>Households</HeaderLink>
+              </>
+            )}
+
             {!isLoggedIn && <HeaderLink href="/auth/login">Login</HeaderLink>}
             {!isLoggedIn && <HeaderLink href="/auth/signup">Signup</HeaderLink>}
             {isLoggedIn && <HeaderLink href="/profile">Profile</HeaderLink>}
