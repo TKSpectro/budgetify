@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { PaymentTable } from '~/components/Household/Payments/PaymentTable';
 import { Alert } from '~/components/UI/Alert';
 import { Button } from '~/components/UI/Button';
+import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
@@ -108,7 +109,7 @@ export default function Payments() {
         <title>Payments | budgetify</title>
       </Head>
 
-      <div className="mt-8 md:mx-32">
+      <div className="md:mt-8 md:mx-32">
         <Error title="Failed to load recurring messages" error={error} />
         {loading && <LoadingAnimation />}
         {!loading && !error && payments.length === 0 ? (
@@ -118,29 +119,36 @@ export default function Payments() {
           />
         ) : (
           <>
-            <Form form={form} onSubmit={onDateFilterSubmit}>
-              <div className="mx-8 md:mx-0 md:grid md: grid-cols-3">
-                <Input
-                  className="mx-4"
-                  label="StartDate"
-                  type="date"
-                  {...form.register('startDate', {})}
-                />
-                <Input label="EndDate" type="date" {...form.register('endDate', {})} />
-                <Button className="mt-4 w-full md:w-auto md:my-auto md:mx-auto" type="submit">
-                  Refresh
-                </Button>
-              </div>
-            </Form>
+            <Container>
+              <Form form={form} onSubmit={onDateFilterSubmit}>
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 mb-4">
+                  <Input
+                    className="lg:col-span-2"
+                    label="StartDate"
+                    type="date"
+                    {...form.register('startDate', {})}
+                  />
+                  <Input
+                    className="lg:col-span-2"
+                    label="EndDate"
+                    type="date"
+                    {...form.register('endDate', {})}
+                  />
+                  <Button className="lg:mt-6" type="submit">
+                    Refresh
+                  </Button>
+                </div>
+              </Form>
 
-            <div className="max-w-[60em] mx-auto">
-              <Line data={genData(labels, chartData)} options={paymentChartOptions} />
-            </div>
-            <div className="my-8">
-              <Link href={router.asPath + '/newPayment'} asButton>
-                New Payment
-              </Link>
-            </div>
+              <div className="max-w-[60em] mx-auto">
+                <Line data={genData(labels, chartData)} options={paymentChartOptions} />
+              </div>
+              <div className="mt-8 flex flex-row-reverse">
+                <Link href={router.asPath + '/newPayment'} asButton>
+                  New Payment
+                </Link>
+              </div>
+            </Container>
             <div className="my-8">
               <PaymentTable payments={payments} />
             </div>
