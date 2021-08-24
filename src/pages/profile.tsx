@@ -66,17 +66,18 @@ export default function Profile() {
         <div className="my-4">
           <ThemeSwitch />
         </div>
-
-        <Modal
-          title="Delete Account"
-          description="If you delete your account all your data will be lost. All households you own will be transferred to another person."
-          submitText="Submit"
-          onSubmit={deleteUser}
-          buttonText="DELETE ACCOUNT"
-          variant="danger"
-          buttonClassName="mr-4"
-        />
-        {data && <Button onClick={logoutHandler}>Logout</Button>}
+        <div className="flex">
+          <Modal
+            title="Delete Account"
+            description="If you delete your account all your data will be lost. All households you own will be transferred to another person."
+            submitText="Submit"
+            onSubmit={deleteUser}
+            buttonText="DELETE ACCOUNT"
+            variant="danger"
+            buttonClassName="mr-4"
+          />
+          <Button onClick={logoutHandler}>Logout</Button>
+        </div>
       </Container>
     </>
   );

@@ -11,12 +11,10 @@ import { Button } from './Button';
 interface HeaderLinkProps extends ComponentProps<'a'> {}
 
 export function HeaderLink({ href, ...props }: HeaderLinkProps) {
-  // TODO: Check for currently active link with router.url? to highlight on which page you currently are
-
   const content = (
     <a
       className={clsx(
-        'p-2 lg:px-4 md:mx-2 text-gray-600 dark:text-gray-200 rounded hover:bg-gray-700 hover:text-gray-700 transition-colors duration-300',
+        'p-2 lg:px-4 md:mx-2 text-gray-600 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-700  transition-colors duration-300',
       )}
       {...props}
     />
@@ -85,7 +83,7 @@ export function Header() {
               <>
                 <HeaderLink
                   href={'/households/' + router.query.householdId}
-                  className="p-2 lg:px-4 md:mx-2 text-white rounded bg-brand-500"
+                  className="p-2 lg:px-4 md:mx-2 text-white rounded font-medium bg-brand-500 hover:bg-opacity-90"
                 >
                   Dashboard
                 </HeaderLink>
