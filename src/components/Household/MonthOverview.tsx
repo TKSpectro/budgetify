@@ -2,6 +2,7 @@ import { TagIcon } from '@heroicons/react/outline';
 import { Doughnut } from 'react-chartjs-2';
 import { Payment } from '~/graphql/__generated__/types';
 import { TooltipItemContext } from '~/utils/charts';
+import { roundOn2 } from '~/utils/helper';
 import { Container } from '../UI/Container';
 
 interface MonthOverviewProps {
@@ -70,6 +71,7 @@ export default function MonthOverview({ monthPayments: payments }: MonthOverview
       </div>
       <Doughnut
         data={monthlyOverviewChartData}
+        className="m-0 sm:m-8"
         options={{
           responsive: true,
           // https://www.chartjs.org/docs/latest/configuration/tooltip.html#label-callback
@@ -85,12 +87,13 @@ export default function MonthOverview({ monthPayments: payments }: MonthOverview
           },
         }}
       />
-      <div className="mt-8">
-        Overall {monthOverall} €
-        <br />
-        Income {monthIncome} €
-        <br />
-        Expenses {monthExpenses} €
+      <div className="font-bold mt-8 max-w-md grid grid-cols-2 gap-4">
+        <div>Overall</div>
+        <div className="text-right">{roundOn2(monthOverall)}€</div>
+        <div>Income</div>
+        <div className="text-right">{roundOn2(monthIncome)}€</div>
+        <div>Expenses</div>
+        <div className="text-right">{roundOn2(monthExpenses)}€</div>
       </div>
     </Container>
   );

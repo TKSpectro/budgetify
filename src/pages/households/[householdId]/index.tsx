@@ -11,6 +11,7 @@ import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
 import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
+import { roundOn2 } from '~/utils/helper';
 
 const HOUSEHOLD_QUERY = gql`
   query HOUSEHOLD_QUERY($householdId: String, $startDate: String, $endDate: String) {
@@ -62,9 +63,13 @@ export default function Households() {
   });
 
   const household = data?.household;
+  const payments = data?.household?.payments || [];
+
+  // Add up the value of all payments for the total balance
+  const paymentSum = payments.reduce((sum: number, payment: Payment) => +sum + +payment.value, 0.0);
 
   return (
-    <div className="my-12 mx-4 sm:mx-24">
+    <div className="my-4 mx-4 sm:mx-24">
       <Head>
         <title>{household?.name + ' | ' + 'budgetify'}</title>
       </Head>
@@ -75,17 +80,8 @@ export default function Households() {
       ) : null}
       {!error && household && (
         <>
-          <div className="text-7xl text-brand-500">{data.household.name}</div>
-          <div className="mt-12 mb-4 text-4xl">
-            Total balance{' '}
-            {
-              // Add up the value of all payments for the total balance
-              data?.household?.payments.reduce(
-                (sum: number, payment: Payment) => +sum + +payment.value,
-                0.0,
-              )
-            }
-          </div>
+          <div className="text-6xl text-brand-500">{data.household.name}</div>
+          <div className="mt-4 text-4xl">Total balance{' ' + roundOn2(paymentSum) + '€'}</div>
           {household.payments?.length === 0 ? (
             <Alert message="Could not find any payments." type="error" />
           ) : null}
