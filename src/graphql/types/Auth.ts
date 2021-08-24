@@ -1,7 +1,8 @@
-import { AuthenticationError } from 'apollo-server-micro';
+import { ApolloError, AuthenticationError } from 'apollo-server-micro';
 import { compareSync, hashSync } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { extendType, nonNull, objectType, stringArg } from 'nexus';
+import { destroyCookie, setCookie } from 'nookies';
 import prisma from '~/utils/prisma';
 import { User } from '.';
 
@@ -62,7 +63,7 @@ export const AuthMutation = extendType({
         firstname: nonNull(stringArg()),
         lastname: nonNull(stringArg()),
       },
-      async resolve(_, args) {
+      async resolve(_, args, ctx) {
         args.password = hashSync(args.password, 10);
 
         try {
@@ -77,8 +78,19 @@ export const AuthMutation = extendType({
 
           const { id, email, isAdmin } = user;
 
+          const token = jwt.sign({ id, email, isAdmin }, process.env.JWT_SECRET!, {
+            expiresIn: '30d',
+          });
+
+          setCookie(ctx, 'authToken', token, {
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 72576000,
+            httpOnly: true,
+            path: '/',
+          });
+
           return {
-            token: jwt.sign({ id, email, isAdmin }, process.env.JWT_SECRET!, { expiresIn: '30d' }),
+            token,
           };
         } catch (error) {
           // TODO: Figure out which error was thrown
@@ -103,16 +115,41 @@ export const AuthMutation = extendType({
           },
         });
         if (!user) {
-          throw new Error('Authorization Error');
+          throw new ApolloError('Authorization Error');
         }
         const { id, email, hashedPassword, isAdmin } = user;
         if (!compareSync(args.password, hashedPassword)) {
           throw new Error('Authorization Error');
         }
 
+        const token = jwt.sign({ id, email, isAdmin }, process.env.JWT_SECRET!, {
+          expiresIn: '30d',
+        });
+
+        setCookie(ctx, 'authToken', token, {
+          secure: process.env.NODE_ENV === 'production',
+          maxAge: 72576000,
+          httpOnly: true,
+          path: '/',
+        });
+
         return {
-          token: jwt.sign({ id, email, isAdmin }, process.env.JWT_SECRET!, { expiresIn: '30d' }),
+          token,
         };
+      },
+    });
+    t.field('logout', {
+      type: 'String',
+      description: `This mutation removes the authToken on the user side.`,
+      resolve(_, __, ctx) {
+        destroyCookie(ctx, 'authToken', {
+          secure: process.env.NODE_ENV === 'production',
+          maxAge: 72576000,
+          httpOnly: true,
+          path: '/',
+        });
+
+        return 'Logged out!';
       },
     });
   },

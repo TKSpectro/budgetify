@@ -101,6 +101,9 @@ type Mutation {
   """
   login(email: String!, password: String!): AuthToken!
 
+  """This mutation removes the authToken on the user side."""
+  logout: String
+
   """Remove a new category. Can just be called by an admin."""
   removeCategory(name: String!): Category!
 

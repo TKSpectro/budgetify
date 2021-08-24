@@ -2,9 +2,9 @@ import { gql, useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Alert } from '~/components/UI/Alert';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
+import { Error } from '~/components/UI/Error';
 import { ME_QUERY } from '~/components/UI/Header';
 import { Modal } from '~/components/UI/Modal';
 import { preloadQuery } from '~/utils/apollo';
@@ -15,6 +15,12 @@ const DELETE_USER_QUERY = gql`
     deleteUser {
       id
     }
+  }
+`;
+
+const LOGOUT_MUTATION = gql`
+  mutation Logout {
+    logout
   }
 `;
 
@@ -34,22 +40,21 @@ export default function Profile() {
     },
   });
 
-  async function logoutHandler() {
-    await fetch(`${window.location.origin}/api/auth/logout`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    });
+  const [logoutMutation, { error: logoutError }] = useMutation(LOGOUT_MUTATION, {
+    onCompleted: () => {
+      // Clear apollo client cache -> remove user data from cache
+      client.resetStore();
 
-    // No need to check for response errors as logout cant fail
-    // If the authCookie cant get deleted the user is logged-out anyways
+      router.push('/auth/login');
+    },
+    onError: (error) => {
+      // Do nothing so the page does not throw an error and we just show the
+      // error to the user, as the component gets render automatically
+    },
+  });
 
-    // Clear apollo client cache -> remove user data from cache
-    client.resetStore();
-
-    router.push('/auth/login');
+  function logoutHandler() {
+    logoutMutation();
   }
 
   if (loading) return <span>loading...</span>;
@@ -60,7 +65,10 @@ export default function Profile() {
         <title>Profile | budgetify</title>
       </Head>
       <Container>
-        {deleteUserError && <Alert type="error" message={deleteUserError.message} />}
+        <Error title="Failed to load user data!" error={error} />
+        <Error title="Failed to delete user!" error={deleteUserError} />
+        <Error title="Failed to logout!" error={logoutError} />
+
         <pre>{JSON.stringify(data, null, 2)}</pre>
 
         <div className="flex">

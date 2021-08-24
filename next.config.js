@@ -63,7 +63,7 @@ module.exports = {
     {
       // Apply these headers to all routes in your application.
       source: '/(.*)',
-      headers: securityHeaders,
+      headers: process.env.NODE_ENV === 'production' ? securityHeaders : [],
     },
   ],
 };

@@ -1,8 +1,10 @@
-import { useQuery } from '@apollo/client';
-import { useRouter } from 'next/dist/client/router';
-import React, { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
+import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
 import { ME_QUERY } from '~/components/UI/Header';
 import { Input } from '~/components/UI/Input';
@@ -13,45 +15,53 @@ type Inputs = {
   password: string;
 };
 
+const LOGIN_MUTATION = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+    }
+  }
+`;
+
 export default function Login() {
   const { refetch } = useQuery(ME_QUERY);
+  const [loginMutation, { data, loading, error }] = useMutation(LOGIN_MUTATION, {
+    onError: (error) => {
+      // Just need to catch the error. The user gets feedback through the Error component
+      try {
+      } catch (error) {}
+    },
+    onCompleted: () => {
+      // Refetch the user for the cache to get updated and then redirect to the homepage
+      refetch();
+      router.push('/');
+    },
+  });
 
   const router = useRouter();
   const form = useForm<Inputs>();
-  const [resError, setResError] = useState();
 
-  async function onSubmit(data: SubmitHandler<Inputs>) {
-    const res = await fetch(`${window.location.origin}/api/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
+  function onSubmit(data: Inputs) {
+    loginMutation({
+      variables: {
+        email: data.email,
+        password: data.password,
       },
-      body: JSON.stringify(data),
     });
-
-    if (res.status >= 400) {
-      setResError(await res.json());
-    }
-
-    if (res.status == 200) {
-      // Refetch the me query so the cache gets update with the newly logged in user
-      await refetch();
-
-      router.push('/');
-    }
   }
 
   return (
     <Container>
-      <Form form={form} onSubmit={onSubmit}>
-        {resError && <pre>{JSON.stringify(resError, null, 2)}</pre>}
+      <div className="mb-2">
+        <Error title="Failed to login. Email or password is wrong!" error={error} />
+      </div>
 
+      <Form form={form} onSubmit={onSubmit}>
         <Input label="Email" type="email" {...form.register('email', {})} />
 
         <Input label="Password" type="password" {...form.register('password', {})} />
 
-        <input type="submit" />
+        <Button type="submit">Login</Button>
       </Form>
 
       <Link href="/auth/signup">No Account? No Problem! Signup</Link>

@@ -112,6 +112,8 @@ export type Mutation = {
    *       Returns a JWT (JSON-Web-Token) for further authentication with the graphql-api.
    */
   login: AuthToken;
+  /** This mutation removes the authToken on the user side. */
+  logout?: Maybe<Scalars['String']>;
   /** Remove a new category. Can just be called by an admin. */
   removeCategory: Category;
   /**
@@ -138,7 +140,7 @@ export type MutationCreatePaymentArgs = {
   description?: Maybe<Scalars['String']>;
   householdId: Scalars['String'];
   name: Scalars['String'];
-  value: Scalars['Int'];
+  value: Scalars['Float'];
 };
 
 

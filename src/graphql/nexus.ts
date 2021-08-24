@@ -164,6 +164,7 @@ export interface NexusGenFieldTypes {
     createPayment: NexusGenRootTypes['Payment']; // Payment!
     deleteUser: NexusGenRootTypes['User']; // User!
     login: NexusGenRootTypes['AuthToken']; // AuthToken!
+    logout: string | null; // String
     removeCategory: NexusGenRootTypes['Category']; // Category!
     signup: NexusGenRootTypes['AuthToken']; // AuthToken!
   }
@@ -267,6 +268,7 @@ export interface NexusGenFieldTypeNames {
     createPayment: 'Payment'
     deleteUser: 'User'
     login: 'AuthToken'
+    logout: 'String'
     removeCategory: 'Category'
     signup: 'AuthToken'
   }
