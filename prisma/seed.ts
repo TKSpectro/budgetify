@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { hashSync } from 'bcrypt';
-import { subDays } from 'date-fns';
+import { addDays, subDays } from 'date-fns';
 import faker from 'faker';
 
 const prisma = new PrismaClient();
@@ -124,6 +124,30 @@ async function main() {
       name: 'recPay1',
       value: 25.0,
       interval: 'WEEKLY',
+      categoryId: cat1.id,
+      householdId: hou1.id,
+      startDate: new Date(subDays(new Date(), 9)),
+    },
+  });
+
+  const recPay2 = await prisma.recurringPayment.create({
+    data: {
+      name: 'recPay2',
+      value: 25.0,
+      description: 'This recurring payment has a description',
+      interval: 'MONTHLY',
+      categoryId: cat1.id,
+      householdId: hou1.id,
+      startDate: new Date(subDays(new Date(), 9)),
+      endDate: new Date(addDays(new Date(), 90)),
+    },
+  });
+
+  const recPay3 = await prisma.recurringPayment.create({
+    data: {
+      name: 'recPay3',
+      value: 25.0,
+      interval: 'DAILY',
       categoryId: cat1.id,
       householdId: hou1.id,
       startDate: new Date(subDays(new Date(), 9)),
