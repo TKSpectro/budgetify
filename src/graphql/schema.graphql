@@ -43,7 +43,7 @@ type Household {
   """
   A list of all recurring payment's which will be booked into this household.
   """
-  recurringPayments(limit: Int, skip: Int): [RecurringPayment]
+  recurringPayments(id: String, limit: Int, skip: Int): [RecurringPayment]
   updatedAt: DateTime!
 }
 
@@ -91,6 +91,9 @@ type Mutation {
 
   """Create a new payment. Need to be logged in."""
   createPayment(categoryId: String!, description: String, householdId: String!, name: String!, value: Float!): Payment!
+
+  """Create a new recurring payment. Need to be logged in."""
+  createRecurringPayment(categoryId: String!, description: String, householdId: String!, name: String!, value: Float!): RecurringPayment!
 
   """Deletes a user and removes all references to it. Need to be logged in."""
   deleteUser: User!

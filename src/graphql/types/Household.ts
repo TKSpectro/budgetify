@@ -57,11 +57,14 @@ export const Household = objectType({
     t.list.field('recurringPayments', {
       type: RecurringPayment,
       description: "A list of all recurring payment's which will be booked into this household.",
-      args: { skip: intArg(), limit: intArg() },
+      args: { id: stringArg(), skip: intArg(), limit: intArg() },
       resolve(source, args) {
         return prisma.household
           .findUnique({ where: { id: source.id || undefined } })
           .RecurringPayment({
+            where: {
+              id: args.id || undefined,
+            },
             orderBy: { nextBooking: 'asc' },
             skip: args.skip || undefined,
             take: args.limit || undefined,

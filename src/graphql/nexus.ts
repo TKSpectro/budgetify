@@ -162,6 +162,7 @@ export interface NexusGenFieldTypes {
     bookRecurringPayments: Array<NexusGenRootTypes['RecurringPayment'] | null> | null; // [RecurringPayment]
     createCategory: NexusGenRootTypes['Category']; // Category!
     createPayment: NexusGenRootTypes['Payment']; // Payment!
+    createRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
     deleteUser: NexusGenRootTypes['User']; // User!
     login: NexusGenRootTypes['AuthToken']; // AuthToken!
     logout: string | null; // String
@@ -266,6 +267,7 @@ export interface NexusGenFieldTypeNames {
     bookRecurringPayments: 'RecurringPayment'
     createCategory: 'Category'
     createPayment: 'Payment'
+    createRecurringPayment: 'RecurringPayment'
     deleteUser: 'User'
     login: 'AuthToken'
     logout: 'String'
@@ -340,6 +342,7 @@ export interface NexusGenArgTypes {
       startDate?: string | null; // String
     }
     recurringPayments: { // args
+      id?: string | null; // String
       limit?: number | null; // Int
       skip?: number | null; // Int
     }
@@ -352,6 +355,13 @@ export interface NexusGenArgTypes {
       name: string; // String!
     }
     createPayment: { // args
+      categoryId: string; // String!
+      description?: string | null; // String
+      householdId: string; // String!
+      name: string; // String!
+      value: number; // Float!
+    }
+    createRecurringPayment: { // args
       categoryId: string; // String!
       description?: string | null; // String
       householdId: string; // String!

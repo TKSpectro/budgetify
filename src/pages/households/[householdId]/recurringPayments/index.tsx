@@ -2,11 +2,11 @@ import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { RecurringPaymentTable } from '~/components/Household/RecurringPayments/RecurringPaymentTable';
 import { Alert } from '~/components/UI/Alert';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
-import { RecurringPayment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 
@@ -21,8 +21,11 @@ const HOUSEHOLD_RECURRING_PAYMENTS_QUERY = gql`
         value
         description
         createdAt
+        startDate
+        endDate
         nextBooking
         lastBooking
+        interval
         category {
           name
         }
@@ -52,22 +55,15 @@ export default function RecurringPayments() {
         <Container>
           <Error title="Failed to load recurring messages" error={error} />
           {loading && <LoadingAnimation />}
-          {!loading && !error && recurringPayments.length === 0 ? (
-            <Alert
-              message="Could not find any recurring messages. Please create a new one"
-              type="warning"
-            />
-          ) : (
-            recurringPayments.map((recPayment: RecurringPayment) => {
-              // TODO: Build recurring payment component
-              return (
-                <div key={recPayment.id}>
-                  {recPayment.name} {recPayment.value}
-                </div>
-              );
-            })
-          )}
         </Container>
+        {!loading && !error && recurringPayments.length === 0 ? (
+          <Alert
+            message="Could not find any recurring messages. Please create a new one"
+            type="warning"
+          />
+        ) : (
+          <RecurringPaymentTable recurringPayments={recurringPayments} />
+        )}
       </div>
     </>
   );

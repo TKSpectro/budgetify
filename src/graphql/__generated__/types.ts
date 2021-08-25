@@ -61,6 +61,7 @@ export type HouseholdPaymentsArgs = {
 
 
 export type HouseholdRecurringPaymentsArgs = {
+  id?: Maybe<Scalars['String']>;
   limit?: Maybe<Scalars['Int']>;
   skip?: Maybe<Scalars['Int']>;
 };
@@ -105,6 +106,8 @@ export type Mutation = {
   createCategory: Category;
   /** Create a new payment. Need to be logged in. */
   createPayment: Payment;
+  /** Create a new recurring payment. Need to be logged in. */
+  createRecurringPayment: RecurringPayment;
   /** Deletes a user and removes all references to it. Need to be logged in. */
   deleteUser: User;
   /**
@@ -136,6 +139,15 @@ export type MutationCreateCategoryArgs = {
 
 
 export type MutationCreatePaymentArgs = {
+  categoryId: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  householdId: Scalars['String'];
+  name: Scalars['String'];
+  value: Scalars['Float'];
+};
+
+
+export type MutationCreateRecurringPaymentArgs = {
   categoryId: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   householdId: Scalars['String'];
