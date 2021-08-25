@@ -93,7 +93,7 @@ type Mutation {
   createPayment(categoryId: String!, description: String, householdId: String!, name: String!, value: Float!): Payment!
 
   """Create a new recurring payment. Need to be logged in."""
-  createRecurringPayment(categoryId: String!, description: String, householdId: String!, name: String!, value: Float!): RecurringPayment!
+  createRecurringPayment(categoryId: String!, description: String, endDate: String, householdId: String!, interval: Interval!, name: String!, startDate: String!, value: Float!): RecurringPayment!
 
   """Deletes a user and removes all references to it. Need to be logged in."""
   deleteUser: User!
@@ -116,6 +116,9 @@ type Mutation {
         for further authentication with the graphql-api.
   """
   signup(email: String!, firstname: String!, lastname: String!, password: String!): AuthToken!
+
+  """Update a new recurring payment. Need to be logged in."""
+  updateRecurringPayment(categoryId: String, description: String, endDate: String, householdId: String!, id: String!, interval: Interval, name: String, startDate: String, value: Float): RecurringPayment!
 }
 
 """A payment is a NOT changeable booking of a specific value."""

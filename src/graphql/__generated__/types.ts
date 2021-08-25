@@ -125,6 +125,8 @@ export type Mutation = {
    *       for further authentication with the graphql-api.
    */
   signup: AuthToken;
+  /** Update a new recurring payment. Need to be logged in. */
+  updateRecurringPayment: RecurringPayment;
 };
 
 
@@ -150,8 +152,11 @@ export type MutationCreatePaymentArgs = {
 export type MutationCreateRecurringPaymentArgs = {
   categoryId: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  endDate?: Maybe<Scalars['String']>;
   householdId: Scalars['String'];
+  interval: Interval;
   name: Scalars['String'];
+  startDate: Scalars['String'];
   value: Scalars['Float'];
 };
 
@@ -172,6 +177,19 @@ export type MutationSignupArgs = {
   firstname: Scalars['String'];
   lastname: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationUpdateRecurringPaymentArgs = {
+  categoryId?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  endDate?: Maybe<Scalars['String']>;
+  householdId?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  interval?: Maybe<Interval>;
+  name?: Maybe<Scalars['String']>;
+  startDate?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['Float']>;
 };
 
 /** A payment is a NOT changeable booking of a specific value. */

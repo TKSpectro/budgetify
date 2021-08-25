@@ -11,7 +11,7 @@ import {
   differenceInWeeks,
   differenceInYears,
 } from 'date-fns';
-import { enumType, extendType, floatArg, nonNull, objectType, stringArg } from 'nexus';
+import { arg, enumType, extendType, floatArg, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
 import { Category, Household, Payment, User } from '.';
 import { Payment as PaymentType } from '../__generated__/types';
@@ -202,7 +202,6 @@ export const RecurringPaymentMutation = extendType({
         return null;
       },
     });
-
     t.nonNull.field('createRecurringPayment', {
       type: RecurringPayment,
       description: 'Create a new recurring payment. Need to be logged in.',
@@ -211,6 +210,9 @@ export const RecurringPaymentMutation = extendType({
         name: nonNull(stringArg()),
         value: nonNull(floatArg()),
         description: stringArg(),
+        interval: nonNull(arg({ type: Interval })),
+        startDate: nonNull(stringArg()),
+        endDate: stringArg(),
         categoryId: nonNull(stringArg()),
         householdId: nonNull(stringArg()),
       },
@@ -227,12 +229,63 @@ export const RecurringPaymentMutation = extendType({
           throw new ApolloError('You are not allowed to create a payment in this household.');
         }
 
+        // TODO: Calculate the next booking date -> maybe same switch structure as in booking
+
         return prisma.recurringPayment.create({
           data: {
             name: args.name,
             value: args.value,
             description: args.description || undefined,
+            interval: args.interval,
+            startDate: args.startDate,
+            endDate: args.endDate,
             categoryId: args.categoryId,
+            userId: ctx.user.id,
+            householdId: foundHousehold[0].id,
+          },
+        });
+      },
+    });
+    t.nonNull.field('updateRecurringPayment', {
+      type: RecurringPayment,
+      description: 'Update a new recurring payment. Need to be logged in.',
+      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      args: {
+        id: nonNull(stringArg()),
+        name: stringArg(),
+        value: floatArg(),
+        description: stringArg(),
+        interval: arg({ type: Interval }),
+        startDate: stringArg(),
+        endDate: stringArg(),
+        categoryId: stringArg(),
+        householdId: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx) {
+        // With this query we can find the household in which the user is wanting
+        // to register the recurring payment. Also we automatically check if the user is a member
+        // of that household. (Result is always an array, either length 0 or 1)
+        const foundHousehold = await prisma.user
+          .findUnique({ where: { id: ctx.user.id } })
+          .households({ where: { id: args.householdId } });
+
+        // User is not a member of this household -> Not allowed to book payments into it.
+        if (foundHousehold.length === 0) {
+          throw new ApolloError('You are not allowed to create a payment in this household.');
+        }
+
+        return prisma.recurringPayment.update({
+          where: {
+            id: args.id,
+          },
+          data: {
+            name: args.name || undefined,
+            value: args.value || undefined,
+            description: args.description || undefined,
+            interval: args.interval || undefined,
+            startDate: args.startDate || undefined,
+            endDate: args.endDate || undefined,
+            categoryId: args.categoryId || undefined,
             userId: ctx.user.id,
             householdId: foundHousehold[0].id,
           },

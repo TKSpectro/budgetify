@@ -168,6 +168,7 @@ export interface NexusGenFieldTypes {
     logout: string | null; // String
     removeCategory: NexusGenRootTypes['Category']; // Category!
     signup: NexusGenRootTypes['AuthToken']; // AuthToken!
+    updateRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
   }
   Payment: { // field return type
     category: NexusGenRootTypes['Category'] | null; // Category
@@ -273,6 +274,7 @@ export interface NexusGenFieldTypeNames {
     logout: 'String'
     removeCategory: 'Category'
     signup: 'AuthToken'
+    updateRecurringPayment: 'RecurringPayment'
   }
   Payment: { // field return type name
     category: 'Category'
@@ -364,8 +366,11 @@ export interface NexusGenArgTypes {
     createRecurringPayment: { // args
       categoryId: string; // String!
       description?: string | null; // String
+      endDate?: string | null; // String
       householdId: string; // String!
+      interval: NexusGenEnums['Interval']; // Interval!
       name: string; // String!
+      startDate: string; // String!
       value: number; // Float!
     }
     login: { // args
@@ -380,6 +385,17 @@ export interface NexusGenArgTypes {
       firstname: string; // String!
       lastname: string; // String!
       password: string; // String!
+    }
+    updateRecurringPayment: { // args
+      categoryId?: string | null; // String
+      description?: string | null; // String
+      endDate?: string | null; // String
+      householdId: string; // String!
+      id: string; // String!
+      interval?: NexusGenEnums['Interval'] | null; // Interval
+      name?: string | null; // String
+      startDate?: string | null; // String
+      value?: number | null; // Float
     }
   }
   Query: {
