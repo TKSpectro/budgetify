@@ -14,7 +14,7 @@ import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
 import {
   Category,
   Interval,
-  MutationCreateRecurringPaymentArgs,
+  MutationUpdateRecurringPaymentArgs,
 } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -104,14 +104,14 @@ export default function EditRecurringPayment() {
     },
   );
 
-  const form = useForm<MutationCreateRecurringPaymentArgs>();
+  const form = useForm<MutationUpdateRecurringPaymentArgs>();
   const recurringPayment = data?.household?.recurringPayments[0];
   const categories = data?.categories;
 
   const { reset } = form;
 
   useEffect(() => {
-    const data: MutationCreateRecurringPaymentArgs = {
+    const data: MutationUpdateRecurringPaymentArgs = {
       ...recurringPayment,
       startDate: recurringPayment.startDate
         ? new Date(recurringPayment.startDate).toISOString().split('T')[0]
@@ -125,11 +125,11 @@ export default function EditRecurringPayment() {
     reset(data);
   }, [recurringPayment, reset]);
 
-  const onSubmit = (data: MutationCreateRecurringPaymentArgs) => {
+  const onSubmit = (data: MutationUpdateRecurringPaymentArgs) => {
     editRecurringPaymentMutation({
       variables: {
         ...form.getValues(),
-        startDate: new Date(form.getValues('startDate')),
+        startDate: new Date(form.getValues('startDate')!),
         endDate: form.getValues('endDate') ? new Date(form.getValues('endDate')!) : null,
       },
     });

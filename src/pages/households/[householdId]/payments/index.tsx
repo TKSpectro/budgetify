@@ -144,7 +144,7 @@ export default function Payments() {
                 <Line data={genData(labels, chartData)} options={paymentChartOptions} />
               </div>
               <div className="mt-8 flex flex-row-reverse">
-                <Link href={router.asPath + '/newPayment'} asButton>
+                <Link href={router.asPath + '/new'} asButton>
                   New Payment
                 </Link>
               </div>

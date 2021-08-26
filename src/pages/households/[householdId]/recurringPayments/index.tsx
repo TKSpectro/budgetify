@@ -6,6 +6,7 @@ import { RecurringPaymentTable } from '~/components/Household/RecurringPayments/
 import { Alert } from '~/components/UI/Alert';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
+import { Link } from '~/components/UI/Link';
 import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -55,6 +56,11 @@ export default function RecurringPayments() {
         <Container>
           <Error title="Failed to load recurring messages" error={error} />
           {loading && <LoadingAnimation />}
+          <div className="flex flex-row-reverse">
+            <Link href={router.asPath + '/new'} asButton>
+              New Recurring Payment
+            </Link>
+          </div>
         </Container>
         {!loading && !error && recurringPayments.length === 0 ? (
           <Alert

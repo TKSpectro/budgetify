@@ -74,7 +74,7 @@ export default function NewPayment() {
     try {
       createPaymentMutation();
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
 
