@@ -5,15 +5,16 @@ export interface Props extends ButtonProps {
   title: string;
   description: string;
   submitText?: string;
-  onSubmit?: any;
+  onSubmit: () => void;
   buttonText: string;
-  buttonClassName: string;
+  buttonClassName?: string;
 }
 
 export function Modal({
   title,
   description,
   submitText = 'SAVE CHANGES',
+  onSubmit,
   buttonText,
   buttonClassName,
   variant,
@@ -50,7 +51,7 @@ export function Modal({
                   <Button
                     onClick={() => {
                       setShowModal(false);
-                      props.onSubmit();
+                      onSubmit();
                     }}
                   >
                     {submitText}

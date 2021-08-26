@@ -17,6 +17,7 @@ type EncodedToken = {
 export async function authenticatedRoute(
   context: GetServerSidePropsContext,
   redirect = '/auth/login',
+  checkOwnerOfHouseholdId?: string,
 ): Promise<GetServerSidePropsResult<{}>> {
   try {
     // Check if the send authToken is a valid jwt.
@@ -26,6 +27,21 @@ export async function authenticatedRoute(
     // Check if there is an actual user with the sent userId.
     const user = await prisma.user.findFirst({ where: { id: data.id } });
     if (!user) throw new AuthenticationError('Client sent a non valid jwt');
+
+    // If checkOwner is given we look up if the currently logged in user owns the household, which
+    // wants to get accessed. If the user does not own it, redirect him.
+    if (checkOwnerOfHouseholdId) {
+      const householdOwner = await prisma.user
+        .findUnique({ where: { id: data.id } })
+        .ownedHouseholds({ where: { id: checkOwnerOfHouseholdId } });
+
+      if (householdOwner.length === 0) {
+        context.res.writeHead(302, {
+          Location: '/households/' + checkOwnerOfHouseholdId,
+        });
+        context.res.end();
+      }
+    }
   } catch (error) {
     context.res.writeHead(302, {
       Location: redirect,

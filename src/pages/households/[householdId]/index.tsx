@@ -7,6 +7,7 @@ import React from 'react';
 import Overview from '~/components/Household/Overview';
 import { Alert } from '~/components/UI/Alert';
 import { Error } from '~/components/UI/Error';
+import { Link } from '~/components/UI/Link';
 import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
 import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
@@ -15,10 +16,14 @@ import { roundOn2 } from '~/utils/helper';
 
 const HOUSEHOLD_QUERY = gql`
   query HOUSEHOLD_QUERY($householdId: String, $startDate: String, $endDate: String) {
+    me {
+      id
+    }
     household(id: $householdId) {
       id
       name
       owner {
+        id
         firstname
         lastname
       }
@@ -51,7 +56,7 @@ const HOUSEHOLD_QUERY = gql`
   }
 `;
 
-export default function Households() {
+export default function Household() {
   const router = useRouter();
   const { householdId } = router.query;
   const { data, loading, error } = useQuery(HOUSEHOLD_QUERY, {
@@ -68,6 +73,8 @@ export default function Households() {
   // Add up the value of all payments for the total balance
   const paymentSum = payments.reduce((sum: number, payment: Payment) => +sum + +payment.value, 0.0);
 
+  const isOwner = household.owner.id === data?.me.id;
+
   return (
     <div className="my-4 mx-4 sm:mx-24">
       <Head>
@@ -80,8 +87,19 @@ export default function Households() {
       ) : null}
       {!error && household && (
         <>
-          <div className="text-6xl text-brand-500">{data.household.name}</div>
+          <div className=" relative text-6xl text-brand-500">
+            {data.household.name}
+            {isOwner && (
+              <span className="absolute right-4 top-6 text-base">
+                <Link href={router.asPath + '/manage'} asButton>
+                  Manage
+                </Link>
+              </span>
+            )}
+          </div>
+
           <div className="mt-4 text-4xl">Total balance{' ' + roundOn2(paymentSum) + '€'}</div>
+
           {household.payments?.length === 0 ? (
             <Alert message="Could not find any payments." type="error" />
           ) : null}
