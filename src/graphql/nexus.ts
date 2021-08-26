@@ -366,11 +366,11 @@ export interface NexusGenArgTypes {
     createRecurringPayment: { // args
       categoryId: string; // String!
       description?: string | null; // String
-      endDate?: string | null; // String
+      endDate?: NexusGenScalars['DateTime'] | null; // DateTime
       householdId: string; // String!
       interval: NexusGenEnums['Interval']; // Interval!
       name: string; // String!
-      startDate: string; // String!
+      startDate: NexusGenScalars['DateTime']; // DateTime!
       value: number; // Float!
     }
     login: { // args
@@ -389,12 +389,12 @@ export interface NexusGenArgTypes {
     updateRecurringPayment: { // args
       categoryId?: string | null; // String
       description?: string | null; // String
-      endDate?: string | null; // String
+      endDate?: NexusGenScalars['DateTime'] | null; // DateTime
       householdId: string; // String!
       id: string; // String!
       interval?: NexusGenEnums['Interval'] | null; // Interval
       name?: string | null; // String
-      startDate?: string | null; // String
+      startDate?: NexusGenScalars['DateTime'] | null; // DateTime
       value?: number | null; // Float
     }
   }

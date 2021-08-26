@@ -152,11 +152,11 @@ export type MutationCreatePaymentArgs = {
 export type MutationCreateRecurringPaymentArgs = {
   categoryId: Scalars['String'];
   description?: Maybe<Scalars['String']>;
-  endDate?: Maybe<Scalars['String']>;
+  endDate?: Maybe<Scalars['DateTime']>;
   householdId: Scalars['String'];
   interval: Interval;
   name: Scalars['String'];
-  startDate: Scalars['String'];
+  startDate: Scalars['DateTime'];
   value: Scalars['Float'];
 };
 
@@ -183,12 +183,12 @@ export type MutationSignupArgs = {
 export type MutationUpdateRecurringPaymentArgs = {
   categoryId?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  endDate?: Maybe<Scalars['String']>;
-  householdId?: Maybe<Scalars['String']>;
+  endDate?: Maybe<Scalars['DateTime']>;
+  householdId: Scalars['String'];
   id: Scalars['String'];
   interval?: Maybe<Interval>;
   name?: Maybe<Scalars['String']>;
-  startDate?: Maybe<Scalars['String']>;
+  startDate?: Maybe<Scalars['DateTime']>;
   value?: Maybe<Scalars['Float']>;
 };
 

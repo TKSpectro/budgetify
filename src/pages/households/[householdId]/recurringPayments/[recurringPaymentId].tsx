@@ -56,8 +56,8 @@ const UPDATE_RECURRING_PAYMENT_MUTATION = gql`
     $value: Float
     $description: String
     $interval: Interval
-    $startDate: String
-    $endDate: String
+    $startDate: DateTime
+    $endDate: DateTime
     $categoryId: String
     $householdId: String!
   ) {
