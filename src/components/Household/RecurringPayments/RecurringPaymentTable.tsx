@@ -26,47 +26,51 @@ export function RecurringPaymentTable({ recurringPayments }: Props) {
                     <TagIcon className="flex-shrink-0 h-6 w-6 text-brand-500" />
 
                     <div className="max-w-xl">
-                      <div className="ml-2 font-bold text-gray-100">
+                      <div className="ml-2 font-bold text-gray-800 dark:text-gray-100">
                         {payment.name}
-                        <span className="hidden md:inline text-sm text-gray-400 ml-8">
+                        <span className="hidden md:inline text-sm text-gray-500 dark:text-gray-400 ml-8">
                           {payment.lastBooking
                             ? new Date(payment.lastBooking).toLocaleDateString()
                             : 'Not booked.'}
                         </span>
-                        <span className="hidden md:inline text-sm text-gray-400 ml-8">
+                        <span className="hidden md:inline text-sm text-gray-500 dark:text-gray-400 ml-8">
                           {'Next booking: ' + new Date(payment.nextBooking).toLocaleDateString()}
                         </span>
                       </div>
-                      <span className="md:hidden ml-2 text-sm text-gray-400">
+                      <span className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
                         {'Next: ' + new Date(payment.nextBooking).toLocaleDateString()}
                       </span>
-                      <div className="md:hidden ml-2 text-sm text-gray-400">
+                      <div className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
                         {'Starts: ' + new Date(payment.startDate).toLocaleDateString()}
                       </div>
-                      <div className="md:hidden ml-2 text-sm text-gray-400">
+                      <div className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
                         {'Ends: ' + new Date(payment.endDate).toLocaleDateString()}
                       </div>
-                      <div className="hidden md:table-cell pl-2 text-sm text-gray-400">
+                      <div className="hidden md:table-cell pl-2 text-sm text-gray-500 dark:text-gray-400">
                         {payment.description}
                       </div>
                     </div>
                   </div>
                 </td>
                 <td className="py-4 hidden sm:table-cell">
-                  <div className="font-light text-gray-400">
+                  <div className="font-light text-gray-500 dark:text-gray-400">
                     {payment.startDate ? new Date(payment.startDate).toLocaleDateString() : ''}
                   </div>
                 </td>
                 <td className="py-4 hidden md:table-cell">
-                  <div className="font-light text-gray-400">
+                  <div className="font-light text-gray-500 dark:text-gray-400">
                     {payment.endDate ? new Date(payment.endDate).toLocaleDateString() : ''}
                   </div>
                 </td>
                 <td className="py-4 hidden md:table-cell">
-                  <div className="font-light text-gray-400">{payment.interval}</div>
+                  <div className="font-light text-gray-500 dark:text-gray-400">
+                    {payment.interval}
+                  </div>
                 </td>
                 <td className="pl-4 py-4 text-right">
-                  <div className="font-bold text-gray-100">{payment.value + '€'}</div>
+                  <div className="font-bold text-gray-800 dark:text-gray-100">
+                    {payment.value + '€'}
+                  </div>
                 </td>
               </tr>
             );
