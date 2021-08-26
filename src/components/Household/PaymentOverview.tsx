@@ -5,11 +5,11 @@ import { Container } from '../UI/Container';
 import { Link } from '../UI/Link';
 import PaymentItem from './PaymentItem';
 
-interface PaymentOverviewProps {
+interface Props {
   payments: Payment[];
 }
 
-export default function PaymentOverview({ payments }: PaymentOverviewProps) {
+export default function PaymentOverview({ payments }: Props) {
   const router = useRouter();
 
   return (

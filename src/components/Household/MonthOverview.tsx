@@ -5,11 +5,11 @@ import { TooltipItemContext } from '~/utils/charts';
 import { roundOn2 } from '~/utils/helper';
 import { Container } from '../UI/Container';
 
-interface MonthOverviewProps {
+interface Props {
   monthPayments: Payment[];
 }
 
-export default function MonthOverview({ monthPayments: payments }: MonthOverviewProps) {
+export default function MonthOverview({ monthPayments: payments }: Props) {
   // TODO: Find out if there is a nicer way to accomplish this
   // Create a array of this type. Need to initialize it but then remove the needed init value again.
   let data: [{ name: string; value: number }] = [{ name: '', value: 1 }];

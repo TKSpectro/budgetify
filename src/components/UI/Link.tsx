@@ -2,13 +2,13 @@ import clsx from 'clsx';
 import { default as NextLink } from 'next/link';
 import { ComponentProps } from 'react';
 
-export interface LinkProps extends ComponentProps<'a'> {
+interface Props extends ComponentProps<'a'> {
   noUnderline?: boolean;
   asButton?: boolean;
   href: string;
 }
 
-export function Link({ noUnderline = false, asButton = false, href, ...props }: LinkProps) {
+export function Link({ noUnderline = false, asButton = false, href, ...props }: Props) {
   const content = (
     <a
       className={clsx(

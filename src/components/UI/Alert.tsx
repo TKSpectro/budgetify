@@ -1,14 +1,14 @@
 import clsx from 'clsx';
 import { useState } from 'react';
 
-interface AlertProps {
+interface Props {
   message: string;
   type?: 'warning' | 'error';
 }
 
 // TODO: Style this component more like the Error
 
-export function Alert({ message, type, ...props }: AlertProps) {
+export function Alert({ message, type, ...props }: Props) {
   const [showAlert, setShowAlert] = useState(true);
   return (
     <>

@@ -4,13 +4,11 @@ import { RecurringPayment } from '~/graphql/__generated__/types';
 import RecurringPaymentItem from '../Household/RecurringPaymentItem';
 import { Container } from '../UI/Container';
 import { Link } from '../UI/Link';
-interface RecurringPaymentOverviewProps {
+interface Props {
   recurringPayments: RecurringPayment[];
 }
 
-export default function RecurringPaymentOverview({
-  recurringPayments,
-}: RecurringPaymentOverviewProps) {
+export default function RecurringPaymentOverview({ recurringPayments }: Props) {
   const router = useRouter();
 
   return (

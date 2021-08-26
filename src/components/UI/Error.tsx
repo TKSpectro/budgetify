@@ -1,9 +1,9 @@
-interface ErrorProps {
+interface Props {
   title: string;
   error?: Error;
 }
 
-export function Error({ title, error }: ErrorProps) {
+export function Error({ title, error }: Props) {
   if (!error) return null;
 
   return (

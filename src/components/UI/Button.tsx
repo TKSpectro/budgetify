@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 import { ComponentProps } from 'react';
 
-export interface ButtonProps extends ComponentProps<'button'> {
+export interface Props extends ComponentProps<'button'> {
   variant?: 'primary' | 'secondary' | 'danger' | 'transparent';
   className?: string;
 }
 
-export function Button({ variant = 'primary', className, ...props }: ButtonProps) {
+export function Button({ variant = 'primary', className, ...props }: Props) {
   return (
     <button
       className={clsx(

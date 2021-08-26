@@ -9,9 +9,9 @@ import { preloadQuery } from '~/utils/apollo';
 import { ThemeSwitch } from '../ThemeSwitch';
 import { Button } from './Button';
 
-interface HeaderLinkProps extends ComponentProps<'a'> {}
+interface Props extends ComponentProps<'a'> {}
 
-export function HeaderLink({ href, ...props }: HeaderLinkProps) {
+export function HeaderLink({ href, ...props }: Props) {
   const content = (
     <a
       className={clsx(

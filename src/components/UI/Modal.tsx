@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Button, ButtonProps } from './Button';
+import { Button, Props as ButtonProps } from './Button';
 
-export interface ModalProps extends ButtonProps {
+export interface Props extends ButtonProps {
   title: string;
   description: string;
   submitText?: string;
@@ -18,7 +18,7 @@ export function Modal({
   buttonClassName,
   variant,
   ...props
-}: ModalProps) {
+}: Props) {
   const [showModal, setShowModal] = useState(false);
   return (
     <>

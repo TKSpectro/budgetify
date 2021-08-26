@@ -3,13 +3,13 @@ import MonthOverview from './MonthOverview';
 import PaymentOverview from './PaymentOverview';
 import RecurringPaymentOverview from './RecurringPaymentOverview';
 
-interface OverviewProps {
+interface Props {
   payments: Payment[];
   recurringPayments: RecurringPayment[];
   monthPayments: Payment[];
 }
 
-export default function Overview({ payments, recurringPayments, monthPayments }: OverviewProps) {
+export default function Overview({ payments, recurringPayments, monthPayments }: Props) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-16">
       {payments.length !== 0 && <PaymentOverview payments={payments} />}
