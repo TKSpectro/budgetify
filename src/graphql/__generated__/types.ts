@@ -104,6 +104,8 @@ export type Mutation = {
   bookRecurringPayments?: Maybe<Array<Maybe<RecurringPayment>>>;
   /** Create a new category. Can just be called by an admin. */
   createCategory: Category;
+  /** Create a new invite. Need to be logged in. */
+  createInvite: Invite;
   /** Create a new payment. Need to be logged in. */
   createPayment: Payment;
   /** Create a new recurring payment. Need to be logged in. */
@@ -137,6 +139,12 @@ export type MutationBookRecurringPaymentsArgs = {
 
 export type MutationCreateCategoryArgs = {
   name: Scalars['String'];
+};
+
+
+export type MutationCreateInviteArgs = {
+  householdId: Scalars['String'];
+  invitedEmail: Scalars['String'];
 };
 
 

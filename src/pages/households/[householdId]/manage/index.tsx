@@ -50,8 +50,6 @@ export default function ManageHousehold() {
   const members = household.members || [];
   const invites = household.invites || [];
 
-  console.log(invites);
-
   return (
     <>
       <Head>
@@ -72,10 +70,8 @@ export default function ManageHousehold() {
       <Container>
         <Error title="Failed to load invites" error={error} />
         {loading && <LoadingAnimation />}
-        {!loading && !household ? (
-          <Alert message="Could not find this household." type="error" />
-        ) : null}
-        {!loading && !error && members && (
+        {!loading && !invites ? <Alert message="Could not find any invites." type="error" /> : null}
+        {!loading && !error && invites && (
           <>
             <InviteManager invites={invites} />
           </>

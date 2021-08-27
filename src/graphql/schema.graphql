@@ -89,6 +89,9 @@ type Mutation {
   """Create a new category. Can just be called by an admin."""
   createCategory(name: String!): Category!
 
+  """Create a new invite. Need to be logged in."""
+  createInvite(householdId: String!, invitedEmail: String!): Invite!
+
   """Create a new payment. Need to be logged in."""
   createPayment(categoryId: String!, description: String, householdId: String!, name: String!, value: Float!): Payment!
 
