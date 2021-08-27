@@ -25,6 +25,19 @@ const HOUSEHOLD_QUERY = gql`
         name
         email
       }
+      invites {
+        id
+        validUntil
+        wasUsed
+        invitedEmail
+        link
+        createdAt
+        updatedAt
+        sender {
+          id
+          name
+        }
+      }
     }
   }
 `;
@@ -35,6 +48,9 @@ export default function ManageHousehold() {
   const household = data?.household || {};
   const owner = household.owner || {};
   const members = household.members || [];
+  const invites = household.invites || [];
+
+  console.log(invites);
 
   return (
     <>
@@ -61,7 +77,7 @@ export default function ManageHousehold() {
         ) : null}
         {!loading && !error && members && (
           <>
-            <InviteManager />
+            <InviteManager invites={invites} />
           </>
         )}
       </Container>

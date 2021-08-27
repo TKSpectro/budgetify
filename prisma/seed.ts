@@ -153,6 +153,17 @@ async function main() {
       startDate: new Date(subDays(new Date(), 9)),
     },
   });
+
+  const inv1 = await prisma.invite.create({
+    data: {
+      invitedEmail: 'test@mail.com',
+      link: '/',
+      wasUsed: false,
+      senderId: testUser.id,
+      householdId: hou1.id,
+      validUntil: addDays(new Date(), 14),
+    },
+  });
 }
 
 main()
