@@ -12,8 +12,8 @@ export const Invite = objectType({
     t.nonNull.field('validUntil', { type: 'DateTime' });
     t.nonNull.boolean('wasUsed');
     t.nonNull.string('invitedEmail', { description: 'The email of the person which was invited.' });
-    t.nonNull.string('link', {
-      description: 'The link which can be used from invited person to use the invite.',
+    t.nonNull.string('token', {
+      description: 'The token which can be used from invited person to use the invite.',
     });
     t.nonNull.field('createdAt', { type: 'DateTime' });
     t.nonNull.field('updatedAt', { type: 'DateTime' });
@@ -73,7 +73,6 @@ export const InviteMutation = extendType({
             validUntil: addDays(new Date(), 14),
             wasUsed: false,
             invitedEmail: args.invitedEmail,
-            link: '',
             senderId: ctx.user.id,
             householdId: args.householdId,
           },

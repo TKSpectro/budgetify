@@ -66,8 +66,8 @@ export interface NexusGenObjects {
     householdId: string; // String!
     id: string; // String!
     invitedEmail: string; // String!
-    link: string; // String!
     senderId: string; // String!
+    token: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     validUntil: NexusGenScalars['DateTime']; // DateTime!
     wasUsed: boolean; // Boolean!
@@ -151,9 +151,9 @@ export interface NexusGenFieldTypes {
     householdId: string; // String!
     id: string; // String!
     invitedEmail: string; // String!
-    link: string; // String!
     sender: NexusGenRootTypes['User'] | null; // User
     senderId: string; // String!
+    token: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     validUntil: NexusGenScalars['DateTime']; // DateTime!
     wasUsed: boolean; // Boolean!
@@ -258,9 +258,9 @@ export interface NexusGenFieldTypeNames {
     householdId: 'String'
     id: 'String'
     invitedEmail: 'String'
-    link: 'String'
     sender: 'User'
     senderId: 'String'
+    token: 'String'
     updatedAt: 'DateTime'
     validUntil: 'DateTime'
     wasUsed: 'Boolean'

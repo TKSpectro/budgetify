@@ -67,12 +67,12 @@ type Invite {
   """The email of the person which was invited."""
   invitedEmail: String!
 
-  """The link which can be used from invited person to use the invite."""
-  link: String!
-
   """The user which sent the invite. (Referrer)"""
   sender: User
   senderId: String!
+
+  """The token which can be used from invited person to use the invite."""
+  token: String!
   updatedAt: DateTime!
   validUntil: DateTime!
   wasUsed: Boolean!

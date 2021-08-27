@@ -84,11 +84,11 @@ export type Invite = {
   id: Scalars['String'];
   /** The email of the person which was invited. */
   invitedEmail: Scalars['String'];
-  /** The link which can be used from invited person to use the invite. */
-  link: Scalars['String'];
   /** The user which sent the invite. (Referrer) */
   sender?: Maybe<User>;
   senderId: Scalars['String'];
+  /** The token which can be used from invited person to use the invite. */
+  token: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   validUntil: Scalars['DateTime'];
   wasUsed: Scalars['Boolean'];

@@ -108,7 +108,7 @@ model Invite {
   validUntil   DateTime
   wasUsed      Boolean
   invitedEmail String
-  link         String
+  token        String    @unique @default(uuid())
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   sender       User      @relation(fields: [senderId], references: [id])

@@ -157,7 +157,6 @@ async function main() {
   const inv1 = await prisma.invite.create({
     data: {
       invitedEmail: 'test@mail.com',
-      link: '/',
       wasUsed: false,
       senderId: testUser.id,
       householdId: hou1.id,

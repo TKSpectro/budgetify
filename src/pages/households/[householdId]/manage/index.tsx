@@ -30,7 +30,7 @@ const HOUSEHOLD_QUERY = gql`
         validUntil
         wasUsed
         invitedEmail
-        link
+        token
         createdAt
         updatedAt
         sender {
