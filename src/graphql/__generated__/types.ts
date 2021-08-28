@@ -129,6 +129,8 @@ export type Mutation = {
   signup: AuthToken;
   /** Update a new recurring payment. Need to be logged in. */
   updateRecurringPayment: RecurringPayment;
+  /** Use a invite. Logged in user gets added to the household in invite. Need to be logged in. */
+  useInvite?: Maybe<Invite>;
 };
 
 
@@ -198,6 +200,11 @@ export type MutationUpdateRecurringPaymentArgs = {
   name?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['DateTime']>;
   value?: Maybe<Scalars['Float']>;
+};
+
+
+export type MutationUseInviteArgs = {
+  token: Scalars['String'];
 };
 
 /** A payment is a NOT changeable booking of a specific value. */

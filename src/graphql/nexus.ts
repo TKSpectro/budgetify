@@ -170,6 +170,7 @@ export interface NexusGenFieldTypes {
     removeCategory: NexusGenRootTypes['Category']; // Category!
     signup: NexusGenRootTypes['AuthToken']; // AuthToken!
     updateRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
+    useInvite: NexusGenRootTypes['Invite'] | null; // Invite
   }
   Payment: { // field return type
     category: NexusGenRootTypes['Category'] | null; // Category
@@ -277,6 +278,7 @@ export interface NexusGenFieldTypeNames {
     removeCategory: 'Category'
     signup: 'AuthToken'
     updateRecurringPayment: 'RecurringPayment'
+    useInvite: 'Invite'
   }
   Payment: { // field return type name
     category: 'Category'
@@ -402,6 +404,9 @@ export interface NexusGenArgTypes {
       name?: string | null; // String
       startDate?: NexusGenScalars['DateTime'] | null; // DateTime
       value?: number | null; // Float
+    }
+    useInvite: { // args
+      token: string; // String!
     }
   }
   Query: {

@@ -1,4 +1,5 @@
 import { ApolloError } from 'apollo-server-micro';
+import { compareAsc } from 'date-fns';
 import addDays from 'date-fns/addDays';
 import { extendType, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
@@ -65,7 +66,7 @@ export const InviteMutation = extendType({
 
         // User is not a member of this household -> Not allowed to book payments into it.
         if (foundHousehold.length === 0) {
-          throw new ApolloError('You are not allowed to create a payment in this household.');
+          throw new ApolloError('You are not allowed to create a new invite in this household.');
         }
 
         return prisma.invite.create({
@@ -77,6 +78,51 @@ export const InviteMutation = extendType({
             householdId: args.householdId,
           },
         });
+      },
+    });
+    t.field('useInvite', {
+      type: Invite,
+      description:
+        'Use a invite. Logged in user gets added to the household in invite. Need to be logged in.',
+      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      args: {
+        token: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx: Context) {
+        const invite = await prisma.invite.findUnique({
+          where: {
+            token: args.token,
+          },
+        });
+
+        if (!invite) {
+          throw new ApolloError('Invite token was not valid.');
+        }
+        if (invite.wasUsed) {
+          throw new ApolloError('Invite was already used.');
+        }
+        if (compareAsc(invite.validUntil, new Date()) !== 1) {
+          throw new ApolloError('Invite is not valid anymore.');
+        }
+        if (ctx.user.email !== invite.invitedEmail) {
+          throw new ApolloError('Invite token was not created for your email address.');
+        }
+
+        const user = await prisma.user.update({
+          where: { id: ctx.user.id },
+          data: { households: { connect: { id: invite.householdId } } },
+        });
+
+        if (!user) {
+          throw new ApolloError('Invite token could not be used.');
+        }
+
+        const updatedInvite = await prisma.invite.update({
+          where: { id: invite.id },
+          data: { updatedAt: new Date(), wasUsed: true },
+        });
+
+        return updatedInvite;
       },
     });
   },
