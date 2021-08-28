@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { Button, Props as ButtonProps } from './Button';
 
 export interface Props extends ButtonProps {
   title: string;
-  description: string;
+  description?: string;
   submitText?: string;
   onSubmit: () => void;
   buttonText: string;
   buttonClassName?: string;
+  children?: ReactNode;
 }
 
 export function Modal({
@@ -18,6 +19,7 @@ export function Modal({
   buttonText,
   buttonClassName,
   variant,
+  children,
   ...props
 }: Props) {
   const [showModal, setShowModal] = useState(false);
@@ -41,7 +43,10 @@ export function Modal({
                 </div>
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
-                  <p className="my-4 text-blueGray-500 text-lg leading-relaxed">{description}</p>
+                  {description && (
+                    <p className="my-4 text-blueGray-500 text-lg leading-relaxed">{description}</p>
+                  )}
+                  {children}
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
