@@ -110,6 +110,8 @@ export type Mutation = {
   createPayment: Payment;
   /** Create a new recurring payment. Need to be logged in. */
   createRecurringPayment: RecurringPayment;
+  /** Remove a invite. Need to be logged in. */
+  deleteInvite?: Maybe<Scalars['Boolean']>;
   /** Deletes a user and removes all references to it. Need to be logged in. */
   deleteUser: User;
   /**
@@ -168,6 +170,11 @@ export type MutationCreateRecurringPaymentArgs = {
   name: Scalars['String'];
   startDate: Scalars['DateTime'];
   value: Scalars['Float'];
+};
+
+
+export type MutationDeleteInviteArgs = {
+  id: Scalars['String'];
 };
 
 

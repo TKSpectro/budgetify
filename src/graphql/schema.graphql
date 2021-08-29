@@ -98,6 +98,9 @@ type Mutation {
   """Create a new recurring payment. Need to be logged in."""
   createRecurringPayment(categoryId: String!, description: String, endDate: DateTime, householdId: String!, interval: Interval!, name: String!, startDate: DateTime!, value: Float!): RecurringPayment!
 
+  """Remove a invite. Need to be logged in."""
+  deleteInvite(id: String!): Boolean
+
   """Deletes a user and removes all references to it. Need to be logged in."""
   deleteUser: User!
 

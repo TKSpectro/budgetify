@@ -164,6 +164,7 @@ export interface NexusGenFieldTypes {
     createInvite: NexusGenRootTypes['Invite']; // Invite!
     createPayment: NexusGenRootTypes['Payment']; // Payment!
     createRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
+    deleteInvite: boolean | null; // Boolean
     deleteUser: NexusGenRootTypes['User']; // User!
     login: NexusGenRootTypes['AuthToken']; // AuthToken!
     logout: string | null; // String
@@ -272,6 +273,7 @@ export interface NexusGenFieldTypeNames {
     createInvite: 'Invite'
     createPayment: 'Payment'
     createRecurringPayment: 'RecurringPayment'
+    deleteInvite: 'Boolean'
     deleteUser: 'User'
     login: 'AuthToken'
     logout: 'String'
@@ -380,6 +382,9 @@ export interface NexusGenArgTypes {
       name: string; // String!
       startDate: NexusGenScalars['DateTime']; // DateTime!
       value: number; // Float!
+    }
+    deleteInvite: { // args
+      id: string; // String!
     }
     login: { // args
       email: string; // String!

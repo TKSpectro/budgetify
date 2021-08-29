@@ -125,5 +125,27 @@ export const InviteMutation = extendType({
         return updatedInvite;
       },
     });
+
+    t.field('deleteInvite', {
+      type: 'Boolean',
+      description: 'Remove a invite. Need to be logged in.',
+      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      args: {
+        id: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx: Context) {
+        try {
+          await prisma.invite.delete({
+            where: {
+              id: args.id,
+            },
+          });
+        } catch (error) {
+          throw new ApolloError('Could not delete a invite with this id.');
+        }
+
+        return true;
+      },
+    });
   },
 });
