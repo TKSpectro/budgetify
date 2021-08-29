@@ -58,15 +58,13 @@ export default function ManageHousehold() {
       <Container>
         <Error title="Failed to load household" error={error} />
         {loading && <LoadingAnimation />}
-        {!loading && !household ? (
-          <Alert message="Could not find this household." type="error" />
-        ) : null}
+        {!loading && !household && <Alert message="Could not find this household." type="error" />}
         {!loading && !error && members && <MemberTable members={members} owner={owner} />}
       </Container>
       <Container>
         <Error title="Failed to load invites" error={error} />
         {loading && <LoadingAnimation />}
-        {!loading && !invites ? <Alert message="Could not find any invites." type="error" /> : null}
+        {!loading && !invites && <Alert message="Could not find any invites." type="error" />}
         {!loading && !error && invites && <InviteManager invites={invites} refetch={refetch} />}
       </Container>
     </>

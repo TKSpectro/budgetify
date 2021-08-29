@@ -113,12 +113,11 @@ export default function EditRecurringPayment() {
   useEffect(() => {
     const data: MutationUpdateRecurringPaymentArgs = {
       ...recurringPayment,
-      startDate: recurringPayment.startDate
-        ? new Date(recurringPayment.startDate).toISOString().split('T')[0]
-        : null,
-      endDate: recurringPayment.endDate
-        ? new Date(recurringPayment.endDate).toISOString().split('T')[0]
-        : null,
+      startDate:
+        recurringPayment.startDate &&
+        new Date(recurringPayment.startDate).toISOString().split('T')[0],
+      endDate:
+        recurringPayment.endDate && new Date(recurringPayment.endDate).toISOString().split('T')[0],
     };
 
     // Reset must be used here to get the form to render the actual default values
@@ -130,7 +129,7 @@ export default function EditRecurringPayment() {
       variables: {
         ...form.getValues(),
         startDate: new Date(form.getValues('startDate')!),
-        endDate: form.getValues('endDate') ? new Date(form.getValues('endDate')!) : null,
+        endDate: form.getValues('endDate') && new Date(form.getValues('endDate')!),
       },
     });
   };
@@ -143,9 +142,9 @@ export default function EditRecurringPayment() {
       <Container>
         <Error title="Failed to load recurring payment" error={error} />
         {loading && <LoadingAnimation />}
-        {!loading && !recurringPayment ? (
+        {!loading && !recurringPayment && (
           <Alert message="Could not find this  recurring payment." type="error" />
-        ) : null}
+        )}
         {!loading && !error && recurringPayment && (
           <>
             <div>Edit Recurring Payment {recurringPayment.name}</div>

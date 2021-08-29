@@ -67,9 +67,9 @@ export default function Households() {
         <Error title="Failed to load households" error={error} />
         <Error title="Failed to use invite token" error={useInviteError} />
         {loading && <LoadingAnimation />}
-        {!loading && !error && households.length === 0 ? (
+        {!loading && !error && households.length === 0 && (
           <Alert message="Could not find any households. Please create or join one." type="error" />
-        ) : null}
+        )}
 
         <div className="mb-4">
           <Modal

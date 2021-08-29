@@ -82,9 +82,7 @@ export default function Household() {
       </Head>
       <Error title="Failed to load household" error={error} />
       {loading && <LoadingAnimation />}
-      {!loading && !household ? (
-        <Alert message="Could not find this household." type="error" />
-      ) : null}
+      {!loading && !household && <Alert message="Could not find this household." type="error" />}
       {!error && household && (
         <>
           <div className=" relative text-6xl text-brand-500">
@@ -100,15 +98,15 @@ export default function Household() {
 
           <div className="mt-4 text-4xl">Total balance{' ' + roundOn2(paymentSum) + '€'}</div>
 
-          {household.payments?.length === 0 ? (
+          {household.payments?.length === 0 && (
             <Alert message="Could not find any payments." type="error" />
-          ) : null}
-          {household.recurringPayments?.length === 0 ? (
+          )}
+          {household.recurringPayments?.length === 0 && (
             <Alert message="Could not find any recurring payments." type="error" />
-          ) : null}
-          {household.thisMonthsPayments?.length === 0 ? (
+          )}
+          {household.thisMonthsPayments?.length === 0 && (
             <Alert message="Could not find any payments this month." type="error" />
-          ) : null}
+          )}
           <Overview
             payments={household.payments}
             recurringPayments={household.recurringPayments}

@@ -28,7 +28,7 @@ export function Modal({
       <Button className={buttonClassName} variant={variant} onClick={() => setShowModal(true)}>
         {buttonText}
       </Button>
-      {showModal ? (
+      {showModal && (
         <>
           <div
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
@@ -67,7 +67,7 @@ export function Modal({
           </div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
-      ) : null}
+      )}
     </>
   );
 }

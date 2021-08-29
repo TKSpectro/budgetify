@@ -91,7 +91,7 @@ export default function NewRecurringPayment() {
           ...form.getValues(),
           value: +form.getValues('value'),
           startDate: new Date(form.getValues('startDate')!),
-          endDate: form.getValues('endDate') ? new Date(form.getValues('endDate')!) : null,
+          endDate: form.getValues('endDate') && new Date(form.getValues('endDate')!),
         },
       });
     } catch (error) {
