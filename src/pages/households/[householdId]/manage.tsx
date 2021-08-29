@@ -43,7 +43,7 @@ const HOUSEHOLD_QUERY = gql`
 `;
 
 export default function ManageHousehold() {
-  const { data, loading, error } = useQuery(HOUSEHOLD_QUERY);
+  const { data, loading, error, refetch } = useQuery(HOUSEHOLD_QUERY);
 
   const household = data?.household || {};
   const owner = household.owner || {};
@@ -73,7 +73,7 @@ export default function ManageHousehold() {
         {!loading && !invites ? <Alert message="Could not find any invites." type="error" /> : null}
         {!loading && !error && invites && (
           <>
-            <InviteManager invites={invites} />
+            <InviteManager invites={invites} refetch={refetch} />
           </>
         )}
       </Container>
