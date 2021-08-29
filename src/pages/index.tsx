@@ -3,17 +3,18 @@ import Head from 'next/head';
 import React from 'react';
 import { ME_QUERY } from '~/components/UI/Header';
 import { Link } from '~/components/UI/Link';
+import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
 
 export default function Home() {
   const { data, loading, error } = useQuery(ME_QUERY);
-
-  if (loading) return <span>loading...</span>;
 
   return (
     <div>
       <Head>
         <title>budgetify</title>
       </Head>
+      {loading && <LoadingAnimation />}
+
       <pre>{JSON.stringify(data, null, 2)}</pre>
       {!data && <div>Not logged in!</div>}
       {!data && (

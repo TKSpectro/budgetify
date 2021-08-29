@@ -6,6 +6,7 @@ import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { ME_QUERY } from '~/components/UI/Header';
+import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
 import { Modal } from '~/components/UI/Modal';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -57,8 +58,6 @@ export default function Profile() {
     logoutMutation();
   }
 
-  if (loading) return <span>loading...</span>;
-  if (error) return <div></div>;
   return (
     <>
       <Head>
@@ -69,20 +68,26 @@ export default function Profile() {
         <Error title="Failed to delete user!" error={deleteUserError} />
         <Error title="Failed to logout!" error={logoutError} />
 
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        {loading && <LoadingAnimation />}
 
-        <div className="flex">
-          <Modal
-            title="Delete Account"
-            description="If you delete your account all your data will be lost. All households you own will be transferred to another person."
-            submitText="Submit"
-            onSubmit={deleteUser}
-            buttonText="DELETE ACCOUNT"
-            variant="danger"
-            buttonClassName="mr-4"
-          />
-          <Button onClick={logoutHandler}>Logout</Button>
-        </div>
+        {!loading && !error && data && (
+          <>
+            <pre>{JSON.stringify(data, null, 2)}</pre>
+
+            <div className="flex">
+              <Modal
+                title="Delete Account"
+                description="If you delete your account all your data will be lost. All households you own will be transferred to another person."
+                submitText="Submit"
+                onSubmit={deleteUser}
+                buttonText="DELETE ACCOUNT"
+                variant="danger"
+                buttonClassName="mr-4"
+              />
+              <Button onClick={logoutHandler}>Logout</Button>
+            </div>
+          </>
+        )}
       </Container>
     </>
   );

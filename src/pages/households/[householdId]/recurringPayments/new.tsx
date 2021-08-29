@@ -10,6 +10,7 @@ import { Container } from '~/components/UI/Container';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
+import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
 import {
   Category,
   Interval,
@@ -120,6 +121,8 @@ export default function NewRecurringPayment() {
 
       <div className="mt-8 md:mx-32">
         <Container>
+          {loading && <LoadingAnimation />}
+
           <Form form={form} onSubmit={onSubmit}>
             <Input label="Name" type="text" {...form.register('name', { required: true })}></Input>
             <Input
