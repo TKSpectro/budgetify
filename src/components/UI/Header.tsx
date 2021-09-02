@@ -94,6 +94,9 @@ export function Header() {
                 <HeaderLink href={'/households/' + router.query.householdId + '/recurringPayments'}>
                   Recurring Payments
                 </HeaderLink>
+                <HeaderLink href={'/households/' + router.query.householdId + '/moneypools'}>
+                  Moneypools
+                </HeaderLink>
                 <HeaderLink href={'/households'}>Households</HeaderLink>
               </>
             )}
