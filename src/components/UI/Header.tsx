@@ -73,12 +73,20 @@ export function Header() {
             })}
           >
             {!router.query.householdId && (
-              <HeaderLink
-                href={'/households'}
-                className="p-2 lg:px-4 md:mx-2 text-white rounded bg-brand-500"
-              >
-                Households
-              </HeaderLink>
+              <>
+                <HeaderLink
+                  href={'/households'}
+                  className="p-2 lg:px-4 md:mx-2 text-white rounded bg-brand-500"
+                >
+                  Households
+                </HeaderLink>
+                <HeaderLink
+                  href={'/groups'}
+                  className="p-2 lg:px-4 md:mx-2 text-white rounded bg-brand-500"
+                >
+                  Groups
+                </HeaderLink>
+              </>
             )}
             {router.query.householdId && (
               <>
@@ -94,9 +102,7 @@ export function Header() {
                 <HeaderLink href={'/households/' + router.query.householdId + '/recurringPayments'}>
                   Recurring Payments
                 </HeaderLink>
-                <HeaderLink href={'/households/' + router.query.householdId + '/moneypools'}>
-                  Moneypools
-                </HeaderLink>
+                <HeaderLink href={'/groups'}>Groups</HeaderLink>
                 <HeaderLink href={'/households'}>Households</HeaderLink>
               </>
             )}
