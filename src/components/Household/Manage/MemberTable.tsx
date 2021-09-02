@@ -31,12 +31,16 @@ export default function MemberTable({ members, owner, ...props }: Props) {
               </td>
               <td className="py-4">
                 <div className="max-w-xl overflow-auto">
-                  <div className="ml-2 font-bold text-gray-100">{member.name}</div>
+                  <div className="ml-2 font-bold text-gray-800 dark:text-gray-100">
+                    {member.name}
+                  </div>
                 </div>
               </td>
               <td className="py-4">
                 <div className="max-w-xl overflow-auto">
-                  <div className="ml-2 font-bold text-gray-100">{member.email}</div>
+                  <div className="ml-2 font-bold text-gray-800 dark:text-gray-100">
+                    {member.email}
+                  </div>
                 </div>
               </td>
               <td className="py-4">
