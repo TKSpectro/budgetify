@@ -32,6 +32,34 @@ export type Category = {
 };
 
 
+export type Group = {
+  __typename?: 'Group';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  /** A list of all user's which have access to this group. */
+  members?: Maybe<Array<Maybe<User>>>;
+  name: Scalars['String'];
+  /** A list of all payments which happened in this group. */
+  payments?: Maybe<Array<Maybe<GroupPayment>>>;
+  updatedAt: Scalars['DateTime'];
+  value: Scalars['String'];
+};
+
+export type GroupPayment = {
+  __typename?: 'GroupPayment';
+  createdAt: Scalars['DateTime'];
+  /** The group in which this payment was booked. */
+  group?: Maybe<Group>;
+  groupId: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  /** The user which booked the payment. */
+  user?: Maybe<User>;
+  userId: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type Household = {
   __typename?: 'Household';
   createdAt: Scalars['DateTime'];
@@ -243,6 +271,8 @@ export type Query = {
   allHouseholds?: Maybe<Array<Maybe<Household>>>;
   /** All available categories. Filterable by id or name via arguments */
   categories?: Maybe<Array<Maybe<Category>>>;
+  /** Returns a group by searching for the given id. */
+  group?: Maybe<Group>;
   household?: Maybe<Household>;
   households?: Maybe<Array<Maybe<Household>>>;
   /** Returns the data of the currently logged in user. Returns null if no user is logged in */
@@ -254,6 +284,11 @@ export type Query = {
 export type QueryCategoriesArgs = {
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryGroupArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -295,6 +330,10 @@ export type User = {
   createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   firstname: Scalars['String'];
+  /** The payments which were booked in groups. */
+  groupPayments?: Maybe<Array<Maybe<GroupPayment>>>;
+  /** The group's in which the user is joined. */
+  groups?: Maybe<Array<Maybe<Group>>>;
   /** The user's safely encrypted password */
   hashedPassword: Scalars['String'];
   /** The household's in which the user is a member. */

@@ -54,6 +54,22 @@ export interface NexusGenObjects {
     name: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
+  Group: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    name: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    value: string; // String!
+  }
+  GroupPayment: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    groupId: string; // String!
+    id: string; // String!
+    name: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    userId: string; // String!
+    value: string; // String!
+  }
   Household: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
@@ -133,6 +149,26 @@ export interface NexusGenFieldTypes {
     name: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
+  Group: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    name: string; // String!
+    payments: Array<NexusGenRootTypes['GroupPayment'] | null> | null; // [GroupPayment]
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    value: string; // String!
+  }
+  GroupPayment: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    group: NexusGenRootTypes['Group'] | null; // Group
+    groupId: string; // String!
+    id: string; // String!
+    name: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    user: NexusGenRootTypes['User'] | null; // User
+    userId: string; // String!
+    value: string; // String!
+  }
   Household: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
@@ -190,6 +226,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     allHouseholds: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     categories: Array<NexusGenRootTypes['Category'] | null> | null; // [Category]
+    group: NexusGenRootTypes['Group'] | null; // Group
     household: NexusGenRootTypes['Household'] | null; // Household
     households: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     me: NexusGenRootTypes['User'] | null; // User
@@ -219,6 +256,8 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
     firstname: string; // String!
+    groupPayments: Array<NexusGenRootTypes['GroupPayment'] | null> | null; // [GroupPayment]
+    groups: Array<NexusGenRootTypes['Group'] | null> | null; // [Group]
     hashedPassword: string; // String!
     households: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     id: string; // String!
@@ -241,6 +280,26 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     name: 'String'
     updatedAt: 'DateTime'
+  }
+  Group: { // field return type name
+    createdAt: 'DateTime'
+    id: 'String'
+    members: 'User'
+    name: 'String'
+    payments: 'GroupPayment'
+    updatedAt: 'DateTime'
+    value: 'String'
+  }
+  GroupPayment: { // field return type name
+    createdAt: 'DateTime'
+    group: 'Group'
+    groupId: 'String'
+    id: 'String'
+    name: 'String'
+    updatedAt: 'DateTime'
+    user: 'User'
+    userId: 'String'
+    value: 'String'
   }
   Household: { // field return type name
     createdAt: 'DateTime'
@@ -299,6 +358,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     allHouseholds: 'Household'
     categories: 'Category'
+    group: 'Group'
     household: 'Household'
     households: 'Household'
     me: 'User'
@@ -328,6 +388,8 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     email: 'String'
     firstname: 'String'
+    groupPayments: 'GroupPayment'
+    groups: 'Group'
     hashedPassword: 'String'
     households: 'Household'
     id: 'String'
@@ -418,6 +480,9 @@ export interface NexusGenArgTypes {
     categories: { // args
       id?: string | null; // String
       name?: string | null; // String
+    }
+    group: { // args
+      id: string; // String!
     }
     household: { // args
       id?: string | null; // String

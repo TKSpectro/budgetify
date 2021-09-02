@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-server-micro';
 import { extendType, objectType } from 'nexus';
 import prisma from '~/utils/prisma';
-import { Household, Invite, Payment } from '.';
+import { Group, GroupPayment, Household, Invite, Payment } from '.';
 
 export const User = objectType({
   name: 'User',
@@ -49,6 +49,20 @@ export const User = objectType({
       description: "The household's in which the user is the current owner",
       resolve(source) {
         return prisma.user.findUnique({ where: { id: source.id || undefined } }).ownedHouseholds();
+      },
+    });
+    t.list.field('groups', {
+      type: Group,
+      description: "The group's in which the user is joined.",
+      resolve(source) {
+        return prisma.user.findUnique({ where: { id: source.id || undefined } }).groups();
+      },
+    });
+    t.list.field('groupPayments', {
+      type: GroupPayment,
+      description: 'The payments which were booked in groups.',
+      resolve(source) {
+        return prisma.user.findUnique({ where: { id: source.id || undefined } }).groupPayments();
       },
     });
   },

@@ -22,6 +22,36 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+type Group {
+  createdAt: DateTime!
+  id: String!
+
+  """A list of all user's which have access to this group."""
+  members: [User]
+  name: String!
+
+  """A list of all payments which happened in this group."""
+  payments: [GroupPayment]
+  updatedAt: DateTime!
+  value: String!
+}
+
+type GroupPayment {
+  createdAt: DateTime!
+
+  """The group in which this payment was booked."""
+  group: Group
+  groupId: String!
+  id: String!
+  name: String!
+  updatedAt: DateTime!
+
+  """The user which booked the payment."""
+  user: User
+  userId: String!
+  value: String!
+}
+
 type Household {
   createdAt: DateTime!
   id: String!
@@ -162,6 +192,9 @@ type Query {
 
   """All available categories. Filterable by id or name via arguments"""
   categories(id: String, name: String): [Category]
+
+  """Returns a group by searching for the given id."""
+  group(id: String!): Group
   household(id: String): Household
   households: [Household]
 
@@ -209,6 +242,12 @@ type User {
   createdAt: DateTime!
   email: String!
   firstname: String!
+
+  """The payments which were booked in groups."""
+  groupPayments: [GroupPayment]
+
+  """The group's in which the user is joined."""
+  groups: [Group]
 
   """The user's safely encrypted password"""
   hashedPassword: String!
