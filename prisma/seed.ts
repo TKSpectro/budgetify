@@ -163,6 +163,20 @@ async function main() {
       validUntil: addDays(new Date(), 14),
     },
   });
+
+  const group1 = await prisma.group.create({
+    data: {
+      name: 'My Group 1',
+      value: 40,
+      members: { connect: { id: testUser.id } },
+      payments: {
+        connectOrCreate: {
+          create: { name: 'Payment 1', value: 40, userId: testUser.id },
+          where: { id: '' },
+        },
+      },
+    },
+  });
 }
 
 main()
