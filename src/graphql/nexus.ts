@@ -164,6 +164,7 @@ export interface NexusGenFieldTypes {
     groupId: string; // String!
     id: string; // String!
     name: string; // String!
+    participants: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User'] | null; // User
     userId: string; // String!
@@ -259,6 +260,7 @@ export interface NexusGenFieldTypes {
     email: string; // String!
     firstname: string; // String!
     groupPayments: Array<NexusGenRootTypes['GroupPayment'] | null> | null; // [GroupPayment]
+    groupPaymentsParticipant: Array<NexusGenRootTypes['GroupPayment'] | null> | null; // [GroupPayment]
     groups: Array<NexusGenRootTypes['Group'] | null> | null; // [Group]
     hashedPassword: string; // String!
     households: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
@@ -298,6 +300,7 @@ export interface NexusGenFieldTypeNames {
     groupId: 'String'
     id: 'String'
     name: 'String'
+    participants: 'User'
     updatedAt: 'DateTime'
     user: 'User'
     userId: 'String'
@@ -393,6 +396,7 @@ export interface NexusGenFieldTypeNames {
     email: 'String'
     firstname: 'String'
     groupPayments: 'GroupPayment'
+    groupPaymentsParticipant: 'GroupPayment'
     groups: 'Group'
     hashedPassword: 'String'
     households: 'Household'

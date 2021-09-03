@@ -44,6 +44,9 @@ type GroupPayment {
   groupId: String!
   id: String!
   name: String!
+
+  """All users which ate some of the bought feed from this payment."""
+  participants: [User]
   updatedAt: DateTime!
 
   """The user which booked the payment."""
@@ -251,8 +254,13 @@ type User {
   email: String!
   firstname: String!
 
-  """The payments which were booked in groups."""
+  """The payments which were booked in groups and where payed by the user."""
   groupPayments: [GroupPayment]
+
+  """
+  All group payments which the user participated in. e.g. user ate some of the bought stuff.
+  """
+  groupPaymentsParticipant: [GroupPayment]
 
   """The group's in which the user is joined."""
   groups: [Group]

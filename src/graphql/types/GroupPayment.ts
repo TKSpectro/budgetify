@@ -34,6 +34,17 @@ export const GroupPayment = objectType({
         });
       },
     });
+    t.list.field('participants', {
+      type: User,
+      description: 'All users which ate some of the bought feed from this payment.',
+      resolve(source) {
+        return prisma.user.findMany({
+          where: {
+            groupPaymentsParticipant: { some: { id: source.id } },
+          },
+        });
+      },
+    });
   },
 });
 

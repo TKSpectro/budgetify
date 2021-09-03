@@ -53,6 +53,8 @@ export type GroupPayment = {
   groupId: Scalars['String'];
   id: Scalars['String'];
   name: Scalars['String'];
+  /** All users which ate some of the bought feed from this payment. */
+  participants?: Maybe<Array<Maybe<User>>>;
   updatedAt: Scalars['DateTime'];
   /** The user which booked the payment. */
   user?: Maybe<User>;
@@ -347,8 +349,10 @@ export type User = {
   createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   firstname: Scalars['String'];
-  /** The payments which were booked in groups. */
+  /** The payments which were booked in groups and where payed by the user. */
   groupPayments?: Maybe<Array<Maybe<GroupPayment>>>;
+  /** All group payments which the user participated in. e.g. user ate some of the bought stuff. */
+  groupPaymentsParticipant?: Maybe<Array<Maybe<GroupPayment>>>;
   /** The group's in which the user is joined. */
   groups?: Maybe<Array<Maybe<Group>>>;
   /** The user's safely encrypted password */

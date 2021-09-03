@@ -60,9 +60,19 @@ export const User = objectType({
     });
     t.list.field('groupPayments', {
       type: GroupPayment,
-      description: 'The payments which were booked in groups.',
+      description: 'The payments which were booked in groups and where payed by the user.',
       resolve(source) {
         return prisma.user.findUnique({ where: { id: source.id || undefined } }).groupPayments();
+      },
+    });
+    t.list.field('groupPaymentsParticipant', {
+      type: GroupPayment,
+      description:
+        'All group payments which the user participated in. e.g. user ate some of the bought stuff.',
+      resolve(source) {
+        return prisma.user
+          .findUnique({ where: { id: source.id || undefined } })
+          .groupPaymentsParticipant();
       },
     });
   },

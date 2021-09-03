@@ -20,21 +20,22 @@ generator client {
 }
 
 model User {
-  id               String             @id @default(uuid())
-  firstname        String
-  lastname         String
-  email            String             @unique
-  hashedPassword   String
-  isAdmin          Boolean            @default(false)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-  households       Household[]
-  invites          Invite[]
-  ownedHouseholds  Household[]        @relation("Owner")
-  payments         Payment[]
-  RecurringPayment RecurringPayment[]
-  groups           Group[]
-  groupPayments    GroupPayment[]
+  id                       String             @id @default(uuid())
+  firstname                String
+  lastname                 String
+  email                    String             @unique
+  hashedPassword           String
+  isAdmin                  Boolean            @default(false)
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime           @updatedAt
+  households               Household[]
+  invites                  Invite[]
+  ownedHouseholds          Household[]        @relation("Owner")
+  payments                 Payment[]
+  RecurringPayment         RecurringPayment[]
+  groups                   Group[]
+  groupPayments            GroupPayment[]
+  groupPaymentsParticipant GroupPayment[]     @relation("Participants")
 }
 
 model Category {
@@ -130,13 +131,14 @@ model Group {
 }
 
 model GroupPayment {
-  id        String   @id @default(uuid())
-  name      String
-  value     Float    @default(0.00)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  group     Group    @relation(fields: [groupId], references: [id])
-  groupId   String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  id           String   @id @default(uuid())
+  name         String
+  value        Float    @default(0.00)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  group        Group    @relation(fields: [groupId], references: [id])
+  groupId      String
+  user         User     @relation(fields: [userId], references: [id])
+  userId       String
+  participants User[]   @relation(name: "Participants")
 }
