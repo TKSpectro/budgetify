@@ -173,6 +173,15 @@ type Mutation {
   useInvite(token: String!): Invite
 }
 
+"""
+HelperType: Contains a participant and the value he can take out of the group or has to pay.
+"""
+type Participant {
+  name: String!
+  userId: String!
+  value: Float!
+}
+
 """A payment is a NOT changeable booking of a specific value."""
 type Payment {
   """The category in which the user placed it. (e.g. food, income)"""
@@ -200,6 +209,9 @@ type Query {
         Can only be queried by admin accounts.
   """
   allHouseholds: [Household]
+
+  """Returns a group by searching for the given id."""
+  calculateMemberBalances(id: String!): [Participant]
 
   """All available categories. Filterable by id or name via arguments"""
   categories(id: String, name: String): [Category]

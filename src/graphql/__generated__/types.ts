@@ -261,6 +261,14 @@ export type MutationUseInviteArgs = {
   token: Scalars['String'];
 };
 
+/** HelperType: Contains a participant and the value he can take out of the group or has to pay. */
+export type Participant = {
+  __typename?: 'Participant';
+  name: Scalars['String'];
+  userId: Scalars['String'];
+  value: Scalars['Float'];
+};
+
 /** A payment is a NOT changeable booking of a specific value. */
 export type Payment = {
   __typename?: 'Payment';
@@ -288,6 +296,8 @@ export type Query = {
    *       Can only be queried by admin accounts.
    */
   allHouseholds?: Maybe<Array<Maybe<Household>>>;
+  /** Returns a group by searching for the given id. */
+  calculateMemberBalances?: Maybe<Array<Maybe<Participant>>>;
   /** All available categories. Filterable by id or name via arguments */
   categories?: Maybe<Array<Maybe<Category>>>;
   /** Returns a group by searching for the given id. */
@@ -297,6 +307,11 @@ export type Query = {
   /** Returns the data of the currently logged in user. Returns null if no user is logged in */
   me?: Maybe<User>;
   recurringPayments?: Maybe<Array<Maybe<RecurringPayment>>>;
+};
+
+
+export type QueryCalculateMemberBalancesArgs = {
+  id: Scalars['String'];
 };
 
 

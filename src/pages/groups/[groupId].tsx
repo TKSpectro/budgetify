@@ -7,7 +7,11 @@ import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
 import { ModalForm } from '~/components/UI/ModalForm';
-import { GroupPayment, MutationCreateGroupPaymentArgs } from '~/graphql/__generated__/types';
+import {
+  GroupPayment,
+  MutationCreateGroupPaymentArgs,
+  Participant,
+} from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 
@@ -22,6 +26,11 @@ const GROUP_QUERY = gql`
         name
         value
       }
+    }
+    calculateMemberBalances(id: $id) {
+      name
+      userId
+      value
     }
   }
 `;
@@ -64,6 +73,7 @@ export default function Group() {
   };
 
   const group = data?.group;
+  const memberBalances = data?.calculateMemberBalances;
 
   return (
     <>
@@ -96,11 +106,11 @@ export default function Group() {
           </div>
         )}
       </Container>
-      {group.payments && (
+      {memberBalances && (
         <Container>
-          <div className="text-lg font-semibold">Who needs to pay what</div>
-          {group.payments.map((payment: GroupPayment) => {
-            return <div key={payment.id}>{payment.name + ' : ' + payment.value + '€'}</div>;
+          <div className="text-lg font-semibold">Member Balances</div>
+          {memberBalances.map((member: Participant) => {
+            return <div key={member.userId}>{member.name + ' : ' + member.value + '€'}</div>;
           })}
         </Container>
       )}

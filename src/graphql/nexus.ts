@@ -89,6 +89,11 @@ export interface NexusGenObjects {
     wasUsed: boolean; // Boolean!
   }
   Mutation: {};
+  Participant: { // root type
+    name: string; // String!
+    userId: string; // String!
+    value: number; // Float!
+  }
   Payment: { // root type
     categoryId: string; // String!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -212,6 +217,11 @@ export interface NexusGenFieldTypes {
     updateRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
     useInvite: NexusGenRootTypes['Invite'] | null; // Invite
   }
+  Participant: { // field return type
+    name: string; // String!
+    userId: string; // String!
+    value: number; // Float!
+  }
   Payment: { // field return type
     category: NexusGenRootTypes['Category'] | null; // Category
     categoryId: string; // String!
@@ -228,6 +238,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     allHouseholds: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
+    calculateMemberBalances: Array<NexusGenRootTypes['Participant'] | null> | null; // [Participant]
     categories: Array<NexusGenRootTypes['Category'] | null> | null; // [Category]
     group: NexusGenRootTypes['Group'] | null; // Group
     household: NexusGenRootTypes['Household'] | null; // Household
@@ -348,6 +359,11 @@ export interface NexusGenFieldTypeNames {
     updateRecurringPayment: 'RecurringPayment'
     useInvite: 'Invite'
   }
+  Participant: { // field return type name
+    name: 'String'
+    userId: 'String'
+    value: 'Float'
+  }
   Payment: { // field return type name
     category: 'Category'
     categoryId: 'String'
@@ -364,6 +380,7 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     allHouseholds: 'Household'
+    calculateMemberBalances: 'Participant'
     categories: 'Category'
     group: 'Group'
     household: 'Household'
@@ -494,6 +511,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    calculateMemberBalances: { // args
+      id: string; // String!
+    }
     categories: { // args
       id?: string | null; // String
       name?: string | null; // String
