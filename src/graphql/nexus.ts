@@ -59,7 +59,7 @@ export interface NexusGenObjects {
     id: string; // String!
     name: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
-    value: string; // String!
+    value: number; // Float!
   }
   GroupPayment: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -68,7 +68,7 @@ export interface NexusGenObjects {
     name: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId: string; // String!
-    value: string; // String!
+    value: number; // Float!
   }
   Household: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -156,7 +156,7 @@ export interface NexusGenFieldTypes {
     name: string; // String!
     payments: Array<NexusGenRootTypes['GroupPayment'] | null> | null; // [GroupPayment]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
-    value: string; // String!
+    value: number; // Float!
   }
   GroupPayment: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -167,7 +167,7 @@ export interface NexusGenFieldTypes {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User'] | null; // User
     userId: string; // String!
-    value: string; // String!
+    value: number; // Float!
   }
   Household: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -288,7 +288,7 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     payments: 'GroupPayment'
     updatedAt: 'DateTime'
-    value: 'String'
+    value: 'Float'
   }
   GroupPayment: { // field return type name
     createdAt: 'DateTime'
@@ -299,7 +299,7 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'DateTime'
     user: 'User'
     userId: 'String'
-    value: 'String'
+    value: 'Float'
   }
   Household: { // field return type name
     createdAt: 'DateTime'

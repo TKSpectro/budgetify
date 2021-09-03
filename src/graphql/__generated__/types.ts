@@ -42,7 +42,7 @@ export type Group = {
   /** A list of all payments which happened in this group. */
   payments?: Maybe<Array<Maybe<GroupPayment>>>;
   updatedAt: Scalars['DateTime'];
-  value: Scalars['String'];
+  value: Scalars['Float'];
 };
 
 export type GroupPayment = {
@@ -57,7 +57,7 @@ export type GroupPayment = {
   /** The user which booked the payment. */
   user?: Maybe<User>;
   userId: Scalars['String'];
-  value: Scalars['String'];
+  value: Scalars['Float'];
 };
 
 export type Household = {
@@ -132,6 +132,8 @@ export type Mutation = {
   bookRecurringPayments?: Maybe<Array<Maybe<RecurringPayment>>>;
   /** Create a new category. Can just be called by an admin. */
   createCategory: Category;
+  /** Creates a new group with the given arguments and returns it. */
+  createGroup?: Maybe<Group>;
   /** Create a new invite. Need to be logged in. */
   createInvite: Invite;
   /** Create a new payment. Need to be logged in. */
@@ -171,6 +173,12 @@ export type MutationBookRecurringPaymentsArgs = {
 
 export type MutationCreateCategoryArgs = {
   name: Scalars['String'];
+};
+
+
+export type MutationCreateGroupArgs = {
+  name: Scalars['String'];
+  value: Scalars['Float'];
 };
 
 

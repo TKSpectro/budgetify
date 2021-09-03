@@ -33,7 +33,7 @@ type Group {
   """A list of all payments which happened in this group."""
   payments: [GroupPayment]
   updatedAt: DateTime!
-  value: String!
+  value: Float!
 }
 
 type GroupPayment {
@@ -49,7 +49,7 @@ type GroupPayment {
   """The user which booked the payment."""
   user: User
   userId: String!
-  value: String!
+  value: Float!
 }
 
 type Household {
