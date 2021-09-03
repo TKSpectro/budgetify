@@ -72,7 +72,7 @@ export function Header() {
               hidden: navBarCollapsed === false,
             })}
           >
-            {!router.query.householdId && (
+            {!router.query.householdId && isLoggedIn && (
               <>
                 <HeaderLink
                   href={'/households'}
