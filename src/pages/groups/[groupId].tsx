@@ -1,4 +1,5 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
+import clsx from 'clsx';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -109,9 +110,22 @@ export default function Group() {
       {memberBalances && (
         <Container>
           <div className="text-lg font-semibold">Member Balances</div>
-          {memberBalances.map((member: Participant) => {
-            return <div key={member.userId}>{member.name + ' : ' + member.value + '€'}</div>;
-          })}
+          <div className="w-full divide-y-2">
+            {memberBalances.map((member: Participant) => {
+              return (
+                <div key={member.userId} className="grid grid-cols-2 py-1">
+                  <div className="">{member.name}</div>
+                  <div
+                    className={clsx('text-right', {
+                      'text-red-600 dark:text-red-500': member.value < 0,
+                    })}
+                  >
+                    {member.value + '€'}
+                  </div>{' '}
+                </div>
+              );
+            })}
+          </div>
         </Container>
       )}
       {group.payments && (
