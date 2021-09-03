@@ -1,5 +1,7 @@
 // https://securityheaders.com
-const ContentSecurityPolicyData = `
+const ContentSecurityPolicyData =
+  process.env.NODE_ENV === 'production'
+    ? `
   default-src 'self';
   script-src 'self' 'unsafe-eval' 'unsafe-inline';
   img-src * blob: data:;
@@ -8,7 +10,8 @@ const ContentSecurityPolicyData = `
   child-src 'none';
   connect-src *;
   font-src 'self';
-`;
+`
+    : '';
 
 // https://nextjs.org/docs/advanced-features/security-headers
 const securityHeaders = [
@@ -63,7 +66,7 @@ module.exports = {
     {
       // Apply these headers to all routes in your application.
       source: '/(.*)',
-      headers: process.env.NODE_ENV === 'production' ? securityHeaders : [],
+      headers: securityHeaders,
     },
   ],
 };
