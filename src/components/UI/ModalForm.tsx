@@ -22,6 +22,7 @@ export function ModalForm<T>({
   buttonClassName,
   children,
   form,
+  description,
   ...props
 }: Props<T>) {
   const [showModal, setShowModal] = useState(false);
@@ -53,6 +54,11 @@ export function ModalForm<T>({
                   <h3 className="text-3xl font-semibold">{title}</h3>
                 </div>
                 {/*body*/}
+                {description && (
+                  <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                    <h3 className="">{description}</h3>
+                  </div>
+                )}
                 <Form form={form} onSubmit={onSubmitHandler}>
                   <div className="relative p-6 flex-auto">{children}</div>
                   {/*footer*/}
