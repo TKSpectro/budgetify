@@ -128,7 +128,7 @@ type Mutation {
   """
   Creates a new payment in the specified group with the given arguments and returns it.
   """
-  createGroupPayment(groupId: String!, name: String!, value: Float!): GroupPayment
+  createGroupPayment(groupId: String!, name: String!, participantIds: [String!]!, value: Float!): GroupPayment
 
   """Create a new invite. Need to be logged in."""
   createInvite(householdId: String!, invitedEmail: String!): Invite!

@@ -92,8 +92,6 @@ export const GroupQuery = extendType({
             participants[index].value += payment.value;
           }
 
-          // Technically we dont need to check if this is negative, as payments which are positive dont have
-          // any participant -> so there would be no calculation run for them
           if (payment.value < 0) {
             // If the payment value is negative e.g. somebody bought food. We go through the participants
             // (which ate something from this bought food) and add their part onto their virtual "balance"
@@ -116,7 +114,10 @@ export const GroupMutation = extendType({
   definition(t) {
     t.field('createGroup', {
       type: Group,
-      args: { name: nonNull(stringArg()), value: floatArg() },
+      args: {
+        name: nonNull(stringArg()),
+        value: floatArg(),
+      },
       description: 'Creates a new group with the given arguments and returns it.',
       authorize: (_, __, ctx) => (ctx.user ? true : false),
       resolve(_, args, ctx) {

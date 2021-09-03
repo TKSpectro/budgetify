@@ -1,4 +1,4 @@
-import { extendType, floatArg, nonNull, objectType, stringArg } from 'nexus';
+import { extendType, floatArg, list, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
 import { Group, User } from '.';
 
@@ -57,6 +57,7 @@ export const GroupPaymentMutation = extendType({
         name: nonNull(stringArg()),
         value: nonNull(floatArg()),
         groupId: nonNull(stringArg()),
+        participantIds: nonNull(list(nonNull(stringArg()))),
       },
       description:
         'Creates a new payment in the specified group with the given arguments and returns it.',
@@ -68,12 +69,23 @@ export const GroupPaymentMutation = extendType({
           data: { value: { increment: args.value } },
         });
 
-        return prisma.groupPayment.create({
+        const payment = await prisma.groupPayment.create({
           data: {
             name: args.name,
             value: args.value,
             groupId: args.groupId,
             userId: ctx.user.id,
+          },
+        });
+
+        return prisma.groupPayment.update({
+          where: { id: payment.id },
+          data: {
+            participants: {
+              connect: args.participantIds.map((pid) => {
+                return { id: pid };
+              }),
+            },
           },
         });
       },

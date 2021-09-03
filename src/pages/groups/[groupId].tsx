@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import { UserMultiSelect } from '~/components/Group/UserMultiselect';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
@@ -12,6 +13,7 @@ import {
   GroupPayment,
   MutationCreateGroupPaymentArgs,
   Participant,
+  User,
 } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -27,6 +29,10 @@ const GROUP_QUERY = gql`
         name
         value
       }
+      members {
+        id
+        name
+      }
     }
     calculateMemberBalances(id: $id) {
       name
@@ -37,8 +43,18 @@ const GROUP_QUERY = gql`
 `;
 
 const CREATE_GROUP_PAYMENT_MUTATION = gql`
-  mutation CREATE_GROUP_PAYMENT_MUTATION($name: String!, $value: Float!, $groupId: String!) {
-    createGroupPayment(name: $name, value: $value, groupId: $groupId) {
+  mutation CREATE_GROUP_PAYMENT_MUTATION(
+    $name: String!
+    $value: Float!
+    $groupId: String!
+    $participantIds: [String!]!
+  ) {
+    createGroupPayment(
+      name: $name
+      value: $value
+      groupId: $groupId
+      participantIds: $participantIds
+    ) {
       id
     }
   }
@@ -70,10 +86,13 @@ export default function Group() {
   });
 
   const onSubmitHandler = () => {
-    createGroupPayment({ variables: { ...form.getValues() } });
+    console.log(form.getValues());
+    //createGroupPayment({ variables: { ...form.getValues() } });
   };
 
   const group = data?.group;
+
+  const members: User[] = group.members;
   const memberBalances = data?.calculateMemberBalances;
 
   return (
@@ -102,6 +121,10 @@ export default function Group() {
                 label="Value"
                 type="number"
                 {...form.register('value', { required: true, valueAsNumber: true })}
+              />
+              <UserMultiSelect
+                items={members}
+                {...form.register('participantIds', { value: ['', ''] })}
               />
             </ModalForm>
           </div>

@@ -189,6 +189,7 @@ export type MutationCreateGroupArgs = {
 export type MutationCreateGroupPaymentArgs = {
   groupId: Scalars['String'];
   name: Scalars['String'];
+  participantIds: Array<Scalars['String']>;
   value: Scalars['Float'];
 };
 

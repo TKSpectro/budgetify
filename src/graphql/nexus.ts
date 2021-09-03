@@ -456,6 +456,7 @@ export interface NexusGenArgTypes {
     createGroupPayment: { // args
       groupId: string; // String!
       name: string; // String!
+      participantIds: string[]; // [String!]!
       value: number; // Float!
     }
     createInvite: { // args
