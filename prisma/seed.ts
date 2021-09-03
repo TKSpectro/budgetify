@@ -23,7 +23,7 @@ async function main() {
     });
   }
 
-  const testUser = await prisma.user.create({
+  let testUser = await prisma.user.create({
     data: {
       firstname: 'tom',
       lastname: 'test',
@@ -37,21 +37,20 @@ async function main() {
       name: 'cat1',
     },
   });
-  const cat2 = await prisma.category.create({
-    data: {
-      name: 'cat2',
-    },
-  });
-  const cat3 = await prisma.category.create({
-    data: {
-      name: 'cat3',
-    },
-  });
 
   const hou1 = await prisma.household.create({
     data: {
       name: 'hou1',
       ownerId: testUser.id,
+    },
+  });
+
+  testUser = await prisma.user.update({
+    where: { id: testUser.id },
+    data: {
+      households: {
+        connect: { id: hou1.id },
+      },
     },
   });
 
@@ -62,16 +61,7 @@ async function main() {
     },
   });
 
-  const testUsernew = await prisma.user.update({
-    where: { id: testUser.id },
-    data: {
-      households: {
-        connect: { id: hou1.id },
-      },
-    },
-  });
-
-  const usr1new = await prisma.user.update({
+  const usr0new = await prisma.user.update({
     where: { id: users[0].id },
     data: {
       households: {
@@ -80,7 +70,7 @@ async function main() {
     },
   });
 
-  const usr1new2 = await prisma.user.update({
+  const usr1new = await prisma.user.update({
     where: { id: users[1].id },
     data: {
       households: {
@@ -89,69 +79,61 @@ async function main() {
     },
   });
 
-  const pay1 = await prisma.payment.create({
-    data: {
-      name: 'pay1',
-      value: 20.01,
-      categoryId: cat1.id,
-      userId: users[0].id,
-      householdId: hou1.id,
-    },
+  const payments = await prisma.payment.createMany({
+    data: [
+      {
+        name: 'pay1',
+        value: 20.01,
+        categoryId: cat1.id,
+        userId: users[0].id,
+        householdId: hou1.id,
+      },
+      {
+        name: 'pay2',
+        value: 40.02,
+        categoryId: cat1.id,
+        userId: users[0].id,
+        householdId: hou1.id,
+      },
+      {
+        name: 'pay3',
+        value: 60.03,
+        categoryId: cat1.id,
+        userId: users[0].id,
+        householdId: hou1.id,
+      },
+    ],
   });
 
-  const pay2 = await prisma.payment.create({
-    data: {
-      name: 'pay2',
-      value: 40.02,
-      categoryId: cat1.id,
-      userId: users[0].id,
-      householdId: hou1.id,
-    },
-  });
-
-  const pay3 = await prisma.payment.create({
-    data: {
-      name: 'pay3',
-      value: 60.03,
-      categoryId: cat1.id,
-      userId: users[0].id,
-      householdId: hou1.id,
-    },
-  });
-
-  const recPay1 = await prisma.recurringPayment.create({
-    data: {
-      name: 'recPay1',
-      value: 25.0,
-      interval: 'WEEKLY',
-      categoryId: cat1.id,
-      householdId: hou1.id,
-      startDate: new Date(subDays(new Date(), 9)),
-    },
-  });
-
-  const recPay2 = await prisma.recurringPayment.create({
-    data: {
-      name: 'recPay2',
-      value: 25.0,
-      description: 'This recurring payment has a description',
-      interval: 'MONTHLY',
-      categoryId: cat1.id,
-      householdId: hou1.id,
-      startDate: new Date(subDays(new Date(), 9)),
-      endDate: new Date(addDays(new Date(), 90)),
-    },
-  });
-
-  const recPay3 = await prisma.recurringPayment.create({
-    data: {
-      name: 'recPay3',
-      value: 25.0,
-      interval: 'DAILY',
-      categoryId: cat1.id,
-      householdId: hou1.id,
-      startDate: new Date(subDays(new Date(), 9)),
-    },
+  const recurringPayments = await prisma.recurringPayment.createMany({
+    data: [
+      {
+        name: 'recPay1',
+        value: 25.0,
+        interval: 'WEEKLY',
+        categoryId: cat1.id,
+        householdId: hou1.id,
+        startDate: new Date(subDays(new Date(), 9)),
+      },
+      {
+        name: 'recPay2',
+        value: 25.0,
+        description: 'This recurring payment has a description',
+        interval: 'MONTHLY',
+        categoryId: cat1.id,
+        householdId: hou1.id,
+        startDate: new Date(subDays(new Date(), 9)),
+        endDate: new Date(addDays(new Date(), 90)),
+      },
+      {
+        name: 'recPay3',
+        value: 25.0,
+        interval: 'DAILY',
+        categoryId: cat1.id,
+        householdId: hou1.id,
+        startDate: new Date(subDays(new Date(), 9)),
+      },
+    ],
   });
 
   const inv1 = await prisma.invite.create({
