@@ -1,4 +1,4 @@
-import { objectType } from 'nexus';
+import { extendType, floatArg, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
 import { Group, User } from '.';
 
@@ -30,6 +30,39 @@ export const GroupPayment = objectType({
         return prisma.user.findUnique({
           where: {
             id: source.userId || undefined,
+          },
+        });
+      },
+    });
+  },
+});
+
+export const GroupPaymentMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('createGroupPayment', {
+      type: GroupPayment,
+      args: {
+        name: nonNull(stringArg()),
+        value: nonNull(floatArg()),
+        groupId: nonNull(stringArg()),
+      },
+      description:
+        'Creates a new payment in the specified group with the given arguments and returns it.',
+      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      async resolve(_, args, ctx) {
+        // Update value of the group
+        await prisma.group.update({
+          where: { id: args.groupId },
+          data: { value: { increment: args.value } },
+        });
+
+        return prisma.groupPayment.create({
+          data: {
+            name: args.name,
+            value: args.value,
+            groupId: args.groupId,
+            userId: ctx.user.id,
           },
         });
       },

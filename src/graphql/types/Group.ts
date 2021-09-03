@@ -1,4 +1,4 @@
-import { extendType, nonNull, objectType, stringArg } from 'nexus';
+import { extendType, floatArg, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
 import { GroupPayment, User } from '.';
 
@@ -39,6 +39,27 @@ export const GroupQuery = extendType({
         return prisma.group.findFirst({
           where: {
             id: args.id,
+          },
+        });
+      },
+    });
+  },
+});
+
+export const GroupMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('createGroup', {
+      type: Group,
+      args: { name: nonNull(stringArg()), value: floatArg() },
+      description: 'Creates a new group with the given arguments and returns it.',
+      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      resolve(_, args, ctx) {
+        return prisma.group.create({
+          data: {
+            name: args.name,
+            value: args.value || 0.0,
+            members: { connect: { id: ctx.user.id } },
           },
         });
       },

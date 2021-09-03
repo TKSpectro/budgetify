@@ -134,6 +134,8 @@ export type Mutation = {
   createCategory: Category;
   /** Creates a new group with the given arguments and returns it. */
   createGroup?: Maybe<Group>;
+  /** Creates a new payment in the specified group with the given arguments and returns it. */
+  createGroupPayment?: Maybe<GroupPayment>;
   /** Create a new invite. Need to be logged in. */
   createInvite: Invite;
   /** Create a new payment. Need to be logged in. */
@@ -177,6 +179,13 @@ export type MutationCreateCategoryArgs = {
 
 
 export type MutationCreateGroupArgs = {
+  name: Scalars['String'];
+  value?: Maybe<Scalars['Float']>;
+};
+
+
+export type MutationCreateGroupPaymentArgs = {
+  groupId: Scalars['String'];
   name: Scalars['String'];
   value: Scalars['Float'];
 };

@@ -197,6 +197,8 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     bookRecurringPayments: Array<NexusGenRootTypes['RecurringPayment'] | null> | null; // [RecurringPayment]
     createCategory: NexusGenRootTypes['Category']; // Category!
+    createGroup: NexusGenRootTypes['Group'] | null; // Group
+    createGroupPayment: NexusGenRootTypes['GroupPayment'] | null; // GroupPayment
     createInvite: NexusGenRootTypes['Invite']; // Invite!
     createPayment: NexusGenRootTypes['Payment']; // Payment!
     createRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
@@ -329,6 +331,8 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     bookRecurringPayments: 'RecurringPayment'
     createCategory: 'Category'
+    createGroup: 'Group'
+    createGroupPayment: 'GroupPayment'
     createInvite: 'Invite'
     createPayment: 'Payment'
     createRecurringPayment: 'RecurringPayment'
@@ -423,6 +427,15 @@ export interface NexusGenArgTypes {
     }
     createCategory: { // args
       name: string; // String!
+    }
+    createGroup: { // args
+      name: string; // String!
+      value?: number | null; // Float
+    }
+    createGroupPayment: { // args
+      groupId: string; // String!
+      name: string; // String!
+      value: number; // Float!
     }
     createInvite: { // args
       householdId: string; // String!

@@ -119,6 +119,14 @@ type Mutation {
   """Create a new category. Can just be called by an admin."""
   createCategory(name: String!): Category!
 
+  """Creates a new group with the given arguments and returns it."""
+  createGroup(name: String!, value: Float): Group
+
+  """
+  Creates a new payment in the specified group with the given arguments and returns it.
+  """
+  createGroupPayment(groupId: String!, name: String!, value: Float!): GroupPayment
+
   """Create a new invite. Need to be logged in."""
   createInvite(householdId: String!, invitedEmail: String!): Invite!
 
