@@ -1,7 +1,9 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
+import { MinusIcon, PlusIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { UserMultiSelect } from '~/components/Group/UserMultiselect';
 import { Container } from '~/components/UI/Container';
@@ -85,7 +87,20 @@ export default function Group() {
   });
 
   const onSubmitHandler = () => {
-    createGroupPayment({ variables: { ...form.getValues() } });
+    // if the user is topping up his account we overwrite the participantIds with an empty array
+    // so its more consistent on the database layer
+    if (formStateIsCashout) {
+      createGroupPayment({ variables: { ...form.getValues() } });
+    } else {
+      createGroupPayment({
+        variables: {
+          ...form.getValues(),
+          // Force the value to be negative as the user input will be positive
+          value: -Math.abs(form.getValues('value')),
+          participantIds: [],
+        },
+      });
+    }
   };
 
   // Need to handle the participantIds with a custom function which will get called from the UserPicker
@@ -100,6 +115,12 @@ export default function Group() {
 
   const members: User[] = group.members;
   const memberBalances = data?.calculateMemberBalances;
+
+  const [formStateIsCashout, setFormStateIsCashout] = useState(false);
+
+  const handleChange = () => {
+    setFormStateIsCashout(!formStateIsCashout);
+  };
 
   return (
     <>
@@ -118,21 +139,48 @@ export default function Group() {
               buttonClassName="md:absolute right-4 top-2 text-base"
               form={form}
               submitText="Create"
-              description={`Negative value = You have taken out money -> Bought food.
-              Positive value = You have put money in -> Payed for your meal.`}
+              description={`You can switch between topping up your account (account balance) and buying food / taking money out of the group balance`}
               onSubmit={onSubmitHandler}
             >
+              {/* // TODO: Somehow make this look and feel better */}
+              <label>
+                Switch beetwen transaction modes
+                <div className="items-center" onClick={handleChange}>
+                  <div
+                    className={clsx(
+                      'w-12 h-6 items-center bg-gray-300 rounded-full p-1 duration-300 ease-in-out',
+                      { 'bg-brand-400': formStateIsCashout === true },
+                    )}
+                  >
+                    <div
+                      className={clsx(
+                        'bg-white dark:bg-gray-800 w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out',
+                        { 'translate-x-6': formStateIsCashout === true },
+                      )}
+                    >
+                      {formStateIsCashout === false ? (
+                        <PlusIcon className="w-4 h-4 " />
+                      ) : (
+                        <MinusIcon className="w-4 h-4 text-brand-400" />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </label>
+
               <Input label="Name" type="text" {...form.register('name', { required: true })} />
               <Input
-                label="Value"
+                label={formStateIsCashout ? 'Bought food / Take money out' : 'Top up account'}
                 type="number"
-                {...form.register('value', { required: true, valueAsNumber: true })}
+                {...form.register('value', { required: true, valueAsNumber: true, min: 0 })}
               />
-              <UserMultiSelect
-                items={members}
-                setValue={setValueHandlerParticipantIds}
-                {...form.register('participantIds')}
-              />
+              {formStateIsCashout && (
+                <UserMultiSelect
+                  items={members}
+                  setValue={setValueHandlerParticipantIds}
+                  {...form.register('participantIds')}
+                />
+              )}
             </ModalForm>
           </div>
         )}
