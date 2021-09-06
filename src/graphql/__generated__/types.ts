@@ -36,6 +36,8 @@ export type Group = {
   __typename?: 'Group';
   createdAt: Scalars['DateTime'];
   id: Scalars['String'];
+  /** A list of all invites to this group. */
+  invites?: Maybe<Array<Maybe<Invite>>>;
   /** A list of all user's which have access to this group. */
   members?: Maybe<Array<Maybe<User>>>;
   name: Scalars['String'];
@@ -108,9 +110,12 @@ export enum Interval {
 export type Invite = {
   __typename?: 'Invite';
   createdAt: Scalars['DateTime'];
+  /** The group in which the person was invited. */
+  group?: Maybe<Group>;
+  groupId?: Maybe<Scalars['String']>;
   /** The household in which the person was invited. */
   household?: Maybe<Household>;
-  householdId: Scalars['String'];
+  householdId?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   /** The email of the person which was invited. */
   invitedEmail: Scalars['String'];
@@ -136,6 +141,8 @@ export type Mutation = {
   createCategory: Category;
   /** Creates a new group with the given arguments and returns it. */
   createGroup?: Maybe<Group>;
+  /** Create a new invite. Need to be logged in. */
+  createGroupInvite: Invite;
   /** Creates a new transaction in the specified group with the given arguments and returns it. */
   createGroupTransaction?: Maybe<GroupTransaction>;
   /** Create a new invite. Need to be logged in. */
@@ -165,6 +172,8 @@ export type Mutation = {
   signup: AuthToken;
   /** Update a new recurring payment. Need to be logged in. */
   updateRecurringPayment: RecurringPayment;
+  /** Use a invite. Logged in user gets added to the group specified in the invite. Need to be logged in. */
+  useGroupInvite?: Maybe<Invite>;
   /** Use a invite. Logged in user gets added to the household in invite. Need to be logged in. */
   useInvite?: Maybe<Invite>;
 };
@@ -183,6 +192,12 @@ export type MutationCreateCategoryArgs = {
 export type MutationCreateGroupArgs = {
   name: Scalars['String'];
   value?: Maybe<Scalars['Float']>;
+};
+
+
+export type MutationCreateGroupInviteArgs = {
+  groupId: Scalars['String'];
+  invitedEmail: Scalars['String'];
 };
 
 
@@ -255,6 +270,11 @@ export type MutationUpdateRecurringPaymentArgs = {
   name?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['DateTime']>;
   value?: Maybe<Scalars['Float']>;
+};
+
+
+export type MutationUseGroupInviteArgs = {
+  token: Scalars['String'];
 };
 
 

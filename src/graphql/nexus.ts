@@ -79,7 +79,8 @@ export interface NexusGenObjects {
   }
   Invite: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
-    householdId: string; // String!
+    groupId?: string | null; // String
+    householdId?: string | null; // String
     id: string; // String!
     invitedEmail: string; // String!
     senderId: string; // String!
@@ -157,6 +158,7 @@ export interface NexusGenFieldTypes {
   Group: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
+    invites: Array<NexusGenRootTypes['Invite'] | null> | null; // [Invite]
     members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     name: string; // String!
     transactions: Array<NexusGenRootTypes['GroupTransaction'] | null> | null; // [GroupTransaction]
@@ -189,8 +191,10 @@ export interface NexusGenFieldTypes {
   }
   Invite: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    group: NexusGenRootTypes['Group'] | null; // Group
+    groupId: string | null; // String
     household: NexusGenRootTypes['Household'] | null; // Household
-    householdId: string; // String!
+    householdId: string | null; // String
     id: string; // String!
     invitedEmail: string; // String!
     sender: NexusGenRootTypes['User'] | null; // User
@@ -204,6 +208,7 @@ export interface NexusGenFieldTypes {
     bookRecurringPayments: Array<NexusGenRootTypes['RecurringPayment'] | null> | null; // [RecurringPayment]
     createCategory: NexusGenRootTypes['Category']; // Category!
     createGroup: NexusGenRootTypes['Group'] | null; // Group
+    createGroupInvite: NexusGenRootTypes['Invite']; // Invite!
     createGroupTransaction: NexusGenRootTypes['GroupTransaction'] | null; // GroupTransaction
     createInvite: NexusGenRootTypes['Invite']; // Invite!
     createPayment: NexusGenRootTypes['Payment']; // Payment!
@@ -215,6 +220,7 @@ export interface NexusGenFieldTypes {
     removeCategory: NexusGenRootTypes['Category']; // Category!
     signup: NexusGenRootTypes['AuthToken']; // AuthToken!
     updateRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
+    useGroupInvite: NexusGenRootTypes['Invite'] | null; // Invite
     useInvite: NexusGenRootTypes['Invite'] | null; // Invite
   }
   Participant: { // field return type
@@ -299,6 +305,7 @@ export interface NexusGenFieldTypeNames {
   Group: { // field return type name
     createdAt: 'DateTime'
     id: 'String'
+    invites: 'Invite'
     members: 'User'
     name: 'String'
     transactions: 'GroupTransaction'
@@ -331,6 +338,8 @@ export interface NexusGenFieldTypeNames {
   }
   Invite: { // field return type name
     createdAt: 'DateTime'
+    group: 'Group'
+    groupId: 'String'
     household: 'Household'
     householdId: 'String'
     id: 'String'
@@ -346,6 +355,7 @@ export interface NexusGenFieldTypeNames {
     bookRecurringPayments: 'RecurringPayment'
     createCategory: 'Category'
     createGroup: 'Group'
+    createGroupInvite: 'Invite'
     createGroupTransaction: 'GroupTransaction'
     createInvite: 'Invite'
     createPayment: 'Payment'
@@ -357,6 +367,7 @@ export interface NexusGenFieldTypeNames {
     removeCategory: 'Category'
     signup: 'AuthToken'
     updateRecurringPayment: 'RecurringPayment'
+    useGroupInvite: 'Invite'
     useInvite: 'Invite'
   }
   Participant: { // field return type name
@@ -453,6 +464,10 @@ export interface NexusGenArgTypes {
       name: string; // String!
       value?: number | null; // Float
     }
+    createGroupInvite: { // args
+      groupId: string; // String!
+      invitedEmail: string; // String!
+    }
     createGroupTransaction: { // args
       groupId: string; // String!
       name: string; // String!
@@ -506,6 +521,9 @@ export interface NexusGenArgTypes {
       name?: string | null; // String
       startDate?: NexusGenScalars['DateTime'] | null; // DateTime
       value?: number | null; // Float
+    }
+    useGroupInvite: { // args
+      token: string; // String!
     }
     useInvite: { // args
       token: string; // String!

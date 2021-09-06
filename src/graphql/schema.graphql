@@ -26,6 +26,9 @@ type Group {
   createdAt: DateTime!
   id: String!
 
+  """A list of all invites to this group."""
+  invites: [Invite]
+
   """A list of all user's which have access to this group."""
   members: [User]
   name: String!
@@ -92,9 +95,13 @@ enum Interval {
 type Invite {
   createdAt: DateTime!
 
+  """The group in which the person was invited."""
+  group: Group
+  groupId: String
+
   """The household in which the person was invited."""
   household: Household
-  householdId: String!
+  householdId: String
   id: String!
 
   """The email of the person which was invited."""
@@ -124,6 +131,9 @@ type Mutation {
 
   """Creates a new group with the given arguments and returns it."""
   createGroup(name: String!, value: Float): Group
+
+  """Create a new invite. Need to be logged in."""
+  createGroupInvite(groupId: String!, invitedEmail: String!): Invite!
 
   """
   Creates a new transaction in the specified group with the given arguments and returns it.
@@ -166,6 +176,11 @@ type Mutation {
 
   """Update a new recurring payment. Need to be logged in."""
   updateRecurringPayment(categoryId: String, description: String, endDate: DateTime, householdId: String!, id: String!, interval: Interval, name: String, startDate: DateTime, value: Float): RecurringPayment!
+
+  """
+  Use a invite. Logged in user gets added to the group specified in the invite. Need to be logged in.
+  """
+  useGroupInvite(token: String!): Invite
 
   """
   Use a invite. Logged in user gets added to the household in invite. Need to be logged in.

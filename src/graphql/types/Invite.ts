@@ -41,7 +41,19 @@ export const Invite = objectType({
         });
       },
     });
-    t.nonNull.string('householdId');
+    t.string('householdId');
+    t.field('group', {
+      type: 'Group',
+      description: 'The group in which the person was invited.',
+      resolve(source) {
+        return prisma.group.findUnique({
+          where: {
+            id: source.householdId || undefined,
+          },
+        });
+      },
+    });
+    t.string('groupId');
   },
 });
 
@@ -110,7 +122,7 @@ export const InviteMutation = extendType({
 
         const user = await prisma.user.update({
           where: { id: ctx.user.id },
-          data: { households: { connect: { id: invite.householdId } } },
+          data: { households: { connect: { id: invite.householdId || undefined } } },
         });
 
         if (!user) {
@@ -145,6 +157,86 @@ export const InviteMutation = extendType({
         }
 
         return true;
+      },
+    });
+  },
+});
+
+export const InviteGroupMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.nonNull.field('createGroupInvite', {
+      type: Invite,
+      description: 'Create a new invite. Need to be logged in.',
+      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      args: {
+        invitedEmail: nonNull(stringArg()),
+        groupId: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx: Context) {
+        const foundGroup = await prisma.user
+          .findUnique({ where: { id: ctx.user.id } })
+          .groups({ where: { id: args.groupId } });
+
+        // User is not a member of this group.
+        if (foundGroup.length === 0) {
+          throw new ApolloError('You are not allowed to create a new invite in this group.');
+        }
+
+        return prisma.invite.create({
+          data: {
+            validUntil: addDays(new Date(), 14),
+            wasUsed: false,
+            invitedEmail: args.invitedEmail,
+            senderId: ctx.user.id,
+            groupId: args.groupId,
+          },
+        });
+      },
+    });
+    t.field('useGroupInvite', {
+      type: Invite,
+      description:
+        'Use a invite. Logged in user gets added to the group specified in the invite. Need to be logged in.',
+      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      args: {
+        token: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx: Context) {
+        const invite = await prisma.invite.findUnique({
+          where: {
+            token: args.token,
+          },
+        });
+
+        if (!invite) {
+          throw new ApolloError('Invite token was not valid.');
+        }
+        if (invite.wasUsed) {
+          throw new ApolloError('Invite was already used.');
+        }
+        if (compareAsc(invite.validUntil, new Date()) !== 1) {
+          throw new ApolloError('Invite is not valid anymore.');
+        }
+        if (ctx.user.email !== invite.invitedEmail) {
+          throw new ApolloError('Invite token was not created for your email address.');
+        }
+
+        const user = await prisma.user.update({
+          where: { id: ctx.user.id },
+          data: { groups: { connect: { id: invite.groupId || undefined } } },
+        });
+
+        if (!user) {
+          throw new ApolloError('Invite token could not be used.');
+        }
+
+        const updatedInvite = await prisma.invite.update({
+          where: { id: invite.id },
+          data: { updatedAt: new Date(), wasUsed: true },
+        });
+
+        return updatedInvite;
       },
     });
   },

@@ -25,6 +25,13 @@ export const Group = objectType({
         return prisma.group.findUnique({ where: { id: source.id || undefined } }).transactions();
       },
     });
+    t.list.field('invites', {
+      type: 'Invite',
+      description: 'A list of all invites to this group.',
+      resolve(source) {
+        return prisma.group.findUnique({ where: { id: source.id || undefined } }).invites();
+      },
+    });
   },
 });
 

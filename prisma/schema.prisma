@@ -107,17 +107,20 @@ model Household {
 }
 
 model Invite {
-  id           String    @id @default(uuid())
+  id           String     @id @default(uuid())
   validUntil   DateTime
   wasUsed      Boolean
   invitedEmail String
-  token        String    @unique @default(uuid())
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  sender       User      @relation(fields: [senderId], references: [id])
+  token        String     @unique @default(uuid())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  sender       User       @relation(fields: [senderId], references: [id])
   senderId     String
-  household    Household @relation(fields: [householdId], references: [id])
-  householdId  String
+  household    Household? @relation(fields: [householdId], references: [id])
+  householdId  String?
+  group        Group?     @relation(fields: [groupId], references: [id])
+  groupId      String?
+
 }
 
 model Group {
@@ -128,6 +131,7 @@ model Group {
   updatedAt    DateTime           @updatedAt
   members      User[]
   transactions GroupTransaction[]
+  invites      Invite[]
 }
 
 model GroupTransaction {
