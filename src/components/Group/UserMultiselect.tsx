@@ -34,15 +34,15 @@ export function UserMultiSelect({ items, ...props }: Props) {
           <div className="w-full">
             <div className="flex flex-col items-center relative">
               <div className="w-full ">
-                <div className="my-2 p-1 flex border border-gray-200 bg-white rounded ">
+                <div className="my-2 p-1 flex border border-gray-200 dark:border-gray-400 bg-white dark:bg-gray-900 rounded ">
                   <div className="flex flex-auto flex-wrap">
                     {selectedItems.map((item, index) => {
                       return (
                         <div
                           key={index}
-                          className="flex justify-center items-center m-1 font-medium py-1 px-2 bg-white rounded-full text-teal-700 bg-teal-100 border border-teal-300 "
+                          className="flex justify-center items-center m-1 font-semibold py-1 px-2 bg-white dark:bg-gray-800 rounded-full  border "
                         >
-                          <div className="text-xs font-normal leading-none max-w-full flex-initial">
+                          <div className="text-xs font-normal leading-none max-w-full flex-initial dark:text-brand-400">
                             {item.name}
                           </div>
                           <div className="flex flex-auto flex-row-reverse">
@@ -75,10 +75,10 @@ export function UserMultiSelect({ items, ...props }: Props) {
                     </div>
                   </div>
                   <div
-                    className="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200"
+                    className="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200 dark:border-gray-400"
                     onClick={toggleDropdown}
                   >
-                    <button className="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
+                    <button className="cursor-pointer w-6 h-6 text-gray-600 dark:text-gray-300 outline-none focus:outline-none">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="100%"

@@ -12,7 +12,7 @@ export function UserDropdown({ items, toggleItem, ...props }: Props) {
   return (
     <div
       id="dropdown"
-      className="absolute shadow top-100 bg-white z-40 w-full md:max-w-md lef-0 rounded max-h-select overflow-y-auto "
+      className="absolute shadow top-100 bg-white dark:bg-gray-800 z-40 w-full md:max-w-md lef-0 rounded max-h-select overflow-y-auto "
     >
       <div className="flex flex-col w-full">
         {items.map((item) => {
