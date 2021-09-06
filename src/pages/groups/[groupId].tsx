@@ -74,20 +74,26 @@ export default function Group() {
       error: createGroupPaymentError,
     },
   ] = useMutation(CREATE_GROUP_PAYMENT_MUTATION, {
-    onCompleted: (data) => {
-      console.log(data);
+    onCompleted: () => {
       refetch();
     },
     onError: () => {},
   });
 
   const form = useForm<MutationCreateGroupTransactionArgs>({
-    defaultValues: { name: '', value: 0, groupId: groupId as string },
+    defaultValues: { name: '', value: 0, groupId: groupId as string, participantIds: [] },
   });
 
   const onSubmitHandler = () => {
-    console.log(form.getValues());
-    //createGroupPayment({ variables: { ...form.getValues() } });
+    createGroupPayment({ variables: { ...form.getValues() } });
+  };
+
+  // Need to handle the participantIds with a custom function which will get called from the UserPicker
+  const setValueHandlerParticipantIds = (members: User[]) => {
+    form.setValue(
+      'participantIds',
+      members.map((member) => member.id),
+    );
   };
 
   const group = data?.group;
@@ -124,7 +130,8 @@ export default function Group() {
               />
               <UserMultiSelect
                 items={members}
-                {...form.register('participantIds', { value: ['', ''] })}
+                setValue={setValueHandlerParticipantIds}
+                {...form.register('participantIds')}
               />
             </ModalForm>
           </div>
