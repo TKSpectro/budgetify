@@ -61,7 +61,7 @@ export interface NexusGenObjects {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     value: number; // Float!
   }
-  GroupPayment: { // root type
+  GroupTransaction: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     groupId: string; // String!
     id: string; // String!
@@ -159,11 +159,11 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     name: string; // String!
-    payments: Array<NexusGenRootTypes['GroupPayment'] | null> | null; // [GroupPayment]
+    transactions: Array<NexusGenRootTypes['GroupTransaction'] | null> | null; // [GroupTransaction]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     value: number; // Float!
   }
-  GroupPayment: { // field return type
+  GroupTransaction: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     group: NexusGenRootTypes['Group'] | null; // Group
     groupId: string; // String!
@@ -204,7 +204,7 @@ export interface NexusGenFieldTypes {
     bookRecurringPayments: Array<NexusGenRootTypes['RecurringPayment'] | null> | null; // [RecurringPayment]
     createCategory: NexusGenRootTypes['Category']; // Category!
     createGroup: NexusGenRootTypes['Group'] | null; // Group
-    createGroupPayment: NexusGenRootTypes['GroupPayment'] | null; // GroupPayment
+    createGroupTransaction: NexusGenRootTypes['GroupTransaction'] | null; // GroupTransaction
     createInvite: NexusGenRootTypes['Invite']; // Invite!
     createPayment: NexusGenRootTypes['Payment']; // Payment!
     createRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
@@ -270,8 +270,8 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
     firstname: string; // String!
-    groupPayments: Array<NexusGenRootTypes['GroupPayment'] | null> | null; // [GroupPayment]
-    groupPaymentsParticipant: Array<NexusGenRootTypes['GroupPayment'] | null> | null; // [GroupPayment]
+    groupTransactions: Array<NexusGenRootTypes['GroupTransaction'] | null> | null; // [GroupTransaction]
+    groupTransactionsParticipant: Array<NexusGenRootTypes['GroupTransaction'] | null> | null; // [GroupTransaction]
     groups: Array<NexusGenRootTypes['Group'] | null> | null; // [Group]
     hashedPassword: string; // String!
     households: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
@@ -301,11 +301,11 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     members: 'User'
     name: 'String'
-    payments: 'GroupPayment'
+    transactions: 'GroupTransaction'
     updatedAt: 'DateTime'
     value: 'Float'
   }
-  GroupPayment: { // field return type name
+  GroupTransaction: { // field return type name
     createdAt: 'DateTime'
     group: 'Group'
     groupId: 'String'
@@ -346,7 +346,7 @@ export interface NexusGenFieldTypeNames {
     bookRecurringPayments: 'RecurringPayment'
     createCategory: 'Category'
     createGroup: 'Group'
-    createGroupPayment: 'GroupPayment'
+    createGroupTransaction: 'GroupTransaction'
     createInvite: 'Invite'
     createPayment: 'Payment'
     createRecurringPayment: 'RecurringPayment'
@@ -412,8 +412,8 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     email: 'String'
     firstname: 'String'
-    groupPayments: 'GroupPayment'
-    groupPaymentsParticipant: 'GroupPayment'
+    groupTransactions: 'GroupTransaction'
+    groupTransactionsParticipant: 'GroupTransaction'
     groups: 'Group'
     hashedPassword: 'String'
     households: 'Household'
@@ -453,7 +453,7 @@ export interface NexusGenArgTypes {
       name: string; // String!
       value?: number | null; // Float
     }
-    createGroupPayment: { // args
+    createGroupTransaction: { // args
       groupId: string; // String!
       name: string; // String!
       participantIds: string[]; // [String!]!

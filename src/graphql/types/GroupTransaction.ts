@@ -2,8 +2,8 @@ import { extendType, floatArg, list, nonNull, objectType, stringArg } from 'nexu
 import prisma from '~/utils/prisma';
 import { Group, User } from '.';
 
-export const GroupPayment = objectType({
-  name: 'GroupPayment',
+export const GroupTransaction = objectType({
+  name: 'GroupTransaction',
   definition(t) {
     t.nonNull.string('id');
     t.nonNull.string('name');
@@ -12,7 +12,7 @@ export const GroupPayment = objectType({
     t.nonNull.field('updatedAt', { type: 'DateTime' });
     t.field('group', {
       type: Group,
-      description: 'The group in which this payment was booked.',
+      description: 'The group in which this transaction was booked.',
       resolve(source) {
         return prisma.group.findUnique({
           where: {
@@ -24,7 +24,7 @@ export const GroupPayment = objectType({
     t.nonNull.string('groupId');
     t.field('user', {
       type: User,
-      description: 'The user which booked the payment.',
+      description: 'The user which booked the transaction.',
       resolve(source) {
         return prisma.user.findUnique({
           where: {
@@ -36,11 +36,11 @@ export const GroupPayment = objectType({
     t.nonNull.string('userId');
     t.list.field('participants', {
       type: User,
-      description: 'All users which ate some of the bought food from this payment.',
+      description: 'All users which ate some of the bought food from this transaction.',
       resolve(source) {
         return prisma.user.findMany({
           where: {
-            groupPaymentsParticipant: { some: { id: source.id } },
+            groupTransactionsParticipant: { some: { id: source.id } },
           },
         });
       },
@@ -48,11 +48,11 @@ export const GroupPayment = objectType({
   },
 });
 
-export const GroupPaymentMutation = extendType({
+export const GroupTransactionMutation = extendType({
   type: 'Mutation',
   definition(t) {
-    t.field('createGroupPayment', {
-      type: GroupPayment,
+    t.field('createGroupTransaction', {
+      type: GroupTransaction,
       args: {
         name: nonNull(stringArg()),
         value: nonNull(floatArg()),
@@ -60,7 +60,7 @@ export const GroupPaymentMutation = extendType({
         participantIds: nonNull(list(nonNull(stringArg()))),
       },
       description:
-        'Creates a new payment in the specified group with the given arguments and returns it.',
+        'Creates a new transaction in the specified group with the given arguments and returns it.',
       authorize: (_, __, ctx) => (ctx.user ? true : false),
       async resolve(_, args, ctx) {
         // Update value of the group
@@ -69,7 +69,7 @@ export const GroupPaymentMutation = extendType({
           data: { value: { increment: args.value } },
         });
 
-        const payment = await prisma.groupPayment.create({
+        const transaction = await prisma.groupTransaction.create({
           data: {
             name: args.name,
             value: args.value,
@@ -78,8 +78,8 @@ export const GroupPaymentMutation = extendType({
           },
         });
 
-        return prisma.groupPayment.update({
-          where: { id: payment.id },
+        return prisma.groupTransaction.update({
+          where: { id: transaction.id },
           data: {
             participants: {
               connect: args.participantIds.map((pid) => {

@@ -10,8 +10,8 @@ import { Input } from '~/components/UI/Input';
 import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
 import { ModalForm } from '~/components/UI/ModalForm';
 import {
-  GroupPayment,
-  MutationCreateGroupPaymentArgs,
+  GroupTransaction,
+  MutationCreateGroupTransactionArgs,
   Participant,
   User,
 } from '~/graphql/__generated__/types';
@@ -24,7 +24,7 @@ const GROUP_QUERY = gql`
       id
       name
       value
-      payments {
+      transactions {
         id
         name
         value
@@ -49,7 +49,7 @@ const CREATE_GROUP_PAYMENT_MUTATION = gql`
     $groupId: String!
     $participantIds: [String!]!
   ) {
-    createGroupPayment(
+    createGroupTransaction(
       name: $name
       value: $value
       groupId: $groupId
@@ -81,7 +81,7 @@ export default function Group() {
     onError: () => {},
   });
 
-  const form = useForm<MutationCreateGroupPaymentArgs>({
+  const form = useForm<MutationCreateGroupTransactionArgs>({
     defaultValues: { name: '', value: 0, groupId: groupId as string },
   });
 
@@ -100,7 +100,7 @@ export default function Group() {
       <Container>
         {loading && <LoadingAnimation />}
         <Error title="Could not load group." error={error} />
-        <Error title="Could not create payment." error={createGroupPaymentError} />
+        <Error title="Could not create transaction." error={createGroupPaymentError} />
         {group && (
           <div className="relative">
             <div className="text-xl font-bold ">{group.name}</div>
@@ -151,11 +151,13 @@ export default function Group() {
           </div>
         </Container>
       )}
-      {group.payments && (
+      {group.transactions && (
         <Container>
           <div className="text-lg font-semibold">Payments</div>
-          {group.payments.map((payment: GroupPayment) => {
-            return <div key={payment.id}>{payment.name + ' : ' + payment.value + '€'}</div>;
+          {group.transactions.map((transaction: GroupTransaction) => {
+            return (
+              <div key={transaction.id}>{transaction.name + ' : ' + transaction.value + '€'}</div>
+            );
           })}
         </Container>
       )}

@@ -1,6 +1,6 @@
 import { extendType, floatArg, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
-import { GroupPayment, User } from '.';
+import { GroupTransaction, User } from '.';
 import { Participant as ParticipantType } from '../__generated__/types';
 
 export const Group = objectType({
@@ -18,11 +18,11 @@ export const Group = objectType({
         return prisma.group.findUnique({ where: { id: source.id || undefined } }).members();
       },
     });
-    t.list.field('payments', {
-      type: GroupPayment,
-      description: 'A list of all payments which happened in this group.',
+    t.list.field('transactions', {
+      type: GroupTransaction,
+      description: 'A list of all transactions which happened in this group.',
       resolve(source) {
-        return prisma.group.findUnique({ where: { id: source.id || undefined } }).payments();
+        return prisma.group.findUnique({ where: { id: source.id || undefined } }).transactions();
       },
     });
   },
@@ -66,7 +66,7 @@ export const GroupQuery = extendType({
           where: { id: args.id },
           include: {
             members: true,
-            payments: {
+            transactions: {
               include: {
                 user: true,
                 participants: true,
@@ -84,21 +84,21 @@ export const GroupQuery = extendType({
           });
         });
 
-        // Run through all Payment in the group
-        group?.payments.map((payment) => {
-          // If the payment value is positive e.g. somebody put money into the group, then we add that to their virtual "balance"
-          if (payment.value >= 0) {
-            const index = participants.findIndex((el) => el.userId === payment.userId);
-            participants[index].value += payment.value;
+        // Run through all Transaction in the group
+        group?.transactions.map((transaction) => {
+          // If the transaction value is positive e.g. somebody put money into the group, then we add that to their virtual "balance"
+          if (transaction.value >= 0) {
+            const index = participants.findIndex((el) => el.userId === transaction.userId);
+            participants[index].value += transaction.value;
           }
 
-          if (payment.value < 0) {
-            // If the payment value is negative e.g. somebody bought food. We go through the participants
+          if (transaction.value < 0) {
+            // If the transaction value is negative e.g. somebody bought food. We go through the participants
             // (which ate something from this bought food) and add their part onto their virtual "balance"
-            payment.participants.map((participant) => {
-              // Foreach Participant add the value divided by the amount of people for that payment
+            transaction.participants.map((participant) => {
+              // Foreach Participant add the value divided by the amount of people for that transaction
               const index = participants.findIndex((el) => el.userId === participant.id);
-              participants[index].value += payment.value / payment.participants.length;
+              participants[index].value += transaction.value / transaction.participants.length;
             });
           }
         });

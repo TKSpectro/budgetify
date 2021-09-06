@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-server-micro';
 import { extendType, objectType } from 'nexus';
 import prisma from '~/utils/prisma';
-import { Group, GroupPayment, Household, Invite, Payment } from '.';
+import { Group, GroupTransaction, Household, Invite, Payment } from '.';
 
 export const User = objectType({
   name: 'User',
@@ -58,21 +58,23 @@ export const User = objectType({
         return prisma.user.findUnique({ where: { id: source.id || undefined } }).groups();
       },
     });
-    t.list.field('groupPayments', {
-      type: GroupPayment,
+    t.list.field('groupTransactions', {
+      type: GroupTransaction,
       description: 'The payments which were booked in groups and where payed by the user.',
       resolve(source) {
-        return prisma.user.findUnique({ where: { id: source.id || undefined } }).groupPayments();
+        return prisma.user
+          .findUnique({ where: { id: source.id || undefined } })
+          .groupTransactions();
       },
     });
-    t.list.field('groupPaymentsParticipant', {
-      type: GroupPayment,
+    t.list.field('groupTransactionsParticipant', {
+      type: GroupTransaction,
       description:
         'All group payments which the user participated in. e.g. user ate some of the bought stuff.',
       resolve(source) {
         return prisma.user
           .findUnique({ where: { id: source.id || undefined } })
-          .groupPaymentsParticipant();
+          .groupTransactionsParticipant();
       },
     });
   },

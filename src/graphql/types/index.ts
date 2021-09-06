@@ -5,7 +5,7 @@ export * from '~/graphql/customTypes';
 export * from './Auth';
 export * from './Category';
 export * from './Group';
-export * from './GroupPayment';
+export * from './GroupTransaction';
 export * from './Household';
 export * from './Invite';
 export * from './Payment';

@@ -30,26 +30,26 @@ type Group {
   members: [User]
   name: String!
 
-  """A list of all payments which happened in this group."""
-  payments: [GroupPayment]
+  """A list of all transactions which happened in this group."""
+  transactions: [GroupTransaction]
   updatedAt: DateTime!
   value: Float!
 }
 
-type GroupPayment {
+type GroupTransaction {
   createdAt: DateTime!
 
-  """The group in which this payment was booked."""
+  """The group in which this transaction was booked."""
   group: Group
   groupId: String!
   id: String!
   name: String!
 
-  """All users which ate some of the bought food from this payment."""
+  """All users which ate some of the bought food from this transaction."""
   participants: [User]
   updatedAt: DateTime!
 
-  """The user which booked the payment."""
+  """The user which booked the transaction."""
   user: User
   userId: String!
   value: Float!
@@ -126,9 +126,9 @@ type Mutation {
   createGroup(name: String!, value: Float): Group
 
   """
-  Creates a new payment in the specified group with the given arguments and returns it.
+  Creates a new transaction in the specified group with the given arguments and returns it.
   """
-  createGroupPayment(groupId: String!, name: String!, participantIds: [String!]!, value: Float!): GroupPayment
+  createGroupTransaction(groupId: String!, name: String!, participantIds: [String!]!, value: Float!): GroupTransaction
 
   """Create a new invite. Need to be logged in."""
   createInvite(householdId: String!, invitedEmail: String!): Invite!
@@ -267,12 +267,12 @@ type User {
   firstname: String!
 
   """The payments which were booked in groups and where payed by the user."""
-  groupPayments: [GroupPayment]
+  groupTransactions: [GroupTransaction]
 
   """
   All group payments which the user participated in. e.g. user ate some of the bought stuff.
   """
-  groupPaymentsParticipant: [GroupPayment]
+  groupTransactionsParticipant: [GroupTransaction]
 
   """The group's in which the user is joined."""
   groups: [Group]

@@ -39,24 +39,24 @@ export type Group = {
   /** A list of all user's which have access to this group. */
   members?: Maybe<Array<Maybe<User>>>;
   name: Scalars['String'];
-  /** A list of all payments which happened in this group. */
-  payments?: Maybe<Array<Maybe<GroupPayment>>>;
+  /** A list of all transactions which happened in this group. */
+  transactions?: Maybe<Array<Maybe<GroupTransaction>>>;
   updatedAt: Scalars['DateTime'];
   value: Scalars['Float'];
 };
 
-export type GroupPayment = {
-  __typename?: 'GroupPayment';
+export type GroupTransaction = {
+  __typename?: 'GroupTransaction';
   createdAt: Scalars['DateTime'];
-  /** The group in which this payment was booked. */
+  /** The group in which this transaction was booked. */
   group?: Maybe<Group>;
   groupId: Scalars['String'];
   id: Scalars['String'];
   name: Scalars['String'];
-  /** All users which ate some of the bought food from this payment. */
+  /** All users which ate some of the bought food from this transaction. */
   participants?: Maybe<Array<Maybe<User>>>;
   updatedAt: Scalars['DateTime'];
-  /** The user which booked the payment. */
+  /** The user which booked the transaction. */
   user?: Maybe<User>;
   userId: Scalars['String'];
   value: Scalars['Float'];
@@ -136,8 +136,8 @@ export type Mutation = {
   createCategory: Category;
   /** Creates a new group with the given arguments and returns it. */
   createGroup?: Maybe<Group>;
-  /** Creates a new payment in the specified group with the given arguments and returns it. */
-  createGroupPayment?: Maybe<GroupPayment>;
+  /** Creates a new transaction in the specified group with the given arguments and returns it. */
+  createGroupTransaction?: Maybe<GroupTransaction>;
   /** Create a new invite. Need to be logged in. */
   createInvite: Invite;
   /** Create a new payment. Need to be logged in. */
@@ -186,7 +186,7 @@ export type MutationCreateGroupArgs = {
 };
 
 
-export type MutationCreateGroupPaymentArgs = {
+export type MutationCreateGroupTransactionArgs = {
   groupId: Scalars['String'];
   name: Scalars['String'];
   participantIds: Array<Scalars['String']>;
@@ -366,9 +366,9 @@ export type User = {
   email: Scalars['String'];
   firstname: Scalars['String'];
   /** The payments which were booked in groups and where payed by the user. */
-  groupPayments?: Maybe<Array<Maybe<GroupPayment>>>;
+  groupTransactions?: Maybe<Array<Maybe<GroupTransaction>>>;
   /** All group payments which the user participated in. e.g. user ate some of the bought stuff. */
-  groupPaymentsParticipant?: Maybe<Array<Maybe<GroupPayment>>>;
+  groupTransactionsParticipant?: Maybe<Array<Maybe<GroupTransaction>>>;
   /** The group's in which the user is joined. */
   groups?: Maybe<Array<Maybe<Group>>>;
   /** The user's safely encrypted password */

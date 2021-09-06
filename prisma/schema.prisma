@@ -20,22 +20,22 @@ generator client {
 }
 
 model User {
-  id                       String             @id @default(uuid())
-  firstname                String
-  lastname                 String
-  email                    String             @unique
-  hashedPassword           String
-  isAdmin                  Boolean            @default(false)
-  createdAt                DateTime           @default(now())
-  updatedAt                DateTime           @updatedAt
-  households               Household[]
-  invites                  Invite[]
-  ownedHouseholds          Household[]        @relation("Owner")
-  payments                 Payment[]
-  RecurringPayment         RecurringPayment[]
-  groups                   Group[]
-  groupPayments            GroupPayment[]
-  groupPaymentsParticipant GroupPayment[]     @relation("Participants")
+  id                           String             @id @default(uuid())
+  firstname                    String
+  lastname                     String
+  email                        String             @unique
+  hashedPassword               String
+  isAdmin                      Boolean            @default(false)
+  createdAt                    DateTime           @default(now())
+  updatedAt                    DateTime           @updatedAt
+  households                   Household[]
+  invites                      Invite[]
+  ownedHouseholds              Household[]        @relation("Owner")
+  payments                     Payment[]
+  RecurringPayment             RecurringPayment[]
+  groups                       Group[]
+  groupTransactions            GroupTransaction[]
+  groupTransactionsParticipant GroupTransaction[] @relation("Participants")
 }
 
 model Category {
@@ -121,16 +121,16 @@ model Invite {
 }
 
 model Group {
-  id        String         @id @default(uuid())
-  name      String
-  value     Float          @default(0.00)
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  members   User[]
-  payments  GroupPayment[]
+  id           String             @id @default(uuid())
+  name         String
+  value        Float              @default(0.00)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  members      User[]
+  transactions GroupTransaction[]
 }
 
-model GroupPayment {
+model GroupTransaction {
   id           String   @id @default(uuid())
   name         String
   value        Float    @default(0.00)

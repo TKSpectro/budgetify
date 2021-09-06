@@ -151,9 +151,9 @@ async function main() {
       name: 'My Group 1',
       value: 40,
       members: { connect: { id: testUser.id } },
-      payments: {
+      transactions: {
         connectOrCreate: {
-          create: { name: 'Payment 1', value: 40, userId: testUser.id },
+          create: { name: 'Transaction 1', value: 40, userId: testUser.id },
           where: { id: '' },
         },
       },
