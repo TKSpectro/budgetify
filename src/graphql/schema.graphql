@@ -45,7 +45,7 @@ type GroupPayment {
   id: String!
   name: String!
 
-  """All users which ate some of the bought feed from this payment."""
+  """All users which ate some of the bought food from this payment."""
   participants: [User]
   updatedAt: DateTime!
 

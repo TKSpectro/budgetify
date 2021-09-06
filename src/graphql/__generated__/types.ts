@@ -53,7 +53,7 @@ export type GroupPayment = {
   groupId: Scalars['String'];
   id: Scalars['String'];
   name: Scalars['String'];
-  /** All users which ate some of the bought feed from this payment. */
+  /** All users which ate some of the bought food from this payment. */
   participants?: Maybe<Array<Maybe<User>>>;
   updatedAt: Scalars['DateTime'];
   /** The user which booked the payment. */

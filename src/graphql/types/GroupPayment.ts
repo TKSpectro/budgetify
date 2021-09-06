@@ -10,7 +10,6 @@ export const GroupPayment = objectType({
     t.nonNull.float('value');
     t.nonNull.field('createdAt', { type: 'DateTime' });
     t.nonNull.field('updatedAt', { type: 'DateTime' });
-    t.nonNull.string('groupId');
     t.field('group', {
       type: Group,
       description: 'The group in which this payment was booked.',
@@ -22,7 +21,7 @@ export const GroupPayment = objectType({
         });
       },
     });
-    t.nonNull.string('userId');
+    t.nonNull.string('groupId');
     t.field('user', {
       type: User,
       description: 'The user which booked the payment.',
@@ -34,9 +33,10 @@ export const GroupPayment = objectType({
         });
       },
     });
+    t.nonNull.string('userId');
     t.list.field('participants', {
       type: User,
-      description: 'All users which ate some of the bought feed from this payment.',
+      description: 'All users which ate some of the bought food from this payment.',
       resolve(source) {
         return prisma.user.findMany({
           where: {

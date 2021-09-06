@@ -18,7 +18,6 @@ export const Invite = objectType({
     });
     t.nonNull.field('createdAt', { type: 'DateTime' });
     t.nonNull.field('updatedAt', { type: 'DateTime' });
-    t.nonNull.string('senderId');
     t.field('sender', {
       type: User,
       description: 'The user which sent the invite. (Referrer)',
@@ -30,7 +29,7 @@ export const Invite = objectType({
         });
       },
     });
-    t.nonNull.string('householdId');
+    t.nonNull.string('senderId');
     t.field('household', {
       type: Household,
       description: 'The household in which the person was invited.',
@@ -42,6 +41,7 @@ export const Invite = objectType({
         });
       },
     });
+    t.nonNull.string('householdId');
   },
 });
 

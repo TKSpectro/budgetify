@@ -13,7 +13,6 @@ export const Payment = objectType({
     t.string('description');
     t.nonNull.field('createdAt', { type: 'DateTime' });
     t.nonNull.field('updatedAt', { type: 'DateTime' });
-    t.nonNull.string('categoryId');
     t.field('category', {
       type: Category,
       description: 'The category in which the user placed it. (e.g. food, income)',
@@ -25,7 +24,7 @@ export const Payment = objectType({
         });
       },
     });
-    t.string('userId');
+    t.nonNull.string('categoryId');
     t.field('user', {
       type: User,
       description: 'The user from which the payment was booked.',
@@ -38,7 +37,7 @@ export const Payment = objectType({
         });
       },
     });
-    t.nonNull.string('householdId');
+    t.string('userId');
     t.field('household', {
       type: Household,
       description: 'The household in which the payment was booked.',
@@ -50,6 +49,7 @@ export const Payment = objectType({
         });
       },
     });
+    t.nonNull.string('householdId');
   },
 });
 

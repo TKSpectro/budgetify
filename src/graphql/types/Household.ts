@@ -9,7 +9,6 @@ export const Household = objectType({
     t.nonNull.string('name');
     t.nonNull.field('createdAt', { type: 'DateTime' });
     t.nonNull.field('updatedAt', { type: 'DateTime' });
-    t.nonNull.string('ownerId');
     t.field('owner', {
       type: User,
       description: "The user which has management right's over the household.",
@@ -21,6 +20,7 @@ export const Household = objectType({
         });
       },
     });
+    t.nonNull.string('ownerId');
     t.list.field('members', {
       type: User,
       description: "A list of all user's which have access to this household.",

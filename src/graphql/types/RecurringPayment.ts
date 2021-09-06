@@ -42,7 +42,6 @@ export const RecurringPayment = objectType({
     });
     t.nonNull.field('createdAt', { type: 'DateTime' });
     t.nonNull.field('updatedAt', { type: 'DateTime' });
-    t.nonNull.string('categoryId');
     t.field('category', {
       type: Category,
       description: 'The category in which the payment will be booked.',
@@ -54,7 +53,7 @@ export const RecurringPayment = objectType({
         });
       },
     });
-    t.string('userId');
+    t.nonNull.string('categoryId');
     t.field('user', {
       type: User,
       description: 'The user from whom the payment will be booked.',
@@ -67,7 +66,7 @@ export const RecurringPayment = objectType({
         });
       },
     });
-    t.nonNull.string('householdId');
+    t.string('userId');
     t.field('household', {
       type: Household,
       description: 'The household in which the payment will be booked.',
@@ -79,6 +78,7 @@ export const RecurringPayment = objectType({
         });
       },
     });
+    t.nonNull.string('householdId');
     t.list.field('payments', {
       type: Payment,
       description: "All payment's which where booked by this recurring payment.",
