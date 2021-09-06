@@ -44,8 +44,8 @@ const GROUP_QUERY = gql`
   }
 `;
 
-const CREATE_GROUP_PAYMENT_MUTATION = gql`
-  mutation CREATE_GROUP_PAYMENT_MUTATION(
+const CREATE_GROUP_TRANSACTION_MUTATION = gql`
+  mutation CREATE_GROUP_TRANSACTION_MUTATION(
     $name: String!
     $value: Float!
     $groupId: String!
@@ -69,13 +69,13 @@ export default function Group() {
   const { data, loading, error, refetch } = useQuery(GROUP_QUERY, { variables: { id: groupId } });
 
   const [
-    createGroupPayment,
+    createGroupTransaction,
     {
-      data: createGroupPaymentData,
-      loading: createGroupPaymentLoading,
-      error: createGroupPaymentError,
+      data: createGroupTransactionData,
+      loading: createGroupTransactionLoading,
+      error: createGroupTransactionError,
     },
-  ] = useMutation(CREATE_GROUP_PAYMENT_MUTATION, {
+  ] = useMutation(CREATE_GROUP_TRANSACTION_MUTATION, {
     onCompleted: () => {
       refetch();
     },
@@ -90,7 +90,7 @@ export default function Group() {
     // if the user is topping up his account we overwrite the participantIds with an empty array
     // so its more consistent on the database layer
     if (formStateIsCashout) {
-      createGroupPayment({
+      createGroupTransaction({
         variables: {
           ...form.getValues(),
           // Force the value to be negative as the user input will be positive
@@ -104,7 +104,7 @@ export default function Group() {
       });
     } else {
       // Top up
-      createGroupPayment({
+      createGroupTransaction({
         variables: {
           ...form.getValues(),
           participantIds: [],
@@ -127,7 +127,7 @@ export default function Group() {
   const memberBalances = data?.calculateMemberBalances;
 
   const [formStateIsCashout, setFormStateIsCashout] = useState(false);
-  const [formAllGroupMembers, setFormAllGroupMembers] = useState(false);
+  const [formAllGroupMembers, setFormAllGroupMembers] = useState(true);
 
   const handleChange = () => {
     setFormStateIsCashout(!formStateIsCashout);
@@ -138,15 +138,15 @@ export default function Group() {
       <Container>
         {loading && <LoadingAnimation />}
         <Error title="Could not load group." error={error} />
-        <Error title="Could not create transaction." error={createGroupPaymentError} />
+        <Error title="Could not create transaction." error={createGroupTransactionError} />
         {group && (
           <div className="relative">
             <div className="text-xl font-bold ">{group.name}</div>
             <div className="text-lg font-medium">Group balance: {group.value}€</div>
 
             <ModalForm
-              title="New Payment"
-              buttonText="New Payment"
+              title="New Transaction"
+              buttonText="New Transaction"
               buttonClassName="md:absolute right-4 top-2 text-base"
               form={form}
               submitText="Create"
@@ -251,7 +251,7 @@ export default function Group() {
       )}
       {group.transactions && (
         <Container>
-          <div className="text-lg font-semibold">Payments</div>
+          <div className="text-lg font-semibold">Transactions</div>
           {group.transactions.map((transaction: GroupTransaction) => {
             return (
               <div key={transaction.id}>{transaction.name + ' : ' + transaction.value + '€'}</div>
