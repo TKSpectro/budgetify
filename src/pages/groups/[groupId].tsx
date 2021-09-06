@@ -1,5 +1,5 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
-import { MinusIcon, PlusIcon } from '@heroicons/react/outline';
+import { CheckIcon, MinusIcon, PlusIcon, XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -90,13 +90,23 @@ export default function Group() {
     // if the user is topping up his account we overwrite the participantIds with an empty array
     // so its more consistent on the database layer
     if (formStateIsCashout) {
-      createGroupPayment({ variables: { ...form.getValues() } });
-    } else {
       createGroupPayment({
         variables: {
           ...form.getValues(),
           // Force the value to be negative as the user input will be positive
           value: -Math.abs(form.getValues('value')),
+          // Check if the all user switch is set depending on that we take all group members
+          // or just the ones that are checked.
+          participantIds: formAllGroupMembers
+            ? members.map((member) => member.id)
+            : form.getValues('participantIds'),
+        },
+      });
+    } else {
+      // Top up
+      createGroupPayment({
+        variables: {
+          ...form.getValues(),
           participantIds: [],
         },
       });
@@ -117,6 +127,7 @@ export default function Group() {
   const memberBalances = data?.calculateMemberBalances;
 
   const [formStateIsCashout, setFormStateIsCashout] = useState(false);
+  const [formAllGroupMembers, setFormAllGroupMembers] = useState(false);
 
   const handleChange = () => {
     setFormStateIsCashout(!formStateIsCashout);
@@ -174,7 +185,39 @@ export default function Group() {
                 type="number"
                 {...form.register('value', { required: true, valueAsNumber: true, min: 0 })}
               />
+
+              {/* // TODO: Somehow make this look and feel better */}
               {formStateIsCashout && (
+                <label>
+                  All group members?
+                  <div
+                    className="items-center"
+                    onClick={() => setFormAllGroupMembers(!formAllGroupMembers)}
+                  >
+                    <div
+                      className={clsx(
+                        'w-12 h-6 items-center bg-gray-300 rounded-full p-1 duration-300 ease-in-out',
+                        { 'bg-brand-400': formAllGroupMembers === true },
+                      )}
+                    >
+                      <div
+                        className={clsx(
+                          'bg-white dark:bg-gray-800 w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out',
+                          { 'translate-x-6': formAllGroupMembers === true },
+                        )}
+                      >
+                        {formAllGroupMembers === false ? (
+                          <XIcon className="w-4 h-4 " />
+                        ) : (
+                          <CheckIcon className="w-4 h-4 text-brand-400" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </label>
+              )}
+
+              {formStateIsCashout && !formAllGroupMembers && (
                 <UserMultiSelect
                   items={members}
                   setValue={setValueHandlerParticipantIds}
