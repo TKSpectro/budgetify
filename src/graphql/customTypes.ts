@@ -16,7 +16,12 @@ export const Money = scalarType({
   },
 
   serialize(value) {
-    const valueAsString = value.toString();
+    const valueAsString: string = value.toString();
+
+    // Need to construct the Number with a different algo as Number cant parse "-.5"
+    if (value > -10 && value < 0)
+      return Number(valueAsString.slice(0, -1) + '0.' + valueAsString.slice(-1));
+
     return Number(valueAsString.slice(0, -2) + '.' + valueAsString.slice(-2));
   },
 
