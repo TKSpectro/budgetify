@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { UserMultiSelect } from '~/components/Group/UserMultiselect';
 import { Container } from '~/components/UI/Container';
+import { Disclosure } from '~/components/UI/Disclosure';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
@@ -30,6 +31,9 @@ const GROUP_QUERY = gql`
         id
         name
         value
+        participants {
+          name
+        }
       }
       members {
         id
@@ -252,11 +256,25 @@ export default function Group() {
       {group?.transactions && (
         <Container>
           <div className="text-lg font-semibold">Transactions</div>
-          {group.transactions.map((transaction: GroupTransaction) => {
-            return (
-              <div key={transaction.id}>{transaction.name + ' : ' + transaction.value + '€'}</div>
-            );
-          })}
+          <div className="divide-y-2">
+            {group.transactions.map((transaction: GroupTransaction) => {
+              // TODO: Need to style this a bit better
+              return (
+                <div key={transaction.id}>
+                  <Disclosure
+                    text={transaction.name + ' : ' + transaction.value + '€'}
+                    showOpen={!!transaction.participants && transaction.participants?.length > 0}
+                  >
+                    <div>
+                      {transaction.participants?.map((user, id) => {
+                        return <div key={user?.id || id}>{user?.name}</div>;
+                      })}
+                    </div>
+                  </Disclosure>
+                </div>
+              );
+            })}
+          </div>
         </Container>
       )}
     </>
