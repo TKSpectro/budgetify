@@ -10,7 +10,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** Date custom scalar type */
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: any;
   /** Money custom scalar type. Converts int to float with 2 decimals. */
   Money: any;
@@ -173,6 +173,8 @@ export type Mutation = {
    *       for further authentication with the graphql-api.
    */
   signup: AuthToken;
+  /** Update a already existing household. Need to be logged in and owner of the household. */
+  updateHousehold: Household;
   /** Update a new recurring payment. Need to be logged in. */
   updateRecurringPayment: RecurringPayment;
   /** Use a invite. Logged in user gets added to the group specified in the invite. Need to be logged in. */
@@ -260,6 +262,12 @@ export type MutationSignupArgs = {
   firstname: Scalars['String'];
   lastname: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationUpdateHouseholdArgs = {
+  id: Scalars['String'];
+  ownerId?: Maybe<Scalars['String']>;
 };
 
 

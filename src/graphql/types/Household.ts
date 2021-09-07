@@ -1,4 +1,4 @@
-import { extendType, intArg, objectType, stringArg } from 'nexus';
+import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
 import { Invite, Payment, RecurringPayment, User } from '.';
 
@@ -100,6 +100,36 @@ export const HouseholdQuery = extendType({
       resolve(_, { id }, { user }) {
         return prisma.household.findFirst({
           where: { id: id || undefined, members: { some: { id: user.id } } },
+        });
+      },
+    });
+  },
+});
+
+export const HouseholdMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.nonNull.field('updateHousehold', {
+      type: Household,
+      description:
+        'Update a already existing household. Need to be logged in and owner of the household.',
+      authorize: async (_, args, ctx) => {
+        const household = await prisma.household.findFirst({
+          where: { id: args.id },
+        });
+        // Check if the user is the owner of the household.
+        const householdOwner = household?.ownerId === ctx.user.id;
+        // User must be logged in and own the household
+        return !!ctx.user && householdOwner;
+      },
+      args: {
+        id: nonNull(stringArg()),
+        ownerId: stringArg(),
+      },
+      async resolve(_, args) {
+        return prisma.household.update({
+          where: { id: args.id },
+          data: { ownerId: args.ownerId || undefined },
         });
       },
     });

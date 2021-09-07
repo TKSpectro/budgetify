@@ -177,6 +177,11 @@ type Mutation {
   """
   signup(email: String!, firstname: String!, lastname: String!, password: String!): AuthToken!
 
+  """
+  Update a already existing household. Need to be logged in and owner of the household.
+  """
+  updateHousehold(id: String!, ownerId: String): Household!
+
   """Update a new recurring payment. Need to be logged in."""
   updateRecurringPayment(categoryId: String, description: String, endDate: DateTime, householdId: String!, id: String!, interval: Interval, name: String, startDate: DateTime, value: Money): RecurringPayment!
 
