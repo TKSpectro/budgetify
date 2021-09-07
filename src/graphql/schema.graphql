@@ -233,8 +233,11 @@ type Query {
   """
   allHouseholds: [Household]
 
-  """Returns a group by searching for the given id."""
+  """Returns the virtual balances for all members in the given group."""
   calculateMemberBalances(id: String!): [Participant]
+
+  """Returns a group by searching for the given id."""
+  calculateMemberBalancesOld(id: String!): [Participant]
 
   """All available categories. Filterable by id or name via arguments"""
   categories(id: String, name: String): [Category]

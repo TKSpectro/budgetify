@@ -30,9 +30,42 @@ async function main() {
 
   let testUser = await prisma.user.create({
     data: {
-      firstname: 'tom',
-      lastname: 'test',
+      firstname: 'A',
+      lastname: '',
       email: 'tom@mail.com',
+      hashedPassword: hashSync('12345678', 10),
+    },
+  });
+
+  let userB = await prisma.user.create({
+    data: {
+      firstname: 'B',
+      lastname: '',
+      email: 'tomb@mail.com',
+      hashedPassword: hashSync('12345678', 10),
+    },
+  });
+  let userC = await prisma.user.create({
+    data: {
+      firstname: 'C',
+      lastname: '',
+      email: 'tomc@mail.com',
+      hashedPassword: hashSync('12345678', 10),
+    },
+  });
+  let userD = await prisma.user.create({
+    data: {
+      firstname: 'D',
+      lastname: '',
+      email: 'tomd@mail.com',
+      hashedPassword: hashSync('12345678', 10),
+    },
+  });
+  let userE = await prisma.user.create({
+    data: {
+      firstname: 'E',
+      lastname: '',
+      email: 'tome@mail.com',
       hashedPassword: hashSync('12345678', 10),
     },
   });
@@ -154,14 +187,42 @@ async function main() {
   const group1 = await prisma.group.create({
     data: {
       name: 'My Group 1',
-      value: 4000,
-      members: { connect: [{ id: testUser.id }, { id: usr0new.id }, { id: usr1new.id }] },
+      value: 1000,
+      members: {
+        connect: [
+          { id: testUser.id },
+          { id: userB.id },
+          { id: userC.id },
+          { id: userD.id },
+          { id: userE.id },
+        ],
+      },
       transactions: {
         create: [
-          { name: 'Top up account.', value: 4000, userId: testUser.id },
+          { id: '0', name: 'ALL go shopping', value: -10, userId: testUser.id },
+
           {
-            name: 'Buy some stuff for salad',
-            value: -1500,
+            id: '1',
+            name: 'A top up',
+            value: 20,
+            userId: testUser.id,
+          },
+          {
+            id: '2',
+            name: 'C top up',
+            value: 20,
+            userId: userC.id,
+          },
+          {
+            id: '3',
+            name: 'D top up',
+            value: 10,
+            userId: userD.id,
+          },
+          {
+            id: '4',
+            name: 'A B C go shopping',
+            value: -10,
             userId: testUser.id,
           },
         ],
@@ -171,7 +232,22 @@ async function main() {
   });
 
   await prisma.groupTransaction.update({
-    where: { id: group1.transactions[0].id },
+    where: { id: '0' },
+    data: {
+      participants: {
+        connect: [
+          { id: testUser.id },
+          { id: userB.id },
+          { id: userC.id },
+          { id: userD.id },
+          { id: userE.id },
+        ],
+      },
+    },
+  });
+
+  await prisma.groupTransaction.update({
+    where: { id: '1' },
     data: {
       participants: {
         connect: { id: testUser.id },
@@ -180,10 +256,28 @@ async function main() {
   });
 
   await prisma.groupTransaction.update({
-    where: { id: group1.transactions[1].id },
+    where: { id: '2' },
     data: {
       participants: {
-        connect: [{ id: testUser.id }, { id: usr0new.id }, { id: usr1new.id }],
+        connect: { id: userC.id },
+      },
+    },
+  });
+
+  await prisma.groupTransaction.update({
+    where: { id: '3' },
+    data: {
+      participants: {
+        connect: { id: userD.id },
+      },
+    },
+  });
+
+  await prisma.groupTransaction.update({
+    where: { id: '4' },
+    data: {
+      participants: {
+        connect: [{ id: testUser.id }, { id: userB.id }, { id: userC.id }],
       },
     },
   });

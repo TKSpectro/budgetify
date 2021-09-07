@@ -1,6 +1,7 @@
 import { arg, extendType, list, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
 import { Group, User } from '.';
+import { Context } from '../context';
 
 export const GroupTransaction = objectType({
   name: 'GroupTransaction',
@@ -62,7 +63,7 @@ export const GroupTransactionMutation = extendType({
       description:
         'Creates a new transaction in the specified group with the given arguments and returns it.',
       authorize: (_, __, ctx) => (ctx.user ? true : false),
-      async resolve(_, args, ctx) {
+      async resolve(_, args, ctx: Context) {
         // Update value of the group
         await prisma.group.update({
           where: { id: args.groupId },
@@ -78,16 +79,28 @@ export const GroupTransactionMutation = extendType({
           },
         });
 
-        return prisma.groupTransaction.update({
-          where: { id: transaction.id },
-          data: {
-            participants: {
-              connect: args.participantIds.map((pid) => {
-                return { id: pid };
-              }),
+        // TODO: Clean up
+        if ((args.participantIds.length = 0)) {
+          return prisma.groupTransaction.update({
+            where: { id: transaction.id },
+            data: {
+              participants: {
+                connect: { id: ctx.user.id },
+              },
             },
-          },
-        });
+          });
+        } else {
+          return prisma.groupTransaction.update({
+            where: { id: transaction.id },
+            data: {
+              participants: {
+                connect: args.participantIds.map((pid) => {
+                  return { id: pid };
+                }),
+              },
+            },
+          });
+        }
       },
     });
   },
