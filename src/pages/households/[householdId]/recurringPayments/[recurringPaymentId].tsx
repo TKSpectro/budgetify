@@ -53,7 +53,7 @@ const UPDATE_RECURRING_PAYMENT_MUTATION = gql`
   mutation EditRecurringPayment(
     $id: String!
     $name: String
-    $value: Float
+    $value: Money
     $description: String
     $interval: Interval
     $startDate: DateTime

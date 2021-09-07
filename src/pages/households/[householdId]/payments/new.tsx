@@ -27,7 +27,7 @@ const CATEGORIES_QUERY = gql`
 const NEW_PAYMENT_MUTATION = gql`
   mutation NEW_PAYMENT_MUTATION(
     $name: String!
-    $value: Float!
+    $value: Money!
     $description: String
     $categoryId: String!
     $householdId: String!

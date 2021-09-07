@@ -31,7 +31,7 @@ const CATEGORIES_QUERY = gql`
 const NEW_RECURRING_PAYMENT_MUTATION = gql`
   mutation NEW_RECURRING_PAYMENT_MUTATION(
     $name: String!
-    $value: Float!
+    $value: Money!
     $description: String
     $interval: Interval!
     $startDate: DateTime!

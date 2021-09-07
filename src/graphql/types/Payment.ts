@@ -1,5 +1,5 @@
 import { ApolloError } from 'apollo-server-micro';
-import { extendType, floatArg, nonNull, objectType, stringArg } from 'nexus';
+import { arg, extendType, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
 import { Category, Household, User } from '.';
 
@@ -9,7 +9,7 @@ export const Payment = objectType({
   definition(t) {
     t.nonNull.string('id');
     t.nonNull.string('name');
-    t.nonNull.float('value');
+    t.nonNull.money('value');
     t.string('description');
     t.nonNull.field('createdAt', { type: 'DateTime' });
     t.nonNull.field('updatedAt', { type: 'DateTime' });
@@ -62,7 +62,7 @@ export const PaymentMutation = extendType({
       authorize: (_, __, ctx) => (ctx.user ? true : false),
       args: {
         name: nonNull(stringArg()),
-        value: nonNull(floatArg()),
+        value: nonNull(arg({ type: 'Money' })),
         description: stringArg(),
         categoryId: nonNull(stringArg()),
         householdId: nonNull(stringArg()),

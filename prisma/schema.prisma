@@ -50,7 +50,7 @@ model Category {
 model Payment {
   id                 String            @id @default(uuid())
   name               String
-  value              Float
+  value              Int
   description        String?
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
@@ -75,7 +75,7 @@ enum Interval {
 model RecurringPayment {
   id          String    @id @default(uuid())
   name        String
-  value       Float
+  value       Int
   description String?
   interval    Interval  @default(MONTHLY)
   startDate   DateTime  @default(now())
@@ -126,7 +126,7 @@ model Invite {
 model Group {
   id           String             @id @default(uuid())
   name         String
-  value        Float              @default(0.00)
+  value        Int                @default(0)
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
   members      User[]
@@ -137,7 +137,7 @@ model Group {
 model GroupTransaction {
   id           String   @id @default(uuid())
   name         String
-  value        Float    @default(0.00)
+  value        Int      @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   group        Group    @relation(fields: [groupId], references: [id])

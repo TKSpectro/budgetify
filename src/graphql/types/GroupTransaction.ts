@@ -1,4 +1,4 @@
-import { extendType, floatArg, list, nonNull, objectType, stringArg } from 'nexus';
+import { arg, extendType, list, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
 import { Group, User } from '.';
 
@@ -7,7 +7,7 @@ export const GroupTransaction = objectType({
   definition(t) {
     t.nonNull.string('id');
     t.nonNull.string('name');
-    t.nonNull.float('value');
+    t.nonNull.money('value');
     t.nonNull.field('createdAt', { type: 'DateTime' });
     t.nonNull.field('updatedAt', { type: 'DateTime' });
     t.field('group', {
@@ -55,7 +55,7 @@ export const GroupTransactionMutation = extendType({
       type: GroupTransaction,
       args: {
         name: nonNull(stringArg()),
-        value: nonNull(floatArg()),
+        value: nonNull(arg({ type: 'Money' })),
         groupId: nonNull(stringArg()),
         participantIds: nonNull(list(nonNull(stringArg()))),
       },

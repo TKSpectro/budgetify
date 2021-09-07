@@ -11,7 +11,7 @@ import {
   differenceInWeeks,
   differenceInYears,
 } from 'date-fns';
-import { arg, enumType, extendType, floatArg, nonNull, objectType, stringArg } from 'nexus';
+import { arg, enumType, extendType, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
 import { Category, Household, Payment, User } from '.';
 import { Payment as PaymentType } from '../__generated__/types';
@@ -27,7 +27,7 @@ export const RecurringPayment = objectType({
   definition(t) {
     t.nonNull.string('id');
     t.nonNull.string('name');
-    t.nonNull.float('value');
+    t.nonNull.money('value');
     t.string('description');
     t.nonNull.field('interval', { type: Interval });
     t.nonNull.field('startDate', { type: 'DateTime' });
@@ -208,7 +208,7 @@ export const RecurringPaymentMutation = extendType({
       authorize: (_, __, ctx) => (ctx.user ? true : false),
       args: {
         name: nonNull(stringArg()),
-        value: nonNull(floatArg()),
+        value: nonNull(arg({ type: 'Money' })),
         description: stringArg(),
         interval: nonNull(arg({ type: Interval })),
         startDate: nonNull(arg({ type: 'DateTime' })),
@@ -253,7 +253,7 @@ export const RecurringPaymentMutation = extendType({
       args: {
         id: nonNull(stringArg()),
         name: stringArg(),
-        value: floatArg(),
+        value: arg({ type: 'Money' }),
         description: stringArg(),
         interval: arg({ type: Interval }),
         startDate: arg({ type: 'DateTime' }),

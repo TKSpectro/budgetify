@@ -36,7 +36,7 @@ type Group {
   """A list of all transactions which happened in this group."""
   transactions: [GroupTransaction]
   updatedAt: DateTime!
-  value: Float!
+  value: Money!
 }
 
 type GroupTransaction {
@@ -55,7 +55,7 @@ type GroupTransaction {
   """The user which booked the transaction."""
   user: User
   userId: String!
-  value: Float!
+  value: Money!
 }
 
 type Household {
@@ -118,6 +118,9 @@ type Invite {
   wasUsed: Boolean!
 }
 
+"""Money custom scalar type. Converts int to float with 2 decimals."""
+scalar Money
+
 type Mutation {
   """
   This mutation should be called regularly (at least once a day)
@@ -130,7 +133,7 @@ type Mutation {
   createCategory(name: String!): Category!
 
   """Creates a new group with the given arguments and returns it."""
-  createGroup(name: String!, value: Float): Group
+  createGroup(name: String!, value: Money): Group
 
   """Create a new invite. Need to be logged in."""
   createGroupInvite(groupId: String!, invitedEmail: String!): Invite!
@@ -138,16 +141,16 @@ type Mutation {
   """
   Creates a new transaction in the specified group with the given arguments and returns it.
   """
-  createGroupTransaction(groupId: String!, name: String!, participantIds: [String!]!, value: Float!): GroupTransaction
+  createGroupTransaction(groupId: String!, name: String!, participantIds: [String!]!, value: Money!): GroupTransaction
 
   """Create a new invite. Need to be logged in."""
   createInvite(householdId: String!, invitedEmail: String!): Invite!
 
   """Create a new payment. Need to be logged in."""
-  createPayment(categoryId: String!, description: String, householdId: String!, name: String!, value: Float!): Payment!
+  createPayment(categoryId: String!, description: String, householdId: String!, name: String!, value: Money!): Payment!
 
   """Create a new recurring payment. Need to be logged in."""
-  createRecurringPayment(categoryId: String!, description: String, endDate: DateTime, householdId: String!, interval: Interval!, name: String!, startDate: DateTime!, value: Float!): RecurringPayment!
+  createRecurringPayment(categoryId: String!, description: String, endDate: DateTime, householdId: String!, interval: Interval!, name: String!, startDate: DateTime!, value: Money!): RecurringPayment!
 
   """Remove a invite. Need to be logged in."""
   deleteInvite(id: String!): Boolean
@@ -175,7 +178,7 @@ type Mutation {
   signup(email: String!, firstname: String!, lastname: String!, password: String!): AuthToken!
 
   """Update a new recurring payment. Need to be logged in."""
-  updateRecurringPayment(categoryId: String, description: String, endDate: DateTime, householdId: String!, id: String!, interval: Interval, name: String, startDate: DateTime, value: Float): RecurringPayment!
+  updateRecurringPayment(categoryId: String, description: String, endDate: DateTime, householdId: String!, id: String!, interval: Interval, name: String, startDate: DateTime, value: Money): RecurringPayment!
 
   """
   Use a invite. Logged in user gets added to the group specified in the invite. Need to be logged in.
@@ -194,7 +197,7 @@ HelperType: Contains a participant and the value he can take out of the group or
 type Participant {
   name: String!
   userId: String!
-  value: Float!
+  value: Money!
 }
 
 """A payment is a NOT changeable booking of a specific value."""
@@ -215,7 +218,7 @@ type Payment {
   """The user from which the payment was booked."""
   user: User
   userId: String
-  value: Float!
+  value: Money!
 }
 
 type Query {
@@ -272,7 +275,7 @@ type RecurringPayment {
   """The user from whom the payment will be booked."""
   user: User
   userId: String
-  value: Float!
+  value: Money!
 }
 
 """A user is an account which can join households and create payments"""

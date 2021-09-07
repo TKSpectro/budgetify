@@ -47,7 +47,7 @@ const GROUP_QUERY = gql`
 const CREATE_GROUP_TRANSACTION_MUTATION = gql`
   mutation CREATE_GROUP_TRANSACTION_MUTATION(
     $name: String!
-    $value: Float!
+    $value: Money!
     $groupId: String!
     $participantIds: [String!]!
   ) {
@@ -123,7 +123,7 @@ export default function Group() {
 
   const group = data?.group;
 
-  const members: User[] = group.members;
+  const members: User[] = group?.members;
   const memberBalances = data?.calculateMemberBalances;
 
   const [formStateIsCashout, setFormStateIsCashout] = useState(false);
@@ -249,7 +249,7 @@ export default function Group() {
           </div>
         </Container>
       )}
-      {group.transactions && (
+      {group?.transactions && (
         <Container>
           <div className="text-lg font-semibold">Transactions</div>
           {group.transactions.map((transaction: GroupTransaction) => {

@@ -5,6 +5,11 @@ import faker from 'faker';
 
 const prisma = new PrismaClient();
 
+/*
+! When defining values for payemnts/transactions you need to write 40.00€ as 4000 because of a custom
+! Money Type implementation
+ */
+
 async function main() {
   // create 2 users
   let users = [];
@@ -83,21 +88,21 @@ async function main() {
     data: [
       {
         name: 'pay1',
-        value: 20.01,
+        value: 2001,
         categoryId: cat1.id,
         userId: users[0].id,
         householdId: hou1.id,
       },
       {
         name: 'pay2',
-        value: 40.02,
+        value: 4002,
         categoryId: cat1.id,
         userId: users[0].id,
         householdId: hou1.id,
       },
       {
         name: 'pay3',
-        value: 60.03,
+        value: 6003,
         categoryId: cat1.id,
         userId: users[0].id,
         householdId: hou1.id,
@@ -109,7 +114,7 @@ async function main() {
     data: [
       {
         name: 'recPay1',
-        value: 25.0,
+        value: 2500,
         interval: 'WEEKLY',
         categoryId: cat1.id,
         householdId: hou1.id,
@@ -117,7 +122,7 @@ async function main() {
       },
       {
         name: 'recPay2',
-        value: 25.0,
+        value: 2500,
         description: 'This recurring payment has a description',
         interval: 'MONTHLY',
         categoryId: cat1.id,
@@ -127,7 +132,7 @@ async function main() {
       },
       {
         name: 'recPay3',
-        value: 25.0,
+        value: 2500,
         interval: 'DAILY',
         categoryId: cat1.id,
         householdId: hou1.id,
@@ -149,13 +154,27 @@ async function main() {
   const group1 = await prisma.group.create({
     data: {
       name: 'My Group 1',
-      value: 40,
-      members: { connect: { id: testUser.id } },
+      value: 4000,
+      members: { connect: [{ id: testUser.id }, { id: usr0new.id }, { id: usr1new.id }] },
       transactions: {
-        connectOrCreate: {
-          create: { name: 'Transaction 1', value: 40, userId: testUser.id },
-          where: { id: '' },
-        },
+        create: [
+          { name: 'Top up account.', value: 4000, userId: testUser.id },
+          {
+            name: 'Buy some stuff for salad',
+            value: -1500,
+            userId: testUser.id,
+          },
+        ],
+      },
+    },
+    include: { transactions: true },
+  });
+
+  await prisma.groupTransaction.update({
+    where: { id: group1.transactions[1].id },
+    data: {
+      participants: {
+        connect: [{ id: testUser.id }, { id: usr0new.id }, { id: usr1new.id }],
       },
     },
   });

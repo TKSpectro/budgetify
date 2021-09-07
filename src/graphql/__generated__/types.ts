@@ -10,8 +10,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
+  /** Date custom scalar type */
   DateTime: any;
+  /** Money custom scalar type. Converts int to float with 2 decimals. */
+  Money: any;
 };
 
 /**
@@ -44,7 +46,7 @@ export type Group = {
   /** A list of all transactions which happened in this group. */
   transactions?: Maybe<Array<Maybe<GroupTransaction>>>;
   updatedAt: Scalars['DateTime'];
-  value: Scalars['Float'];
+  value: Scalars['Money'];
 };
 
 export type GroupTransaction = {
@@ -61,7 +63,7 @@ export type GroupTransaction = {
   /** The user which booked the transaction. */
   user?: Maybe<User>;
   userId: Scalars['String'];
-  value: Scalars['Float'];
+  value: Scalars['Money'];
 };
 
 export type Household = {
@@ -129,6 +131,7 @@ export type Invite = {
   wasUsed: Scalars['Boolean'];
 };
 
+
 export type Mutation = {
   __typename?: 'Mutation';
   /**
@@ -191,7 +194,7 @@ export type MutationCreateCategoryArgs = {
 
 export type MutationCreateGroupArgs = {
   name: Scalars['String'];
-  value?: Maybe<Scalars['Float']>;
+  value?: Maybe<Scalars['Money']>;
 };
 
 
@@ -205,7 +208,7 @@ export type MutationCreateGroupTransactionArgs = {
   groupId: Scalars['String'];
   name: Scalars['String'];
   participantIds: Array<Scalars['String']>;
-  value: Scalars['Float'];
+  value: Scalars['Money'];
 };
 
 
@@ -220,7 +223,7 @@ export type MutationCreatePaymentArgs = {
   description?: Maybe<Scalars['String']>;
   householdId: Scalars['String'];
   name: Scalars['String'];
-  value: Scalars['Float'];
+  value: Scalars['Money'];
 };
 
 
@@ -232,7 +235,7 @@ export type MutationCreateRecurringPaymentArgs = {
   interval: Interval;
   name: Scalars['String'];
   startDate: Scalars['DateTime'];
-  value: Scalars['Float'];
+  value: Scalars['Money'];
 };
 
 
@@ -269,7 +272,7 @@ export type MutationUpdateRecurringPaymentArgs = {
   interval?: Maybe<Interval>;
   name?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['DateTime']>;
-  value?: Maybe<Scalars['Float']>;
+  value?: Maybe<Scalars['Money']>;
 };
 
 
@@ -287,7 +290,7 @@ export type Participant = {
   __typename?: 'Participant';
   name: Scalars['String'];
   userId: Scalars['String'];
-  value: Scalars['Float'];
+  value: Scalars['Money'];
 };
 
 /** A payment is a NOT changeable booking of a specific value. */
@@ -307,7 +310,7 @@ export type Payment = {
   /** The user from which the payment was booked. */
   user?: Maybe<User>;
   userId?: Maybe<Scalars['String']>;
-  value: Scalars['Float'];
+  value: Scalars['Money'];
 };
 
 export type Query = {
@@ -376,7 +379,7 @@ export type RecurringPayment = {
   /** The user from whom the payment will be booked. */
   user?: Maybe<User>;
   userId?: Maybe<Scalars['String']>;
-  value: Scalars['Float'];
+  value: Scalars['Money'];
 };
 
 /** A user is an account which can join households and create payments */
