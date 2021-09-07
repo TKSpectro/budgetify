@@ -263,11 +263,16 @@ export default function Group() {
                 <div key={transaction.id}>
                   <Disclosure
                     text={transaction.name + ' : ' + transaction.value + '€'}
+                    overflowText="jj iss  jiasdjiajsd asjidjiasdi asdjiajas asdjisd asdf asdasd asd asd asd asd  sssasdasdmasd "
                     showOpen={!!transaction.participants && transaction.participants?.length > 0}
                   >
                     <div>
-                      {transaction.participants?.map((user, id) => {
-                        return <div key={user?.id || id}>{user?.name}</div>;
+                      {transaction.participants?.map((user, id, array) => {
+                        return (
+                          <span key={user?.id || id}>
+                            {user?.name + (id !== array.length - 1 ? ' | ' : '')}
+                          </span>
+                        );
                       })}
                     </div>
                   </Disclosure>

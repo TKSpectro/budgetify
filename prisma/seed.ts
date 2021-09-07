@@ -171,6 +171,15 @@ async function main() {
   });
 
   await prisma.groupTransaction.update({
+    where: { id: group1.transactions[0].id },
+    data: {
+      participants: {
+        connect: { id: testUser.id },
+      },
+    },
+  });
+
+  await prisma.groupTransaction.update({
     where: { id: group1.transactions[1].id },
     data: {
       participants: {
