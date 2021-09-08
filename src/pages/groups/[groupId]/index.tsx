@@ -37,6 +37,10 @@ const GROUP_QUERY = gql`
           name
         }
       }
+      owner {
+        id
+        name
+      }
       members {
         id
         name
@@ -233,6 +237,7 @@ export default function Group() {
           </div>
         )}
       </Container>
+
       {memberBalances && (
         <Container>
           <div className="text-lg font-semibold">Member Balances</div>

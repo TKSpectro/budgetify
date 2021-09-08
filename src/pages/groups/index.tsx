@@ -12,9 +12,13 @@ import { authenticatedRoute } from '~/utils/auth';
 const GROUPS_QUERY = gql`
   query GROUPS_QUERY {
     me {
+      id
       groups {
         id
         name
+        owner {
+          id
+        }
       }
     }
   }
@@ -36,6 +40,11 @@ export default function Groups() {
             <Link href={`/groups/${group.id}`} noUnderline key={group.id}>
               <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer">
                 <div className="text-xl">{group.name}</div>
+
+                {/* // TODO: Style the manage link better -> Maybe float to the right */}
+                {data && group?.owner?.id === data.me.id && (
+                  <Link href={`${router.asPath}/${group.id}/manage`}>Manage</Link>
+                )}
               </div>
             </Link>
           );
