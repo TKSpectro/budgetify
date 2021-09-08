@@ -62,59 +62,6 @@ export const GroupQuery = extendType({
         });
       },
     });
-    // TODO: Remove this if the new calculateMemberBalances is finished
-    t.list.field('calculateMemberBalancesOld', {
-      type: Participant,
-      args: { id: nonNull(stringArg()) },
-      description: 'Returns a group by searching for the given id.',
-      authorize: (_, __, ctx) => (ctx.user ? true : false),
-      async resolve(_, args, ctx) {
-        let participants: ParticipantType[] = [];
-
-        const group = await prisma.group.findUnique({
-          where: { id: args.id },
-          include: {
-            members: true,
-            transactions: {
-              include: {
-                user: true,
-                participants: true,
-              },
-            },
-          },
-        });
-
-        // Run through all members of the group and firstly add them to the list
-        group?.members.map((member) => {
-          participants.push({
-            userId: member.id,
-            name: member.firstname + ' ' + member.lastname,
-            value: 0,
-          });
-        });
-
-        // Run through all Transaction in the group
-        group?.transactions.map((transaction) => {
-          // If the transaction value is positive e.g. somebody put money into the group, then we add that to their virtual "balance"
-          if (transaction.value >= 0) {
-            const index = participants.findIndex((el) => el.userId === transaction.userId);
-            participants[index].value += transaction.value;
-          }
-
-          if (transaction.value < 0) {
-            // If the transaction value is negative e.g. somebody bought food. We go through the participants
-            // (which ate something from this bought food) and add their part onto their virtual "balance"
-            transaction.participants.map((participant) => {
-              // Foreach Participant add the value divided by the amount of people for that transaction
-              const index = participants.findIndex((el) => el.userId === participant.id);
-              participants[index].value += transaction.value / transaction.participants.length;
-            });
-          }
-        });
-
-        return participants;
-      },
-    });
     t.list.field('calculateMemberBalances', {
       type: Participant,
       args: { id: nonNull(stringArg()) },

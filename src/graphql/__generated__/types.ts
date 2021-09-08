@@ -330,8 +330,6 @@ export type Query = {
   allHouseholds?: Maybe<Array<Maybe<Household>>>;
   /** Returns the virtual balances for all members in the given group. */
   calculateMemberBalances?: Maybe<Array<Maybe<Participant>>>;
-  /** Returns a group by searching for the given id. */
-  calculateMemberBalancesOld?: Maybe<Array<Maybe<Participant>>>;
   /** All available categories. Filterable by id or name via arguments */
   categories?: Maybe<Array<Maybe<Category>>>;
   /** Returns a group by searching for the given id. */
@@ -345,11 +343,6 @@ export type Query = {
 
 
 export type QueryCalculateMemberBalancesArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryCalculateMemberBalancesOldArgs = {
   id: Scalars['String'];
 };
 

@@ -255,7 +255,6 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     allHouseholds: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     calculateMemberBalances: Array<NexusGenRootTypes['Participant'] | null> | null; // [Participant]
-    calculateMemberBalancesOld: Array<NexusGenRootTypes['Participant'] | null> | null; // [Participant]
     categories: Array<NexusGenRootTypes['Category'] | null> | null; // [Category]
     group: NexusGenRootTypes['Group'] | null; // Group
     household: NexusGenRootTypes['Household'] | null; // Household
@@ -404,7 +403,6 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     allHouseholds: 'Household'
     calculateMemberBalances: 'Participant'
-    calculateMemberBalancesOld: 'Participant'
     categories: 'Category'
     group: 'Group'
     household: 'Household'
@@ -548,9 +546,6 @@ export interface NexusGenArgTypes {
   }
   Query: {
     calculateMemberBalances: { // args
-      id: string; // String!
-    }
-    calculateMemberBalancesOld: { // args
       id: string; // String!
     }
     categories: { // args
