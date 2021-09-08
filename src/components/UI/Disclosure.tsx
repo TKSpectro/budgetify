@@ -15,14 +15,17 @@ export function Disclosure({ text, overflowText, showOpen, children, ...props }:
   return (
     <div onClick={() => setIsOpen(!isOpen)}>
       {text}
-      {showOpen && (
-        <>
-          <span className="float-right pr-4">
-            <ChevronDownIcon className="w-5 h-5" />
-          </span>
-        </>
+      {overflowText && (
+        <span className="float-right hidden md:inline md:max-w-[16rem] truncate pr-5">
+          {overflowText}
+        </span>
       )}
-      <div className={clsx('mx-4', { hidden: !isOpen })}>{children}</div>
+      {showOpen && (
+        <span className="float-right pr-4">
+          <ChevronDownIcon className="w-5 h-5" />
+        </span>
+      )}
+      <div className={clsx('my-2 mx-4', { hidden: !isOpen || overflowText })}>{children}</div>
     </div>
   );
 }

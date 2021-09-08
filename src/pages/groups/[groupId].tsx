@@ -159,7 +159,7 @@ export default function Group() {
             >
               {/* // TODO: Somehow make this look and feel better */}
               <label>
-                Switch beetwen transaction modes
+                Switch between transaction modes
                 <div className="items-center" onClick={handleChange}>
                   <div
                     className={clsx(
@@ -263,8 +263,12 @@ export default function Group() {
                 <div key={transaction.id}>
                   <Disclosure
                     text={transaction.name + ' : ' + transaction.value + '€'}
-                    overflowText="jj iss  jiasdjiajsd asjidjiasdi asdjiajas asdjisd asdf asdasd asd asd asd asd  sssasdasdmasd "
-                    showOpen={!!transaction.participants && transaction.participants?.length > 0}
+                    overflowText={
+                      transaction.participants?.length === 1
+                        ? transaction.participants[0]?.name
+                        : ''
+                    }
+                    showOpen={!!transaction.participants && transaction.participants?.length > 1}
                   >
                     <div>
                       {transaction.participants?.map((user, id, array) => {
