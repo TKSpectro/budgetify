@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { hashSync } from 'bcrypt';
 import { addDays, subDays } from 'date-fns';
 import faker from 'faker';
-import { TransactionType } from '~/graphql/__generated__/types';
+import { TransactionType } from '../src/graphql/__generated__/types';
 
 const prisma = new PrismaClient();
 
