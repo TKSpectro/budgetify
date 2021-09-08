@@ -35,7 +35,7 @@ export const Money = scalarType({
       return Number(valueAsString.slice(0, -2) + valueAsString.slice(-2));
     }
     if (ast.kind === Kind.INT) {
-      return ast.value;
+      return Number(ast.value);
     }
 
     return null;
