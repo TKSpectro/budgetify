@@ -12,6 +12,18 @@ export const Group = objectType({
     t.nonNull.money('value');
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
+    t.field('owner', {
+      type: User,
+      description: "The user which has management right's over the group.",
+      resolve(source) {
+        return prisma.user.findUnique({
+          where: {
+            id: source.ownerId || undefined,
+          },
+        });
+      },
+    });
+    t.nonNull.string('ownerId');
     t.list.field('members', {
       type: User,
       description: "A list of all user's which have access to this group.",
@@ -198,6 +210,7 @@ export const GroupMutation = extendType({
           data: {
             name: args.name,
             value: args.value || 0.0,
+            owner: { connect: { id: ctx.user.id } },
             members: { connect: { id: ctx.user.id } },
           },
         });

@@ -68,6 +68,7 @@ export interface NexusGenObjects {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     name: string; // String!
+    ownerId: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     value: NexusGenScalars['Money']; // Money!
   }
@@ -172,6 +173,8 @@ export interface NexusGenFieldTypes {
     invites: Array<NexusGenRootTypes['Invite'] | null> | null; // [Invite]
     members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     name: string; // String!
+    owner: NexusGenRootTypes['User'] | null; // User
+    ownerId: string; // String!
     transactions: Array<NexusGenRootTypes['GroupTransaction'] | null> | null; // [GroupTransaction]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     value: NexusGenScalars['Money']; // Money!
@@ -300,6 +303,7 @@ export interface NexusGenFieldTypes {
     isAdmin: boolean; // Boolean!
     lastname: string; // String!
     name: string; // String!
+    ownedGroups: Array<NexusGenRootTypes['Group'] | null> | null; // [Group]
     ownedHouseholds: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     payments: Array<NexusGenRootTypes['Payment'] | null> | null; // [Payment]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -322,6 +326,8 @@ export interface NexusGenFieldTypeNames {
     invites: 'Invite'
     members: 'User'
     name: 'String'
+    owner: 'User'
+    ownerId: 'String'
     transactions: 'GroupTransaction'
     updatedAt: 'DateTime'
     value: 'Money'
@@ -450,6 +456,7 @@ export interface NexusGenFieldTypeNames {
     isAdmin: 'Boolean'
     lastname: 'String'
     name: 'String'
+    ownedGroups: 'Group'
     ownedHouseholds: 'Household'
     payments: 'Payment'
     updatedAt: 'DateTime'

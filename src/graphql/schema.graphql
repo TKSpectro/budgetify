@@ -33,6 +33,10 @@ type Group {
   members: [User]
   name: String!
 
+  """The user which has management right's over the group."""
+  owner: User
+  ownerId: String!
+
   """A list of all transactions which happened in this group."""
   transactions: [GroupTransaction]
   updatedAt: DateTime!
@@ -328,6 +332,9 @@ type User {
   isAdmin: Boolean!
   lastname: String!
   name: String!
+
+  """The groups's in which the user is the current owner"""
+  ownedGroups: [Group]
 
   """The household's in which the user is the current owner"""
   ownedHouseholds: [Household]

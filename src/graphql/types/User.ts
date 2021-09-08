@@ -58,6 +58,13 @@ export const User = objectType({
         return prisma.user.findUnique({ where: { id: source.id || undefined } }).groups();
       },
     });
+    t.list.field('ownedGroups', {
+      type: Group,
+      description: "The groups's in which the user is the current owner",
+      resolve(source) {
+        return prisma.user.findUnique({ where: { id: source.id || undefined } }).ownedGroups();
+      },
+    });
     t.list.field('groupTransactions', {
       type: GroupTransaction,
       description: 'The payments which were booked in groups and where payed by the user.',

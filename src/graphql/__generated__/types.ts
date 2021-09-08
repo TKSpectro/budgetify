@@ -43,6 +43,9 @@ export type Group = {
   /** A list of all user's which have access to this group. */
   members?: Maybe<Array<Maybe<User>>>;
   name: Scalars['String'];
+  /** The user which has management right's over the group. */
+  owner?: Maybe<User>;
+  ownerId: Scalars['String'];
   /** A list of all transactions which happened in this group. */
   transactions?: Maybe<Array<Maybe<GroupTransaction>>>;
   updatedAt: Scalars['DateTime'];
@@ -429,6 +432,8 @@ export type User = {
   isAdmin: Scalars['Boolean'];
   lastname: Scalars['String'];
   name: Scalars['String'];
+  /** The groups's in which the user is the current owner */
+  ownedGroups?: Maybe<Array<Maybe<Group>>>;
   /** The household's in which the user is the current owner */
   ownedHouseholds?: Maybe<Array<Maybe<Household>>>;
   /** All payment's which where done by the user. */
