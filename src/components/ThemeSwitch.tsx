@@ -1,7 +1,7 @@
 import { MoonIcon, SunIcon } from '@heroicons/react/outline';
-import clsx from 'clsx';
 import { useTheme } from 'next-themes';
 import { ClientOnly } from './ClientOnly';
+import { Switch } from './UI/Switch';
 
 export function ThemeSwitch() {
   const { theme, setTheme } = useTheme();
@@ -15,27 +15,13 @@ export function ThemeSwitch() {
   // Also add icons depending on the state
   return (
     <ClientOnly>
-      <div className="items-center" onClick={handleChange}>
-        <div
-          className={clsx(
-            'w-16 h-10 items-center bg-gray-300 rounded-full p-1 duration-300 ease-in-out',
-            { 'bg-brand-400': theme !== 'light' },
-          )}
-        >
-          <div
-            className={clsx(
-              'bg-white dark:bg-gray-800 w-8 h-8 rounded-full shadow-md transform duration-300 ease-in-out',
-              { 'translate-x-6': theme! == 'light' },
-            )}
-          >
-            {theme === 'light' ? (
-              <SunIcon className="w-8 h-8 " />
-            ) : (
-              <MoonIcon className="w-8 h-8 text-brand-400" />
-            )}
-          </div>
-        </div>
-      </div>
+      <Switch
+        isLeft={theme !== 'light'}
+        onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+        leftIcon={<SunIcon className="w-8 h-8" />}
+        rightIcon={<MoonIcon className="w-8 h-8 text-brand-400" />}
+        big
+      />
     </ClientOnly>
   );
 }

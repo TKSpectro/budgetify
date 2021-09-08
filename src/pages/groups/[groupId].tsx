@@ -12,6 +12,7 @@ import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
 import { ModalForm } from '~/components/UI/ModalForm';
+import { Switch } from '~/components/UI/Switch';
 import {
   GroupTransaction,
   MutationCreateGroupTransactionArgs,
@@ -139,10 +140,6 @@ export default function Group() {
   const [formStateIsBuyingFood, setFormStateIsBuyingFood] = useState(true);
   const [formAllGroupMembers, setFormAllGroupMembers] = useState(true);
 
-  const handleChange = () => {
-    setFormStateIsCashout(!formStateIsCashout);
-  };
-
   return (
     <>
       <Container>
@@ -166,27 +163,12 @@ export default function Group() {
               {/* // TODO: Somehow make this look and feel better */}
               <label>
                 Switch between transaction modes
-                <div className="items-center" onClick={handleChange}>
-                  <div
-                    className={clsx(
-                      'w-12 h-6 items-center bg-gray-300 rounded-full p-1 duration-300 ease-in-out',
-                      { 'bg-brand-400': formStateIsCashout === true },
-                    )}
-                  >
-                    <div
-                      className={clsx(
-                        'bg-white dark:bg-gray-800 w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out',
-                        { 'translate-x-6': formStateIsCashout === true },
-                      )}
-                    >
-                      {formStateIsCashout === false ? (
-                        <PlusIcon className="w-4 h-4 " />
-                      ) : (
-                        <MinusIcon className="w-4 h-4 text-brand-400" />
-                      )}
-                    </div>
-                  </div>
-                </div>
+                <Switch
+                  isLeft={formStateIsCashout}
+                  onClick={() => setFormStateIsCashout(!formStateIsCashout)}
+                  leftIcon={<PlusIcon className="w-4 h-4 " />}
+                  rightIcon={<MinusIcon className="w-4 h-4 text-brand-400" />}
+                />
               </label>
 
               <Input
@@ -201,30 +183,12 @@ export default function Group() {
               {formStateIsCashout && (
                 <label>
                   Take out money / Bought food
-                  <div
-                    className="items-center"
+                  <Switch
+                    isLeft={formStateIsBuyingFood}
                     onClick={() => setFormStateIsBuyingFood(!formStateIsBuyingFood)}
-                  >
-                    <div
-                      className={clsx(
-                        'w-12 h-6 items-center bg-gray-300 rounded-full p-1 duration-300 ease-in-out',
-                        { 'bg-brand-400': formStateIsBuyingFood === true },
-                      )}
-                    >
-                      <div
-                        className={clsx(
-                          'bg-white dark:bg-gray-800 w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out',
-                          { 'translate-x-6': formStateIsBuyingFood === true },
-                        )}
-                      >
-                        {formStateIsBuyingFood === false ? (
-                          <XIcon className="w-4 h-4 " />
-                        ) : (
-                          <CheckIcon className="w-4 h-4 text-brand-400" />
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                    leftIcon={<XIcon className="w-4 h-4 " />}
+                    rightIcon={<CheckIcon className="w-4 h-4 text-brand-400" />}
+                  />
                 </label>
               )}
 
@@ -249,30 +213,12 @@ export default function Group() {
               {formStateIsCashout && formStateIsBuyingFood && (
                 <label>
                   All group members?
-                  <div
-                    className="items-center"
+                  <Switch
+                    isLeft={formAllGroupMembers}
                     onClick={() => setFormAllGroupMembers(!formAllGroupMembers)}
-                  >
-                    <div
-                      className={clsx(
-                        'w-12 h-6 items-center bg-gray-300 rounded-full p-1 duration-300 ease-in-out',
-                        { 'bg-brand-400': formAllGroupMembers === true },
-                      )}
-                    >
-                      <div
-                        className={clsx(
-                          'bg-white dark:bg-gray-800 w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out',
-                          { 'translate-x-6': formAllGroupMembers === true },
-                        )}
-                      >
-                        {formAllGroupMembers === false ? (
-                          <XIcon className="w-4 h-4 " />
-                        ) : (
-                          <CheckIcon className="w-4 h-4 text-brand-400" />
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                    leftIcon={<XIcon className="w-4 h-4 " />}
+                    rightIcon={<CheckIcon className="w-4 h-4 text-brand-400" />}
+                  />
                 </label>
               )}
 
