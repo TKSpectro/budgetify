@@ -171,6 +171,8 @@ export type Mutation = {
   logout?: Maybe<Scalars['String']>;
   /** Remove a new category. Can just be called by an admin. */
   removeCategory: Category;
+  /** Remove a member from the specified group. Need to be logged in and own the group. */
+  removeGroupMember: Group;
   /** Remove a member from the specified household. Need to be logged in and own the household. */
   removeHouseholdMember: Household;
   /**
@@ -179,6 +181,8 @@ export type Mutation = {
    *       for further authentication with the graphql-api.
    */
   signup: AuthToken;
+  /** Update a already existing group. Need to be logged in and be owner of the group. */
+  updateGroup: Group;
   /** Update a already existing household. Need to be logged in and owner of the household. */
   updateHousehold: Household;
   /** Update a new recurring payment. Need to be logged in. */
@@ -264,6 +268,12 @@ export type MutationRemoveCategoryArgs = {
 };
 
 
+export type MutationRemoveGroupMemberArgs = {
+  id: Scalars['String'];
+  memberId: Scalars['String'];
+};
+
+
 export type MutationRemoveHouseholdMemberArgs = {
   id: Scalars['String'];
   memberId: Scalars['String'];
@@ -275,6 +285,12 @@ export type MutationSignupArgs = {
   firstname: Scalars['String'];
   lastname: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationUpdateGroupArgs = {
+  id: Scalars['String'];
+  ownerId?: Maybe<Scalars['String']>;
 };
 
 

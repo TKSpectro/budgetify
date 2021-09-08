@@ -216,5 +216,57 @@ export const GroupMutation = extendType({
         });
       },
     });
+
+    t.nonNull.field('updateGroup', {
+      type: Group,
+      description:
+        'Update a already existing group. Need to be logged in and be owner of the group.',
+      authorize: async (_, args, ctx) => {
+        const group = await prisma.group.findFirst({
+          where: { id: args.id },
+        });
+        // Check if the user is the owner of the group.
+        const groupOwner = group?.ownerId === ctx.user.id;
+        // User must be logged in and own the household
+        return !!ctx.user && groupOwner;
+      },
+      args: {
+        id: nonNull(stringArg()),
+        ownerId: stringArg(),
+      },
+      async resolve(_, args) {
+        return prisma.group.update({
+          where: { id: args.id },
+          data: { ownerId: args.ownerId || undefined },
+        });
+      },
+    });
+
+    // TODO: Need to figure out how we remove a member if we want to keep the transactions as
+    // the transactions user is non-null
+    t.nonNull.field('removeGroupMember', {
+      type: Group,
+      description:
+        'Remove a member from the specified group. Need to be logged in and own the group.',
+      authorize: async (_, args, ctx) => {
+        const group = await prisma.group.findFirst({
+          where: { id: args.id },
+        });
+        // Check if the user is the owner of the household.
+        const groupOwner = group?.ownerId === ctx.user.id;
+        // User must be logged in and own the household
+        return !!ctx.user && groupOwner;
+      },
+      args: {
+        id: nonNull(stringArg()),
+        memberId: nonNull(stringArg()),
+      },
+      async resolve(_, args) {
+        return prisma.group.update({
+          where: { id: args.id },
+          data: { members: { disconnect: { id: args.memberId } } },
+        });
+      },
+    });
   },
 });

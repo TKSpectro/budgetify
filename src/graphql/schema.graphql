@@ -176,6 +176,11 @@ type Mutation {
   removeCategory(name: String!): Category!
 
   """
+  Remove a member from the specified group. Need to be logged in and own the group.
+  """
+  removeGroupMember(id: String!, memberId: String!): Group!
+
+  """
   Remove a member from the specified household. Need to be logged in and own the household.
   """
   removeHouseholdMember(id: String!, memberId: String!): Household!
@@ -186,6 +191,11 @@ type Mutation {
         for further authentication with the graphql-api.
   """
   signup(email: String!, firstname: String!, lastname: String!, password: String!): AuthToken!
+
+  """
+  Update a already existing group. Need to be logged in and be owner of the group.
+  """
+  updateGroup(id: String!, ownerId: String): Group!
 
   """
   Update a already existing household. Need to be logged in and owner of the household.

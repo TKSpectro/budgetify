@@ -233,8 +233,10 @@ export interface NexusGenFieldTypes {
     login: NexusGenRootTypes['AuthToken']; // AuthToken!
     logout: string | null; // String
     removeCategory: NexusGenRootTypes['Category']; // Category!
+    removeGroupMember: NexusGenRootTypes['Group']; // Group!
     removeHouseholdMember: NexusGenRootTypes['Household']; // Household!
     signup: NexusGenRootTypes['AuthToken']; // AuthToken!
+    updateGroup: NexusGenRootTypes['Group']; // Group!
     updateHousehold: NexusGenRootTypes['Household']; // Household!
     updateRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
     useGroupInvite: NexusGenRootTypes['Invite'] | null; // Invite
@@ -386,8 +388,10 @@ export interface NexusGenFieldTypeNames {
     login: 'AuthToken'
     logout: 'String'
     removeCategory: 'Category'
+    removeGroupMember: 'Group'
     removeHouseholdMember: 'Household'
     signup: 'AuthToken'
+    updateGroup: 'Group'
     updateHousehold: 'Household'
     updateRecurringPayment: 'RecurringPayment'
     useGroupInvite: 'Invite'
@@ -530,6 +534,10 @@ export interface NexusGenArgTypes {
     removeCategory: { // args
       name: string; // String!
     }
+    removeGroupMember: { // args
+      id: string; // String!
+      memberId: string; // String!
+    }
     removeHouseholdMember: { // args
       id: string; // String!
       memberId: string; // String!
@@ -539,6 +547,10 @@ export interface NexusGenArgTypes {
       firstname: string; // String!
       lastname: string; // String!
       password: string; // String!
+    }
+    updateGroup: { // args
+      id: string; // String!
+      ownerId?: string | null; // String
     }
     updateHousehold: { // args
       id: string; // String!

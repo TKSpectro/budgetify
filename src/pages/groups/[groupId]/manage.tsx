@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import MemberTable from '~/components/Household/Manage/MemberTable';
+import GroupMemberTable from '~/components/Group/Manage/GroupMemberTable';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
@@ -55,7 +55,7 @@ export default function ManageGroup() {
       {loading && <LoadingAnimation />}
       <Error title="Could not load group." error={error} />
 
-      {data && <MemberTable members={members} owner={owner} />}
+      {data && <GroupMemberTable members={members} owner={owner} />}
     </Container>
   );
 }
