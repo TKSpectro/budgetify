@@ -183,11 +183,25 @@ export default function Group() {
                 </div>
               </label>
 
-              <Input label="Name" type="text" {...form.register('name', { required: true })} />
               <Input
-                label={formStateIsCashout ? 'Bought food / Take money out' : 'Top up account'}
+                label="Name*"
+                type="text"
+                {...form.register('name', {
+                  required: { value: true, message: 'Name is required' },
+                  minLength: { value: 3, message: 'Name must be at least 3 characters' },
+                })}
+              />
+              <Input
+                label={
+                  formStateIsCashout ? 'Bought food / Take money out*' : 'Top up account balance*'
+                }
                 type="number"
-                {...form.register('value', { required: true, valueAsNumber: true, min: 0 })}
+                step="any"
+                {...form.register('value', {
+                  required: { value: true, message: 'Value is required' },
+                  min: { value: 0, message: 'Value must be positive' },
+                  valueAsNumber: true,
+                })}
               />
 
               {/* // TODO: Somehow make this look and feel better */}

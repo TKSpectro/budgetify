@@ -11,8 +11,12 @@ export const Money = scalarType({
   description: 'Money custom scalar type. Converts int to float with 2 decimals.',
 
   parseValue(value) {
+    // Multiply by 100 because we get a input like 10Euro, which we need to convert to 1000
+    // instead of just 10
+    value *= 100;
+
     const valueAsString = value.toString();
-    return Number(valueAsString.slice(0, -3) + valueAsString.slice(-2));
+    return Number(valueAsString.slice(0, -2) + valueAsString.slice(-2));
   },
 
   serialize(value) {
@@ -28,7 +32,7 @@ export const Money = scalarType({
   parseLiteral(ast) {
     if (ast.kind === Kind.FLOAT) {
       const valueAsString = ast.value.toString();
-      return Number(valueAsString.slice(0, -3) + valueAsString.slice(-2));
+      return Number(valueAsString.slice(0, -2) + valueAsString.slice(-2));
     }
     if (ast.kind === Kind.INT) {
       return ast.value;
