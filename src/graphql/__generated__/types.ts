@@ -59,6 +59,7 @@ export type GroupTransaction = {
   name: Scalars['String'];
   /** All users which ate some of the bought food from this transaction. */
   participants?: Maybe<Array<Maybe<User>>>;
+  type: TransactionType;
   updatedAt: Scalars['DateTime'];
   /** The user which booked the transaction. */
   user?: Maybe<User>;
@@ -210,6 +211,7 @@ export type MutationCreateGroupTransactionArgs = {
   groupId: Scalars['String'];
   name: Scalars['String'];
   participantIds: Array<Scalars['String']>;
+  type: TransactionType;
   value: Scalars['Money'];
 };
 
@@ -389,6 +391,12 @@ export type RecurringPayment = {
   userId?: Maybe<Scalars['String']>;
   value: Scalars['Money'];
 };
+
+export enum TransactionType {
+  Buy = 'BUY',
+  TakeOut = 'TAKE_OUT',
+  TopUp = 'TOP_UP'
+}
 
 /** A user is an account which can join households and create payments */
 export type User = {

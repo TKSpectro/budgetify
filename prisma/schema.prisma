@@ -134,15 +134,22 @@ model Group {
   invites      Invite[]
 }
 
+enum TransactionType {
+  TOP_UP
+  TAKE_OUT
+  BUY
+}
+
 model GroupTransaction {
-  id           String   @id @default(uuid())
+  id           String          @id @default(uuid())
   name         String
-  value        Int      @default(0)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  group        Group    @relation(fields: [groupId], references: [id])
+  value        Int             @default(0)
+  type         TransactionType
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  group        Group           @relation(fields: [groupId], references: [id])
   groupId      String
-  user         User     @relation(fields: [userId], references: [id])
+  user         User            @relation(fields: [userId], references: [id])
   userId       String
-  participants User[]   @relation(name: "Participants")
+  participants User[]          @relation(name: "Participants")
 }

@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { hashSync } from 'bcrypt';
 import { addDays, subDays } from 'date-fns';
 import faker from 'faker';
+import { TransactionType } from '~/graphql/__generated__/types';
 
 const prisma = new PrismaClient();
 
@@ -199,30 +200,40 @@ async function main() {
       },
       transactions: {
         create: [
-          { id: '0', name: 'ALL go shopping', value: -10, userId: testUser.id },
+          {
+            id: '0',
+            name: 'ALL go shopping',
+            value: -10,
+            type: TransactionType.Buy,
+            userId: testUser.id,
+          },
 
           {
             id: '1',
             name: 'A top up',
             value: 20,
+            type: TransactionType.TopUp,
             userId: testUser.id,
           },
           {
             id: '2',
             name: 'C top up',
             value: 20,
+            type: TransactionType.TopUp,
             userId: userC.id,
           },
           {
             id: '3',
             name: 'D top up',
             value: 10,
+            type: TransactionType.TopUp,
             userId: userD.id,
           },
           {
             id: '4',
             name: 'A B C go shopping',
             value: -10,
+            type: TransactionType.Buy,
             userId: testUser.id,
           },
         ],

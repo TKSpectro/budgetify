@@ -16,6 +16,7 @@ import {
   GroupTransaction,
   MutationCreateGroupTransactionArgs,
   Participant,
+  TransactionType,
   User,
 } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
@@ -52,12 +53,14 @@ const CREATE_GROUP_TRANSACTION_MUTATION = gql`
   mutation CREATE_GROUP_TRANSACTION_MUTATION(
     $name: String!
     $value: Money!
+    $type: TransactionType!
     $groupId: String!
     $participantIds: [String!]!
   ) {
     createGroupTransaction(
       name: $name
       value: $value
+      type: $type
       groupId: $groupId
       participantIds: $participantIds
     ) {
@@ -99,6 +102,7 @@ export default function Group() {
           ...form.getValues(),
           // Force the value to be negative as the user input will be positive
           value: -Math.abs(form.getValues('value')),
+          type: formStateIsBuyingFood ? TransactionType.Buy : TransactionType.TakeOut,
           // Check if the all user switch is set depending on that we take all group members
           // or just the ones that are checked.
           participantIds: formAllGroupMembers
@@ -111,6 +115,7 @@ export default function Group() {
       createGroupTransaction({
         variables: {
           ...form.getValues(),
+          type: TransactionType.TopUp,
           participantIds: [],
         },
       });
@@ -131,6 +136,7 @@ export default function Group() {
   const memberBalances = data?.calculateMemberBalances;
 
   const [formStateIsCashout, setFormStateIsCashout] = useState(false);
+  const [formStateIsBuyingFood, setFormStateIsBuyingFood] = useState(true);
   const [formAllGroupMembers, setFormAllGroupMembers] = useState(true);
 
   const handleChange = () => {
@@ -191,9 +197,44 @@ export default function Group() {
                   minLength: { value: 3, message: 'Name must be at least 3 characters' },
                 })}
               />
+
+              {formStateIsCashout && (
+                <label>
+                  Take out money / Bought food
+                  <div
+                    className="items-center"
+                    onClick={() => setFormStateIsBuyingFood(!formStateIsBuyingFood)}
+                  >
+                    <div
+                      className={clsx(
+                        'w-12 h-6 items-center bg-gray-300 rounded-full p-1 duration-300 ease-in-out',
+                        { 'bg-brand-400': formStateIsBuyingFood === true },
+                      )}
+                    >
+                      <div
+                        className={clsx(
+                          'bg-white dark:bg-gray-800 w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out',
+                          { 'translate-x-6': formStateIsBuyingFood === true },
+                        )}
+                      >
+                        {formStateIsBuyingFood === false ? (
+                          <XIcon className="w-4 h-4 " />
+                        ) : (
+                          <CheckIcon className="w-4 h-4 text-brand-400" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </label>
+              )}
+
               <Input
                 label={
-                  formStateIsCashout ? 'Bought food / Take money out*' : 'Top up account balance*'
+                  formStateIsCashout
+                    ? formStateIsBuyingFood
+                      ? 'Bought food*'
+                      : 'Take money out*'
+                    : 'Top up account balance*'
                 }
                 type="number"
                 step="any"
@@ -205,7 +246,7 @@ export default function Group() {
               />
 
               {/* // TODO: Somehow make this look and feel better */}
-              {formStateIsCashout && (
+              {formStateIsCashout && formStateIsBuyingFood && (
                 <label>
                   All group members?
                   <div

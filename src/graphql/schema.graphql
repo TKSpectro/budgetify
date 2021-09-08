@@ -50,6 +50,7 @@ type GroupTransaction {
 
   """All users which ate some of the bought food from this transaction."""
   participants: [User]
+  type: TransactionType!
   updatedAt: DateTime!
 
   """The user which booked the transaction."""
@@ -141,7 +142,7 @@ type Mutation {
   """
   Creates a new transaction in the specified group with the given arguments and returns it.
   """
-  createGroupTransaction(groupId: String!, name: String!, participantIds: [String!]!, value: Money!): GroupTransaction
+  createGroupTransaction(groupId: String!, name: String!, participantIds: [String!]!, type: TransactionType!, value: Money!): GroupTransaction
 
   """Create a new invite. Need to be logged in."""
   createInvite(householdId: String!, invitedEmail: String!): Invite!
@@ -281,6 +282,12 @@ type RecurringPayment {
   user: User
   userId: String
   value: Money!
+}
+
+enum TransactionType {
+  BUY
+  TAKE_OUT
+  TOP_UP
 }
 
 """A user is an account which can join households and create payments"""

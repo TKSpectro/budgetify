@@ -41,6 +41,7 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   Interval: "DAILY" | "MONTHLY" | "QUARTERLY" | "WEEKLY" | "YEARLY"
+  TransactionType: "BUY" | "TAKE_OUT" | "TOP_UP"
 }
 
 export interface NexusGenScalars {
@@ -75,6 +76,7 @@ export interface NexusGenObjects {
     groupId: string; // String!
     id: string; // String!
     name: string; // String!
+    type: NexusGenEnums['TransactionType']; // TransactionType!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId: string; // String!
     value: NexusGenScalars['Money']; // Money!
@@ -181,6 +183,7 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     name: string; // String!
     participants: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    type: NexusGenEnums['TransactionType']; // TransactionType!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User'] | null; // User
     userId: string; // String!
@@ -329,6 +332,7 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     name: 'String'
     participants: 'User'
+    type: 'TransactionType'
     updatedAt: 'DateTime'
     user: 'User'
     userId: 'String'
@@ -483,6 +487,7 @@ export interface NexusGenArgTypes {
       groupId: string; // String!
       name: string; // String!
       participantIds: string[]; // [String!]!
+      type: NexusGenEnums['TransactionType']; // TransactionType!
       value: NexusGenScalars['Money']; // Money!
     }
     createInvite: { // args
