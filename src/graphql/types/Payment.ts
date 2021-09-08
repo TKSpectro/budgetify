@@ -11,8 +11,8 @@ export const Payment = objectType({
     t.nonNull.string('name');
     t.nonNull.money('value');
     t.string('description');
-    t.nonNull.field('createdAt', { type: 'DateTime' });
-    t.nonNull.field('updatedAt', { type: 'DateTime' });
+    t.nonNull.date('createdAt');
+    t.nonNull.date('updatedAt');
     t.field('category', {
       type: Category,
       description: 'The category in which the user placed it. (e.g. food, income)',

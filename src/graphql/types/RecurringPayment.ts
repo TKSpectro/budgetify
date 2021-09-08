@@ -30,18 +30,16 @@ export const RecurringPayment = objectType({
     t.nonNull.money('value');
     t.string('description');
     t.nonNull.field('interval', { type: Interval });
-    t.nonNull.field('startDate', { type: 'DateTime' });
-    t.field('endDate', { type: 'DateTime' });
-    t.field('lastBooking', {
-      type: 'DateTime',
+    t.nonNull.date('startDate');
+    t.date('endDate');
+    t.date('lastBooking', {
       description: 'The date of when this recurring payment was last booked.',
     });
-    t.field('nextBooking', {
-      type: 'DateTime',
+    t.date('nextBooking', {
       description: 'The date of when this recurring payment should be booked next.',
     });
-    t.nonNull.field('createdAt', { type: 'DateTime' });
-    t.nonNull.field('updatedAt', { type: 'DateTime' });
+    t.nonNull.date('createdAt');
+    t.nonNull.date('updatedAt');
     t.field('category', {
       type: Category,
       description: 'The category in which the payment will be booked.',

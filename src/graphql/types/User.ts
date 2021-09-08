@@ -21,8 +21,8 @@ export const User = objectType({
       description:
         "The user's role. This could be extended to a complete role system in the future",
     });
-    t.nonNull.field('createdAt', { type: 'DateTime' });
-    t.nonNull.field('updatedAt', { type: 'DateTime' });
+    t.nonNull.date('createdAt');
+    t.nonNull.date('updatedAt');
     t.list.field('payments', {
       type: Payment,
       description: "All payment's which where done by the user.",

@@ -15,8 +15,8 @@ export const GroupTransaction = objectType({
     t.nonNull.string('name');
     t.nonNull.money('value');
     t.nonNull.field('type', { type: TransactionType });
-    t.nonNull.field('createdAt', { type: 'DateTime' });
-    t.nonNull.field('updatedAt', { type: 'DateTime' });
+    t.nonNull.date('createdAt');
+    t.nonNull.date('updatedAt');
     t.field('group', {
       type: Group,
       description: 'The group in which this transaction was booked.',

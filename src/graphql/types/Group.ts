@@ -10,8 +10,8 @@ export const Group = objectType({
     t.nonNull.string('id');
     t.nonNull.string('name');
     t.nonNull.money('value');
-    t.nonNull.field('createdAt', { type: 'DateTime' });
-    t.nonNull.field('updatedAt', { type: 'DateTime' });
+    t.nonNull.date('createdAt');
+    t.nonNull.date('updatedAt');
     t.list.field('members', {
       type: User,
       description: "A list of all user's which have access to this group.",

@@ -7,8 +7,8 @@ export const Household = objectType({
   definition(t) {
     t.nonNull.string('id');
     t.nonNull.string('name');
-    t.nonNull.field('createdAt', { type: 'DateTime' });
-    t.nonNull.field('updatedAt', { type: 'DateTime' });
+    t.nonNull.date('createdAt');
+    t.nonNull.date('updatedAt');
     t.field('owner', {
       type: User,
       description: "The user which has management right's over the household.",

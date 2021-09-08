@@ -10,14 +10,14 @@ export const Invite = objectType({
   name: 'Invite',
   definition(t) {
     t.nonNull.string('id');
-    t.nonNull.field('validUntil', { type: 'DateTime' });
+    t.nonNull.date('validUntil');
     t.nonNull.boolean('wasUsed');
     t.nonNull.string('invitedEmail', { description: 'The email of the person which was invited.' });
     t.nonNull.string('token', {
       description: 'The token which can be used from invited person to use the invite.',
     });
-    t.nonNull.field('createdAt', { type: 'DateTime' });
-    t.nonNull.field('updatedAt', { type: 'DateTime' });
+    t.nonNull.date('createdAt');
+    t.nonNull.date('updatedAt');
     t.field('sender', {
       type: User,
       description: 'The user which sent the invite. (Referrer)',
