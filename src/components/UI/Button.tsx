@@ -16,7 +16,7 @@ export function Button({ variant = 'primary', className, ...props }: Props) {
           'bg-brand-500 text-white': variant === 'primary',
           'bg-gray-700 hover:bg-gray-600 text-gray-100': variant === 'secondary',
           'bg-red-500 text-white': variant === 'danger',
-          'bg-transparent text-white': variant === 'transparent',
+          'bg-transparent text-gray-900 dark:text-white': variant === 'transparent',
         },
       )}
       {...props}
