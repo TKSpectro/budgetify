@@ -230,6 +230,7 @@ export interface NexusGenFieldTypes {
     login: NexusGenRootTypes['AuthToken']; // AuthToken!
     logout: string | null; // String
     removeCategory: NexusGenRootTypes['Category']; // Category!
+    removeHouseholdMember: NexusGenRootTypes['Household']; // Household!
     signup: NexusGenRootTypes['AuthToken']; // AuthToken!
     updateHousehold: NexusGenRootTypes['Household']; // Household!
     updateRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
@@ -379,6 +380,7 @@ export interface NexusGenFieldTypeNames {
     login: 'AuthToken'
     logout: 'String'
     removeCategory: 'Category'
+    removeHouseholdMember: 'Household'
     signup: 'AuthToken'
     updateHousehold: 'Household'
     updateRecurringPayment: 'RecurringPayment'
@@ -520,6 +522,10 @@ export interface NexusGenArgTypes {
     }
     removeCategory: { // args
       name: string; // String!
+    }
+    removeHouseholdMember: { // args
+      id: string; // String!
+      memberId: string; // String!
     }
     signup: { // args
       email: string; // String!

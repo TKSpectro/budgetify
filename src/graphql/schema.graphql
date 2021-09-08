@@ -172,6 +172,11 @@ type Mutation {
   removeCategory(name: String!): Category!
 
   """
+  Remove a member from the specified household. Need to be logged in and own the household.
+  """
+  removeHouseholdMember(id: String!, memberId: String!): Household!
+
+  """
   This mutation takes the values for a new user as arguments. 
         Saves them and returns a JWT (JSON-Web-Token) 
         for further authentication with the graphql-api.

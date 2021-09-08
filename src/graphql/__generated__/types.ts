@@ -168,6 +168,8 @@ export type Mutation = {
   logout?: Maybe<Scalars['String']>;
   /** Remove a new category. Can just be called by an admin. */
   removeCategory: Category;
+  /** Remove a member from the specified household. Need to be logged in and own the household. */
+  removeHouseholdMember: Household;
   /**
    * This mutation takes the values for a new user as arguments.
    *       Saves them and returns a JWT (JSON-Web-Token)
@@ -256,6 +258,12 @@ export type MutationLoginArgs = {
 
 export type MutationRemoveCategoryArgs = {
   name: Scalars['String'];
+};
+
+
+export type MutationRemoveHouseholdMemberArgs = {
+  id: Scalars['String'];
+  memberId: Scalars['String'];
 };
 
 

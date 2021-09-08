@@ -133,5 +133,30 @@ export const HouseholdMutation = extendType({
         });
       },
     });
+
+    t.nonNull.field('removeHouseholdMember', {
+      type: Household,
+      description:
+        'Remove a member from the specified household. Need to be logged in and own the household.',
+      authorize: async (_, args, ctx) => {
+        const household = await prisma.household.findFirst({
+          where: { id: args.id },
+        });
+        // Check if the user is the owner of the household.
+        const householdOwner = household?.ownerId === ctx.user.id;
+        // User must be logged in and own the household
+        return !!ctx.user && householdOwner;
+      },
+      args: {
+        id: nonNull(stringArg()),
+        memberId: nonNull(stringArg()),
+      },
+      async resolve(_, args) {
+        return prisma.household.update({
+          where: { id: args.id },
+          data: { members: { disconnect: { id: args.memberId } } },
+        });
+      },
+    });
   },
 });
