@@ -79,28 +79,21 @@ export const GroupTransactionMutation = extendType({
           },
         });
 
-        // TODO: Clean up
-        if ((args.participantIds.length = 0)) {
-          return prisma.groupTransaction.update({
-            where: { id: transaction.id },
-            data: {
-              participants: {
-                connect: { id: ctx.user.id },
-              },
+        return prisma.groupTransaction.update({
+          where: { id: transaction.id },
+          data: {
+            participants: {
+              // If no participants were send we add the user which created the transaction
+              // to the list, else we add the given participants
+              connect:
+                args.participantIds.length === 0
+                  ? { id: ctx.user.id }
+                  : args.participantIds.map((pid) => {
+                      return { id: pid };
+                    }),
             },
-          });
-        } else {
-          return prisma.groupTransaction.update({
-            where: { id: transaction.id },
-            data: {
-              participants: {
-                connect: args.participantIds.map((pid) => {
-                  return { id: pid };
-                }),
-              },
-            },
-          });
-        }
+          },
+        });
       },
     });
   },
