@@ -9,11 +9,11 @@ import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 
 const GROUP_QUERY = gql`
-  query GROUP_QUERY($groupId: String!) {
+  query GROUP_QUERY($id: String!) {
     me {
       id
     }
-    group(id: $groupId) {
+    group(id: $id) {
       id
       name
       value
@@ -33,7 +33,7 @@ export default function ManageGroup() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
-  const { data, loading, error } = useQuery(GROUP_QUERY, { variables: { groupId: groupId } });
+  const { data, loading, error } = useQuery(GROUP_QUERY, { variables: { id: groupId } });
 
   const currentUserId = data?.me.id;
   const group = data?.group;
