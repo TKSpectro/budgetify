@@ -283,8 +283,6 @@ export const GroupMutation = extendType({
       async resolve(_, args) {
         const owners = await prisma.group.findUnique({ where: { id: args.id } }).owners();
 
-        console.log(owners);
-
         // Cant remove the last owner of a group because then nobody could manage the group.
         if (owners.length <= 1) {
           throw new ApolloError(

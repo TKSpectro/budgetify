@@ -52,7 +52,9 @@ export default function ManageGroup() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  authenticatedRoute(ctx, undefined, undefined, ctx.query.groupId as string);
+  authenticatedRoute(ctx, undefined, {
+    CHECK_GROUP_OWNER: ctx.query.groupId as string,
+  });
   return preloadQuery(ctx, {
     query: GROUP_QUERY,
     variables: {

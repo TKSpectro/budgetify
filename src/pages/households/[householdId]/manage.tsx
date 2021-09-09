@@ -72,7 +72,9 @@ export default function ManageHousehold() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  authenticatedRoute(ctx, undefined, ctx.query.householdId as string);
+  authenticatedRoute(ctx, undefined, {
+    CHECK_HOUSEHOLD_OWNER: ctx.query.householdId as string,
+  });
   return preloadQuery(ctx, {
     query: HOUSEHOLD_QUERY,
     variables: {

@@ -11,8 +11,11 @@ type EncodedToken = {
   exp: number;
 };
 
-// TODO: Need better implementation for checking for owner and stuff like that
-// Maybe a object and specify a list of keys for better usage.
+// Checks which can be used to check for authorization to specific things e.g. groups
+export enum AuthRouteChecks {
+  CHECK_HOUSEHOLD_OWNER = 'CHECK_HOUSEHOLD_OWNER',
+  CHECK_GROUP_OWNER = 'CHECK_GROUP_OWNER',
+}
 
 // This function can be called in the getServerSideProps function of a component
 // to enforce that the user is logged in, else we will redirect him to either
@@ -20,8 +23,7 @@ type EncodedToken = {
 export async function authenticatedRoute(
   context: GetServerSidePropsContext,
   redirect = '/auth/login',
-  checkOwnerOfHouseholdId?: string,
-  checkOwnerOfGroupId?: string,
+  checks?: { [key in AuthRouteChecks]?: string },
 ): Promise<GetServerSidePropsResult<{}>> {
   try {
     // Check if the send authToken is a valid jwt.
@@ -32,36 +34,41 @@ export async function authenticatedRoute(
     const user = await prisma.user.findFirst({ where: { id: data.id } });
     if (!user) throw new AuthenticationError('Client sent a non valid jwt');
 
-    // If checkOwner is given we look up if the currently logged in user owns the household, which
-    // wants to get accessed. If the user does not own it, redirect him.
-    if (checkOwnerOfHouseholdId) {
-      const householdOwner = await prisma.user
-        .findUnique({ where: { id: data.id } })
-        .ownedHouseholds({ where: { id: checkOwnerOfHouseholdId } });
+    let redirectCheckLocation: string = '';
+    // If any checks were given, look for specific one and if they were found check them
+    if (checks) {
+      // Checks if the logged in user owns the requested household
+      if (checks['CHECK_HOUSEHOLD_OWNER']) {
+        const householdOwner = await prisma.user
+          .findUnique({ where: { id: data.id } })
+          .ownedHouseholds({ where: { id: checks['CHECK_HOUSEHOLD_OWNER'] } });
 
-      if (householdOwner.length === 0) {
-        context.res.writeHead(302, {
-          Location: '/households/' + checkOwnerOfHouseholdId,
-        });
-        context.res.end();
+        if (householdOwner.length === 0) {
+          redirectCheckLocation = '/households/' + checks['CHECK_HOUSEHOLD_OWNER'];
+        }
+      }
+      // Checks if the logged in user is one of the owners of the requested group
+      if (checks['CHECK_GROUP_OWNER']) {
+        const groupOwner = await prisma.user
+          .findUnique({ where: { id: data.id } })
+          .ownedGroups({ where: { id: checks['CHECK_GROUP_OWNER'] } });
+
+        if (groupOwner.length === 0) {
+          redirectCheckLocation = '/groups/' + checks['CHECK_GROUP_OWNER'];
+        }
       }
     }
 
-    // If checkOwnerOfGroupId is given we look up if the currently logged in user owns the group, which
-    // wants to get accessed. If the user does not own it, redirect him.
-    if (checkOwnerOfGroupId) {
-      const groupOwner = await prisma.user
-        .findUnique({ where: { id: data.id } })
-        .ownedGroups({ where: { id: checkOwnerOfGroupId } });
-
-      if (groupOwner.length === 0) {
-        context.res.writeHead(302, {
-          Location: '/groups/' + checkOwnerOfGroupId,
-        });
-        context.res.end();
-      }
+    // If any check occured we can redirect to the set location
+    if (redirectCheckLocation) {
+      context.res.writeHead(302, {
+        Location: redirectCheckLocation,
+      });
+      context.res.end();
     }
   } catch (error) {
+    // If the user sent a token thats not valid, then we just reset the cookie on their side.
+    // And redirect to the login page.
     context.res.writeHead(302, {
       Location: redirect,
       // https://stackoverflow.com/questions/65160156/remove-cookies-and-sign-out-server-side-in-next-js
