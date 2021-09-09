@@ -10,6 +10,7 @@ import { Container } from '~/components/UI/Container';
 import { Disclosure } from '~/components/UI/Disclosure';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
+import { Link } from '~/components/UI/Link';
 import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
 import { ModalForm } from '~/components/UI/ModalForm';
 import { Switch } from '~/components/UI/Switch';
@@ -25,6 +26,9 @@ import { authenticatedRoute } from '~/utils/auth';
 
 const GROUP_QUERY = gql`
   query GROUP_QUERY($id: String!) {
+    me {
+      id
+    }
     group(id: $id) {
       id
       name
@@ -234,6 +238,14 @@ export default function Group() {
                 />
               )}
             </ModalForm>
+            {/* // TODO: Style better */}
+            {data && !!group?.owners?.find((x: User) => x?.id === data.me.id) && (
+              <div className="md:absolute right-48 top-4 text-base">
+                <Link href={`${router.asPath}/${group.id}/manage`} asButton>
+                  Manage
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </Container>

@@ -39,19 +39,12 @@ export default function Groups() {
           return (
             // TODO: Need a better way of wrapping those. Because <a> in wrapped by <a> is not allowed.
             <div
-              className="relative border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer"
+              className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer"
               key={group.id}
             >
               <Link href={`/groups/${group.id}`} noUnderline>
                 <div className="text-xl">{group.name}</div>
               </Link>
-              <div className="my-2 md:my-0 md:absolute right-1 top-[0.85rem] text-base z-10">
-                {data && !!group?.owners?.find((x) => x?.id === data.me.id) && (
-                  <Link href={`${router.asPath}/${group.id}/manage`} asButton>
-                    Manage
-                  </Link>
-                )}
-              </div>
             </div>
           );
         })}
