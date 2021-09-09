@@ -18,6 +18,7 @@ export async function authenticatedRoute(
   context: GetServerSidePropsContext,
   redirect = '/auth/login',
   checkOwnerOfHouseholdId?: string,
+  checkOwnerOfGroupId?: string,
 ): Promise<GetServerSidePropsResult<{}>> {
   try {
     // Check if the send authToken is a valid jwt.
@@ -38,6 +39,21 @@ export async function authenticatedRoute(
       if (householdOwner.length === 0) {
         context.res.writeHead(302, {
           Location: '/households/' + checkOwnerOfHouseholdId,
+        });
+        context.res.end();
+      }
+    }
+
+    // If checkOwnerOfGroupId is given we look up if the currently logged in user owns the group, which
+    // wants to get accessed. If the user does not own it, redirect him.
+    if (checkOwnerOfGroupId) {
+      const groupOwner = await prisma.user
+        .findUnique({ where: { id: data.id } })
+        .ownedGroups({ where: { id: checkOwnerOfGroupId } });
+
+      if (groupOwner.length === 0) {
+        context.res.writeHead(302, {
+          Location: '/groups/' + checkOwnerOfGroupId,
         });
         context.res.end();
       }
