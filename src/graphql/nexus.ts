@@ -114,7 +114,7 @@ export interface NexusGenObjects {
     id: string; // String!
     name: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
-    userId?: string | null; // String
+    userId: string; // String!
     value: NexusGenScalars['Money']; // Money!
   }
   Query: {};
@@ -131,7 +131,7 @@ export interface NexusGenObjects {
     nextBooking?: NexusGenScalars['DateTime'] | null; // DateTime
     startDate: NexusGenScalars['DateTime']; // DateTime!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
-    userId?: string | null; // String
+    userId: string; // String!
     value: NexusGenScalars['Money']; // Money!
   }
   User: { // root type
@@ -258,7 +258,7 @@ export interface NexusGenFieldTypes {
     name: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User'] | null; // User
-    userId: string | null; // String
+    userId: string; // String!
     value: NexusGenScalars['Money']; // Money!
   }
   Query: { // field return type
@@ -288,7 +288,7 @@ export interface NexusGenFieldTypes {
     startDate: NexusGenScalars['DateTime']; // DateTime!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User'] | null; // User
-    userId: string | null; // String
+    userId: string; // String!
     value: NexusGenScalars['Money']; // Money!
   }
   User: { // field return type

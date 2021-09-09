@@ -251,7 +251,7 @@ type Payment {
 
   """The user from which the payment was booked."""
   user: User
-  userId: String
+  userId: String!
   value: Money!
 }
 
@@ -308,7 +308,7 @@ type RecurringPayment {
 
   """The user from whom the payment will be booked."""
   user: User
-  userId: String
+  userId: String!
   value: Money!
 }
 

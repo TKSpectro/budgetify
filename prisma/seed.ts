@@ -152,6 +152,7 @@ async function main() {
         interval: 'WEEKLY',
         categoryId: cat1.id,
         householdId: hou1.id,
+        userId: testUser.id,
         startDate: new Date(subDays(new Date(), 9)),
       },
       {
@@ -161,6 +162,7 @@ async function main() {
         interval: 'MONTHLY',
         categoryId: cat1.id,
         householdId: hou1.id,
+        userId: testUser.id,
         startDate: new Date(subDays(new Date(), 9)),
         endDate: new Date(addDays(new Date(), 90)),
       },
@@ -170,6 +172,7 @@ async function main() {
         interval: 'DAILY',
         categoryId: cat1.id,
         householdId: hou1.id,
+        userId: testUser.id,
         startDate: new Date(subDays(new Date(), 9)),
       },
     ],

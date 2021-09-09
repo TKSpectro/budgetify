@@ -59,12 +59,12 @@ export const RecurringPayment = objectType({
         if (!source.userId) return null;
         return prisma.user.findUnique({
           where: {
-            id: source.userId || undefined,
+            id: source.userId,
           },
         });
       },
     });
-    t.string('userId');
+    t.nonNull.string('userId');
     t.field('household', {
       type: Household,
       description: 'The household in which the payment will be booked.',

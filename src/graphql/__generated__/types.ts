@@ -361,7 +361,7 @@ export type Payment = {
   updatedAt: Scalars['DateTime'];
   /** The user from which the payment was booked. */
   user?: Maybe<User>;
-  userId?: Maybe<Scalars['String']>;
+  userId: Scalars['String'];
   value: Scalars['Money'];
 };
 
@@ -430,7 +430,7 @@ export type RecurringPayment = {
   updatedAt: Scalars['DateTime'];
   /** The user from whom the payment will be booked. */
   user?: Maybe<User>;
-  userId?: Maybe<Scalars['String']>;
+  userId: Scalars['String'];
   value: Scalars['Money'];
 };
 
