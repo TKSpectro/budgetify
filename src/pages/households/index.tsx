@@ -6,13 +6,13 @@ import { useForm } from 'react-hook-form';
 import { Alert } from '~/components/UI/Alert';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
-import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
 import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
-import { Modal } from '~/components/UI/Modal';
+import { ModalForm } from '~/components/UI/ModalForm';
 import { Household, MutationUseInviteArgs } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
+import { uuidRegex } from '~/utils/helper';
 
 const HOUSEHOLD_LIST_QUERY = gql`
   query HOUSEHOLD_LIST_QUERY {
@@ -72,17 +72,22 @@ export default function Households() {
         )}
 
         <div className="mb-4">
-          <Modal
+          <ModalForm
+            form={form}
             buttonText="Use Invite Token"
             title="Use a Invite Token"
-            description=""
             onSubmit={onSubmitHandler}
             submitText="Use Token"
           >
-            <Form onSubmit={() => {}} form={form}>
-              <Input label="Token" {...form.register('token')}></Input>
-            </Form>
-          </Modal>
+            <Input
+              label="Token"
+              {...form.register('token', {
+                required: { value: true, message: 'Please input a token' },
+                minLength: { value: 30, message: 'Please input a valid token (length)' },
+                pattern: { value: uuidRegex, message: 'Please input a valid token' },
+              })}
+            ></Input>
+          </ModalForm>
         </div>
 
         {households?.map((household: Household) => {
