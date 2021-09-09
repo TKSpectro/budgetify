@@ -92,25 +92,38 @@ export const UserMutation = extendType({
   definition(t) {
     t.nonNull.field('deleteUser', {
       type: User,
-      description: 'Deletes a user and removes all references to it. Need to be logged in.',
+      description: 'Deletes a user by anonymizing his personal data. Need to be logged in.',
       authorize: (_, __, ctx) => (ctx.user ? true : false),
       async resolve(_, __, ctx) {
-        // The only NonNull UserReference is the owner of households, get them from the db
-        // and if the user is the owner of some households cancel the deletion.
-        // If the user has no owner roles, just delete the account.
-        const households = await prisma.household.findMany({
-          where: { ownerId: ctx.user.id },
-        });
+        const ownedGroups = await prisma.user
+          .findUnique({ where: { id: ctx.user.id } })
+          .ownedGroups();
 
+        const ownedHouseholds = await prisma.user
+          .findUnique({ where: { id: ctx.user.id } })
+          .ownedHouseholds();
+
+        // If the user own any groups or households we can not delete the account.
         // Prisma always returns an array. So we can just check for then length of it,
-        // if the length is 0 the user does not own any households
-        if (households.length > 0) {
+        // if the length is 0 the user does not own any households or groups
+        if (ownedGroups.length > 0 || ownedHouseholds.length > 0) {
+          // TODO: return all household and group names he owns
           throw new ApolloError(
-            `You are the owner of ${households.length} households. Please go to each household and give another user the owner role.`,
+            `You are the owner of ${ownedHouseholds.length} households. Please go to each household and give another user the owner role.`,
           );
         }
 
-        return prisma.user.delete({ where: { id: ctx.user.id } });
+        return prisma.user.update({
+          where: { id: ctx.user.id },
+          data: {
+            firstname: 'deleted',
+            lastname: 'user',
+            email: 'deleted.' + new Date().getTime() + '@budgetify.com',
+            hashedPassword: '',
+            invites: { deleteMany: {} },
+            isAdmin: false,
+          },
+        });
       },
     });
   },

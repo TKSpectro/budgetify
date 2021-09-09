@@ -161,7 +161,7 @@ export type Mutation = {
   createRecurringPayment: RecurringPayment;
   /** Remove a invite. Need to be logged in. */
   deleteInvite?: Maybe<Scalars['Boolean']>;
-  /** Deletes a user and removes all references to it. Need to be logged in. */
+  /** Deletes a user by anonymizing his personal data. Need to be logged in. */
   deleteUser: User;
   /**
    * This mutation takes the email and password of an existing user.

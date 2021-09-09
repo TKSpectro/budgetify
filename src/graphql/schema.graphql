@@ -164,7 +164,7 @@ type Mutation {
   """Remove a invite. Need to be logged in."""
   deleteInvite(id: String!): Boolean
 
-  """Deletes a user and removes all references to it. Need to be logged in."""
+  """Deletes a user by anonymizing his personal data. Need to be logged in."""
   deleteUser: User!
 
   """
