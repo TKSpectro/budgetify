@@ -12,9 +12,13 @@ export function Link({ noUnderline = false, asButton = false, href, ...props }: 
   const content = (
     <a
       className={clsx(
-        'text-gray-900 dark:text-gray-100 underline font-medium  hover:text-opacity-80',
+        ' underline font-medium  hover:text-opacity-80',
         { 'no-underline': noUnderline },
-        { 'bg-brand-500 items-center justify-center px-6 py-3 rounded no-underline': asButton },
+        {
+          'text-white bg-brand-500 items-center justify-center px-6 py-3 rounded no-underline':
+            asButton,
+        },
+        { 'text-gray-900 dark:text-gray-100': !asButton },
       )}
       {...props}
     />
