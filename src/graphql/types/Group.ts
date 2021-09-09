@@ -322,7 +322,10 @@ export const GroupMutation = extendType({
       async resolve(_, args) {
         return prisma.group.update({
           where: { id: args.id },
-          data: { members: { disconnect: { id: args.memberId } } },
+          data: {
+            members: { disconnect: { id: args.memberId } },
+            owners: { disconnect: { id: args.memberId } },
+          },
         });
       },
     });

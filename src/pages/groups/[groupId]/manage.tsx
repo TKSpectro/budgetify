@@ -17,14 +17,6 @@ const GROUP_QUERY = gql`
       id
       name
       value
-      transactions {
-        id
-        name
-        value
-        participants {
-          name
-        }
-      }
       owners {
         id
         name
@@ -33,11 +25,6 @@ const GROUP_QUERY = gql`
         id
         name
       }
-    }
-    calculateMemberBalances(id: $groupId) {
-      name
-      userId
-      value
     }
   }
 `;
