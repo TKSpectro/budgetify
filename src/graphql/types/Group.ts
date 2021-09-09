@@ -12,18 +12,13 @@ export const Group = objectType({
     t.nonNull.money('value');
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
-    t.field('owner', {
+    t.list.field('owners', {
       type: User,
-      description: "The user which has management right's over the group.",
+      description: "The users which have management right's over the group.",
       resolve(source) {
-        return prisma.user.findUnique({
-          where: {
-            id: source.ownerId || undefined,
-          },
-        });
+        return prisma.group.findUnique({ where: { id: source.id || undefined } }).owners();
       },
     });
-    t.nonNull.string('ownerId');
     t.list.field('members', {
       type: User,
       description: "A list of all user's which have access to this group.",
@@ -210,7 +205,7 @@ export const GroupMutation = extendType({
           data: {
             name: args.name,
             value: args.value || 0.0,
-            owner: { connect: { id: ctx.user.id } },
+            owners: { connect: { id: ctx.user.id } },
             members: { connect: { id: ctx.user.id } },
           },
         });
@@ -224,11 +219,12 @@ export const GroupMutation = extendType({
       authorize: async (_, args, ctx) => {
         const group = await prisma.group.findFirst({
           where: { id: args.id },
+          include: { owners: true },
         });
         // Check if the user is the owner of the group.
-        const groupOwner = group?.ownerId === ctx.user.id;
+        const groupOwner = group?.owners.find((x) => x.id === ctx.user.id);
         // User must be logged in and own the household
-        return !!ctx.user && groupOwner;
+        return !!ctx.user && !!groupOwner;
       },
       args: {
         id: nonNull(stringArg()),
@@ -237,7 +233,68 @@ export const GroupMutation = extendType({
       async resolve(_, args) {
         return prisma.group.update({
           where: { id: args.id },
-          data: { ownerId: args.ownerId || undefined },
+          data: { owners: { connect: { id: args.ownerId || undefined } } },
+        });
+      },
+    });
+
+    t.nonNull.field('addGroupOwner', {
+      type: Group,
+      description: 'Add a new owner to a group. Need to be logged in and be owner of the group.',
+      authorize: async (_, args, ctx) => {
+        const group = await prisma.group.findFirst({
+          where: { id: args.id },
+          include: { owners: true },
+        });
+        // Check if the user is the owner of the group.
+        const groupOwner = group?.owners.find((x) => x.id === ctx.user.id);
+        // User must be logged in and own the household
+        return !!ctx.user && !!groupOwner;
+      },
+      args: {
+        id: nonNull(stringArg()),
+        ownerId: stringArg(),
+      },
+      async resolve(_, args) {
+        return prisma.group.update({
+          where: { id: args.id },
+          data: { owners: { connect: { id: args.ownerId || undefined } } },
+        });
+      },
+    });
+
+    t.nonNull.field('removeGroupOwner', {
+      type: Group,
+      description: 'Remove a owner of a group. Need to be logged in and be owner of the group.',
+      authorize: async (_, args, ctx) => {
+        const group = await prisma.group.findFirst({
+          where: { id: args.id },
+          include: { owners: true },
+        });
+        // Check if the user is the owner of the group.
+        const groupOwner = group?.owners.find((x) => x.id === ctx.user.id);
+        // User must be logged in and own the household
+        return !!ctx.user && !!groupOwner;
+      },
+      args: {
+        id: nonNull(stringArg()),
+        ownerId: stringArg(),
+      },
+      async resolve(_, args) {
+        const owners = await prisma.group.findUnique({ where: { id: args.id } }).owners();
+
+        console.log(owners);
+
+        // Cant remove the last owner of a group because then nobody could manage the group.
+        if (owners.length <= 1) {
+          throw new ApolloError(
+            'Cant remove owner status, because the group would then be without any owner.',
+          );
+        }
+
+        return prisma.group.update({
+          where: { id: args.id },
+          data: { owners: { disconnect: { id: args.ownerId || undefined } } },
         });
       },
     });
@@ -251,11 +308,12 @@ export const GroupMutation = extendType({
       authorize: async (_, args, ctx) => {
         const group = await prisma.group.findFirst({
           where: { id: args.id },
+          include: { owners: true },
         });
         // Check if the user is the owner of the household.
-        const groupOwner = group?.ownerId === ctx.user.id;
+        const groupOwner = group?.owners.find((x) => x.id === ctx.user.id);
         // User must be logged in and own the household
-        return !!ctx.user && groupOwner;
+        return !!ctx.user && !!groupOwner;
       },
       args: {
         id: nonNull(stringArg()),

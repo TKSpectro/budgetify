@@ -68,7 +68,6 @@ export interface NexusGenObjects {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     name: string; // String!
-    ownerId: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     value: NexusGenScalars['Money']; // Money!
   }
@@ -173,8 +172,7 @@ export interface NexusGenFieldTypes {
     invites: Array<NexusGenRootTypes['Invite'] | null> | null; // [Invite]
     members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     name: string; // String!
-    owner: NexusGenRootTypes['User'] | null; // User
-    ownerId: string; // String!
+    owners: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     transactions: Array<NexusGenRootTypes['GroupTransaction'] | null> | null; // [GroupTransaction]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     value: NexusGenScalars['Money']; // Money!
@@ -220,6 +218,7 @@ export interface NexusGenFieldTypes {
     wasUsed: boolean; // Boolean!
   }
   Mutation: { // field return type
+    addGroupOwner: NexusGenRootTypes['Group']; // Group!
     bookRecurringPayments: Array<NexusGenRootTypes['RecurringPayment'] | null> | null; // [RecurringPayment]
     createCategory: NexusGenRootTypes['Category']; // Category!
     createGroup: NexusGenRootTypes['Group'] | null; // Group
@@ -234,6 +233,7 @@ export interface NexusGenFieldTypes {
     logout: string | null; // String
     removeCategory: NexusGenRootTypes['Category']; // Category!
     removeGroupMember: NexusGenRootTypes['Group']; // Group!
+    removeGroupOwner: NexusGenRootTypes['Group']; // Group!
     removeHouseholdMember: NexusGenRootTypes['Household']; // Household!
     signup: NexusGenRootTypes['AuthToken']; // AuthToken!
     updateGroup: NexusGenRootTypes['Group']; // Group!
@@ -328,8 +328,7 @@ export interface NexusGenFieldTypeNames {
     invites: 'Invite'
     members: 'User'
     name: 'String'
-    owner: 'User'
-    ownerId: 'String'
+    owners: 'User'
     transactions: 'GroupTransaction'
     updatedAt: 'DateTime'
     value: 'Money'
@@ -375,6 +374,7 @@ export interface NexusGenFieldTypeNames {
     wasUsed: 'Boolean'
   }
   Mutation: { // field return type name
+    addGroupOwner: 'Group'
     bookRecurringPayments: 'RecurringPayment'
     createCategory: 'Category'
     createGroup: 'Group'
@@ -389,6 +389,7 @@ export interface NexusGenFieldTypeNames {
     logout: 'String'
     removeCategory: 'Category'
     removeGroupMember: 'Group'
+    removeGroupOwner: 'Group'
     removeHouseholdMember: 'Household'
     signup: 'AuthToken'
     updateGroup: 'Group'
@@ -482,6 +483,10 @@ export interface NexusGenArgTypes {
     }
   }
   Mutation: {
+    addGroupOwner: { // args
+      id: string; // String!
+      ownerId?: string | null; // String
+    }
     bookRecurringPayments: { // args
       secretKey: string; // String!
     }
@@ -537,6 +542,10 @@ export interface NexusGenArgTypes {
     removeGroupMember: { // args
       id: string; // String!
       memberId: string; // String!
+    }
+    removeGroupOwner: { // args
+      id: string; // String!
+      ownerId?: string | null; // String
     }
     removeHouseholdMember: { // args
       id: string; // String!

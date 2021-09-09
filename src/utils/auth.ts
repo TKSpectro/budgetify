@@ -11,6 +11,9 @@ type EncodedToken = {
   exp: number;
 };
 
+// TODO: Need better implementation for checking for owner and stuff like that
+// Maybe a object and specify a list of keys for better usage.
+
 // This function can be called in the getServerSideProps function of a component
 // to enforce that the user is logged in, else we will redirect him to either
 // the login page or a given route

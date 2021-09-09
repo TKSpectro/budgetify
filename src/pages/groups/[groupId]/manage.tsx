@@ -10,6 +10,9 @@ import { authenticatedRoute } from '~/utils/auth';
 
 const GROUP_QUERY = gql`
   query GROUP_QUERY($groupId: String!) {
+    me {
+      id
+    }
     group(id: $groupId) {
       id
       name
@@ -22,7 +25,7 @@ const GROUP_QUERY = gql`
           name
         }
       }
-      owner {
+      owners {
         id
         name
       }
@@ -45,23 +48,24 @@ export default function ManageGroup() {
 
   const { data, loading, error } = useQuery(GROUP_QUERY, { variables: { groupId: groupId } });
 
+  const currentUserId = data?.me.id;
   const group = data?.group;
 
   const members = group?.members;
-  const owner = group?.owner;
+  const owners = group?.owners;
 
   return (
     <Container>
       {loading && <LoadingAnimation />}
       <Error title="Could not load group." error={error} />
 
-      {data && <GroupMemberTable members={members} owner={owner} />}
+      {data && <GroupMemberTable members={members} owners={owners} currentUserId={currentUserId} />}
     </Container>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  authenticatedRoute(ctx);
+  authenticatedRoute(ctx, undefined, undefined, ctx.query.groupId as string);
   return preloadQuery(ctx, {
     query: GROUP_QUERY,
     variables: {

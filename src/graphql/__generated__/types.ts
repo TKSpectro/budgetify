@@ -43,9 +43,8 @@ export type Group = {
   /** A list of all user's which have access to this group. */
   members?: Maybe<Array<Maybe<User>>>;
   name: Scalars['String'];
-  /** The user which has management right's over the group. */
-  owner?: Maybe<User>;
-  ownerId: Scalars['String'];
+  /** The users which have management right's over the group. */
+  owners?: Maybe<Array<Maybe<User>>>;
   /** A list of all transactions which happened in this group. */
   transactions?: Maybe<Array<Maybe<GroupTransaction>>>;
   updatedAt: Scalars['DateTime'];
@@ -138,6 +137,8 @@ export type Invite = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Add a new owner to a group. Need to be logged in and be owner of the group. */
+  addGroupOwner: Group;
   /**
    * This mutation should be called regularly (at least once a day)
    *         by a CRON-Job or something of this kind. To book all recurringPayment
@@ -173,6 +174,8 @@ export type Mutation = {
   removeCategory: Category;
   /** Remove a member from the specified group. Need to be logged in and own the group. */
   removeGroupMember: Group;
+  /** Remove a owner of a group. Need to be logged in and be owner of the group. */
+  removeGroupOwner: Group;
   /** Remove a member from the specified household. Need to be logged in and own the household. */
   removeHouseholdMember: Household;
   /**
@@ -191,6 +194,12 @@ export type Mutation = {
   useGroupInvite?: Maybe<Invite>;
   /** Use a invite. Logged in user gets added to the household in invite. Need to be logged in. */
   useInvite?: Maybe<Invite>;
+};
+
+
+export type MutationAddGroupOwnerArgs = {
+  id: Scalars['String'];
+  ownerId?: Maybe<Scalars['String']>;
 };
 
 
@@ -271,6 +280,12 @@ export type MutationRemoveCategoryArgs = {
 export type MutationRemoveGroupMemberArgs = {
   id: Scalars['String'];
   memberId: Scalars['String'];
+};
+
+
+export type MutationRemoveGroupOwnerArgs = {
+  id: Scalars['String'];
+  ownerId?: Maybe<Scalars['String']>;
 };
 
 

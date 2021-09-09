@@ -198,7 +198,7 @@ async function main() {
           { id: userE.id },
         ],
       },
-      owner: {
+      owners: {
         connect: { id: testUser.id },
       },
       transactions: {

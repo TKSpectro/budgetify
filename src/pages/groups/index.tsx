@@ -16,7 +16,7 @@ const GROUPS_QUERY = gql`
       groups {
         id
         name
-        owner {
+        owners {
           id
         }
       }
@@ -42,7 +42,7 @@ export default function Groups() {
                 <div className="text-xl">{group.name}</div>
 
                 {/* // TODO: Style the manage link better -> Maybe float to the right */}
-                {data && group?.owner?.id === data.me.id && (
+                {data && !!group?.owners?.find((x) => x?.id === data.me.id) && (
                   <Link href={`${router.asPath}/${group.id}/manage`}>Manage</Link>
                 )}
               </div>

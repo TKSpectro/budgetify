@@ -33,9 +33,8 @@ type Group {
   members: [User]
   name: String!
 
-  """The user which has management right's over the group."""
-  owner: User
-  ownerId: String!
+  """The users which have management right's over the group."""
+  owners: [User]
 
   """A list of all transactions which happened in this group."""
   transactions: [GroupTransaction]
@@ -128,6 +127,11 @@ scalar Money
 
 type Mutation {
   """
+  Add a new owner to a group. Need to be logged in and be owner of the group.
+  """
+  addGroupOwner(id: String!, ownerId: String): Group!
+
+  """
   This mutation should be called regularly (at least once a day)
           by a CRON-Job or something of this kind. To book all recurringPayment
           which need to be booked.
@@ -179,6 +183,11 @@ type Mutation {
   Remove a member from the specified group. Need to be logged in and own the group.
   """
   removeGroupMember(id: String!, memberId: String!): Group!
+
+  """
+  Remove a owner of a group. Need to be logged in and be owner of the group.
+  """
+  removeGroupOwner(id: String!, ownerId: String): Group!
 
   """
   Remove a member from the specified household. Need to be logged in and own the household.

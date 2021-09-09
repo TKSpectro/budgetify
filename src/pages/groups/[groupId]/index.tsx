@@ -37,7 +37,7 @@ const GROUP_QUERY = gql`
           name
         }
       }
-      owner {
+      owners {
         id
         name
       }
