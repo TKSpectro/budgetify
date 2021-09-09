@@ -4,21 +4,21 @@ import { Button, Props as ButtonProps } from './Button';
 export interface Props extends ButtonProps {
   title: string;
   description?: string;
-  submitText?: string;
   onSubmit: () => void;
   buttonText: string;
   buttonClassName?: string;
+  submitText?: string;
   children?: ReactNode;
 }
 
 export function Modal({
   title,
   description,
-  submitText = 'SAVE CHANGES',
   onSubmit,
   buttonText,
   buttonClassName,
   variant,
+  submitText = buttonText,
   children,
   ...props
 }: Props) {
