@@ -46,6 +46,7 @@ const REMOVE_GROUP_MEMBER_MUTATION = gql`
       id
       members {
         id
+        name
       }
     }
   }
