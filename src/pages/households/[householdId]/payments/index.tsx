@@ -15,7 +15,7 @@ import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
-import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
+import { Loader } from '~/components/UI/Loader';
 import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -111,7 +111,8 @@ export default function Payments() {
 
       <div className="md:mt-8 md:mx-32">
         <Error title="Failed to load recurring messages" error={error} />
-        {loading && <LoadingAnimation />}
+        <Loader loading={loading} />
+
         {!loading && !error && payments.length === 0 ? (
           <Alert
             message="Could not find any recurring messages. Please create a new one"

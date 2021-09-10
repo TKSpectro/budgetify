@@ -8,7 +8,7 @@ import Overview from '~/components/Household/Overview';
 import { Alert } from '~/components/UI/Alert';
 import { Error } from '~/components/UI/Error';
 import { Link } from '~/components/UI/Link';
-import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
+import { Loader } from '~/components/UI/Loader';
 import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -81,7 +81,8 @@ export default function Household() {
         <title>{household?.name + ' | ' + 'budgetify'}</title>
       </Head>
       <Error title="Failed to load household" error={error} />
-      {loading && <LoadingAnimation />}
+      <Loader loading={loading} />
+
       {!loading && !household && <Alert message="Could not find this household." type="error" />}
       {!error && household && (
         <>

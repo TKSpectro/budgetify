@@ -10,7 +10,7 @@ import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
-import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
+import { Loader } from '~/components/UI/Loader';
 import {
   Category,
   Interval,
@@ -141,7 +141,8 @@ export default function EditRecurringPayment() {
       </Head>
       <Container>
         <Error title="Failed to load recurring payment" error={error} />
-        {loading && <LoadingAnimation />}
+        <Loader loading={loading} />
+
         {!loading && !recurringPayment && (
           <Alert message="Could not find this  recurring payment." type="error" />
         )}

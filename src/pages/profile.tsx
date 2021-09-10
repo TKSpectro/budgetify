@@ -6,7 +6,7 @@ import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { ME_QUERY } from '~/components/UI/Header';
-import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
+import { Loader } from '~/components/UI/Loader';
 import { Modal } from '~/components/UI/Modal';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -67,8 +67,7 @@ export default function Profile() {
         <Error title="Failed to load user data!" error={error} />
         <Error title="Failed to delete user!" error={deleteUserError} />
         <Error title="Failed to logout!" error={logoutError} />
-
-        {loading && <LoadingAnimation />}
+        <Loader loading={loading} />
 
         {!loading && !error && data && (
           <>

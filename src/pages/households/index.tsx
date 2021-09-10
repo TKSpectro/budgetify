@@ -7,7 +7,7 @@ import { Alert } from '~/components/UI/Alert';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
-import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
+import { Loader } from '~/components/UI/Loader';
 import { ModalForm } from '~/components/UI/ModalForm';
 import { Household, MutationUseInviteArgs } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
@@ -66,7 +66,8 @@ export default function Households() {
       <Container>
         <Error title="Failed to load households" error={error} />
         <Error title="Failed to use invite token" error={useInviteError} />
-        {loading && <LoadingAnimation />}
+        <Loader loading={loading} />
+
         {!loading && !error && households.length === 0 && (
           <Alert message="Could not find any households. Please create or join one." type="error" />
         )}

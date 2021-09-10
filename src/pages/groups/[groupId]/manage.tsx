@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import GroupMemberTable from '~/components/Group/Manage/GroupMemberTable';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
-import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
+import { Loader } from '~/components/UI/Loader';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 
@@ -43,8 +43,8 @@ export default function ManageGroup() {
 
   return (
     <Container>
-      {loading && <LoadingAnimation />}
       <Error title="Could not load group." error={error} />
+      <Loader loading={loading} />
 
       {data && <GroupMemberTable members={members} owners={owners} currentUserId={currentUserId} />}
     </Container>

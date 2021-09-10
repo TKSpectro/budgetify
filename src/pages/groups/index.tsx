@@ -6,7 +6,7 @@ import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
-import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
+import { Loader } from '~/components/UI/Loader';
 import { ModalForm } from '~/components/UI/ModalForm';
 import { Group } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
@@ -63,9 +63,9 @@ export default function Groups() {
 
   return (
     <Container>
-      {loading && <LoadingAnimation />}
       <Error title="Could not load group." error={error} />
       <Error title="Could not use invite." error={inviteError} />
+      <Loader loading={loading} />
 
       <div className="mb-4">
         <ModalForm

@@ -7,10 +7,11 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
+import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
-import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
+import { Loader } from '~/components/UI/Loader';
 import { Category, MutationCreatePaymentArgs } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
@@ -103,7 +104,8 @@ export default function NewPayment() {
 
       <div className="mt-8 md:mx-32">
         <Container>
-          {loading && <LoadingAnimation />}
+          <Error title="Could not load categories." error={error} />
+          <Loader loading={loading} />
 
           <Form form={form} onSubmit={onNewPaymentSubmit}>
             <div className="grid gap-4">

@@ -7,10 +7,11 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
+import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
-import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
+import { Loader } from '~/components/UI/Loader';
 import {
   Category,
   Interval,
@@ -121,7 +122,8 @@ export default function NewRecurringPayment() {
 
       <div className="mt-8 md:mx-32">
         <Container>
-          {loading && <LoadingAnimation />}
+          <Error title="Could not load categories." error={error} />
+          <Loader loading={loading} />
 
           <Form form={form} onSubmit={onSubmit}>
             <Input label="Name" type="text" {...form.register('name', { required: true })}></Input>

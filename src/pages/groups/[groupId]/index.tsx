@@ -11,7 +11,7 @@ import { Disclosure } from '~/components/UI/Disclosure';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
-import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
+import { Loader } from '~/components/UI/Loader';
 import { ModalForm } from '~/components/UI/ModalForm';
 import { Switch } from '~/components/UI/Switch';
 import {
@@ -151,9 +151,10 @@ export default function Group() {
   return (
     <>
       <Container>
-        {loading && <LoadingAnimation />}
         <Error title="Could not load group." error={error} />
         <Error title="Could not create transaction." error={createGroupTransactionError} />
+        <Loader loading={loading} />
+
         {group && (
           <div className="relative">
             <div className="text-xl font-bold ">{group.name}</div>
