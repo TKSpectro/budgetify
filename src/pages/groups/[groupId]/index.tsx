@@ -241,7 +241,7 @@ export default function Group() {
             {/* // TODO: Style better */}
             {data && !!group?.owners?.find((x: User) => x?.id === data.me.id) && (
               <div className="md:absolute right-48 top-4 text-base">
-                <Link href={`${router.asPath}/${group.id}/manage`} asButton>
+                <Link href={`${router.asPath}/manage`} asButton>
                   Manage
                 </Link>
               </div>
