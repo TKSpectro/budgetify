@@ -33,7 +33,7 @@ async function main() {
     data: {
       firstname: 'A',
       lastname: '',
-      email: 'tom@mail.com',
+      email: 'tom@' + process.env.DOMAIN,
       hashedPassword: hashSync('12345678', 10),
     },
   });
@@ -42,7 +42,7 @@ async function main() {
     data: {
       firstname: 'B',
       lastname: '',
-      email: 'tomb@mail.com',
+      email: 'tomb@' + process.env.DOMAIN,
       hashedPassword: hashSync('12345678', 10),
     },
   });
@@ -50,7 +50,7 @@ async function main() {
     data: {
       firstname: 'C',
       lastname: '',
-      email: 'tomc@mail.com',
+      email: 'tomc@' + process.env.DOMAIN,
       hashedPassword: hashSync('12345678', 10),
     },
   });
@@ -58,7 +58,7 @@ async function main() {
     data: {
       firstname: 'D',
       lastname: '',
-      email: 'tomd@mail.com',
+      email: 'tomd@' + process.env.DOMAIN,
       hashedPassword: hashSync('12345678', 10),
     },
   });
@@ -66,7 +66,7 @@ async function main() {
     data: {
       firstname: 'E',
       lastname: '',
-      email: 'tome@mail.com',
+      email: 'tome@' + process.env.DOMAIN,
       hashedPassword: hashSync('12345678', 10),
     },
   });
@@ -180,7 +180,7 @@ async function main() {
 
   const inv1 = await prisma.invite.create({
     data: {
-      invitedEmail: 'test@mail.com',
+      invitedEmail: 'test@' + process.env.DOMAIN,
       wasUsed: false,
       senderId: testUser.id,
       householdId: hou1.id,

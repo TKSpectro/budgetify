@@ -117,7 +117,7 @@ export const UserMutation = extendType({
           data: {
             firstname: 'deleted',
             lastname: 'user',
-            email: 'deleted.' + new Date().getTime() + '@budgetify.com',
+            email: 'deleted.' + new Date().getTime() + '@' + process.env.DOMAIN,
             hashedPassword: '',
             invites: { deleteMany: {} },
             isAdmin: false,
