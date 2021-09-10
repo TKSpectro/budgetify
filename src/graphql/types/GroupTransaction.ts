@@ -24,7 +24,7 @@ export const GroupTransaction = objectType({
       resolve(source) {
         return prisma.group.findUnique({
           where: {
-            id: source.groupId || undefined,
+            id: source.groupId,
           },
         });
       },
@@ -36,7 +36,7 @@ export const GroupTransaction = objectType({
       resolve(source) {
         return prisma.user.findUnique({
           where: {
-            id: source.userId || undefined,
+            id: source.userId,
           },
         });
       },
@@ -46,11 +46,7 @@ export const GroupTransaction = objectType({
       type: 'User',
       description: 'All users which ate some of the bought food from this transaction.',
       resolve(source) {
-        return prisma.user.findMany({
-          where: {
-            groupTransactionsParticipant: { some: { id: source.id } },
-          },
-        });
+        return prisma.groupTransaction.findUnique({ where: { id: source.id } }).participants();
       },
     });
   },
@@ -72,7 +68,7 @@ export const GroupTransactionMutation = extendType({
         'Creates a new transaction in the specified group with the given arguments and returns it.',
       authorize: (_, __, ctx) => (ctx.user ? true : false),
       async resolve(_, args, ctx: Context) {
-        // Update value of the group
+        // Update value of the group with the transaction value
         const group = await prisma.group.update({
           where: { id: args.groupId },
           data: { value: { increment: Number(args.value) } },
@@ -84,8 +80,19 @@ export const GroupTransactionMutation = extendType({
             name: args.name,
             value: args.value,
             type: args.type,
-            groupId: args.groupId,
-            userId: ctx.user.id,
+            group: { connect: { id: args.groupId } },
+            user: { connect: { id: ctx.user.id } },
+            participants: {
+              // If no participants were send or the type is take out (the user just took out money
+              // from the bank) we add the user which created the transaction to the list,
+              // else we add the given participants
+              connect:
+                args.participantIds.length === 0 || args.type === 'TAKE_OUT'
+                  ? { id: ctx.user.id }
+                  : args.participantIds.map((pid) => {
+                      return { id: pid };
+                    }),
+            },
           },
         });
 
@@ -143,22 +150,7 @@ export const GroupTransactionMutation = extendType({
           transporter.close();
         }
 
-        return prisma.groupTransaction.update({
-          where: { id: transaction.id },
-          data: {
-            participants: {
-              // If no participants were send or the type is take out (the user just took out money
-              // from the bank) we add the user which created the transaction to the list,
-              // else we add the given participants
-              connect:
-                args.participantIds.length === 0 || args.type === 'TAKE_OUT'
-                  ? { id: ctx.user.id }
-                  : args.participantIds.map((pid) => {
-                      return { id: pid };
-                    }),
-            },
-          },
-        });
+        return transaction;
       },
     });
   },
