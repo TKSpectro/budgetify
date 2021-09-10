@@ -1,7 +1,6 @@
 import { ApolloError } from 'apollo-server-errors';
 import { arg, extendType, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
-import { GroupTransaction, User } from '.';
 import { Participant as ParticipantType } from '../__generated__/types';
 
 export const Group = objectType({
@@ -13,21 +12,21 @@ export const Group = objectType({
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
     t.list.field('owners', {
-      type: User,
+      type: 'User',
       description: "The users which have management right's over the group.",
       resolve(source) {
         return prisma.group.findUnique({ where: { id: source.id || undefined } }).owners();
       },
     });
     t.list.field('members', {
-      type: User,
+      type: 'User',
       description: "A list of all user's which have access to this group.",
       resolve(source) {
         return prisma.group.findUnique({ where: { id: source.id || undefined } }).members();
       },
     });
     t.list.field('transactions', {
-      type: GroupTransaction,
+      type: 'GroupTransaction',
       description: 'A list of all transactions which happened in this group.',
       resolve(source) {
         return prisma.group.findUnique({ where: { id: source.id || undefined } }).transactions();

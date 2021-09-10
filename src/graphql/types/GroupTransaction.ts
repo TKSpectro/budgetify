@@ -1,6 +1,5 @@
 import { arg, enumType, extendType, list, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
-import { Group, User } from '.';
 import { Context } from '../context';
 
 export const TransactionType = enumType({
@@ -18,7 +17,7 @@ export const GroupTransaction = objectType({
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
     t.field('group', {
-      type: Group,
+      type: 'Group',
       description: 'The group in which this transaction was booked.',
       resolve(source) {
         return prisma.group.findUnique({
@@ -30,7 +29,7 @@ export const GroupTransaction = objectType({
     });
     t.nonNull.string('groupId');
     t.field('user', {
-      type: User,
+      type: 'User',
       description: 'The user which booked the transaction.',
       resolve(source) {
         return prisma.user.findUnique({
@@ -42,7 +41,7 @@ export const GroupTransaction = objectType({
     });
     t.nonNull.string('userId');
     t.list.field('participants', {
-      type: User,
+      type: 'User',
       description: 'All users which ate some of the bought food from this transaction.',
       resolve(source) {
         return prisma.user.findMany({

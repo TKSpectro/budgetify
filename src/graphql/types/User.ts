@@ -1,7 +1,6 @@
 import { ApolloError } from 'apollo-server-micro';
 import { extendType, objectType } from 'nexus';
 import prisma from '~/utils/prisma';
-import { Group, GroupTransaction, Household, Invite, Payment } from '.';
 
 export const User = objectType({
   name: 'User',
@@ -24,49 +23,49 @@ export const User = objectType({
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
     t.list.field('payments', {
-      type: Payment,
+      type: 'Payment',
       description: "All payment's which where done by the user.",
       resolve(source) {
         return prisma.user.findUnique({ where: { id: source.id || undefined } }).payments();
       },
     });
     t.list.field('households', {
-      type: Household,
+      type: 'Household',
       description: "The household's in which the user is a member.",
       resolve(source) {
         return prisma.user.findUnique({ where: { id: source.id || undefined } }).households();
       },
     });
     t.list.field('invites', {
-      type: Invite,
+      type: 'Invite',
       description: "The invite's which where send by the user.",
       resolve(source) {
         return prisma.user.findUnique({ where: { id: source.id || undefined } }).invites();
       },
     });
     t.list.field('ownedHouseholds', {
-      type: Household,
+      type: 'Household',
       description: "The household's in which the user is the current owner",
       resolve(source) {
         return prisma.user.findUnique({ where: { id: source.id || undefined } }).ownedHouseholds();
       },
     });
     t.list.field('groups', {
-      type: Group,
+      type: 'Group',
       description: "The group's in which the user is joined.",
       resolve(source) {
         return prisma.user.findUnique({ where: { id: source.id || undefined } }).groups();
       },
     });
     t.list.field('ownedGroups', {
-      type: Group,
+      type: 'Group',
       description: "The groups's in which the user is the current owner",
       resolve(source) {
         return prisma.user.findUnique({ where: { id: source.id || undefined } }).ownedGroups();
       },
     });
     t.list.field('groupTransactions', {
-      type: GroupTransaction,
+      type: 'GroupTransaction',
       description: 'The payments which were booked in groups and where payed by the user.',
       resolve(source) {
         return prisma.user
@@ -75,7 +74,7 @@ export const User = objectType({
       },
     });
     t.list.field('groupTransactionsParticipant', {
-      type: GroupTransaction,
+      type: 'GroupTransaction',
       description:
         'All group payments which the user participated in. e.g. user ate some of the bought stuff.',
       resolve(source) {

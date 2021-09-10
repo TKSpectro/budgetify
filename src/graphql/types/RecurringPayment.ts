@@ -13,7 +13,6 @@ import {
 } from 'date-fns';
 import { arg, enumType, extendType, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
-import { Category, Household, Payment, User } from '.';
 import { Payment as PaymentType } from '../__generated__/types';
 
 const Interval = enumType({
@@ -41,7 +40,7 @@ export const RecurringPayment = objectType({
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
     t.field('category', {
-      type: Category,
+      type: 'Category',
       description: 'The category in which the payment will be booked.',
       resolve(source) {
         return prisma.category.findUnique({
@@ -53,7 +52,7 @@ export const RecurringPayment = objectType({
     });
     t.nonNull.string('categoryId');
     t.field('user', {
-      type: User,
+      type: 'User',
       description: 'The user from whom the payment will be booked.',
       resolve(source) {
         if (!source.userId) return null;
@@ -66,7 +65,7 @@ export const RecurringPayment = objectType({
     });
     t.nonNull.string('userId');
     t.field('household', {
-      type: Household,
+      type: 'Household',
       description: 'The household in which the payment will be booked.',
       resolve(source) {
         return prisma.household.findUnique({
@@ -78,7 +77,7 @@ export const RecurringPayment = objectType({
     });
     t.nonNull.string('householdId');
     t.list.field('payments', {
-      type: Payment,
+      type: 'Payment',
       description: "All payment's which where booked by this recurring payment.",
       resolve(source) {
         return prisma.payment.findMany({

@@ -1,6 +1,5 @@
 import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
-import { Invite, Payment, RecurringPayment, User } from '.';
 
 export const Household = objectType({
   name: 'Household',
@@ -10,7 +9,7 @@ export const Household = objectType({
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
     t.field('owner', {
-      type: User,
+      type: 'User',
       description: "The user which has management right's over the household.",
       resolve(source) {
         return prisma.user.findUnique({
@@ -22,21 +21,21 @@ export const Household = objectType({
     });
     t.nonNull.string('ownerId');
     t.list.field('members', {
-      type: User,
+      type: 'User',
       description: "A list of all user's which have access to this household.",
       resolve(source) {
         return prisma.household.findUnique({ where: { id: source.id || undefined } }).members();
       },
     });
     t.list.field('invites', {
-      type: Invite,
+      type: 'Invite',
       description: "A list of all invite's for this household.",
       resolve(source) {
         return prisma.household.findUnique({ where: { id: source.id || undefined } }).invites();
       },
     });
     t.list.field('payments', {
-      type: Payment,
+      type: 'Payment',
       description: "A list of all payment's which where booked into this household.",
       args: { skip: intArg(), limit: intArg(), startDate: stringArg(), endDate: stringArg() },
       resolve(source, args) {
@@ -55,7 +54,7 @@ export const Household = objectType({
       },
     });
     t.list.field('recurringPayments', {
-      type: RecurringPayment,
+      type: 'RecurringPayment',
       description: "A list of all recurring payment's which will be booked into this household.",
       args: { id: stringArg(), skip: intArg(), limit: intArg() },
       resolve(source, args) {

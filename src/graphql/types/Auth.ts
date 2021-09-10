@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import { extendType, nonNull, objectType, stringArg } from 'nexus';
 import { destroyCookie, setCookie } from 'nookies';
 import prisma from '~/utils/prisma';
-import { User } from '.';
 
 export const AuthToken = objectType({
   name: 'AuthToken',
@@ -19,7 +18,7 @@ export const AuthQuery = extendType({
   type: 'Query',
   definition(t) {
     t.field('me', {
-      type: User || null,
+      type: 'User' || null,
       description:
         'Returns the data of the currently logged in user. Returns null if no user is logged in',
       async resolve(_, __, ctx) {

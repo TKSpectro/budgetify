@@ -3,7 +3,6 @@ import { compareAsc } from 'date-fns';
 import addDays from 'date-fns/addDays';
 import { extendType, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
-import { Household, User } from '.';
 import { Context } from '../context';
 
 export const Invite = objectType({
@@ -19,7 +18,7 @@ export const Invite = objectType({
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
     t.field('sender', {
-      type: User,
+      type: 'User',
       description: 'The user which sent the invite. (Referrer)',
       resolve(source) {
         return prisma.user.findUnique({
@@ -31,7 +30,7 @@ export const Invite = objectType({
     });
     t.nonNull.string('senderId');
     t.field('household', {
-      type: Household,
+      type: 'Household',
       description: 'The household in which the person was invited.',
       resolve(source) {
         return prisma.household.findUnique({
