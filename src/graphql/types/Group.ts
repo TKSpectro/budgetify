@@ -114,6 +114,18 @@ export const GroupQuery = extendType({
           });
         });
 
+        // Run through all members because it could be that some members have no transactions,
+        // but we still want to show them
+        group?.members.forEach((member) => {
+          if (!resultParticipants.find((x) => x.userId === member.id)) {
+            resultParticipants.push({
+              userId: member.id,
+              name: member.firstname + ' ' + member.lastname,
+              value: 0,
+            });
+          }
+        });
+
         try {
           // The moneypools are used to get a list of all different variants of transactions
           let moneypools: any = {};
