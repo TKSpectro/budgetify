@@ -1,13 +1,17 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
+import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
 import { LoadingAnimation } from '~/components/UI/LoadingAnimation';
+import { ModalForm } from '~/components/UI/ModalForm';
 import { Group } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
+import { uuidRegex } from '~/utils/helper';
 
 const GROUPS_QUERY = gql`
   query GROUPS_QUERY {
@@ -24,9 +28,36 @@ const GROUPS_QUERY = gql`
   }
 `;
 
+const USE_GROUP_INVITE_TOKEN_MUTATION = gql`
+  mutation USE_GROUP_INVITE_TOKEN_MUTATION($token: String!) {
+    useGroupInvite(token: $token) {
+      id
+    }
+  }
+`;
+
 export default function Groups() {
-  const { data, loading, error } = useQuery(GROUPS_QUERY);
+  const { data, loading, error, refetch } = useQuery(GROUPS_QUERY);
   const router = useRouter();
+  const form = useForm();
+
+  const [useGroupTokenMutation, { error: inviteError }] = useMutation(
+    USE_GROUP_INVITE_TOKEN_MUTATION,
+    {
+      onCompleted: () => {
+        refetch();
+      },
+      onError: () => {},
+    },
+  );
+
+  const useInviteSubmitHandler = () => {
+    useGroupTokenMutation({
+      variables: {
+        ...form.getValues(),
+      },
+    });
+  };
 
   const groups = data?.me.groups;
 
@@ -34,6 +65,27 @@ export default function Groups() {
     <Container>
       {loading && <LoadingAnimation />}
       <Error title="Could not load group." error={error} />
+      <Error title="Could not use invite." error={inviteError} />
+
+      <div className="mb-4">
+        <ModalForm
+          form={form}
+          buttonText="Use Invite Token"
+          title="Use a Invite Token"
+          onSubmit={useInviteSubmitHandler}
+          submitText="Use Token"
+        >
+          <Input
+            label="Token"
+            {...form.register('token', {
+              required: { value: true, message: 'Please input a token' },
+              minLength: { value: 30, message: 'Please input a valid token (length)' },
+              pattern: { value: uuidRegex, message: 'Please input a valid token' },
+            })}
+          ></Input>
+        </ModalForm>
+      </div>
+
       {groups &&
         groups.map((group: Group) => {
           return (
