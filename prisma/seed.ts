@@ -191,7 +191,7 @@ async function main() {
   const group1 = await prisma.group.create({
     data: {
       name: 'My Group 1',
-      value: 1000,
+      value: 3000,
       members: {
         connect: [
           { id: testUser.id },
@@ -209,7 +209,7 @@ async function main() {
           {
             id: '0',
             name: 'ALL go shopping',
-            value: -10,
+            value: -1000,
             type: TransactionType.Buy,
             userId: testUser.id,
           },
@@ -217,28 +217,28 @@ async function main() {
           {
             id: '1',
             name: 'A top up',
-            value: 20,
+            value: 2000,
             type: TransactionType.TopUp,
             userId: testUser.id,
           },
           {
             id: '2',
             name: 'C top up',
-            value: 20,
+            value: 2000,
             type: TransactionType.TopUp,
             userId: userC.id,
           },
           {
             id: '3',
             name: 'D top up',
-            value: 10,
+            value: 1000,
             type: TransactionType.TopUp,
             userId: userD.id,
           },
           {
             id: '4',
             name: 'A B C go shopping',
-            value: -10,
+            value: -1000,
             type: TransactionType.Buy,
             userId: testUser.id,
           },
