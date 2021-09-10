@@ -162,11 +162,18 @@ enum ThresholdTrigger {
   UNDER
 }
 
+enum ThresholdType {
+  GOAL
+  LIMIT
+  WARNING
+}
+
 model Threshold {
   id        String           @id @default(uuid())
   name      String
   value     Int
   trigger   ThresholdTrigger
+  type      ThresholdType
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
   group     Group            @relation(fields: [groupId], references: [id])

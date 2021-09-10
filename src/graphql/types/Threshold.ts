@@ -6,6 +6,11 @@ export const ThresholdTrigger = enumType({
   members: ['OVER', 'UNDER'],
 });
 
+export const ThresholdType = enumType({
+  name: 'ThresholdType',
+  members: ['GOAL', 'LIMIT', 'WARNING'],
+});
+
 export const Threshold = objectType({
   name: 'Threshold',
   definition(t) {
@@ -13,6 +18,7 @@ export const Threshold = objectType({
     t.nonNull.string('name');
     t.nonNull.money('value');
     t.nonNull.field('trigger', { type: ThresholdTrigger });
+    t.nonNull.field('type', { type: ThresholdType });
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
     t.field('group', {
@@ -50,6 +56,7 @@ export const ThresholdMutation = extendType({
         name: nonNull(stringArg()),
         value: nonNull(arg({ type: 'Money' })),
         trigger: nonNull(arg({ type: ThresholdTrigger })),
+        type: nonNull(arg({ type: ThresholdType })),
         groupId: nonNull(stringArg()),
       },
       resolve(_, args) {
@@ -58,6 +65,7 @@ export const ThresholdMutation = extendType({
             name: args.name,
             value: args.value,
             trigger: args.trigger,
+            type: args.type,
             groupId: args.groupId,
           },
         });

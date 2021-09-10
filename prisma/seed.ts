@@ -246,8 +246,9 @@ async function main() {
       },
       thresholds: {
         create: [
-          { name: 'Threshold Over', value: 10000, trigger: 'OVER' },
-          { name: 'Threshold Under', value: 0, trigger: 'UNDER' },
+          { name: 'Threshold Goal', value: 10000, trigger: 'OVER', type: 'GOAL' },
+          { name: 'Threshold Warning', value: 100, trigger: 'UNDER', type: 'WARNING' },
+          { name: 'Threshold LIMIT', value: 0, trigger: 'UNDER', type: 'LIMIT' },
         ],
       },
     },
