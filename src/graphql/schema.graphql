@@ -36,6 +36,9 @@ type Group {
   """The users which have management right's over the group."""
   owners: [User]
 
+  """A list of all thresholds hooked to this group."""
+  thresholds: [Threshold]
+
   """A list of all transactions which happened in this group."""
   transactions: [GroupTransaction]
   updatedAt: DateTime!
@@ -160,6 +163,9 @@ type Mutation {
 
   """Create a new recurring payment. Need to be logged in."""
   createRecurringPayment(categoryId: String!, description: String, endDate: DateTime, householdId: String!, interval: Interval!, name: String!, startDate: DateTime!, value: Money!): RecurringPayment!
+
+  """Create a new threshold. Need to be logged in and own group."""
+  createThreshold(groupId: String!, name: String!, trigger: ThresholdTrigger!, value: Money!): Threshold!
 
   """Remove a invite. Need to be logged in."""
   deleteInvite(id: String!): Boolean
@@ -310,6 +316,24 @@ type RecurringPayment {
   user: User
   userId: String!
   value: Money!
+}
+
+type Threshold {
+  createdAt: DateTime!
+
+  """The group to which this trigger is hooked."""
+  group: Group
+  groupId: String!
+  id: String!
+  name: String!
+  trigger: ThresholdTrigger!
+  updatedAt: DateTime!
+  value: Money!
+}
+
+enum ThresholdTrigger {
+  OVER
+  UNDER
 }
 
 enum TransactionType {

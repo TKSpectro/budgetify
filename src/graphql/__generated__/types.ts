@@ -45,6 +45,8 @@ export type Group = {
   name: Scalars['String'];
   /** The users which have management right's over the group. */
   owners?: Maybe<Array<Maybe<User>>>;
+  /** A list of all thresholds hooked to this group. */
+  thresholds?: Maybe<Array<Maybe<Threshold>>>;
   /** A list of all transactions which happened in this group. */
   transactions?: Maybe<Array<Maybe<GroupTransaction>>>;
   updatedAt: Scalars['DateTime'];
@@ -159,6 +161,8 @@ export type Mutation = {
   createPayment: Payment;
   /** Create a new recurring payment. Need to be logged in. */
   createRecurringPayment: RecurringPayment;
+  /** Create a new threshold. Need to be logged in and own group. */
+  createThreshold: Threshold;
   /** Remove a invite. Need to be logged in. */
   deleteInvite?: Maybe<Scalars['Boolean']>;
   /** Deletes a user by anonymizing his personal data. Need to be logged in. */
@@ -257,6 +261,14 @@ export type MutationCreateRecurringPaymentArgs = {
   interval: Interval;
   name: Scalars['String'];
   startDate: Scalars['DateTime'];
+  value: Scalars['Money'];
+};
+
+
+export type MutationCreateThresholdArgs = {
+  groupId: Scalars['String'];
+  name: Scalars['String'];
+  trigger: ThresholdTrigger;
   value: Scalars['Money'];
 };
 
@@ -433,6 +445,24 @@ export type RecurringPayment = {
   userId: Scalars['String'];
   value: Scalars['Money'];
 };
+
+export type Threshold = {
+  __typename?: 'Threshold';
+  createdAt: Scalars['DateTime'];
+  /** The group to which this trigger is hooked. */
+  group?: Maybe<Group>;
+  groupId: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  trigger: ThresholdTrigger;
+  updatedAt: Scalars['DateTime'];
+  value: Scalars['Money'];
+};
+
+export enum ThresholdTrigger {
+  Over = 'OVER',
+  Under = 'UNDER'
+}
 
 export enum TransactionType {
   Buy = 'BUY',

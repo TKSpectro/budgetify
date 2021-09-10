@@ -41,6 +41,7 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   Interval: "DAILY" | "MONTHLY" | "QUARTERLY" | "WEEKLY" | "YEARLY"
+  ThresholdTrigger: "OVER" | "UNDER"
   TransactionType: "BUY" | "TAKE_OUT" | "TOP_UP"
 }
 
@@ -134,6 +135,15 @@ export interface NexusGenObjects {
     userId: string; // String!
     value: NexusGenScalars['Money']; // Money!
   }
+  Threshold: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    groupId: string; // String!
+    id: string; // String!
+    name: string; // String!
+    trigger: NexusGenEnums['ThresholdTrigger']; // ThresholdTrigger!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    value: NexusGenScalars['Money']; // Money!
+  }
   User: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
@@ -173,6 +183,7 @@ export interface NexusGenFieldTypes {
     members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     name: string; // String!
     owners: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    thresholds: Array<NexusGenRootTypes['Threshold'] | null> | null; // [Threshold]
     transactions: Array<NexusGenRootTypes['GroupTransaction'] | null> | null; // [GroupTransaction]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     value: NexusGenScalars['Money']; // Money!
@@ -227,6 +238,7 @@ export interface NexusGenFieldTypes {
     createInvite: NexusGenRootTypes['Invite']; // Invite!
     createPayment: NexusGenRootTypes['Payment']; // Payment!
     createRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
+    createThreshold: NexusGenRootTypes['Threshold']; // Threshold!
     deleteInvite: boolean | null; // Boolean
     deleteUser: NexusGenRootTypes['User']; // User!
     login: NexusGenRootTypes['AuthToken']; // AuthToken!
@@ -291,6 +303,16 @@ export interface NexusGenFieldTypes {
     userId: string; // String!
     value: NexusGenScalars['Money']; // Money!
   }
+  Threshold: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    group: NexusGenRootTypes['Group'] | null; // Group
+    groupId: string; // String!
+    id: string; // String!
+    name: string; // String!
+    trigger: NexusGenEnums['ThresholdTrigger']; // ThresholdTrigger!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    value: NexusGenScalars['Money']; // Money!
+  }
   User: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
@@ -329,6 +351,7 @@ export interface NexusGenFieldTypeNames {
     members: 'User'
     name: 'String'
     owners: 'User'
+    thresholds: 'Threshold'
     transactions: 'GroupTransaction'
     updatedAt: 'DateTime'
     value: 'Money'
@@ -383,6 +406,7 @@ export interface NexusGenFieldTypeNames {
     createInvite: 'Invite'
     createPayment: 'Payment'
     createRecurringPayment: 'RecurringPayment'
+    createThreshold: 'Threshold'
     deleteInvite: 'Boolean'
     deleteUser: 'User'
     login: 'AuthToken'
@@ -445,6 +469,16 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'DateTime'
     user: 'User'
     userId: 'String'
+    value: 'Money'
+  }
+  Threshold: { // field return type name
+    createdAt: 'DateTime'
+    group: 'Group'
+    groupId: 'String'
+    id: 'String'
+    name: 'String'
+    trigger: 'ThresholdTrigger'
+    updatedAt: 'DateTime'
     value: 'Money'
   }
   User: { // field return type name
@@ -527,6 +561,12 @@ export interface NexusGenArgTypes {
       interval: NexusGenEnums['Interval']; // Interval!
       name: string; // String!
       startDate: NexusGenScalars['DateTime']; // DateTime!
+      value: NexusGenScalars['Money']; // Money!
+    }
+    createThreshold: { // args
+      groupId: string; // String!
+      name: string; // String!
+      trigger: NexusGenEnums['ThresholdTrigger']; // ThresholdTrigger!
       value: NexusGenScalars['Money']; // Money!
     }
     deleteInvite: { // args

@@ -10,4 +10,5 @@ export * from './Household';
 export * from './Invite';
 export * from './Payment';
 export * from './RecurringPayment';
+export * from './Threshold';
 export * from './User';

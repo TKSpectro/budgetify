@@ -40,6 +40,13 @@ export const Group = objectType({
         return prisma.group.findUnique({ where: { id: source.id || undefined } }).invites();
       },
     });
+    t.list.field('thresholds', {
+      type: 'Threshold',
+      description: 'A list of all thresholds hooked to this group.',
+      resolve(source) {
+        return prisma.group.findUnique({ where: { id: source.id || undefined } }).thresholds();
+      },
+    });
   },
 });
 

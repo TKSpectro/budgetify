@@ -134,6 +134,7 @@ model Group {
   members      User[]
   transactions GroupTransaction[]
   invites      Invite[]
+  thresholds   Threshold[]
 }
 
 enum TransactionType {
@@ -154,4 +155,20 @@ model GroupTransaction {
   user         User            @relation(fields: [userId], references: [id])
   userId       String
   participants User[]          @relation(name: "Participants")
+}
+
+enum ThresholdTrigger {
+  OVER
+  UNDER
+}
+
+model Threshold {
+  id        String           @id @default(uuid())
+  name      String
+  value     Int
+  trigger   ThresholdTrigger
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  group     Group            @relation(fields: [groupId], references: [id])
+  groupId   String
 }

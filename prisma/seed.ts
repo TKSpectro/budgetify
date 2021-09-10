@@ -244,6 +244,12 @@ async function main() {
           },
         ],
       },
+      thresholds: {
+        create: [
+          { name: 'Threshold Over', value: 10000, trigger: 'OVER' },
+          { name: 'Threshold Under', value: 0, trigger: 'UNDER' },
+        ],
+      },
     },
     include: { transactions: true },
   });
