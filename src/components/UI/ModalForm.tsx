@@ -63,7 +63,12 @@ export function ModalForm<T>({
                   <div className="relative p-6 flex-auto">{children}</div>
                   {/*footer*/}
                   <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                    <Button className="mr-4" variant="secondary" onClick={onCloseHandler}>
+                    <Button
+                      type="reset"
+                      className="mr-4"
+                      variant="secondary"
+                      onClick={onCloseHandler}
+                    >
                       Close
                     </Button>
                     <Button type="submit">{submitText}</Button>

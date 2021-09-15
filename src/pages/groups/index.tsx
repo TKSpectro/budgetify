@@ -8,7 +8,11 @@ import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
 import { ModalForm } from '~/components/UI/ModalForm';
-import { Group } from '~/graphql/__generated__/types';
+import {
+  Group,
+  MutationCreateGroupArgs,
+  MutationUseInviteArgs,
+} from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { uuidRegex } from '~/utils/helper';
@@ -36,10 +40,26 @@ const USE_GROUP_INVITE_TOKEN_MUTATION = gql`
   }
 `;
 
+const CREATE_GROUP_MUTATION = gql`
+  mutation CREATE_GROUP_MUTATION($name: String!) {
+    createGroup(name: $name) {
+      id
+      name
+      value
+      members {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export default function Groups() {
   const { data, loading, error, refetch } = useQuery(GROUPS_QUERY);
   const router = useRouter();
-  const form = useForm();
+
+  const form = useForm<MutationUseInviteArgs>();
+  const createGroupForm = useForm<MutationCreateGroupArgs>();
 
   const [useGroupTokenMutation, { error: inviteError }] = useMutation(
     USE_GROUP_INVITE_TOKEN_MUTATION,
@@ -51,11 +71,24 @@ export default function Groups() {
     },
   );
 
+  const [createGroupMutation, { error: createGroupError }] = useMutation(CREATE_GROUP_MUTATION, {
+    onCompleted: () => {
+      refetch();
+    },
+    onError: () => {},
+  });
+
   const useInviteSubmitHandler = () => {
     useGroupTokenMutation({
       variables: {
         ...form.getValues(),
       },
+    });
+  };
+
+  const createGroupSubmitHandler = () => {
+    createGroupMutation({
+      variables: { ...createGroupForm.getValues() },
     });
   };
 
@@ -65,9 +98,10 @@ export default function Groups() {
     <Container>
       <Error title="Could not load group." error={error} />
       <Error title="Could not use invite." error={inviteError} />
-      <Loader loading={loading} />
+      <Error title="Could not create group." error={createGroupError} />
 
-      <div className="mb-4">
+      <Loader loading={loading} />
+      <div className="mb-4 relative">
         <ModalForm
           form={form}
           buttonText="Use Invite Token"
@@ -84,8 +118,24 @@ export default function Groups() {
             })}
           ></Input>
         </ModalForm>
+        <div className="mt-2 md:mt-0 md:absolute md:right-0 md:top-0">
+          <ModalForm
+            form={createGroupForm}
+            buttonText="Create Group"
+            title="Create a new Group"
+            onSubmit={createGroupSubmitHandler}
+            submitText="Create Group"
+          >
+            <Input
+              label="Name"
+              {...createGroupForm.register('name', {
+                required: { value: true, message: 'Please input a name' },
+                minLength: { value: 2, message: 'Please input at least 2 characters' },
+              })}
+            ></Input>
+          </ModalForm>
+        </div>
       </div>
-
       {groups &&
         groups.map((group: Group) => {
           return (
