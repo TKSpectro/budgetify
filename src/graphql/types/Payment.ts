@@ -1,6 +1,7 @@
 import { ApolloError } from 'apollo-server-micro';
 import { arg, extendType, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
+import { authIsLoggedIn } from '../authRules';
 
 export const Payment = objectType({
   name: 'Payment',
@@ -58,7 +59,7 @@ export const PaymentMutation = extendType({
     t.nonNull.field('createPayment', {
       type: Payment,
       description: 'Create a new payment. Need to be logged in.',
-      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      authorize: authIsLoggedIn,
       args: {
         name: nonNull(stringArg()),
         value: nonNull(arg({ type: 'Money' })),

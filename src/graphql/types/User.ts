@@ -1,6 +1,7 @@
 import { ApolloError } from 'apollo-server-micro';
 import { extendType, objectType } from 'nexus';
 import prisma from '~/utils/prisma';
+import { authIsLoggedIn } from '../authRules';
 
 export const User = objectType({
   name: 'User',
@@ -92,7 +93,7 @@ export const UserMutation = extendType({
     t.nonNull.field('deleteUser', {
       type: User,
       description: 'Deletes a user by anonymizing his personal data. Need to be logged in.',
-      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      authorize: authIsLoggedIn,
       async resolve(_, __, ctx) {
         const ownedGroups = await prisma.user
           .findUnique({ where: { id: ctx.user.id } })

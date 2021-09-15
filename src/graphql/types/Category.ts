@@ -1,5 +1,6 @@
 import { extendType, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
+import { authIsAdmin } from '../authRules';
 
 export const Category = objectType({
   name: 'Category',
@@ -36,7 +37,7 @@ export const CategoryMutation = extendType({
     t.nonNull.field('createCategory', {
       type: 'Category',
       description: 'Create a new category. Can just be called by an admin.',
-      authorize: (_, __, ctx) => ctx.user.isAdmin,
+      authorize: authIsAdmin,
       args: {
         name: nonNull(stringArg()),
       },
@@ -51,7 +52,7 @@ export const CategoryMutation = extendType({
     t.nonNull.field('removeCategory', {
       type: 'Category',
       description: 'Remove a new category. Can just be called by an admin.',
-      authorize: (_, __, ctx) => ctx.user.isAdmin,
+      authorize: authIsAdmin,
       args: {
         name: nonNull(stringArg()),
       },

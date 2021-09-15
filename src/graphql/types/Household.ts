@@ -1,5 +1,6 @@
 import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
+import { authIsAdmin, authIsHouseholdOwner } from '../authRules';
 
 export const Household = objectType({
   name: 'Household',
@@ -80,7 +81,7 @@ export const HouseholdQuery = extendType({
       type: Household,
       description: `Returns all households available in the database. 
       Can only be queried by admin accounts.`,
-      authorize: (_, __, ctx) => ctx.user.isAdmin,
+      authorize: authIsAdmin,
       resolve() {
         return prisma.household.findMany();
       },
@@ -112,15 +113,7 @@ export const HouseholdMutation = extendType({
       type: Household,
       description:
         'Update a already existing household. Need to be logged in and owner of the household.',
-      authorize: async (_, args, ctx) => {
-        const household = await prisma.household.findFirst({
-          where: { id: args.id },
-        });
-        // Check if the user is the owner of the household.
-        const householdOwner = household?.ownerId === ctx.user.id;
-        // User must be logged in and own the household
-        return !!ctx.user && householdOwner;
-      },
+      authorize: authIsHouseholdOwner,
       args: {
         id: nonNull(stringArg()),
         ownerId: stringArg(),
@@ -137,15 +130,7 @@ export const HouseholdMutation = extendType({
       type: Household,
       description:
         'Remove a member from the specified household. Need to be logged in and own the household.',
-      authorize: async (_, args, ctx) => {
-        const household = await prisma.household.findFirst({
-          where: { id: args.id },
-        });
-        // Check if the user is the owner of the household.
-        const householdOwner = household?.ownerId === ctx.user.id;
-        // User must be logged in and own the household
-        return !!ctx.user && householdOwner;
-      },
+      authorize: authIsHouseholdOwner,
       args: {
         id: nonNull(stringArg()),
         memberId: nonNull(stringArg()),

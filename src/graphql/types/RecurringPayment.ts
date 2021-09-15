@@ -13,6 +13,7 @@ import {
 } from 'date-fns';
 import { arg, enumType, extendType, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
+import { authIsLoggedIn } from '../authRules';
 import { Payment as PaymentType } from '../__generated__/types';
 
 const Interval = enumType({
@@ -202,7 +203,7 @@ export const RecurringPaymentMutation = extendType({
     t.nonNull.field('createRecurringPayment', {
       type: RecurringPayment,
       description: 'Create a new recurring payment. Need to be logged in.',
-      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      authorize: authIsLoggedIn,
       args: {
         name: nonNull(stringArg()),
         value: nonNull(arg({ type: 'Money' })),
@@ -246,7 +247,7 @@ export const RecurringPaymentMutation = extendType({
     t.nonNull.field('updateRecurringPayment', {
       type: RecurringPayment,
       description: 'Update a new recurring payment. Need to be logged in.',
-      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      authorize: authIsLoggedIn,
       args: {
         id: nonNull(stringArg()),
         name: stringArg(),

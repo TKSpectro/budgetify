@@ -1,6 +1,7 @@
 import { ApolloError } from 'apollo-server-errors';
 import { arg, extendType, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
+import { authIsGroupOwner, authIsLoggedIn } from '../authRules';
 import { Participant as ParticipantType } from '../__generated__/types';
 
 export const Group = objectType({
@@ -66,7 +67,7 @@ export const GroupQuery = extendType({
       type: Group,
       args: { id: nonNull(stringArg()) },
       description: 'Returns a group by searching for the given id.',
-      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      authorize: authIsLoggedIn,
       resolve(_, args) {
         return prisma.group.findFirst({
           where: {
@@ -79,7 +80,7 @@ export const GroupQuery = extendType({
       type: Participant,
       args: { id: nonNull(stringArg()) },
       description: 'Returns the virtual balances for all members in the given group.',
-      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      authorize: authIsLoggedIn,
       async resolve(_, args, ctx) {
         // * The algorithm to calculate the virtual balances is relatively complex, as we
         // * need to account for the division which ends in a rest different than 0.
@@ -226,7 +227,7 @@ export const GroupMutation = extendType({
         value: arg({ type: 'Money' }),
       },
       description: 'Creates a new group with the given arguments and returns it.',
-      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      authorize: authIsLoggedIn,
       resolve(_, args, ctx) {
         return prisma.group.create({
           data: {
@@ -243,16 +244,7 @@ export const GroupMutation = extendType({
       type: Group,
       description:
         'Update a already existing group. Need to be logged in and be owner of the group.',
-      authorize: async (_, args, ctx) => {
-        const group = await prisma.group.findFirst({
-          where: { id: args.id },
-          include: { owners: true },
-        });
-        // Check if the user is the owner of the group.
-        const groupOwner = group?.owners.find((x) => x.id === ctx.user.id);
-        // User must be logged in and own the household
-        return !!ctx.user && !!groupOwner;
-      },
+      authorize: authIsGroupOwner,
       args: {
         id: nonNull(stringArg()),
         ownerId: stringArg(),
@@ -268,16 +260,7 @@ export const GroupMutation = extendType({
     t.nonNull.field('addGroupOwner', {
       type: Group,
       description: 'Add a new owner to a group. Need to be logged in and be owner of the group.',
-      authorize: async (_, args, ctx) => {
-        const group = await prisma.group.findFirst({
-          where: { id: args.id },
-          include: { owners: true },
-        });
-        // Check if the user is the owner of the group.
-        const groupOwner = group?.owners.find((x) => x.id === ctx.user.id);
-        // User must be logged in and own the household
-        return !!ctx.user && !!groupOwner;
-      },
+      authorize: authIsGroupOwner,
       args: {
         id: nonNull(stringArg()),
         ownerId: stringArg(),
@@ -293,16 +276,7 @@ export const GroupMutation = extendType({
     t.nonNull.field('removeGroupOwner', {
       type: Group,
       description: 'Remove a owner of a group. Need to be logged in and be owner of the group.',
-      authorize: async (_, args, ctx) => {
-        const group = await prisma.group.findFirst({
-          where: { id: args.id },
-          include: { owners: true },
-        });
-        // Check if the user is the owner of the group.
-        const groupOwner = group?.owners.find((x) => x.id === ctx.user.id);
-        // User must be logged in and own the household
-        return !!ctx.user && !!groupOwner;
-      },
+      authorize: authIsGroupOwner,
       args: {
         id: nonNull(stringArg()),
         ownerId: stringArg(),
@@ -330,16 +304,7 @@ export const GroupMutation = extendType({
       type: Group,
       description:
         'Remove a member from the specified group. Need to be logged in and own the group.',
-      authorize: async (_, args, ctx) => {
-        const group = await prisma.group.findFirst({
-          where: { id: args.id },
-          include: { owners: true },
-        });
-        // Check if the user is the owner of the group.
-        const groupOwner = group?.owners.find((x) => x.id === ctx.user.id);
-        // User must be logged in and own the group
-        return !!ctx.user && !!groupOwner;
-      },
+      authorize: authIsGroupOwner,
       args: {
         id: nonNull(stringArg()),
         memberId: nonNull(stringArg()),

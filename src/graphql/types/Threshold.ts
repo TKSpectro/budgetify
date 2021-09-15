@@ -1,5 +1,6 @@
 import { arg, enumType, extendType, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
+import { authIsGroupOwner } from '../authRules';
 
 export const ThresholdTrigger = enumType({
   name: 'ThresholdTrigger',
@@ -42,16 +43,7 @@ export const ThresholdMutation = extendType({
     t.nonNull.field('createThreshold', {
       type: 'Threshold',
       description: 'Create a new threshold. Need to be logged in and own group.',
-      authorize: async (_, args, ctx) => {
-        const group = await prisma.group.findFirst({
-          where: { id: args.groupId },
-          include: { owners: true },
-        });
-        // Check if the user is the owner of the group.
-        const groupOwner = group?.owners.find((x) => x.id === ctx.user.id);
-        // User must be logged in and own the household
-        return !!ctx.user && !!groupOwner;
-      },
+      authorize: authIsGroupOwner,
       args: {
         name: nonNull(stringArg()),
         value: nonNull(arg({ type: 'Money' })),

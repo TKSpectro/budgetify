@@ -3,6 +3,7 @@ import { compareAsc } from 'date-fns';
 import addDays from 'date-fns/addDays';
 import { extendType, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
+import { authIsLoggedIn } from '../authRules';
 import { Context } from '../context';
 
 export const Invite = objectType({
@@ -62,7 +63,7 @@ export const InviteMutation = extendType({
     t.nonNull.field('createInvite', {
       type: Invite,
       description: 'Create a new invite. Need to be logged in.',
-      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      authorize: authIsLoggedIn,
       args: {
         invitedEmail: nonNull(stringArg()),
         householdId: nonNull(stringArg()),
@@ -95,7 +96,7 @@ export const InviteMutation = extendType({
       type: Invite,
       description:
         'Use a invite. Logged in user gets added to the household in invite. Need to be logged in.',
-      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      authorize: authIsLoggedIn,
       args: {
         token: nonNull(stringArg()),
       },
@@ -140,7 +141,7 @@ export const InviteMutation = extendType({
     t.field('deleteInvite', {
       type: 'Boolean',
       description: 'Remove a invite. Need to be logged in.',
-      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      authorize: authIsLoggedIn,
       args: {
         id: nonNull(stringArg()),
       },
@@ -167,7 +168,7 @@ export const InviteGroupMutation = extendType({
     t.nonNull.field('createGroupInvite', {
       type: Invite,
       description: 'Create a new invite. Need to be logged in.',
-      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      authorize: authIsLoggedIn,
       args: {
         invitedEmail: nonNull(stringArg()),
         groupId: nonNull(stringArg()),
@@ -197,7 +198,7 @@ export const InviteGroupMutation = extendType({
       type: Invite,
       description:
         'Use a invite. Logged in user gets added to the group specified in the invite. Need to be logged in.',
-      authorize: (_, __, ctx) => (ctx.user ? true : false),
+      authorize: authIsLoggedIn,
       args: {
         token: nonNull(stringArg()),
       },
