@@ -298,8 +298,6 @@ export const GroupMutation = extendType({
       },
     });
 
-    // TODO: Need to figure out how we remove a member if we want to keep the transactions as
-    // the transactions user is non-null
     t.nonNull.field('removeGroupMember', {
       type: Group,
       description:
