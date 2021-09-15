@@ -192,9 +192,7 @@ export type Mutation = {
   updateHousehold: Household;
   /** Update a new recurring payment. Need to be logged in. */
   updateRecurringPayment: RecurringPayment;
-  /** Use a invite. Logged in user gets added to the group specified in the invite. Need to be logged in. */
-  useGroupInvite?: Maybe<Invite>;
-  /** Use a invite. Logged in user gets added to the household in invite. Need to be logged in. */
+  /** Use a invite. Logged in user gets added to the household or group specified in the invite. Need to be logged in. */
   useInvite?: Maybe<Invite>;
 };
 
@@ -336,11 +334,6 @@ export type MutationUpdateRecurringPaymentArgs = {
   name?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['DateTime']>;
   value?: Maybe<Scalars['Money']>;
-};
-
-
-export type MutationUseGroupInviteArgs = {
-  token: Scalars['String'];
 };
 
 

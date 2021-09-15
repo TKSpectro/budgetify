@@ -253,7 +253,6 @@ export interface NexusGenFieldTypes {
     updateGroup: NexusGenRootTypes['Group']; // Group!
     updateHousehold: NexusGenRootTypes['Household']; // Household!
     updateRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
-    useGroupInvite: NexusGenRootTypes['Invite'] | null; // Invite
     useInvite: NexusGenRootTypes['Invite'] | null; // Invite
   }
   Participant: { // field return type
@@ -422,7 +421,6 @@ export interface NexusGenFieldTypeNames {
     updateGroup: 'Group'
     updateHousehold: 'Household'
     updateRecurringPayment: 'RecurringPayment'
-    useGroupInvite: 'Invite'
     useInvite: 'Invite'
   }
   Participant: { // field return type name
@@ -620,9 +618,6 @@ export interface NexusGenArgTypes {
       name?: string | null; // String
       startDate?: NexusGenScalars['DateTime'] | null; // DateTime
       value?: NexusGenScalars['Money'] | null; // Money
-    }
-    useGroupInvite: { // args
-      token: string; // String!
     }
     useInvite: { // args
       token: string; // String!

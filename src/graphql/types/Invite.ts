@@ -116,7 +116,7 @@ export const InviteMutation = extendType({
     t.field('useInvite', {
       type: Invite,
       description:
-        'Use a invite. Logged in user gets added to the household in invite. Need to be logged in.',
+        'Use a invite. Logged in user gets added to the household or group specified in the invite. Need to be logged in.',
       authorize: authIsLoggedIn,
       args: {
         token: nonNull(stringArg()),
@@ -141,9 +141,22 @@ export const InviteMutation = extendType({
           throw new ApolloError('Invite token was not created for your email address.');
         }
 
+        if (!invite.groupId && !invite.householdId) {
+          throw new ApolloError('Invite token was not valid. (Type)');
+        }
+
+        // Depending on which id is set we connect the user to the corresponding group or household
         const user = await prisma.user.update({
           where: { id: ctx.user.id },
-          data: { households: { connect: { id: invite.householdId || undefined } } },
+          data: invite.householdId
+            ? {
+                households: { connect: { id: invite.householdId || undefined } },
+              }
+            : invite.groupId
+            ? {
+                groups: { connect: { id: invite.groupId || undefined } },
+              }
+            : '',
         });
 
         if (!user) {
@@ -231,51 +244,6 @@ export const InviteGroupMutation = extendType({
         }
 
         return invite;
-      },
-    });
-    t.field('useGroupInvite', {
-      type: Invite,
-      description:
-        'Use a invite. Logged in user gets added to the group specified in the invite. Need to be logged in.',
-      authorize: authIsLoggedIn,
-      args: {
-        token: nonNull(stringArg()),
-      },
-      async resolve(_, args, ctx: Context) {
-        const invite = await prisma.invite.findUnique({
-          where: {
-            token: args.token,
-          },
-        });
-
-        if (!invite) {
-          throw new ApolloError('Invite token was not valid.');
-        }
-        if (invite.wasUsed) {
-          throw new ApolloError('Invite was already used.');
-        }
-        if (compareAsc(invite.validUntil, new Date()) !== 1) {
-          throw new ApolloError('Invite is not valid anymore.');
-        }
-        if (ctx.user.email !== invite.invitedEmail) {
-          throw new ApolloError('Invite token was not created for your email address.');
-        }
-
-        const user = await prisma.user.update({
-          where: { id: ctx.user.id },
-          data: { groups: { connect: { id: invite.groupId || undefined } } },
-        });
-
-        if (!user) {
-          throw new ApolloError('Invite token could not be used.');
-        }
-
-        const updatedInvite = await prisma.invite.update({
-          where: { id: invite.id },
-          data: { updatedAt: new Date(), wasUsed: true },
-        });
-
-        return updatedInvite;
       },
     });
   },

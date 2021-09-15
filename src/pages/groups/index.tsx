@@ -32,9 +32,9 @@ const GROUPS_QUERY = gql`
   }
 `;
 
-const USE_GROUP_INVITE_TOKEN_MUTATION = gql`
-  mutation USE_GROUP_INVITE_TOKEN_MUTATION($token: String!) {
-    useGroupInvite(token: $token) {
+const USE_INVITE_TOKEN_MUTATION = gql`
+  mutation USE_INVITE_TOKEN_MUTATION($token: String!) {
+    useInvite(token: $token) {
       id
     }
   }
@@ -61,15 +61,12 @@ export default function Groups() {
   const form = useForm<MutationUseInviteArgs>();
   const createGroupForm = useForm<MutationCreateGroupArgs>();
 
-  const [useGroupTokenMutation, { error: inviteError }] = useMutation(
-    USE_GROUP_INVITE_TOKEN_MUTATION,
-    {
-      onCompleted: () => {
-        refetch();
-      },
-      onError: () => {},
+  const [useGroupTokenMutation, { error: inviteError }] = useMutation(USE_INVITE_TOKEN_MUTATION, {
+    onCompleted: () => {
+      refetch();
     },
-  );
+    onError: () => {},
+  });
 
   const [createGroupMutation, { error: createGroupError }] = useMutation(CREATE_GROUP_MUTATION, {
     onCompleted: () => {

@@ -221,12 +221,7 @@ type Mutation {
   updateRecurringPayment(categoryId: String, description: String, endDate: DateTime, householdId: String!, id: String!, interval: Interval, name: String, startDate: DateTime, value: Money): RecurringPayment!
 
   """
-  Use a invite. Logged in user gets added to the group specified in the invite. Need to be logged in.
-  """
-  useGroupInvite(token: String!): Invite
-
-  """
-  Use a invite. Logged in user gets added to the household in invite. Need to be logged in.
+  Use a invite. Logged in user gets added to the household or group specified in the invite. Need to be logged in.
   """
   useInvite(token: String!): Invite
 }
