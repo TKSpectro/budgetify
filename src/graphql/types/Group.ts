@@ -335,9 +335,9 @@ export const GroupMutation = extendType({
           where: { id: args.id },
           include: { owners: true },
         });
-        // Check if the user is the owner of the household.
+        // Check if the user is the owner of the group.
         const groupOwner = group?.owners.find((x) => x.id === ctx.user.id);
-        // User must be logged in and own the household
+        // User must be logged in and own the group
         return !!ctx.user && !!groupOwner;
       },
       args: {

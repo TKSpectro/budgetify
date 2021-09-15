@@ -87,6 +87,11 @@ export default function GroupMemberTable({ members, owners, currentUserId, ...pr
     removeMemberMutation({ variables: { id: groupId, memberId: id } });
   };
 
+  const leaveHandler = (id: string) => {
+    //TODO: add leave mutation
+    // removeMemberMutation({ variables: { id: groupId, memberId: id } });
+  };
+
   return (
     <>
       <Error title="Could not remove owner." error={removeOwnerError} />
@@ -115,13 +120,20 @@ export default function GroupMemberTable({ members, owners, currentUserId, ...pr
                   </div>
                 </td>
                 <td className="py-4">
-                  {/* // TODO: Implement leave button for the own user */}
                   {member.id !== currentUserId && (
                     <Modal
-                      title="Remove user from household"
-                      description={`Are you sure that you want to remove ${member.name} from this household?`}
+                      title="Remove user from group"
+                      description={`Are you sure that you want to remove ${member.name} from this group?`}
                       onSubmit={() => removeHandler(member.id)}
                       buttonText="Remove"
+                    />
+                  )}
+                  {member.id === currentUserId && (
+                    <Modal
+                      title="Leave group."
+                      description={`Are you sure that you want to remove ${member.name} from this group?`}
+                      onSubmit={() => removeHandler(member.id)}
+                      buttonText="Leave"
                     />
                   )}
                 </td>
@@ -138,7 +150,7 @@ export default function GroupMemberTable({ members, owners, currentUserId, ...pr
                     <Modal
                       title="Remove owner role"
                       description={`Are you sure that you want to remove ${member.name} from the owners?`}
-                      onSubmit={() => removeOwnerHandler(member.id)}
+                      onSubmit={() => leaveHandler(member.id)}
                       buttonText="Remove Owner"
                     />
                   )}

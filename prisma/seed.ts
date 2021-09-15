@@ -23,7 +23,7 @@ async function main() {
       data: {
         firstname,
         lastname,
-        email: faker.internet.email(firstname, lastname, 'budgetifyTest.prisma'),
+        email: faker.internet.email(firstname, lastname, process.env.DOMAIN || 'budgetify.xyz'),
         hashedPassword: faker.internet.password(16),
       },
     });

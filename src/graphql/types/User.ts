@@ -96,7 +96,7 @@ export const UserMutation = extendType({
       async resolve(_, __, ctx) {
         const ownedGroups = await prisma.user
           .findUnique({ where: { id: ctx.user.id } })
-          .ownedGroups();
+          .ownedGroups({ include: { owners: true } });
 
         const ownedHouseholds = await prisma.user
           .findUnique({ where: { id: ctx.user.id } })
@@ -105,10 +105,31 @@ export const UserMutation = extendType({
         // If the user own any groups or households we can not delete the account.
         // Prisma always returns an array. So we can just check for then length of it,
         // if the length is 0 the user does not own any households or groups
-        if (ownedGroups.length > 0 || ownedHouseholds.length > 0) {
-          // TODO: return all household and group names he owns
+        if (ownedHouseholds.length > 0) {
           throw new ApolloError(
-            `You are the owner of ${ownedHouseholds.length} households. Please go to each household and give another user the owner role.`,
+            `You are the owner of ${
+              ownedHouseholds.length
+            } household(s). Please go to each household and give another user the owner role. Households: ${ownedHouseholds
+              .map((household) => household.name)
+              .join(', ')}`,
+          );
+        }
+
+        if (ownedGroups.length > 0) {
+          let names: string[] = [];
+
+          ownedGroups.forEach((group) => {
+            if (group.owners.length <= 1) {
+              names.push(group.name);
+            }
+          });
+
+          throw new ApolloError(
+            `You are the single owner of ${
+              ownedGroups.length
+            } groups. Please go to each group and give another user the owner role. Households: ${names.join(
+              ', ',
+            )}`,
           );
         }
 
