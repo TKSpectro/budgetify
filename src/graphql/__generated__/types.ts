@@ -33,7 +33,6 @@ export type Category = {
   updatedAt: Scalars['DateTime'];
 };
 
-
 export type Group = {
   __typename?: 'Group';
   createdAt: Scalars['DateTime'];
@@ -135,7 +134,6 @@ export type Invite = {
   validUntil: Scalars['DateTime'];
   wasUsed: Scalars['Boolean'];
 };
-
 
 export type Mutation = {
   __typename?: 'Mutation';
