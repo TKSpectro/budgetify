@@ -1,9 +1,9 @@
 import { arg, enumType, extendType, list, nonNull, objectType, stringArg } from 'nexus';
-import nodemailer from 'nodemailer';
 import { MailOptions } from 'nodemailer/lib/sendmail-transport';
 import prisma from '~/utils/prisma';
 import { authIsLoggedIn } from '../authRules';
 import { Context } from '../context';
+import { createNodemailerTransporter } from '../helper';
 
 export const TransactionType = enumType({
   name: 'TransactionType',
@@ -97,58 +97,36 @@ export const GroupTransactionMutation = extendType({
           },
         });
 
-        if (!!group.thresholds && process.env.EMAIL_ENABLE == 'true') {
-          let account = { host: '', user: '', pass: '' };
+        if (!!group.thresholds) {
+          const transporter = createNodemailerTransporter({});
+          if (transporter) {
+            const mailOptions: MailOptions = {
+              from: `${process.env.DOMAIN} <info@${process.env.DOMAIN}>`,
+              to: group.members.map((member) => member.email).join(),
+              subject: 'Info from budgetify',
+              text: '',
+            };
 
-          // Switch between ethereal fake email catcher and real email service
-          // Ethereal: https://ethereal.email/
-          if (process.env.EMAIL_ETHEREAL == 'false') {
-            account.host = process.env.EMAIL_HOST!;
-            account.user = process.env.EMAIL_USER!;
-            account.pass = process.env.EMAIL_PASS!;
-          } else {
-            account.host = process.env.EMAIL_ETHEREAL_HOST!;
-            account.user = process.env.EMAIL_ETHEREAL_USER!;
-            account.pass = process.env.EMAIL_ETHEREAL_PASS!;
+            // ? TODO: Should only owner's get a mail or everybody
+            // Check if any hooked threshold needs to trigger
+            group.thresholds.forEach(async (threshold) => {
+              // TODO: Maybe decide if going over is a good thing or a bad thing or maybe just a warning
+              if (threshold.trigger === 'OVER') {
+                if (group.value > threshold.value) {
+                  mailOptions.text = `Your group ${group.name} just went over the ${threshold.name} threshold.`;
+                  transporter.sendMail(mailOptions);
+                }
+              } else if (threshold.trigger === 'UNDER') {
+                if (group.value < threshold.value) {
+                  mailOptions.text = `Your group ${group.name} just went under the ${threshold.name} threshold.`;
+                  transporter.sendMail(mailOptions);
+                }
+              }
+            });
+
+            // Close the connection
+            transporter.close();
           }
-
-          const transporter = nodemailer.createTransport({
-            host: account.host,
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-              user: account.user,
-              pass: account.pass,
-            },
-            logger: true,
-          });
-
-          const mailOptions: MailOptions = {
-            from: `${process.env.DOMAIN} <info@${process.env.DOMAIN}>`,
-            to: group.members.map((member) => member.email).join(),
-            subject: 'Info from budgetify',
-            text: '',
-          };
-
-          // Check if any hooked threshold needs to trigger
-          group.thresholds.forEach(async (threshold) => {
-            // TODO: Maybe decide if going over is a good thing or a bad thing or maybe just a warning
-            if (threshold.trigger === 'OVER') {
-              if (group.value > threshold.value) {
-                mailOptions.text = `Your group ${group.name} just went over the ${threshold.name} threshold.`;
-                transporter.sendMail(mailOptions);
-              }
-            } else if (threshold.trigger === 'UNDER') {
-              if (group.value < threshold.value) {
-                mailOptions.text = `Your group ${group.name} just went under the ${threshold.name} threshold.`;
-                transporter.sendMail(mailOptions);
-              }
-            }
-          });
-
-          // Close the connection
-          transporter.close();
         }
 
         return transaction;
