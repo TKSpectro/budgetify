@@ -2,9 +2,11 @@ import { ApolloError } from 'apollo-server-micro';
 import { compareAsc } from 'date-fns';
 import addDays from 'date-fns/addDays';
 import { extendType, nonNull, objectType, stringArg } from 'nexus';
+import { MailOptions } from 'nodemailer/lib/sendmail-transport';
 import prisma from '~/utils/prisma';
 import { authIsLoggedIn } from '../authRules';
 import { Context } from '../context';
+import { createNodemailerTransporter } from '../helper';
 
 export const Invite = objectType({
   name: 'Invite',
@@ -60,6 +62,7 @@ export const Invite = objectType({
 export const InviteMutation = extendType({
   type: 'Mutation',
   definition(t) {
+    // TODO: Maybe combine createHouseholdInvite and createGroupInvite as there not many differences
     t.nonNull.field('createInvite', {
       type: Invite,
       description: 'Create a new invite. Need to be logged in.',
@@ -81,7 +84,7 @@ export const InviteMutation = extendType({
           throw new ApolloError('You are not allowed to create a new invite in this household.');
         }
 
-        return prisma.invite.create({
+        const invite = await prisma.invite.create({
           data: {
             validUntil: addDays(new Date(), 14),
             wasUsed: false,
@@ -90,6 +93,24 @@ export const InviteMutation = extendType({
             householdId: args.householdId,
           },
         });
+
+        // Send an email out to the invited person with the generated token
+        const transporter = createNodemailerTransporter({ enableLogger: false });
+        if (transporter) {
+          const mailOptions: MailOptions = {
+            from: `${process.env.DOMAIN} <no-reply@${process.env.DOMAIN}>`,
+            to: invite.invitedEmail,
+            subject: `Budgetify | Invite to household - ${foundHousehold[0].name}`,
+            text: `invite-token: ${invite.token}`,
+          };
+
+          transporter.sendMail(mailOptions);
+
+          // Close the connection
+          transporter.close();
+        }
+
+        return invite;
       },
     });
     t.field('useInvite', {
@@ -183,7 +204,7 @@ export const InviteGroupMutation = extendType({
           throw new ApolloError('You are not allowed to create a new invite in this group.');
         }
 
-        return prisma.invite.create({
+        const invite = await prisma.invite.create({
           data: {
             validUntil: addDays(new Date(), 14),
             wasUsed: false,
@@ -192,6 +213,24 @@ export const InviteGroupMutation = extendType({
             groupId: args.groupId,
           },
         });
+
+        // Send an email out to the invited person with the generated token
+        const transporter = createNodemailerTransporter({ enableLogger: false });
+        if (transporter) {
+          const mailOptions: MailOptions = {
+            from: `${process.env.DOMAIN} <no-reply@${process.env.DOMAIN}>`,
+            to: invite.invitedEmail,
+            subject: `Budgetify | Invite to group - ${foundGroup[0].name}`,
+            text: `invite-token: ${invite.token}`,
+          };
+
+          transporter.sendMail(mailOptions);
+
+          // Close the connection
+          transporter.close();
+        }
+
+        return invite;
       },
     });
     t.field('useGroupInvite', {
