@@ -3,7 +3,6 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import InviteManager from '~/components/Household/Manage/InviteManager';
 import MemberTable from '~/components/Household/Manage/MemberTable';
-import { Alert } from '~/components/UI/Alert';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Loader } from '~/components/UI/Loader';
@@ -57,15 +56,19 @@ export default function ManageHousehold() {
       </Head>
       <Container>
         <Error title="Failed to load household" error={error} />
+        <Error
+          title="Could not find this household."
+          error={!loading && !household ? '' : undefined}
+        />
         <Loader loading={loading} />
 
-        {!loading && !household && <Alert message="Could not find this household." type="error" />}
         {!loading && !error && members && <MemberTable members={members} owner={owner} />}
       </Container>
       <Container>
         <Error title="Failed to load invites" error={error} />
+        <Error title="Could not find any invites." error={!loading && !invites ? '' : undefined} />
         <Loader loading={loading} />
-        {!loading && !invites && <Alert message="Could not find any invites." type="error" />}
+
         {!loading && !error && invites && <InviteManager invites={invites} refetch={refetch} />}
       </Container>
     </>

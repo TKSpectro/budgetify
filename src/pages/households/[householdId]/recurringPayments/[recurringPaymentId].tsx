@@ -4,7 +4,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Alert } from '~/components/UI/Alert';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
@@ -141,11 +140,12 @@ export default function EditRecurringPayment() {
       </Head>
       <Container>
         <Error title="Failed to load recurring payment" error={error} />
+        <Error
+          title="Could not find this  recurring payment."
+          error={!loading && !recurringPayment ? '' : undefined}
+        />
         <Loader loading={loading} />
 
-        {!loading && !recurringPayment && (
-          <Alert message="Could not find this  recurring payment." type="error" />
-        )}
         {!loading && !error && recurringPayment && (
           <>
             <div>Edit Recurring Payment {recurringPayment.name}</div>

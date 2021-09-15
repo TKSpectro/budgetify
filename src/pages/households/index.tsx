@@ -3,7 +3,6 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-import { Alert } from '~/components/UI/Alert';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
@@ -68,9 +67,10 @@ export default function Households() {
         <Error title="Failed to use invite token" error={useInviteError} />
         <Loader loading={loading} />
 
-        {!loading && !error && households.length === 0 && (
-          <Alert message="Could not find any households. Please create or join one." type="error" />
-        )}
+        <Error
+          title="Could not find any households. Please create a new one or join one with a token."
+          error={!loading && !error && households.length === 0 ? '' : undefined}
+        />
 
         <div className="mb-4">
           <ModalForm

@@ -3,7 +3,6 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { RecurringPaymentTable } from '~/components/Household/RecurringPayments/RecurringPaymentTable';
-import { Alert } from '~/components/UI/Alert';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Link } from '~/components/UI/Link';
@@ -54,7 +53,11 @@ export default function RecurringPayments() {
 
       <div className="mt-16">
         <Container>
-          <Error title="Failed to load recurring messages" error={error} />
+          <Error title="Failed to load recurring payments" error={error} />
+          <Error
+            title="Could not find any recurring payments. Please create a new one."
+            error={!loading && !error && recurringPayments.length === 0 ? '' : undefined}
+          />
           <Loader loading={loading} />
 
           <div className="flex flex-row-reverse">
@@ -63,12 +66,7 @@ export default function RecurringPayments() {
             </Link>
           </div>
         </Container>
-        {!loading && !error && recurringPayments.length === 0 ? (
-          <Alert
-            message="Could not find any recurring messages. Please create a new one"
-            type="warning"
-          />
-        ) : (
+        {!loading && !error && recurringPayments && (
           <RecurringPaymentTable recurringPayments={recurringPayments} />
         )}
       </div>

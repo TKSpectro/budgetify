@@ -5,7 +5,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Overview from '~/components/Household/Overview';
-import { Alert } from '~/components/UI/Alert';
 import { Error } from '~/components/UI/Error';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
@@ -81,9 +80,12 @@ export default function Household() {
         <title>{household?.name + ' | ' + 'budgetify'}</title>
       </Head>
       <Error title="Failed to load household" error={error} />
+      <Error
+        title="Could not find this household."
+        error={!loading && !household ? '' : undefined}
+      />
       <Loader loading={loading} />
 
-      {!loading && !household && <Alert message="Could not find this household." type="error" />}
       {!error && household && (
         <>
           <div className=" relative text-6xl text-brand-500">
@@ -99,15 +101,19 @@ export default function Household() {
 
           <div className="mt-4 text-4xl">Total balance{' ' + roundOn2(paymentSum) + '€'}</div>
 
-          {household.payments?.length === 0 && (
-            <Alert message="Could not find any payments." type="error" />
-          )}
-          {household.recurringPayments?.length === 0 && (
-            <Alert message="Could not find any recurring payments." type="error" />
-          )}
-          {household.thisMonthsPayments?.length === 0 && (
-            <Alert message="Could not find any payments this month." type="error" />
-          )}
+          <Error
+            title="Could not find any payments."
+            error={household.payments?.length === 0 ? '' : undefined}
+          />
+          <Error
+            title="Could not find any recurring payments."
+            error={household.recurringPayments?.length === 0 ? '' : undefined}
+          />
+          <Error
+            title="Could not find any payments this month."
+            error={household.thisMonthsPayments?.length === 0 ? '' : undefined}
+          />
+
           <Overview
             payments={household.payments}
             recurringPayments={household.recurringPayments}

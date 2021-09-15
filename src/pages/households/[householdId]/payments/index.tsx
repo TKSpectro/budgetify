@@ -8,7 +8,6 @@ import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { useForm } from 'react-hook-form';
 import { PaymentTable } from '~/components/Household/Payments/PaymentTable';
-import { Alert } from '~/components/UI/Alert';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
@@ -111,14 +110,13 @@ export default function Payments() {
 
       <div className="md:mt-8 md:mx-32">
         <Error title="Failed to load recurring messages" error={error} />
+        <Error
+          title="Could not find any recurring messages. Please create a new one."
+          error={!loading && !error && payments.length === 0 ? '' : undefined}
+        />
         <Loader loading={loading} />
 
-        {!loading && !error && payments.length === 0 ? (
-          <Alert
-            message="Could not find any recurring messages. Please create a new one"
-            type="warning"
-          />
-        ) : (
+        {!loading && !error && payments && (
           <>
             <Container>
               <Form form={form} onSubmit={onDateFilterSubmit}>
