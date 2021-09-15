@@ -67,13 +67,19 @@ export default function GroupMemberTable({ members, owners, currentUserId, ...pr
       onError: () => {},
     });
 
-  const [removeMemberMutation] = useMutation<MutationRemoveGroupMemberArgs>(
-    REMOVE_GROUP_MEMBER_MUTATION,
-    {
+  const [removeMemberMutation, { error: removeMemberError }] =
+    useMutation<MutationRemoveGroupMemberArgs>(REMOVE_GROUP_MEMBER_MUTATION, {
       onCompleted: () => {},
       onError: () => {},
-    },
-  );
+    });
+
+  const [leaveGroupMutation, { error: leaveGroupError }] =
+    useMutation<MutationRemoveGroupMemberArgs>(REMOVE_GROUP_MEMBER_MUTATION, {
+      onCompleted: () => {
+        router.push('/groups');
+      },
+      onError: () => {},
+    });
 
   const makeOwnerHandler = (id: string) => {
     addGroupOwnerMutation({ variables: { id: groupId, ownerId: id } });
@@ -83,18 +89,20 @@ export default function GroupMemberTable({ members, owners, currentUserId, ...pr
     removeGroupOwnerMutation({ variables: { id: groupId, ownerId: id } });
   };
 
-  const removeHandler = (id: string) => {
+  const removeMemberHandler = (id: string) => {
     removeMemberMutation({ variables: { id: groupId, memberId: id } });
   };
 
-  const leaveHandler = (id: string) => {
-    //TODO: add leave mutation
-    // removeMemberMutation({ variables: { id: groupId, memberId: id } });
+  const leaveGroupHandler = (id: string) => {
+    leaveGroupMutation({ variables: { id: groupId, memberId: id } });
   };
 
   return (
     <>
       <Error title="Could not remove owner." error={removeOwnerError} />
+      <Error title="Could not remove member from group." error={removeMemberError} />
+      <Error title="Could not leave group." error={leaveGroupError} />
+
       <table className="w-full">
         <tbody className="divide-y divide-gray-200 ">
           {members.map((member: User) => {
@@ -124,7 +132,7 @@ export default function GroupMemberTable({ members, owners, currentUserId, ...pr
                     <Modal
                       title="Remove user from group"
                       description={`Are you sure that you want to remove ${member.name} from this group?`}
-                      onSubmit={() => removeHandler(member.id)}
+                      onSubmit={() => removeMemberHandler(member.id)}
                       buttonText="Remove"
                     />
                   )}
@@ -132,7 +140,7 @@ export default function GroupMemberTable({ members, owners, currentUserId, ...pr
                     <Modal
                       title="Leave group."
                       description={`Are you sure that you want to remove ${member.name} from this group?`}
-                      onSubmit={() => removeHandler(member.id)}
+                      onSubmit={() => leaveGroupHandler(member.id)}
                       buttonText="Leave"
                     />
                   )}
@@ -150,7 +158,7 @@ export default function GroupMemberTable({ members, owners, currentUserId, ...pr
                     <Modal
                       title="Remove owner role"
                       description={`Are you sure that you want to remove ${member.name} from the owners?`}
-                      onSubmit={() => leaveHandler(member.id)}
+                      onSubmit={() => removeOwnerHandler(member.id)}
                       buttonText="Remove Owner"
                     />
                   )}

@@ -344,7 +344,18 @@ export const GroupMutation = extendType({
         id: nonNull(stringArg()),
         memberId: nonNull(stringArg()),
       },
-      async resolve(_, args) {
+      async resolve(_, args, ctx) {
+        const group = await prisma.group.findFirst({
+          where: { id: args.id },
+          include: { owners: true },
+        });
+
+        if (ctx.user.id === args.memberId && group!.owners.length <= 1) {
+          throw new ApolloError(
+            'You cant leave the household as you are the last owner. Please make someone else owner of the group.',
+          );
+        }
+
         return prisma.group.update({
           where: { id: args.id },
           data: {
