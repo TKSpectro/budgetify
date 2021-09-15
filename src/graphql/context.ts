@@ -23,6 +23,7 @@ export function context({ req, res }: ContextInput): Context {
   // and contains the JWT
   const token = req.cookies.authToken || undefined;
 
+  // TODO: Remove email from jwt
   let user: ContextUser = { id: '', email: '', isAdmin: false };
 
   try {
