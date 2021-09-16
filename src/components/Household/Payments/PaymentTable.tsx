@@ -19,26 +19,26 @@ export function PaymentTable({ payments }: Props) {
                     <TagIcon className="flex-shrink-0 h-6 w-6 text-brand-500" />
 
                     <div className="max-w-xl overflow-auto">
-                      <div className="ml-2 font-bold text-gray-100">
+                      <div className="ml-2 font-bold dark:text-gray-100">
                         {payment.name}
-                        <span className="hidden md:inline text-sm text-gray-400 ml-8">
+                        <span className="hidden md:inline text-sm dark:text-gray-400 ml-8">
                           {new Date(payment.createdAt).toLocaleDateString()}
                         </span>
                       </div>
                       <span className="md:hidden ml-2 text-sm text-gray-400">
                         {new Date(payment.createdAt).toLocaleDateString()}
                       </span>
-                      <div className="hidden md:table-cell pl-2 text-sm text-gray-400">
+                      <div className="hidden md:table-cell pl-2 text-sm dark:text-gray-400">
                         {payment.description}
                       </div>
                     </div>
                   </div>
                 </td>
                 <td className="py-4 hidden md:table-cell">
-                  <div className="font-light text-gray-400">{payment.category!.name}</div>
+                  <div className="font-light dark:text-gray-400">{payment.category!.name}</div>
                 </td>
                 <td className="pl-4 py-4 text-right">
-                  <div className="font-bold text-gray-100">{payment.value + '€'}</div>
+                  <div className="font-bold dark:text-gray-100">{payment.value + '€'}</div>
                 </td>
               </tr>
             );
