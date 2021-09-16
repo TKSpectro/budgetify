@@ -1,6 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import InviteManager from '~/components/Household/Manage/InviteManager';
 import MemberTable from '~/components/Household/Manage/MemberTable';
 import { Container } from '~/components/UI/Container';
@@ -10,7 +11,7 @@ import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 
 const HOUSEHOLD_QUERY = gql`
-  query HOUSEHOLD_QUERY($householdId: String) {
+  query HOUSEHOLD_QUERY($householdId: String!) {
     household(id: $householdId) {
       id
       name
@@ -42,7 +43,13 @@ const HOUSEHOLD_QUERY = gql`
 `;
 
 export default function ManageHousehold() {
-  const { data, loading, error, refetch } = useQuery(HOUSEHOLD_QUERY);
+  const router = useRouter();
+  const { householdId } = router.query;
+  const { data, loading, error, refetch } = useQuery(HOUSEHOLD_QUERY, {
+    variables: {
+      householdId: householdId,
+    },
+  });
 
   const household = data?.household || {};
   const owner = household.owner || {};
