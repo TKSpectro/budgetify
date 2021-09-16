@@ -41,8 +41,7 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   Interval: "DAILY" | "MONTHLY" | "QUARTERLY" | "WEEKLY" | "YEARLY"
-  ThresholdTrigger: "OVER" | "UNDER"
-  ThresholdType: "GOAL" | "LIMIT" | "WARNING"
+  ThresholdType: "GOAL" | "MAX" | "MIN"
   TransactionType: "BUY" | "TAKE_OUT" | "TOP_UP"
 }
 
@@ -141,7 +140,6 @@ export interface NexusGenObjects {
     groupId: string; // String!
     id: string; // String!
     name: string; // String!
-    trigger: NexusGenEnums['ThresholdTrigger']; // ThresholdTrigger!
     type: NexusGenEnums['ThresholdType']; // ThresholdType!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     value: NexusGenScalars['Money']; // Money!
@@ -310,7 +308,6 @@ export interface NexusGenFieldTypes {
     groupId: string; // String!
     id: string; // String!
     name: string; // String!
-    trigger: NexusGenEnums['ThresholdTrigger']; // ThresholdTrigger!
     type: NexusGenEnums['ThresholdType']; // ThresholdType!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     value: NexusGenScalars['Money']; // Money!
@@ -478,7 +475,6 @@ export interface NexusGenFieldTypeNames {
     groupId: 'String'
     id: 'String'
     name: 'String'
-    trigger: 'ThresholdTrigger'
     type: 'ThresholdType'
     updatedAt: 'DateTime'
     value: 'Money'
@@ -568,7 +564,6 @@ export interface NexusGenArgTypes {
     createThreshold: { // args
       groupId: string; // String!
       name: string; // String!
-      trigger: NexusGenEnums['ThresholdTrigger']; // ThresholdTrigger!
       type: NexusGenEnums['ThresholdType']; // ThresholdType!
       value: NexusGenScalars['Money']; // Money!
     }

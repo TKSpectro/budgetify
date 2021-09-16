@@ -2,14 +2,9 @@ import { arg, enumType, extendType, nonNull, objectType, stringArg } from 'nexus
 import prisma from '~/utils/prisma';
 import { authIsGroupOwner } from '../authRules';
 
-export const ThresholdTrigger = enumType({
-  name: 'ThresholdTrigger',
-  members: ['OVER', 'UNDER'],
-});
-
 export const ThresholdType = enumType({
   name: 'ThresholdType',
-  members: ['GOAL', 'LIMIT', 'WARNING'],
+  members: ['MIN', 'MAX', 'GOAL'],
 });
 
 export const Threshold = objectType({
@@ -18,7 +13,6 @@ export const Threshold = objectType({
     t.nonNull.string('id');
     t.nonNull.string('name');
     t.nonNull.money('value');
-    t.nonNull.field('trigger', { type: ThresholdTrigger });
     t.nonNull.field('type', { type: ThresholdType });
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
@@ -47,7 +41,6 @@ export const ThresholdMutation = extendType({
       args: {
         name: nonNull(stringArg()),
         value: nonNull(arg({ type: 'Money' })),
-        trigger: nonNull(arg({ type: ThresholdTrigger })),
         type: nonNull(arg({ type: ThresholdType })),
         groupId: nonNull(stringArg()),
       },
@@ -56,7 +49,6 @@ export const ThresholdMutation = extendType({
           data: {
             name: args.name,
             value: args.value,
-            trigger: args.trigger,
             type: args.type,
             groupId: args.groupId,
           },

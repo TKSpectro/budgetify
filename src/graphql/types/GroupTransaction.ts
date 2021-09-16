@@ -111,14 +111,19 @@ export const GroupTransactionMutation = extendType({
             // Check if any hooked threshold needs to trigger
             group.thresholds.forEach(async (threshold) => {
               // TODO: Maybe decide if going over is a good thing or a bad thing or maybe just a warning
-              if (threshold.trigger === 'OVER') {
+              if (threshold.type === 'MAX') {
                 if (group.value > threshold.value) {
-                  mailOptions.text = `Your group ${group.name} just went over the ${threshold.name} threshold.`;
+                  mailOptions.text = `Your group ${group.name} just went over the ${threshold.name} maximum threshold.`;
                   transporter.sendMail(mailOptions);
                 }
-              } else if (threshold.trigger === 'UNDER') {
+              } else if (threshold.type === 'MIN') {
                 if (group.value < threshold.value) {
-                  mailOptions.text = `Your group ${group.name} just went under the ${threshold.name} threshold.`;
+                  mailOptions.text = `Your group ${group.name} just went under the ${threshold.name} minimum threshold.`;
+                  transporter.sendMail(mailOptions);
+                }
+              } else if (threshold.type === 'GOAL') {
+                if (group.value > threshold.value) {
+                  mailOptions.text = `Your group ${group.name} just reached the ${threshold.name} goal.`;
                   transporter.sendMail(mailOptions);
                 }
               }

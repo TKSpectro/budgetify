@@ -165,7 +165,7 @@ type Mutation {
   createRecurringPayment(categoryId: String!, description: String, endDate: DateTime, householdId: String!, interval: Interval!, name: String!, startDate: DateTime!, value: Money!): RecurringPayment!
 
   """Create a new threshold. Need to be logged in and own group."""
-  createThreshold(groupId: String!, name: String!, trigger: ThresholdTrigger!, type: ThresholdType!, value: Money!): Threshold!
+  createThreshold(groupId: String!, name: String!, type: ThresholdType!, value: Money!): Threshold!
 
   """Remove a invite. Need to be logged in."""
   deleteInvite(id: String!): Boolean
@@ -321,21 +321,15 @@ type Threshold {
   groupId: String!
   id: String!
   name: String!
-  trigger: ThresholdTrigger!
   type: ThresholdType!
   updatedAt: DateTime!
   value: Money!
 }
 
-enum ThresholdTrigger {
-  OVER
-  UNDER
-}
-
 enum ThresholdType {
   GOAL
-  LIMIT
-  WARNING
+  MAX
+  MIN
 }
 
 enum TransactionType {

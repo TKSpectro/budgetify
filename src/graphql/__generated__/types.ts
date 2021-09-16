@@ -264,7 +264,6 @@ export type MutationCreateRecurringPaymentArgs = {
 export type MutationCreateThresholdArgs = {
   groupId: Scalars['String'];
   name: Scalars['String'];
-  trigger: ThresholdTrigger;
   type: ThresholdType;
   value: Scalars['Money'];
 };
@@ -446,21 +445,15 @@ export type Threshold = {
   groupId: Scalars['String'];
   id: Scalars['String'];
   name: Scalars['String'];
-  trigger: ThresholdTrigger;
   type: ThresholdType;
   updatedAt: Scalars['DateTime'];
   value: Scalars['Money'];
 };
 
-export enum ThresholdTrigger {
-  Over = 'OVER',
-  Under = 'UNDER'
-}
-
 export enum ThresholdType {
   Goal = 'GOAL',
-  Limit = 'LIMIT',
-  Warning = 'WARNING'
+  Max = 'MAX',
+  Min = 'MIN'
 }
 
 export enum TransactionType {
