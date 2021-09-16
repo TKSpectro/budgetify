@@ -109,50 +109,51 @@ export default function Payments() {
       </Head>
 
       <div className="md:mt-8 md:mx-32">
-        <Error title="Failed to load recurring messages" error={error} />
-        <Error
-          title="Could not find any recurring messages. Please create a new one."
-          error={!loading && !error && payments.length === 0 ? '' : undefined}
-        />
-        <Loader loading={loading} />
+        <>
+          <Container>
+            <Error title="Failed to load payments" error={error} />
+            <Error
+              title="Could not find any payments. Please create a new one."
+              error={!loading && !error && payments.length === 0 ? '' : undefined}
+            />
+            <Loader loading={loading} />
 
-        {!loading && !error && payments && (
-          <>
-            <Container>
-              <Form form={form} onSubmit={onDateFilterSubmit}>
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 mb-4">
-                  <Input
-                    className="lg:col-span-2"
-                    label="StartDate"
-                    type="date"
-                    {...form.register('startDate', {})}
-                  />
-                  <Input
-                    className="lg:col-span-2"
-                    label="EndDate"
-                    type="date"
-                    {...form.register('endDate', {})}
-                  />
-                  <Button className="lg:mt-6" type="submit">
-                    Refresh
-                  </Button>
-                </div>
-              </Form>
+            <Form form={form} onSubmit={onDateFilterSubmit}>
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 mb-4">
+                <Input
+                  className="lg:col-span-2"
+                  label="StartDate"
+                  type="date"
+                  {...form.register('startDate', {})}
+                />
+                <Input
+                  className="lg:col-span-2"
+                  label="EndDate"
+                  type="date"
+                  {...form.register('endDate', {})}
+                />
+                <Button className="lg:mt-6" type="submit">
+                  Refresh
+                </Button>
+              </div>
+            </Form>
 
-              <div className="max-w-[60em] mx-auto">
-                <Line data={genData(labels, chartData)} options={paymentChartOptions} />
-              </div>
-              <div className="mt-8 flex flex-row-reverse">
-                <Link href={router.asPath + '/new'} asButton>
-                  New Payment
-                </Link>
-              </div>
-            </Container>
+            <div className="max-w-[60em] mx-auto">
+              <Line data={genData(labels, chartData)} options={paymentChartOptions} />
+            </div>
+            <div className="mt-8 flex flex-row-reverse">
+              <Link href={router.asPath + '/new'} asButton>
+                New Payment
+              </Link>
+            </div>
+          </Container>
+          {payments.length !== 0 && (
             <div className="my-8">
               <PaymentTable payments={payments} />
             </div>
-          </>
-        )}
+          )}
+        </>
+        )
       </div>
     </>
   );

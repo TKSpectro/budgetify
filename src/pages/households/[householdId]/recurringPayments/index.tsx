@@ -66,7 +66,7 @@ export default function RecurringPayments() {
             </Link>
           </div>
         </Container>
-        {!loading && !error && recurringPayments && (
+        {recurringPayments.length !== 0 && (
           <RecurringPaymentTable recurringPayments={recurringPayments} />
         )}
       </div>
