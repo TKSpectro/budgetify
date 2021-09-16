@@ -103,16 +103,15 @@ export const GroupTransactionMutation = extendType({
             const mailOptions: MailOptions = {
               from: `${process.env.DOMAIN} <info@${process.env.DOMAIN}>`,
               to: group.members
+                // Only add members which have enabled receivingNotifications
                 .map((member) => (member.receiveNotifications ? member.email : null))
                 .join(),
               subject: 'Info from budgetify',
               text: '',
             };
 
-            // ? TODO: Should only owner's get a mail or everybody
             // Check if any hooked threshold needs to trigger
             group.thresholds.forEach(async (threshold) => {
-              // TODO: Maybe decide if going over is a good thing or a bad thing or maybe just a warning
               if (threshold.type === 'MAX') {
                 if (group.value > threshold.value) {
                   mailOptions.text = `Your group ${group.name} just went over the ${threshold.name} maximum threshold.`;

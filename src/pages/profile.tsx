@@ -47,7 +47,6 @@ const LOGOUT_MUTATION = gql`
   }
 `;
 
-// TODO: Maybe build a HOC for the MEQUERY so that all components can easily access the user data
 export const ME_QUERY = gql`
   query ME_QUERY {
     me {
