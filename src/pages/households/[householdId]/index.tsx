@@ -4,7 +4,9 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
-import Overview from '~/components/Household/Overview';
+import MonthOverview from '~/components/Household/MonthOverview';
+import PaymentOverview from '~/components/Household/PaymentOverview';
+import RecurringPaymentOverview from '~/components/Household/RecurringPaymentOverview';
 import { Error } from '~/components/UI/Error';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
@@ -101,26 +103,13 @@ export default function Household() {
 
           <div className="mt-4 text-4xl">Total balance{' ' + roundOn2(paymentSum) + '€'}</div>
 
-          {/* // TODO: Put these error into the specific containers and also always show them but 
-              // if no data is passed they are just empty */}
-          <Error
-            title="Could not find any payments."
-            error={household.payments?.length === 0 ? '' : undefined}
-          />
-          <Error
-            title="Could not find any recurring payments."
-            error={household.recurringPayments?.length === 0 ? '' : undefined}
-          />
-          <Error
-            title="Could not find any payments this month."
-            error={household.thisMonthsPayments?.length === 0 ? '' : undefined}
-          />
+          <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-16 overflow-auto">
+            <PaymentOverview payments={household.payments} />
 
-          <Overview
-            payments={household.payments}
-            recurringPayments={household.recurringPayments}
-            monthPayments={household.thisMonthsPayments}
-          />
+            <RecurringPaymentOverview recurringPayments={household.recurringPayments} />
+
+            <MonthOverview monthPayments={household.thisMonthsPayments} />
+          </div>
         </>
       )}
     </div>

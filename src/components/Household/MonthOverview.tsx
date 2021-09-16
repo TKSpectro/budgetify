@@ -4,6 +4,7 @@ import { Payment } from '~/graphql/__generated__/types';
 import { TooltipItemContext } from '~/utils/charts';
 import { roundOn2 } from '~/utils/helper';
 import { Container } from '../UI/Container';
+import { Error } from '../UI/Error';
 
 interface Props {
   monthPayments: Payment[];
@@ -69,32 +70,42 @@ export default function MonthOverview({ monthPayments: payments }: Props) {
         <TagIcon className="h-8 w-8 inline-block" />
         &nbsp;This Month
       </div>
-      <Doughnut
-        data={monthlyOverviewChartData}
-        className="m-0 sm:m-8"
-        options={{
-          responsive: true,
-          // https://www.chartjs.org/docs/latest/configuration/tooltip.html#label-callback
-          plugins: {
-            tooltip: {
-              callbacks: {
-                label: function (context: TooltipItemContext) {
-                  // Change tooltip text. e.g.:" Category 1: 100€"
-                  return ' ' + context.label + ': ' + context.parsed + '€';
+
+      <Error
+        title="Could not find any payments this month."
+        error={payments?.length === 0 ? '' : undefined}
+      />
+
+      {payments?.length !== 0 && (
+        <>
+          <Doughnut
+            data={monthlyOverviewChartData}
+            className="m-0 sm:m-8"
+            options={{
+              responsive: true,
+              // https://www.chartjs.org/docs/latest/configuration/tooltip.html#label-callback
+              plugins: {
+                tooltip: {
+                  callbacks: {
+                    label: function (context: TooltipItemContext) {
+                      // Change tooltip text. e.g.:" Category 1: 100€"
+                      return ' ' + context.label + ': ' + context.parsed + '€';
+                    },
+                  },
                 },
               },
-            },
-          },
-        }}
-      />
-      <div className="font-bold mt-8 max-w-md grid grid-cols-2 gap-4">
-        <div>Overall</div>
-        <div className="text-right">{roundOn2(monthOverall)}€</div>
-        <div>Income</div>
-        <div className="text-right">{roundOn2(monthIncome)}€</div>
-        <div>Expenses</div>
-        <div className="text-right">{roundOn2(monthExpenses)}€</div>
-      </div>
+            }}
+          />
+          <div className="font-bold mt-8 max-w-md grid grid-cols-2 gap-4">
+            <div>Overall</div>
+            <div className="text-right">{roundOn2(monthOverall)}€</div>
+            <div>Income</div>
+            <div className="text-right">{roundOn2(monthIncome)}€</div>
+            <div>Expenses</div>
+            <div className="text-right">{roundOn2(monthExpenses)}€</div>
+          </div>
+        </>
+      )}
     </Container>
   );
 }

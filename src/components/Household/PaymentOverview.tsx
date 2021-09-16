@@ -2,6 +2,7 @@ import { CurrencyDollarIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { Payment } from '~/graphql/__generated__/types';
 import { Container } from '../UI/Container';
+import { Error } from '../UI/Error';
 import { Link } from '../UI/Link';
 import PaymentItem from './PaymentItem';
 
@@ -18,6 +19,7 @@ export default function PaymentOverview({ payments }: Props) {
         <CurrencyDollarIcon className="h-8 w-8 inline-block" />
         &nbsp;Payments
       </div>
+      <Error title="Could not find any payments." error={payments?.length === 0 ? '' : undefined} />
       <div className="my-8">
         {payments?.map((payment: Payment) => {
           return <PaymentItem payment={payment} key={payment.id}></PaymentItem>;
