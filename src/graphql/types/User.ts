@@ -1,5 +1,5 @@
 import { ApolloError } from 'apollo-server-micro';
-import { extendType, objectType } from 'nexus';
+import { booleanArg, extendType, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
 import { authIsLoggedIn } from '../authRules';
 
@@ -93,6 +93,32 @@ export const User = objectType({
 export const UserMutation = extendType({
   type: 'Mutation',
   definition(t) {
+    t.nonNull.field('updateUser', {
+      type: User,
+      description: 'Updates a user with the given data. Need to be logged in.',
+      args: {
+        firstname: stringArg(),
+        lastname: stringArg(),
+        email: stringArg(),
+        receiveNotifications: booleanArg(),
+      },
+      authorize: authIsLoggedIn,
+      async resolve(_, args, ctx) {
+        console.log(args);
+        return prisma.user.update({
+          where: { id: ctx.user.id },
+          data: {
+            firstname: args.firstname || undefined,
+            lastname: args.lastname || undefined,
+            email: args.email || undefined,
+            receiveNotifications:
+              typeof args.receiveNotifications === 'boolean'
+                ? args.receiveNotifications
+                : undefined,
+          },
+        });
+      },
+    });
     t.nonNull.field('deleteUser', {
       type: User,
       description: 'Deletes a user by anonymizing his personal data. Need to be logged in.',

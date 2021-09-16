@@ -1,15 +1,37 @@
 import { gql, useApolloClient, useMutation, useQuery } from '@apollo/client';
+import { CheckIcon, XIcon } from '@heroicons/react/outline';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
-import { ME_QUERY } from '~/components/UI/Header';
+import { Input } from '~/components/UI/Input';
 import { Loader } from '~/components/UI/Loader';
 import { Modal } from '~/components/UI/Modal';
+import { ModalForm } from '~/components/UI/ModalForm';
+import { Switch } from '~/components/UI/Switch';
+import { MutationUpdateUserArgs, User } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
+
+const UPDATE_USER_QUERY = gql`
+  mutation ($firstname: String, $lastname: String, $email: String, $receiveNotifications: Boolean) {
+    updateUser(
+      firstname: $firstname
+      lastname: $lastname
+      email: $email
+      receiveNotifications: $receiveNotifications
+    ) {
+      id
+      name
+      email
+      receiveNotifications
+    }
+  }
+`;
 
 const DELETE_USER_QUERY = gql`
   mutation DeleteUser {
@@ -25,20 +47,43 @@ const LOGOUT_MUTATION = gql`
   }
 `;
 
-export default function Profile() {
-  const { data, loading, error } = useQuery(ME_QUERY);
-  const router = useRouter();
+// TODO: Maybe build a HOC for the MEQUERY so that all components can easily access the user data
+export const ME_QUERY = gql`
+  query ME_QUERY {
+    me {
+      id
+      firstname
+      lastname
+      email
+      receiveNotifications
+    }
+  }
+`;
 
+export default function Profile() {
+  const router = useRouter();
   const client = useApolloClient();
+
+  const updateUserForm = useForm<MutationUpdateUserArgs>();
+  const { reset } = updateUserForm;
+
+  const { data, loading, error, refetch } = useQuery(ME_QUERY);
+
+  const [updateUser, { error: updateUserError }] = useMutation<MutationUpdateUserArgs>(
+    UPDATE_USER_QUERY,
+    {
+      onCompleted: () => {
+        refetch();
+      },
+      onError: () => {},
+    },
+  );
 
   const [deleteUser, { error: deleteUserError }] = useMutation(DELETE_USER_QUERY, {
     onCompleted: () => {
       logoutHandler();
     },
-    onError: (error) => {
-      // Do nothing so the page does not throw an error and we just show the
-      // error to the user, as the component gets render automatically
-    },
+    onError: () => {},
   });
 
   const [logoutMutation, { error: logoutError }] = useMutation(LOGOUT_MUTATION, {
@@ -48,15 +93,28 @@ export default function Profile() {
 
       router.push('/auth/login');
     },
-    onError: (error) => {
-      // Do nothing so the page does not throw an error and we just show the
-      // error to the user, as the component gets render automatically
-    },
+    onError: () => {},
   });
+
+  // Need to reset the updateUser form data with the data from the ME_QUERY
+  const me: User = data?.me;
+  useEffect(() => {
+    const data: MutationUpdateUserArgs = {
+      ...me,
+    };
+    // Set state for switch as its not getting handled automatically
+    reset(data);
+  }, [me, reset]);
 
   function logoutHandler() {
     logoutMutation();
   }
+
+  const updateUserHandler = () => {
+    updateUser({
+      variables: { ...updateUserForm.getValues() },
+    });
+  };
 
   return (
     <>
@@ -67,6 +125,7 @@ export default function Profile() {
         <Error title="Failed to load user data!" error={error} />
         <Error title="Failed to delete user!" error={deleteUserError} />
         <Error title="Failed to logout!" error={logoutError} />
+        <Error title="Failed to update user!" error={updateUserError} />
         <Loader loading={loading} />
 
         {!loading && !error && data && (
@@ -83,6 +142,49 @@ export default function Profile() {
                 variant="danger"
                 buttonClassName="mr-4"
               />
+              <ModalForm
+                form={updateUserForm}
+                buttonText="Update account"
+                title="Update account data"
+                onSubmit={updateUserHandler}
+                submitText="Update account"
+                buttonClassName="mr-4"
+              >
+                <Input
+                  label="Firstname"
+                  {...updateUserForm.register('firstname', {
+                    required: { value: true, message: 'Please input your firstname' },
+                  })}
+                ></Input>
+                <Input
+                  label="Lastname"
+                  {...updateUserForm.register('lastname', {
+                    required: { value: true, message: 'Please input your lastname' },
+                  })}
+                ></Input>
+                <Input
+                  label="Email"
+                  {...updateUserForm.register('email', {
+                    required: { value: true, message: 'Please input your email' },
+                  })}
+                ></Input>
+
+                <label>
+                  Receive Notifications?
+                  <Switch
+                    isLeft={!!updateUserForm.watch('receiveNotifications')}
+                    // onClick={() => setIsReceivingNotification(!isReceivingNotification)}
+                    onClick={() =>
+                      updateUserForm.setValue(
+                        'receiveNotifications',
+                        !updateUserForm.getValues('receiveNotifications'),
+                      )
+                    }
+                    leftIcon={<XIcon className="w-4 h-4 " />}
+                    rightIcon={<CheckIcon className="w-4 h-4 text-brand-400" />}
+                  />
+                </label>
+              </ModalForm>
               <Button onClick={logoutHandler}>Logout</Button>
             </div>
           </>

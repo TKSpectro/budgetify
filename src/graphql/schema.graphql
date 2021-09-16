@@ -220,6 +220,9 @@ type Mutation {
   """Update a new recurring payment. Need to be logged in."""
   updateRecurringPayment(categoryId: String, description: String, endDate: DateTime, householdId: String!, id: String!, interval: Interval, name: String, startDate: DateTime, value: Money): RecurringPayment!
 
+  """Updates a user with the given data. Need to be logged in."""
+  updateUser(email: String, firstname: String, lastname: String, receiveNotifications: Boolean): User!
+
   """
   Use a invite. Logged in user gets added to the household or group specified in the invite. Need to be logged in.
   """
