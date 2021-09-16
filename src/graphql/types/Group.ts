@@ -257,6 +257,24 @@ export const GroupMutation = extendType({
       },
     });
 
+    t.nonNull.field('deleteGroup', {
+      type: Group,
+      description: 'Delete a existing group. Need to be logged in and owner of the group.',
+      authorize: authIsGroupOwner,
+      args: {
+        id: nonNull(stringArg()),
+      },
+      async resolve(_, args) {
+        await prisma.groupTransaction.deleteMany({ where: { groupId: args.id } });
+        await prisma.threshold.deleteMany({ where: { groupId: args.id } });
+        await prisma.invite.deleteMany({ where: { groupId: args.id } });
+
+        return prisma.group.delete({
+          where: { id: args.id },
+        });
+      },
+    });
+
     t.nonNull.field('addGroupOwner', {
       type: Group,
       description: 'Add a new owner to a group. Need to be logged in and be owner of the group.',

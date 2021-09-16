@@ -170,6 +170,9 @@ type Mutation {
   """Create a new threshold. Need to be logged in and own group."""
   createThreshold(groupId: String!, name: String!, type: ThresholdType!, value: Money!): Threshold!
 
+  """Delete a existing group. Need to be logged in and owner of the group."""
+  deleteGroup(id: String!): Group!
+
   """Remove a invite. Need to be logged in."""
   deleteInvite(id: String!): Boolean
 

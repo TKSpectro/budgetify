@@ -241,6 +241,7 @@ export interface NexusGenFieldTypes {
     createPayment: NexusGenRootTypes['Payment']; // Payment!
     createRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
     createThreshold: NexusGenRootTypes['Threshold']; // Threshold!
+    deleteGroup: NexusGenRootTypes['Group']; // Group!
     deleteInvite: boolean | null; // Boolean
     deleteUser: NexusGenRootTypes['User']; // User!
     login: NexusGenRootTypes['AuthToken']; // AuthToken!
@@ -411,6 +412,7 @@ export interface NexusGenFieldTypeNames {
     createPayment: 'Payment'
     createRecurringPayment: 'RecurringPayment'
     createThreshold: 'Threshold'
+    deleteGroup: 'Group'
     deleteInvite: 'Boolean'
     deleteUser: 'User'
     login: 'AuthToken'
@@ -576,6 +578,9 @@ export interface NexusGenArgTypes {
       name: string; // String!
       type: NexusGenEnums['ThresholdType']; // ThresholdType!
       value: NexusGenScalars['Money']; // Money!
+    }
+    deleteGroup: { // args
+      id: string; // String!
     }
     deleteInvite: { // args
       id: string; // String!

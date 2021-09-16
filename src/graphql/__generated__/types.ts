@@ -163,6 +163,8 @@ export type Mutation = {
   createRecurringPayment: RecurringPayment;
   /** Create a new threshold. Need to be logged in and own group. */
   createThreshold: Threshold;
+  /** Delete a existing group. Need to be logged in and owner of the group. */
+  deleteGroup: Group;
   /** Remove a invite. Need to be logged in. */
   deleteInvite?: Maybe<Scalars['Boolean']>;
   /** Deletes a user by anonymizing his personal data. Need to be logged in. */
@@ -275,6 +277,11 @@ export type MutationCreateThresholdArgs = {
   name: Scalars['String'];
   type: ThresholdType;
   value: Scalars['Money'];
+};
+
+
+export type MutationDeleteGroupArgs = {
+  id: Scalars['String'];
 };
 
 
