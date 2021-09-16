@@ -31,8 +31,8 @@ async function main() {
 
   let testUser = await prisma.user.create({
     data: {
-      firstname: 'A',
-      lastname: '',
+      firstname: 'Tom',
+      lastname: faker.name.lastName(),
       email: 'tom@' + process.env.DOMAIN,
       hashedPassword: hashSync('12345678', 10),
     },
@@ -40,32 +40,32 @@ async function main() {
 
   let userB = await prisma.user.create({
     data: {
-      firstname: 'B',
-      lastname: '',
+      firstname: 'Berta',
+      lastname: faker.name.lastName(),
       email: 'tomb@' + process.env.DOMAIN,
       hashedPassword: hashSync('12345678', 10),
     },
   });
   let userC = await prisma.user.create({
     data: {
-      firstname: 'C',
-      lastname: '',
+      firstname: 'Claus',
+      lastname: faker.name.lastName(),
       email: 'tomc@' + process.env.DOMAIN,
       hashedPassword: hashSync('12345678', 10),
     },
   });
   let userD = await prisma.user.create({
     data: {
-      firstname: 'D',
-      lastname: '',
+      firstname: 'Dobby',
+      lastname: faker.name.lastName(),
       email: 'tomd@' + process.env.DOMAIN,
       hashedPassword: hashSync('12345678', 10),
     },
   });
   let userE = await prisma.user.create({
     data: {
-      firstname: 'E',
-      lastname: '',
+      firstname: 'Erna',
+      lastname: faker.name.lastName(),
       email: 'tome@' + process.env.DOMAIN,
       hashedPassword: hashSync('12345678', 10),
     },
