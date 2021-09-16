@@ -21,6 +21,9 @@ export const User = objectType({
       description:
         "The user's role. This could be extended to a complete role system in the future",
     });
+    t.nonNull.boolean('receiveNotifications', {
+      description: 'Toggle to receive any notifications. (e.g. thresholds)',
+    });
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
     t.list.field('payments', {
@@ -143,6 +146,7 @@ export const UserMutation = extendType({
             hashedPassword: '',
             invites: { deleteMany: {} },
             isAdmin: false,
+            receiveNotifications: false,
           },
         });
       },

@@ -102,7 +102,9 @@ export const GroupTransactionMutation = extendType({
           if (transporter) {
             const mailOptions: MailOptions = {
               from: `${process.env.DOMAIN} <info@${process.env.DOMAIN}>`,
-              to: group.members.map((member) => member.email).join(),
+              to: group.members
+                .map((member) => (member.receiveNotifications ? member.email : null))
+                .join(),
               subject: 'Info from budgetify',
               text: '',
             };

@@ -152,6 +152,7 @@ export interface NexusGenObjects {
     id: string; // String!
     isAdmin: boolean; // Boolean!
     lastname: string; // String!
+    receiveNotifications: boolean; // Boolean!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
 }
@@ -329,6 +330,7 @@ export interface NexusGenFieldTypes {
     ownedGroups: Array<NexusGenRootTypes['Group'] | null> | null; // [Group]
     ownedHouseholds: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     payments: Array<NexusGenRootTypes['Payment'] | null> | null; // [Payment]
+    receiveNotifications: boolean; // Boolean!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
 }
@@ -496,6 +498,7 @@ export interface NexusGenFieldTypeNames {
     ownedGroups: 'Group'
     ownedHouseholds: 'Household'
     payments: 'Payment'
+    receiveNotifications: 'Boolean'
     updatedAt: 'DateTime'
   }
 }

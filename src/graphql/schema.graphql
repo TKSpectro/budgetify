@@ -380,5 +380,8 @@ type User {
 
   """All payment's which where done by the user."""
   payments: [Payment]
+
+  """Toggle to receive any notifications. (e.g. thresholds)"""
+  receiveNotifications: Boolean!
   updatedAt: DateTime!
 }

@@ -491,5 +491,7 @@ export type User = {
   ownedHouseholds?: Maybe<Array<Maybe<Household>>>;
   /** All payment's which where done by the user. */
   payments?: Maybe<Array<Maybe<Payment>>>;
+  /** Toggle to receive any notifications. (e.g. thresholds) */
+  receiveNotifications: Scalars['Boolean'];
   updatedAt: Scalars['DateTime'];
 };

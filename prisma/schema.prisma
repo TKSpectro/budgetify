@@ -26,6 +26,7 @@ model User {
   email                        String             @unique
   hashedPassword               String
   isAdmin                      Boolean            @default(false)
+  receiveNotifications         Boolean            @default(true)
   createdAt                    DateTime           @default(now())
   updatedAt                    DateTime           @updatedAt
   households                   Household[]
