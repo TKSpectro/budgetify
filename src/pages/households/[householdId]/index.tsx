@@ -101,6 +101,8 @@ export default function Household() {
 
           <div className="mt-4 text-4xl">Total balance{' ' + roundOn2(paymentSum) + '€'}</div>
 
+          {/* // TODO: Put these error into the specific containers and also always show them but 
+              // if no data is passed they are just empty */}
           <Error
             title="Could not find any payments."
             error={household.payments?.length === 0 ? '' : undefined}

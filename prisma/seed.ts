@@ -32,7 +32,7 @@ async function main() {
   let testUser = await prisma.user.create({
     data: {
       firstname: 'Tom',
-      lastname: faker.name.lastName(),
+      lastname: 'Budgetify',
       email: 'tom@' + process.env.DOMAIN,
       hashedPassword: hashSync('12345678', 10),
     },

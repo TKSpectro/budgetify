@@ -236,6 +236,7 @@ export interface NexusGenFieldTypes {
     createGroup: NexusGenRootTypes['Group'] | null; // Group
     createGroupInvite: NexusGenRootTypes['Invite']; // Invite!
     createGroupTransaction: NexusGenRootTypes['GroupTransaction'] | null; // GroupTransaction
+    createHousehold: NexusGenRootTypes['Household']; // Household!
     createInvite: NexusGenRootTypes['Invite']; // Invite!
     createPayment: NexusGenRootTypes['Payment']; // Payment!
     createRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
@@ -405,6 +406,7 @@ export interface NexusGenFieldTypeNames {
     createGroup: 'Group'
     createGroupInvite: 'Invite'
     createGroupTransaction: 'GroupTransaction'
+    createHousehold: 'Household'
     createInvite: 'Invite'
     createPayment: 'Payment'
     createRecurringPayment: 'RecurringPayment'
@@ -544,6 +546,9 @@ export interface NexusGenArgTypes {
       participantIds: string[]; // [String!]!
       type: NexusGenEnums['TransactionType']; // TransactionType!
       value: NexusGenScalars['Money']; // Money!
+    }
+    createHousehold: { // args
+      name: string; // String!
     }
     createInvite: { // args
       householdId: string; // String!

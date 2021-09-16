@@ -8,7 +8,11 @@ import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { Loader } from '~/components/UI/Loader';
 import { ModalForm } from '~/components/UI/ModalForm';
-import { Household, MutationUseInviteArgs } from '~/graphql/__generated__/types';
+import {
+  Household,
+  MutationCreateHouseholdArgs,
+  MutationUseInviteArgs,
+} from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { uuidRegex } from '~/utils/helper';
@@ -34,9 +38,18 @@ const USE_INVITE_TOKEN_MUTATION = gql`
   }
 `;
 
+const CREATE_HOUESHOLD_MUTATION = gql`
+  mutation ($name: String!) {
+    createHousehold(name: $name) {
+      id
+    }
+  }
+`;
+
 export default function Households() {
   const { data, loading, error, refetch } = useQuery(HOUSEHOLD_LIST_QUERY);
   const form = useForm<MutationUseInviteArgs>({ defaultValues: { token: '' } });
+  const createHouseholdForm = useForm<MutationCreateHouseholdArgs>({ defaultValues: { name: '' } });
 
   const [UseInviteMutation, { error: useInviteError }] = useMutation(USE_INVITE_TOKEN_MUTATION, {
     onCompleted: () => {
@@ -48,8 +61,20 @@ export default function Households() {
     },
   });
 
+  const [createHouseholdMutation, { error: createHouseholdError }] =
+    useMutation<MutationCreateHouseholdArgs>(CREATE_HOUESHOLD_MUTATION, {
+      onCompleted: () => {
+        refetch();
+      },
+      onError: () => {},
+    });
+
   const onSubmitHandler = () => {
     UseInviteMutation({ variables: { token: form.getValues('token') } });
+  };
+
+  const createHouseholdSubmitHandler = () => {
+    createHouseholdMutation({ variables: { ...createHouseholdForm.getValues() } });
   };
 
   const households = data?.households || [];
@@ -63,16 +88,16 @@ export default function Households() {
         <title>Households | budgetify</title>
       </Head>
       <Container>
-        <Error title="Failed to load households" error={error} />
-        <Error title="Failed to use invite token" error={useInviteError} />
-        <Loader loading={loading} />
-
+        <Error title="Failed to load households." error={error} />
+        <Error title="Failed to use invite token." error={useInviteError} />
+        <Error title="Failed to create household." error={createHouseholdError} />
         <Error
           title="Could not find any households. Please create a new one or join one with a token."
           error={!loading && !error && households.length === 0 ? '' : undefined}
         />
+        <Loader loading={loading} />
 
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <ModalForm
             form={form}
             buttonText="Use Invite Token"
@@ -89,6 +114,23 @@ export default function Households() {
               })}
             ></Input>
           </ModalForm>
+          <div className="mt-2 md:mt-0 md:absolute md:right-0 md:top-0">
+            <ModalForm
+              form={createHouseholdForm}
+              buttonText="Create Household"
+              title="Create a new Household"
+              onSubmit={createHouseholdSubmitHandler}
+              submitText="Create Household"
+            >
+              <Input
+                label="Name"
+                {...createHouseholdForm.register('name', {
+                  required: { value: true, message: 'Please input a name' },
+                  minLength: { value: 2, message: 'Please input at least 2 characters' },
+                })}
+              ></Input>
+            </ModalForm>
+          </div>
         </div>
 
         {households?.map((household: Household) => {

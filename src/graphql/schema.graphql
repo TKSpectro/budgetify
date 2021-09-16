@@ -155,6 +155,9 @@ type Mutation {
   """
   createGroupTransaction(groupId: String!, name: String!, participantIds: [String!]!, type: TransactionType!, value: Money!): GroupTransaction
 
+  """Create a new household. Need to be logged."""
+  createHousehold(name: String!): Household!
+
   """Create a new invite. Need to be logged in."""
   createInvite(householdId: String!, invitedEmail: String!): Invite!
 

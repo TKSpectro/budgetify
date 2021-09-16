@@ -153,6 +153,8 @@ export type Mutation = {
   createGroupInvite: Invite;
   /** Creates a new transaction in the specified group with the given arguments and returns it. */
   createGroupTransaction?: Maybe<GroupTransaction>;
+  /** Create a new household. Need to be logged. */
+  createHousehold: Household;
   /** Create a new invite. Need to be logged in. */
   createInvite: Invite;
   /** Create a new payment. Need to be logged in. */
@@ -233,6 +235,11 @@ export type MutationCreateGroupTransactionArgs = {
   participantIds: Array<Scalars['String']>;
   type: TransactionType;
   value: Scalars['Money'];
+};
+
+
+export type MutationCreateHouseholdArgs = {
+  name: Scalars['String'];
 };
 
 

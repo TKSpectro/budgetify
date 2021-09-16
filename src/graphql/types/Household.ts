@@ -1,6 +1,6 @@
 import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
-import { authIsAdmin, authIsHouseholdOwner } from '../authRules';
+import { authIsAdmin, authIsHouseholdOwner, authIsLoggedIn } from '../authRules';
 
 export const Household = objectType({
   name: 'Household',
@@ -109,6 +109,24 @@ export const HouseholdQuery = extendType({
 export const HouseholdMutation = extendType({
   type: 'Mutation',
   definition(t) {
+    t.nonNull.field('createHousehold', {
+      type: Household,
+      description: 'Create a new household. Need to be logged.',
+      authorize: authIsLoggedIn,
+      args: {
+        name: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx) {
+        return prisma.household.create({
+          data: {
+            name: args.name,
+            members: { connect: { id: ctx.user.id } },
+            owner: { connect: { id: ctx.user.id } },
+          },
+        });
+      },
+    });
+
     t.nonNull.field('updateHousehold', {
       type: Household,
       description:
