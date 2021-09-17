@@ -5,6 +5,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { NewThreshold } from '~/components/Group/NewThreshold';
 import { UserMultiSelect } from '~/components/Group/UserMultiselect';
 import { Container } from '~/components/UI/Container';
 import { Disclosure } from '~/components/UI/Disclosure';
@@ -18,7 +19,6 @@ import { Switch } from '~/components/UI/Switch';
 import {
   GroupTransaction,
   MutationCreateGroupTransactionArgs,
-  MutationCreateThresholdArgs,
   Participant,
   Threshold,
   ThresholdType,
@@ -89,22 +89,6 @@ const CREATE_GROUP_TRANSACTION_MUTATION = gql`
   }
 `;
 
-const CREATE_THRESHOLD_MUTATION = gql`
-  mutation CREATE_THRESHOLD_MUTATION(
-    $name: String!
-    $value: Money!
-    $type: ThresholdType!
-    $groupId: String!
-  ) {
-    createThreshold(name: $name, value: $value, type: $type, groupId: $groupId) {
-      id
-      name
-      value
-      type
-    }
-  }
-`;
-
 export default function Group() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
@@ -125,22 +109,8 @@ export default function Group() {
     onError: () => {},
   });
 
-  const [createThreshold, { error: createThresholdError }] = useMutation(
-    CREATE_THRESHOLD_MUTATION,
-    {
-      onCompleted: () => {
-        refetch();
-      },
-      onError: () => {},
-    },
-  );
-
   const formCreateGroupTransaction = useForm<MutationCreateGroupTransactionArgs>({
     defaultValues: { name: '', value: 0, groupId: groupId as string, participantIds: [] },
-  });
-
-  const formCreateThreshold = useForm<MutationCreateThresholdArgs>({
-    defaultValues: { name: '', value: 0, groupId: groupId },
   });
 
   const onSubmitHandler = () => {
@@ -170,10 +140,6 @@ export default function Group() {
         },
       });
     }
-  };
-
-  const onCreateThresholdHandler = () => {
-    createThreshold({ variables: { ...formCreateThreshold.getValues(), groupId: groupId } });
   };
 
   // Need to handle the participantIds with a custom function which will get called from the UserPicker
@@ -327,52 +293,7 @@ export default function Group() {
               );
             })}
 
-            <ModalForm
-              title="New Threshold"
-              buttonText="New Threshold"
-              form={formCreateThreshold}
-              submitText="Create"
-              onSubmit={onCreateThresholdHandler}
-            >
-              <Input
-                label="Name"
-                type="text"
-                {...formCreateThreshold.register('name', {
-                  required: { value: true, message: 'Name is required' },
-                  minLength: { value: 2, message: 'Name must be at least 2 characters' },
-                })}
-              />
-
-              <Input
-                label="Value"
-                type="number"
-                step="any"
-                {...formCreateThreshold.register('value', {
-                  required: { value: true, message: 'Value is required' },
-                  valueAsNumber: true,
-                })}
-              />
-
-              <label>
-                Type
-                <select
-                  className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
-                  {...formCreateThreshold.register('type', {
-                    required: { value: true, message: 'Please choose a type' },
-                  })}
-                >
-                  <option key={ThresholdType.Goal} value={ThresholdType.Goal}>
-                    {ThresholdType.Goal}
-                  </option>
-                  <option key={ThresholdType.Max} value={ThresholdType.Max}>
-                    {ThresholdType.Max}
-                  </option>
-                  <option key={ThresholdType.Min} value={ThresholdType.Min}>
-                    {ThresholdType.Min}
-                  </option>
-                </select>
-              </label>
-            </ModalForm>
+            <NewThreshold />
           </Disclosure>
         </Container>
       )}
