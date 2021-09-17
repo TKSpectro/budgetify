@@ -136,15 +136,11 @@ export default function Groups() {
       {groups &&
         groups.map((group: Group) => {
           return (
-            // TODO: Need a better way of wrapping those. Because <a> in wrapped by <a> is not allowed.
-            <div
-              className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer"
-              key={group.id}
-            >
-              <Link href={`/groups/${group.id}`} noUnderline>
+            <Link href={`/groups/${group.id}`} key={group.id} noUnderline>
+              <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer">
                 <div className="text-xl">{group.name}</div>
-              </Link>
-            </div>
+              </div>
+            </Link>
           );
         })}
     </Container>
