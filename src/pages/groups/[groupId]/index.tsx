@@ -13,16 +13,20 @@ import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
 import { ModalForm } from '~/components/UI/ModalForm';
+import { Progressbar } from '~/components/UI/Progressbar';
 import { Switch } from '~/components/UI/Switch';
 import {
   GroupTransaction,
   MutationCreateGroupTransactionArgs,
   Participant,
+  Threshold,
+  ThresholdType,
   TransactionType,
   User,
 } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
+import { roundOn2 } from '~/utils/helper';
 
 const GROUP_QUERY = gql`
   query GROUP_QUERY($id: String!) {
@@ -48,6 +52,12 @@ const GROUP_QUERY = gql`
       members {
         id
         name
+      }
+      thresholds {
+        id
+        name
+        type
+        value
       }
     }
     calculateMemberBalances(id: $id) {
@@ -143,6 +153,8 @@ export default function Group() {
 
   const members: User[] = group?.members;
   const memberBalances = data?.calculateMemberBalances;
+
+  const thresholds = group?.thresholds;
 
   const [formStateIsCashout, setFormStateIsCashout] = useState(false);
   const [formStateIsBuyingFood, setFormStateIsBuyingFood] = useState(true);
@@ -251,6 +263,38 @@ export default function Group() {
         )}
       </Container>
 
+      {thresholds && (
+        <Container>
+          <Disclosure text="Thresholds" showOpen>
+            {thresholds.map((threshold: Threshold) => {
+              return (
+                <div key={threshold.id}>
+                  {(threshold.type === ThresholdType.Goal ||
+                    threshold.type === ThresholdType.Max) && (
+                    <Progressbar
+                      progress={roundOn2((group.value / threshold.value) * 100)}
+                      text={threshold.name}
+                      type={threshold.type}
+                    />
+                  )}
+                  {/* // TODO: Figure out how to smartly show a min type threshold */}
+                  {threshold.type === ThresholdType.Min && (
+                    <Progressbar
+                      progress={roundOn2(
+                        (threshold.value !== 0 ? group.value - threshold.value : group.value - 0) *
+                          1,
+                      )}
+                      text={threshold.name}
+                      type={threshold.type}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </Disclosure>
+        </Container>
+      )}
+
       {memberBalances && (
         <Container>
           <div className="text-lg font-semibold">Member Balances</div>
@@ -272,6 +316,7 @@ export default function Group() {
           </div>
         </Container>
       )}
+
       {group?.transactions && (
         <Container>
           <div className="text-lg font-semibold">Transactions</div>
