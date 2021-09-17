@@ -97,7 +97,6 @@ export default function Payments() {
   }
 
   const onDateFilterSubmit = () => {
-    // Todo: Could be optimized by not querying the whole household but just the payments for the household
     // Re-Query with the newly set parameters
     refetch();
   };

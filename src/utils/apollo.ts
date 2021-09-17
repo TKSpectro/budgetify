@@ -72,7 +72,6 @@ export async function preloadQuery(
       },
     };
   } catch (e) {
-    // TODO: Handle GraphQL Errors
     // Even if an error occurs return empty props so the client just can request the data again
     return { props: {} };
   }

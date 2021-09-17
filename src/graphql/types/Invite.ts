@@ -62,7 +62,6 @@ export const Invite = objectType({
 export const InviteMutation = extendType({
   type: 'Mutation',
   definition(t) {
-    // TODO: Maybe combine createHouseholdInvite and createGroupInvite as there not many differences
     t.nonNull.field('createInvite', {
       type: Invite,
       description: 'Create a new invite. Need to be logged in.',

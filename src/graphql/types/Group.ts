@@ -132,13 +132,14 @@ export const GroupQuery = extendType({
           let moneypools: any = {};
           group.transactions.forEach((transaction) => {
             // Take the userIds of all the participants in the current transaction
-            // so we cann build our hashmap by concatanaiting the sorted ids.
+            // so we can build our hashmap by concatenating the sorted ids.
             let participants = transaction.participants.map((participant) => participant.id);
             // Need to sort the ids so we always get the same order if the same participants are there
             participants.sort();
 
-            // TODO: Could use SHA-1 for better performance for string compares
-            // ! Hashes can be insanely long as we conacatinate the UUIDs of all the participants
+            // ! Hashes can be insanely long as we concatenate the UUIDs of all the participants
+            // But we cant use SHA-1 as we then would not know which ids were involved
+            // and cant split them up again
             let hash = '';
             for (let i = 0; i < participants.length; i++) {
               hash += participants[i];
@@ -146,7 +147,7 @@ export const GroupQuery = extendType({
             }
 
             // Write the value of the transaction into our hashmap of moneypools
-            // Add a new entry if it doesnt exist
+            // Add a new entry if it does not exist
             if (!moneypools[hash]) {
               moneypools[hash] = transaction.value;
             } else {
@@ -157,7 +158,7 @@ export const GroupQuery = extendType({
           // Now we have a hashmap of all transactions which we can use to calculate
           // the virtual balances of the members
           for (let hash in moneypools) {
-            // Revert the concatination of the ids by splitting them up again
+            // Revert the concatenation of the ids by splitting them up again
             const ids = hash.split(',');
             // Calculate the rest for this transaction group, as we need that for the
             // value splitting between the participants
@@ -171,17 +172,17 @@ export const GroupQuery = extendType({
               const index = resultParticipants.findIndex((el) => el.userId === id);
 
               // If the value is positive we can just add the value onto the virtual balance,
-              // because this is basically a balance top up, which doesnt get split
+              // because this is basically a balance top up, which does not get split
               // between participants
               if (moneypools[hash] >= 0) resultParticipants[index].value += moneypools[hash];
 
               if (moneypools[hash] < 0) {
                 if (rest === 0 || rest === -0) {
                   // If the rest is 0 we can just divide the transaction value by the amount of
-                  // participants, as there will be a whole number for everbody to add
+                  // participants, as there will be a whole number for everybody to add
                   resultParticipants[index].value += moneypools[hash] / ids.length;
                 } else {
-                  // If the rest is unequal to 0 we calculate the nearst whole number which we can
+                  // If the rest is unequal to 0 we calculate the nearest whole number which we can
                   // then add to the participant
                   nearestWholeNumber = Math.round(moneypools[hash] / ids.length);
                   resultParticipants[index].value += nearestWholeNumber;

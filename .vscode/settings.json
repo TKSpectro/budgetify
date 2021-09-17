@@ -1,4 +1,13 @@
 {
   "editor.tabSize": 2,
-  "cSpell.words": ["Moneypool", "budgetify", "clsx", "firstname", "lastname", "signup"]
+  "cSpell.words": [
+    "budgetify",
+    "chartjs",
+    "clsx",
+    "firstname",
+    "lastname",
+    "Moneypool",
+    "moneypools",
+    "signup"
+  ]
 }

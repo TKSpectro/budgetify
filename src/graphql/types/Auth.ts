@@ -92,7 +92,6 @@ export const AuthMutation = extendType({
             token,
           };
         } catch (error) {
-          // TODO: Figure out which error was thrown
           throw new AuthenticationError(
             'Error while signing up. Probably a user exists with the send email',
           );
