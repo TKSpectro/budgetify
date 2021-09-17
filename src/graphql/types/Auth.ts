@@ -75,9 +75,9 @@ export const AuthMutation = extendType({
             },
           });
 
-          const { id, email, isAdmin } = user;
+          const { id } = user;
 
-          const token = jwt.sign({ id, email, isAdmin }, process.env.JWT_SECRET!, {
+          const token = jwt.sign({ id }, process.env.JWT_SECRET!, {
             expiresIn: '30d',
           });
 
@@ -116,12 +116,12 @@ export const AuthMutation = extendType({
         if (!user) {
           throw new ApolloError('Authorization Error');
         }
-        const { id, email, hashedPassword, isAdmin } = user;
+        const { id, hashedPassword } = user;
         if (!compareSync(args.password, hashedPassword)) {
           throw new Error('Authorization Error');
         }
 
-        const token = jwt.sign({ id, email, isAdmin }, process.env.JWT_SECRET!, {
+        const token = jwt.sign({ id }, process.env.JWT_SECRET!, {
           expiresIn: '30d',
         });
 

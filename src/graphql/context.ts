@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { prisma } from '~/utils/prisma';
 
 export interface ContextUser {
   id: string;
@@ -18,12 +19,11 @@ export interface Context {
   user: ContextUser;
 }
 
-export function context({ req, res }: ContextInput): Context {
+export async function context({ req, res }: ContextInput): Promise<Context> {
   // Get the token from authToken cookie. This is a secure http-only cookie
   // and contains the JWT
   const token = req.cookies.authToken || undefined;
 
-  // TODO: Remove email from jwt
   let user: ContextUser = { id: '', email: '', isAdmin: false };
 
   try {
@@ -31,13 +31,19 @@ export function context({ req, res }: ContextInput): Context {
       const data = jwt.verify(token, process.env.JWT_SECRET!);
 
       if (typeof data !== 'string') {
-        user.id = data.id;
-        user.email = data.email;
-        user.isAdmin = data.isAdmin;
+        const foundUser = await prisma.user.findFirst({ where: { id: data.id } });
+
+        // If we find a user in the database the token with the userId was valid
+        if (!foundUser) {
+          throw Error('Context: Token was not valid');
+        }
+
+        user.id = foundUser.id;
+        user.email = foundUser.email;
+        user.isAdmin = foundUser.isAdmin;
       }
     }
   } catch (error) {
-    // TODO: handle error?
     throw Error('Context: Token was not valid');
   }
 
