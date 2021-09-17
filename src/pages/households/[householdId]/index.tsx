@@ -74,7 +74,7 @@ export default function Household() {
   // Add up the value of all payments for the total balance
   const paymentSum = payments.reduce((sum: number, payment: Payment) => +sum + +payment.value, 0.0);
 
-  const isOwner = household.owner.id === data?.me.id;
+  const isOwner = household?.owner?.id === data?.me?.id;
 
   return (
     <div className="my-4 mx-4 sm:mx-24">
