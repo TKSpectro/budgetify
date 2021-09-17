@@ -85,7 +85,6 @@ export default function MemberTable({ members, owner, ...props }: Props) {
                 </div>
               </td>
               <td className="py-4">
-                {/* // TODO: Implement leave button for the own user */}
                 {owner.id !== member.id && (
                   <Modal
                     title="Remove user from household"

@@ -227,8 +227,6 @@ export const RecurringPaymentMutation = extendType({
           throw new ApolloError('You are not allowed to create a payment in this household.');
         }
 
-        // TODO: Calculate the next booking date -> maybe same switch structure as in booking
-
         return prisma.recurringPayment.create({
           data: {
             name: args.name,
@@ -237,6 +235,7 @@ export const RecurringPaymentMutation = extendType({
             interval: args.interval,
             startDate: args.startDate,
             endDate: args.endDate,
+            nextBooking: args.startDate,
             categoryId: args.categoryId,
             userId: ctx.user.id,
             householdId: foundHousehold[0].id,
