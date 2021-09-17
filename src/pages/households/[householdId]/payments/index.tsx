@@ -81,19 +81,18 @@ export default function Payments() {
   const payments = data?.household?.payments || [];
 
   let addedPaymentValues = 0.0;
-
-  if (loading) return <div>loading</div>;
-
   const labels = payments.map((payment: Payment) => payment.createdAt);
   const chartData = payments.map((payment: Payment) => (addedPaymentValues += payment.value));
 
-  // Adjust the label unit by the difference in days.
-  if (differenceInDays(parseISO(labels[labels.length - 1]), parseISO(labels[0])) < 2) {
-    paymentChartOptions.scales.xAxis.time.unit = 'hour';
-  } else if (differenceInDays(parseISO(labels[labels.length - 1]), parseISO(labels[0])) < 14) {
-    paymentChartOptions.scales.xAxis.time.unit = 'day';
-  } else if (differenceInDays(parseISO(labels[labels.length - 1]), parseISO(labels[0])) < 90) {
-    paymentChartOptions.scales.xAxis.time.unit = 'week';
+  if (labels.length > 0) {
+    // Adjust the label unit by the difference in days.
+    if (differenceInDays(parseISO(labels[labels.length - 1]), parseISO(labels[0])) < 2) {
+      paymentChartOptions.scales.xAxis.time.unit = 'hour';
+    } else if (differenceInDays(parseISO(labels[labels.length - 1]), parseISO(labels[0])) < 14) {
+      paymentChartOptions.scales.xAxis.time.unit = 'day';
+    } else if (differenceInDays(parseISO(labels[labels.length - 1]), parseISO(labels[0])) < 90) {
+      paymentChartOptions.scales.xAxis.time.unit = 'week';
+    }
   }
 
   const onDateFilterSubmit = () => {
