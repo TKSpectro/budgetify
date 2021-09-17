@@ -18,6 +18,7 @@ import { Switch } from '~/components/UI/Switch';
 import {
   GroupTransaction,
   MutationCreateGroupTransactionArgs,
+  MutationCreateThresholdArgs,
   Participant,
   Threshold,
   ThresholdType,
@@ -88,9 +89,25 @@ const CREATE_GROUP_TRANSACTION_MUTATION = gql`
   }
 `;
 
+const CREATE_THRESHOLD_MUTATION = gql`
+  mutation CREATE_THRESHOLD_MUTATION(
+    $name: String!
+    $value: Money!
+    $type: ThresholdType!
+    $groupId: String!
+  ) {
+    createThreshold(name: $name, value: $value, type: $type, groupId: $groupId) {
+      id
+      name
+      value
+      type
+    }
+  }
+`;
+
 export default function Group() {
   const router = useRouter();
-  const groupId = router.query.groupId;
+  const groupId = router.query.groupId as string;
 
   const { data, loading, error, refetch } = useQuery(GROUP_QUERY, { variables: { id: groupId } });
 
@@ -108,8 +125,22 @@ export default function Group() {
     onError: () => {},
   });
 
-  const form = useForm<MutationCreateGroupTransactionArgs>({
+  const [createThreshold, { error: createThresholdError }] = useMutation(
+    CREATE_THRESHOLD_MUTATION,
+    {
+      onCompleted: () => {
+        refetch();
+      },
+      onError: () => {},
+    },
+  );
+
+  const formCreateGroupTransaction = useForm<MutationCreateGroupTransactionArgs>({
     defaultValues: { name: '', value: 0, groupId: groupId as string, participantIds: [] },
+  });
+
+  const formCreateThreshold = useForm<MutationCreateThresholdArgs>({
+    defaultValues: { name: '', value: 0, groupId: groupId },
   });
 
   const onSubmitHandler = () => {
@@ -118,22 +149,22 @@ export default function Group() {
     if (formStateIsCashout) {
       createGroupTransaction({
         variables: {
-          ...form.getValues(),
+          ...formCreateGroupTransaction.getValues(),
           // Force the value to be negative as the user input will be positive
-          value: -Math.abs(form.getValues('value')),
+          value: -Math.abs(formCreateGroupTransaction.getValues('value')),
           type: formStateIsBuyingFood ? TransactionType.Buy : TransactionType.TakeOut,
           // Check if the all user switch is set depending on that we take all group members
           // or just the ones that are checked.
           participantIds: formAllGroupMembers
             ? members.map((member) => member.id)
-            : form.getValues('participantIds'),
+            : formCreateGroupTransaction.getValues('participantIds'),
         },
       });
     } else {
       // Top up
       createGroupTransaction({
         variables: {
-          ...form.getValues(),
+          ...formCreateGroupTransaction.getValues(),
           type: TransactionType.TopUp,
           participantIds: [],
         },
@@ -141,9 +172,13 @@ export default function Group() {
     }
   };
 
+  const onCreateThresholdHandler = () => {
+    createThreshold({ variables: { ...formCreateThreshold.getValues(), groupId: groupId } });
+  };
+
   // Need to handle the participantIds with a custom function which will get called from the UserPicker
   const setValueHandlerParticipantIds = (members: User[]) => {
-    form.setValue(
+    formCreateGroupTransaction.setValue(
       'participantIds',
       members.map((member) => member.id),
     );
@@ -176,7 +211,7 @@ export default function Group() {
               title="New Transaction"
               buttonText="New Transaction"
               buttonClassName="md:absolute right-4 top-2 text-base"
-              form={form}
+              form={formCreateGroupTransaction}
               submitText="Create"
               description={`You can switch between topping up your account (account balance) and buying food / taking money out of the group balance`}
               onSubmit={onSubmitHandler}
@@ -195,7 +230,7 @@ export default function Group() {
               <Input
                 label="Name*"
                 type="text"
-                {...form.register('name', {
+                {...formCreateGroupTransaction.register('name', {
                   required: { value: true, message: 'Name is required' },
                   minLength: { value: 3, message: 'Name must be at least 3 characters' },
                 })}
@@ -223,7 +258,7 @@ export default function Group() {
                 }
                 type="number"
                 step="any"
-                {...form.register('value', {
+                {...formCreateGroupTransaction.register('value', {
                   required: { value: true, message: 'Value is required' },
                   min: { value: 0, message: 'Value must be positive' },
                   valueAsNumber: true,
@@ -247,7 +282,7 @@ export default function Group() {
                 <UserMultiSelect
                   items={members}
                   setValue={setValueHandlerParticipantIds}
-                  {...form.register('participantIds')}
+                  {...formCreateGroupTransaction.register('participantIds')}
                 />
               )}
             </ModalForm>
@@ -291,6 +326,53 @@ export default function Group() {
                 </div>
               );
             })}
+
+            <ModalForm
+              title="New Threshold"
+              buttonText="New Threshold"
+              form={formCreateThreshold}
+              submitText="Create"
+              onSubmit={onCreateThresholdHandler}
+            >
+              <Input
+                label="Name"
+                type="text"
+                {...formCreateThreshold.register('name', {
+                  required: { value: true, message: 'Name is required' },
+                  minLength: { value: 2, message: 'Name must be at least 2 characters' },
+                })}
+              />
+
+              <Input
+                label="Value"
+                type="number"
+                step="any"
+                {...formCreateThreshold.register('value', {
+                  required: { value: true, message: 'Value is required' },
+                  valueAsNumber: true,
+                })}
+              />
+
+              <label>
+                Type
+                <select
+                  className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
+                  {...formCreateThreshold.register('type', {
+                    required: { value: true, message: 'Please choose a type' },
+                  })}
+                >
+                  <option key={ThresholdType.Goal} value={ThresholdType.Goal}>
+                    {ThresholdType.Goal}
+                  </option>
+                  <option key={ThresholdType.Max} value={ThresholdType.Max}>
+                    {ThresholdType.Max}
+                  </option>
+                  <option key={ThresholdType.Min} value={ThresholdType.Min}>
+                    {ThresholdType.Min}
+                  </option>
+                </select>
+              </label>
+            </ModalForm>
           </Disclosure>
         </Container>
       )}
