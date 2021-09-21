@@ -17,7 +17,7 @@
     "seed": "ts-node -O {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
-    "@apollo/client": "^3.4.11",
+    "@apollo/client": "^3.4.13",
     "@heroicons/react": "^1.0.4",
     "@prisma/client": "^3.0.2",
     "apollo-server-micro": "^3.3.0",
@@ -38,7 +38,7 @@
     "react": "17.0.2",
     "react-chartjs-2": "^3.0.4",
     "react-dom": "17.0.2",
-    "react-hook-form": "^7.15.3"
+    "react-hook-form": "^7.15.4"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.2.0",
@@ -52,9 +52,9 @@
     "@types/faker": "^5.5.8",
     "@types/graphql-iso-date": "^3.4.0",
     "@types/jsonwebtoken": "^8.5.5",
-    "@types/node": "^16.9.2",
+    "@types/node": "^16.9.4",
     "@types/nodemailer": "^6.4.4",
-    "@types/react": "17.0.21",
+    "@types/react": "17.0.22",
     "autoprefixer": "^10.3.4",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
