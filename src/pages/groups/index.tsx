@@ -24,6 +24,7 @@ const GROUPS_QUERY = gql`
       groups {
         id
         name
+        value
         owners {
           id
         }
@@ -139,6 +140,7 @@ export default function Groups() {
             <Link href={`/groups/${group.id}`} key={group.id} noUnderline>
               <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer">
                 <div className="text-xl">{group.name}</div>
+                <span className="font-light">Current value: {group.value}€</span>
               </div>
             </Link>
           );
