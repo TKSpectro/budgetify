@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { destroyCookie } from 'nookies';
 import { prisma } from '~/utils/prisma';
 
 export interface ContextUser {
@@ -31,11 +32,19 @@ export async function context({ req, res }: ContextInput): Promise<Context> {
       const data = jwt.verify(token, process.env.JWT_SECRET!);
 
       if (typeof data !== 'string') {
-        const foundUser = await prisma.user.findFirst({ where: { id: data.id } });
+        let foundUser = await prisma.user.findFirst({ where: { id: data.id } });
 
-        // If we find a user in the database the token with the userId was valid
+        // If we dont find a user with the user id in the token,
+        // we remove the authToken on the client side
         if (!foundUser) {
-          throw Error('Context: Token was not valid');
+          destroyCookie({ res }, 'authToken', {
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 72576000,
+            httpOnly: true,
+            path: '/',
+          });
+
+          throw new Error('Context: Token was not valid');
         }
 
         user.id = foundUser.id;
@@ -44,7 +53,7 @@ export async function context({ req, res }: ContextInput): Promise<Context> {
       }
     }
   } catch (error) {
-    throw Error('Context: Token was not valid');
+    throw new Error('Context: Token was not valid');
   }
 
   return { req, res, user } as Context;
