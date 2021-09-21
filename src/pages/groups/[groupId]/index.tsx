@@ -113,6 +113,7 @@ export default function Group() {
                         progress={roundOn2((group.value / threshold.value) * 100)}
                         text={threshold.name}
                         type={threshold.type}
+                        value={threshold.value + '€'}
                       />
                     )}
                     {/* // TODO: Figure out how to smartly show a min type threshold */}
@@ -125,6 +126,7 @@ export default function Group() {
                         )}
                         text={threshold.name}
                         type={threshold.type}
+                        value={threshold.value + '€'}
                       />
                     )}
                   </div>
