@@ -7,13 +7,13 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { useForm } from 'react-hook-form';
+import { NewPayment } from '~/components/Household/Payments/NewPayment';
 import { PaymentTable } from '~/components/Household/Payments/PaymentTable';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
-import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
 import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
@@ -25,8 +25,8 @@ type DateFilterInput = {
   endDate: Date;
 };
 
-const HOUSEHOLD_PAYMENT_QUERY = gql`
-  query HOUSEHOLD_PAYMENT_QUERY($householdId: String, $startDate: String, $endDate: String) {
+const QUERY = gql`
+  query QUERY($householdId: String, $startDate: String, $endDate: String) {
     household(id: $householdId) {
       id
       name
@@ -46,6 +46,10 @@ const HOUSEHOLD_PAYMENT_QUERY = gql`
           lastname
         }
       }
+    }
+    categories {
+      id
+      name
     }
   }
 `;
@@ -82,7 +86,7 @@ export default function Payments() {
   const form = useForm<DateFilterInput>();
 
   const { householdId } = router.query;
-  const { data, loading, error, refetch } = useQuery(HOUSEHOLD_PAYMENT_QUERY, {
+  const { data, loading, error, refetch } = useQuery(QUERY, {
     variables: {
       householdId,
       startDate: form.getValues('startDate') || undefined,
@@ -91,6 +95,7 @@ export default function Payments() {
   });
 
   const payments = data?.household?.payments || [];
+  const categories = data?.categories || [];
 
   let addedPaymentValues = 0.0;
   const labels = payments.map((payment: Payment) => payment.createdAt);
@@ -157,9 +162,7 @@ export default function Payments() {
               />
             </div>
             <div className="mt-8 flex flex-row-reverse">
-              <Link href={router.asPath + '/new'} asButton>
-                New Payment
-              </Link>
+              <NewPayment categories={categories} />
             </div>
           </Container>
           {payments.length !== 0 && (
@@ -176,7 +179,7 @@ export default function Payments() {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
   return preloadQuery(ctx, {
-    query: HOUSEHOLD_PAYMENT_QUERY,
+    query: QUERY,
     variables: {
       householdId: ctx.params!.householdId,
       startDate: undefined,

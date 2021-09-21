@@ -45,6 +45,8 @@ const NEW_PAYMENT_MUTATION = gql`
   }
 `;
 
+// TODO: Instead of a new page just build a modal form as a component. -> DONE
+// TODO: Remove after asking what is better?
 export default function NewPayment() {
   const router = useRouter();
   const { householdId } = router.query;
