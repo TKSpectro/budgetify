@@ -66,6 +66,7 @@ export function Header() {
             </div>
           </div>
 
+          {/* // TODO: Maybe automatically hide the navbar if a link is clicked */}
           <div
             className={clsx('md:flex flex-col md:flex-row md:ml-auto mt-3 md:mt-0', {
               flex: navBarCollapsed === true,

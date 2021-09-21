@@ -1,4 +1,5 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
+import { TrashIcon } from '@heroicons/react/outline';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { GroupInviteManager } from '~/components/Group/Manage/GroupInviteManager';
@@ -85,6 +86,7 @@ export default function ManageGroup() {
           description="Are you sure that you want to delete this group"
           onSubmit={deleteGroupHandler}
           title="Delete Group"
+          submitText={<TrashIcon className="w-6 h-6" />}
         />
       </Container>
 
