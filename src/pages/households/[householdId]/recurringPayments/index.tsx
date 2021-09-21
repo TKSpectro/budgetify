@@ -2,16 +2,16 @@ import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { NewRecurringPayment } from '~/components/Household/RecurringPayments/NewRecurringPayment';
 import { RecurringPaymentTable } from '~/components/Household/RecurringPayments/RecurringPaymentTable';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
-import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 
-const HOUSEHOLD_RECURRING_PAYMENTS_QUERY = gql`
-  query HOUSEHOLD_RECURRING_PAYMENTS_QUERY($householdId: String) {
+const QUERY = gql`
+  query QUERY($householdId: String) {
     household(id: $householdId) {
       id
       name
@@ -31,19 +31,24 @@ const HOUSEHOLD_RECURRING_PAYMENTS_QUERY = gql`
         }
       }
     }
+    categories {
+      id
+      name
+    }
   }
 `;
 
 export default function RecurringPayments() {
   const router = useRouter();
   const { householdId } = router.query;
-  const { data, loading, error, refetch } = useQuery(HOUSEHOLD_RECURRING_PAYMENTS_QUERY, {
+  const { data, loading, error, refetch } = useQuery(QUERY, {
     variables: {
       householdId,
     },
   });
 
   const recurringPayments = data?.household?.recurringPayments || [];
+  const categories = data?.categories || [];
 
   return (
     <>
@@ -60,11 +65,7 @@ export default function RecurringPayments() {
           />
           <Loader loading={loading} />
 
-          <div className="flex flex-row-reverse">
-            <Link href={router.asPath + '/new'} asButton>
-              New Recurring Payment
-            </Link>
-          </div>
+          <NewRecurringPayment categories={categories} />
         </Container>
         {recurringPayments.length !== 0 && (
           <RecurringPaymentTable recurringPayments={recurringPayments} />
@@ -77,7 +78,7 @@ export default function RecurringPayments() {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
   return preloadQuery(ctx, {
-    query: HOUSEHOLD_RECURRING_PAYMENTS_QUERY,
+    query: QUERY,
     variables: { householdId: ctx.params!.householdId },
   });
 };

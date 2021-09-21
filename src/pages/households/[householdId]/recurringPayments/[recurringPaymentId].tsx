@@ -82,6 +82,7 @@ const UPDATE_RECURRING_PAYMENT_MUTATION = gql`
   }
 `;
 
+// TODO:  Instead of a new page just build a modal form as a component. Probally kinda tricky.
 export default function EditRecurringPayment() {
   const router = useRouter();
   const { householdId, recurringPaymentId } = router.query;
