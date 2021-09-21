@@ -118,28 +118,45 @@ async function main() {
     },
   });
 
+  // Create a bunch of payments in the range of -100..100 euros
+  for (let i = 0; i < 50; i++) {
+    await prisma.payment.create({
+      data: {
+        name: faker.lorem.words(2),
+        value: faker.datatype.number({ min: -10000, max: 10000, precision: 1 }),
+        categoryId: cat1.id,
+        userId: users[0].id,
+        householdId: hou1.id,
+        createdAt: faker.date.past(1),
+      },
+    });
+  }
+
   const payments = await prisma.payment.createMany({
     data: [
       {
         name: 'pay1',
-        value: 2001,
+        value: 20001,
         categoryId: cat1.id,
         userId: users[0].id,
         householdId: hou1.id,
+        createdAt: faker.date.past(1),
       },
       {
         name: 'pay2',
-        value: 4002,
+        value: 40002,
         categoryId: cat1.id,
         userId: users[0].id,
         householdId: hou1.id,
+        createdAt: faker.date.past(1),
       },
       {
         name: 'pay3',
-        value: 6003,
+        value: 60003,
         categoryId: cat1.id,
         userId: users[0].id,
         householdId: hou1.id,
+        createdAt: faker.date.past(1),
       },
     ],
   });
