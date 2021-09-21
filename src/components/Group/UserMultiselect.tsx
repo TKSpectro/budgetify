@@ -84,7 +84,7 @@ export const UserMultiSelect = forwardRef<HTMLFormControlsCollection, Props>(
                       className="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200 dark:border-gray-400"
                       onClick={toggleDropdown}
                     >
-                      <button className="cursor-pointer w-6 h-6 text-gray-600 dark:text-gray-300 outline-none focus:outline-none">
+                      <div className="cursor-pointer w-6 h-6 text-gray-600 dark:text-gray-300 outline-none focus:outline-none">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="100%"
@@ -99,7 +99,7 @@ export const UserMultiSelect = forwardRef<HTMLFormControlsCollection, Props>(
                         >
                           <polyline points="18 15 12 9 6 15"></polyline>
                         </svg>
-                      </button>
+                      </div>
                     </div>
                   </div>
                 </div>
