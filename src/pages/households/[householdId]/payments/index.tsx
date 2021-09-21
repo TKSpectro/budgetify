@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
+import { ChartOptions } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import { differenceInDays, parseISO } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -18,7 +18,7 @@ import { Loader } from '~/components/UI/Loader';
 import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
-import { genData } from '~/utils/charts';
+import { roundOn2 } from '~/utils/helper';
 
 type DateFilterInput = {
   startDate: Date;
@@ -50,15 +50,27 @@ const HOUSEHOLD_PAYMENT_QUERY = gql`
   }
 `;
 
-let paymentChartOptions = {
+let paymentChartOptions: ChartOptions = {
   responsive: true,
   scales: {
-    xAxis: {
+    x: {
       type: 'time',
       time: {
         unit: 'month',
-        displayFormats: {
-          quarter: 'MMM YYYY',
+      },
+      // Enable automatic scaling for the ticks
+      ticks: { source: 'auto' },
+    },
+  },
+  plugins: {
+    tooltip: {
+      callbacks: {
+        label: function (this) {
+          return (
+            'Balance: ' +
+            roundOn2(this.dataPoints[0].dataset.data[this.dataPoints[0].dataIndex] as number) +
+            '€'
+          );
         },
       },
     },
@@ -83,17 +95,6 @@ export default function Payments() {
   let addedPaymentValues = 0.0;
   const labels = payments.map((payment: Payment) => payment.createdAt);
   const chartData = payments.map((payment: Payment) => (addedPaymentValues += payment.value));
-
-  if (labels.length > 0) {
-    // Adjust the label unit by the difference in days.
-    if (differenceInDays(parseISO(labels[labels.length - 1]), parseISO(labels[0])) < 2) {
-      paymentChartOptions.scales.xAxis.time.unit = 'hour';
-    } else if (differenceInDays(parseISO(labels[labels.length - 1]), parseISO(labels[0])) < 14) {
-      paymentChartOptions.scales.xAxis.time.unit = 'day';
-    } else if (differenceInDays(parseISO(labels[labels.length - 1]), parseISO(labels[0])) < 90) {
-      paymentChartOptions.scales.xAxis.time.unit = 'week';
-    }
-  }
 
   const onDateFilterSubmit = () => {
     // Re-Query with the newly set parameters
@@ -137,7 +138,23 @@ export default function Payments() {
             </Form>
 
             <div className="max-w-[60em] mx-auto">
-              <Line data={genData(labels, chartData)} options={paymentChartOptions} />
+              <Line
+                data={{
+                  labels: labels,
+                  datasets: [
+                    {
+                      label: 'Scale',
+                      fill: true,
+                      data: chartData,
+                      backgroundColor: ['rgba(255,255,255,0.04)'],
+                      borderColor: ['rgba(20, 184, 166, 1)'],
+                      borderWidth: 1,
+                      tension: 0.2,
+                    },
+                  ],
+                }}
+                options={paymentChartOptions}
+              />
             </div>
             <div className="mt-8 flex flex-row-reverse">
               <Link href={router.asPath + '/new'} asButton>
