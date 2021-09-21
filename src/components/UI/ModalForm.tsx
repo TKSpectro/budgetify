@@ -16,9 +16,9 @@ export interface Props<T> {
 
 export function ModalForm<T>({
   title,
-  submitText = 'SAVE CHANGES',
   onSubmit,
   buttonText,
+  submitText = buttonText,
   buttonClassName,
   children,
   form,
