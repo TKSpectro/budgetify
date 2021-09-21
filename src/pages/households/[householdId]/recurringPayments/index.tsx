@@ -56,21 +56,19 @@ export default function RecurringPayments() {
         <title>Recurring Payments | budgetify</title>
       </Head>
 
-      <div className="mt-16">
-        <Container>
-          <Error title="Failed to load recurring payments" error={error} />
-          <Error
-            title="Could not find any recurring payments. Please create a new one."
-            error={!loading && !error && recurringPayments.length === 0 ? '' : undefined}
-          />
-          <Loader loading={loading} />
+      <Container>
+        <Error title="Failed to load recurring payments" error={error} />
+        <Error
+          title="Could not find any recurring payments. Please create a new one."
+          error={!loading && !error && recurringPayments.length === 0 ? '' : undefined}
+        />
+        <Loader loading={loading} />
 
-          <NewRecurringPayment categories={categories} />
-        </Container>
-        {recurringPayments.length !== 0 && (
-          <RecurringPaymentTable recurringPayments={recurringPayments} />
-        )}
-      </div>
+        <NewRecurringPayment categories={categories} />
+      </Container>
+      {recurringPayments.length !== 0 && (
+        <RecurringPaymentTable recurringPayments={recurringPayments} />
+      )}
     </>
   );
 }

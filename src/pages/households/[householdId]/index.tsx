@@ -77,7 +77,7 @@ export default function Household() {
   const isOwner = household?.owner?.id === data?.me?.id;
 
   return (
-    <div className="my-4 mx-4 sm:mx-24">
+    <div className="sm:mx-24">
       <Head>
         <title>{household?.name + ' | ' + 'budgetify'}</title>
       </Head>
@@ -90,20 +90,22 @@ export default function Household() {
 
       {!error && household && (
         <>
-          <div className=" relative text-6xl text-brand-500">
-            {data.household.name}
-            {isOwner && (
-              <span className="absolute right-4 top-6 text-base">
-                <Link href={router.asPath + '/manage'} asButton>
-                  Manage
-                </Link>
-              </span>
-            )}
+          <div className="mx-4 my-4">
+            <div className="relative text-6xl text-brand-500">
+              {data.household.name}
+              {isOwner && (
+                <span className="absolute right-4 top-6 text-base">
+                  <Link href={router.asPath + '/manage'} asButton>
+                    Manage
+                  </Link>
+                </span>
+              )}
+            </div>
+
+            <div className="mt-4 text-4xl">Total balance{' ' + roundOn2(paymentSum) + '€'}</div>
           </div>
 
-          <div className="mt-4 text-4xl">Total balance{' ' + roundOn2(paymentSum) + '€'}</div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-16 overflow-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-y-8 lg:gap-x-16 overflow-auto">
             <PaymentOverview payments={household.payments} />
 
             <RecurringPaymentOverview recurringPayments={household.recurringPayments} />
