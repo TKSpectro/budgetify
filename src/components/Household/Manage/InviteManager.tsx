@@ -87,14 +87,14 @@ export default function InviteManager({ invites, refetch, ...props }: Props) {
                       {invite.invitedEmail}
                     </div>
                     <div className="table-cell sm:hidden  font-bold text-gray-800 dark:text-gray-100">
-                      {new Date(invite.validUntil).toLocaleDateString()}
+                      {new Date(invite.validUntil).toDateString()}
                     </div>
                   </div>
                 </td>
                 <td className="py-4 hidden sm:table-cell">
                   <div className="max-w-xl overflow-auto">
                     <div className="ml-2 font-bold text-gray-800 dark:text-gray-100">
-                      {new Date(invite.validUntil).toLocaleDateString()}
+                      {new Date(invite.validUntil).toDateString()}
                     </div>
                   </div>
                 </td>

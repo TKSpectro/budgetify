@@ -20,9 +20,7 @@ export default function RecurringPaymentItem({ recurringPayment, ...props }: Pro
       <div className="max-w-7xl mx-auto pb-2 px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between flex-wrap">
           <div className="w-0 flex-1 flex items-center">
-            <span className="flex">
-              {new Date(recurringPayment.nextBooking).toLocaleDateString()}
-            </span>
+            <span className="flex">{new Date(recurringPayment.nextBooking).toDateString()}</span>
           </div>
           <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-3">
             {recurringPayment.interval}

@@ -15,9 +15,7 @@ export default function PaymentItem({ payment, ...props }: Props) {
           <div className="order-2 text-lg flex-shrink-0 sm:order-3 sm:ml-3">{payment.value}€</div>
         </div>
       </div>
-      <div className="mb-2 px-3 sm:px-6 lg:px-8">
-        {new Date(payment.createdAt).toLocaleDateString()}
-      </div>
+      <div className="mb-2 px-3 sm:px-6 lg:px-8">{new Date(payment.createdAt).toDateString()}</div>
     </div>
   );
 }

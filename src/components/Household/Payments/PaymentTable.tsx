@@ -22,11 +22,11 @@ export function PaymentTable({ payments }: Props) {
                       <div className="ml-2 font-bold dark:text-gray-100">
                         {payment.name}
                         <span className="hidden md:inline text-sm dark:text-gray-400 ml-8">
-                          {new Date(payment.createdAt).toLocaleDateString()}
+                          {new Date(payment.createdAt).toDateString()}
                         </span>
                       </div>
                       <span className="md:hidden ml-2 text-sm text-gray-400">
-                        {new Date(payment.createdAt).toLocaleDateString()}
+                        {new Date(payment.createdAt).toDateString()}
                       </span>
                       <div className="hidden md:table-cell pl-2 text-sm dark:text-gray-400">
                         {payment.description}

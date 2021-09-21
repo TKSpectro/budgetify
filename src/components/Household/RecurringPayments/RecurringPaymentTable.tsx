@@ -30,21 +30,21 @@ export function RecurringPaymentTable({ recurringPayments }: Props) {
                         {payment.name}
                         <span className="hidden md:inline text-sm text-gray-500 dark:text-gray-400 ml-8">
                           {payment.lastBooking
-                            ? new Date(payment.lastBooking).toLocaleDateString()
+                            ? new Date(payment.lastBooking).toDateString()
                             : 'Not booked.'}
                         </span>
                         <span className="hidden md:inline text-sm text-gray-500 dark:text-gray-400 ml-8">
-                          {'Next booking: ' + new Date(payment.nextBooking).toLocaleDateString()}
+                          {'Next booking: ' + new Date(payment.nextBooking).toDateString()}
                         </span>
                       </div>
                       <span className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
-                        {'Next: ' + new Date(payment.nextBooking).toLocaleDateString()}
+                        {'Next: ' + new Date(payment.nextBooking).toDateString()}
                       </span>
                       <div className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
-                        {'Starts: ' + new Date(payment.startDate).toLocaleDateString()}
+                        {'Starts: ' + new Date(payment.startDate).toDateString()}
                       </div>
                       <div className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
-                        {'Ends: ' + new Date(payment.endDate).toLocaleDateString()}
+                        {'Ends: ' + new Date(payment.endDate).toDateString()}
                       </div>
                       <div className="hidden md:table-cell pl-2 text-sm text-gray-500 dark:text-gray-400">
                         {payment.description}
@@ -54,12 +54,12 @@ export function RecurringPaymentTable({ recurringPayments }: Props) {
                 </td>
                 <td className="py-4 hidden sm:table-cell">
                   <div className="font-light text-gray-500 dark:text-gray-400">
-                    {payment.startDate ? new Date(payment.startDate).toLocaleDateString() : ''}
+                    {payment.startDate ? new Date(payment.startDate).toDateString() : ''}
                   </div>
                 </td>
                 <td className="py-4 hidden md:table-cell">
                   <div className="font-light text-gray-500 dark:text-gray-400">
-                    {payment.endDate ? new Date(payment.endDate).toLocaleDateString() : ''}
+                    {payment.endDate ? new Date(payment.endDate).toDateString() : ''}
                   </div>
                 </td>
                 <td className="py-4 hidden md:table-cell">
