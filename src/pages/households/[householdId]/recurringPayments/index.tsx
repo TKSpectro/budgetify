@@ -67,7 +67,7 @@ export default function RecurringPayments() {
         <NewRecurringPayment categories={categories} />
       </Container>
       {recurringPayments.length !== 0 && (
-        <RecurringPaymentTable recurringPayments={recurringPayments} />
+        <RecurringPaymentTable recurringPayments={recurringPayments} categories={categories} />
       )}
     </>
   );

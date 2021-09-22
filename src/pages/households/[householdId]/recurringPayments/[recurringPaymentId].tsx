@@ -82,7 +82,8 @@ const UPDATE_RECURRING_PAYMENT_MUTATION = gql`
   }
 `;
 
-// TODO:  Instead of a new page just build a modal form as a component. Probally kinda tricky.
+// TODO:  Instead of a new page just build a modal form as a component. Probally kinda tricky. -> DONE
+// Need to remove this page.
 export default function UpdateRecurringPayment() {
   const router = useRouter();
   const { householdId, recurringPaymentId } = router.query;
