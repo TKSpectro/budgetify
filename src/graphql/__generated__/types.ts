@@ -403,6 +403,8 @@ export type Query = {
   calculateMemberBalances?: Maybe<Array<Maybe<Participant>>>;
   /** All available categories. Filterable by id or name via arguments */
   categories?: Maybe<Array<Maybe<Category>>>;
+  /** Get a single invite with the given token. Need to be logged in. */
+  getInviteByToken?: Maybe<Invite>;
   /** Returns a group by searching for the given id. */
   group?: Maybe<Group>;
   household?: Maybe<Household>;
@@ -421,6 +423,11 @@ export type QueryCalculateMemberBalancesArgs = {
 export type QueryCategoriesArgs = {
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryGetInviteByTokenArgs = {
+  token: Scalars['String'];
 };
 
 

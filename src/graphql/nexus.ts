@@ -280,6 +280,7 @@ export interface NexusGenFieldTypes {
     allHouseholds: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     calculateMemberBalances: Array<NexusGenRootTypes['Participant'] | null> | null; // [Participant]
     categories: Array<NexusGenRootTypes['Category'] | null> | null; // [Category]
+    getInviteByToken: NexusGenRootTypes['Invite'] | null; // Invite
     group: NexusGenRootTypes['Group'] | null; // Group
     household: NexusGenRootTypes['Household'] | null; // Household
     households: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
@@ -451,6 +452,7 @@ export interface NexusGenFieldTypeNames {
     allHouseholds: 'Household'
     calculateMemberBalances: 'Participant'
     categories: 'Category'
+    getInviteByToken: 'Invite'
     group: 'Group'
     household: 'Household'
     households: 'Household'
@@ -646,6 +648,9 @@ export interface NexusGenArgTypes {
     categories: { // args
       id?: string | null; // String
       name?: string | null; // String
+    }
+    getInviteByToken: { // args
+      token: string; // String!
     }
     group: { // args
       id: string; // String!

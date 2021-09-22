@@ -59,6 +59,29 @@ export const Invite = objectType({
   },
 });
 
+export const InviteQuery = extendType({
+  type: 'Query',
+  definition(t) {
+    t.field('getInviteByToken', {
+      type: Invite,
+      description: 'Get a single invite with the given token. Need to be logged in.',
+      authorize: authIsLoggedIn,
+      args: {
+        token: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx) {
+        const invite = await prisma.invite.findFirst({ where: { token: args.token } });
+
+        if (!invite) {
+          throw new ApolloError('No invite found with this token.');
+        }
+
+        return invite;
+      },
+    });
+  },
+});
+
 export const InviteMutation = extendType({
   type: 'Mutation',
   definition(t) {

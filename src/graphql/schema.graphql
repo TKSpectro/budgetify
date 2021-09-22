@@ -278,6 +278,9 @@ type Query {
   """All available categories. Filterable by id or name via arguments"""
   categories(id: String, name: String): [Category]
 
+  """Get a single invite with the given token. Need to be logged in."""
+  getInviteByToken(token: String!): Invite
+
   """Returns a group by searching for the given id."""
   group(id: String!): Group
   household(id: String): Household
