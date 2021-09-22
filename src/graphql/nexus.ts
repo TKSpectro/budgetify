@@ -250,6 +250,7 @@ export interface NexusGenFieldTypes {
     removeGroupMember: NexusGenRootTypes['Group']; // Group!
     removeGroupOwner: NexusGenRootTypes['Group']; // Group!
     removeHouseholdMember: NexusGenRootTypes['Household']; // Household!
+    removeThreshold: NexusGenRootTypes['Threshold']; // Threshold!
     signup: NexusGenRootTypes['AuthToken']; // AuthToken!
     updateGroup: NexusGenRootTypes['Group']; // Group!
     updateHousehold: NexusGenRootTypes['Household']; // Household!
@@ -422,6 +423,7 @@ export interface NexusGenFieldTypeNames {
     removeGroupMember: 'Group'
     removeGroupOwner: 'Group'
     removeHouseholdMember: 'Household'
+    removeThreshold: 'Threshold'
     signup: 'AuthToken'
     updateGroup: 'Group'
     updateHousehold: 'Household'
@@ -527,7 +529,7 @@ export interface NexusGenArgTypes {
   }
   Mutation: {
     addGroupOwner: { // args
-      id: string; // String!
+      groupId: string; // String!
       ownerId?: string | null; // String
     }
     bookRecurringPayments: { // args
@@ -582,7 +584,7 @@ export interface NexusGenArgTypes {
       value: NexusGenScalars['Money']; // Money!
     }
     deleteGroup: { // args
-      id: string; // String!
+      groupId: string; // String!
     }
     deleteInvite: { // args
       id: string; // String!
@@ -595,16 +597,20 @@ export interface NexusGenArgTypes {
       name: string; // String!
     }
     removeGroupMember: { // args
-      id: string; // String!
+      groupId: string; // String!
       memberId: string; // String!
     }
     removeGroupOwner: { // args
-      id: string; // String!
+      groupId: string; // String!
       ownerId?: string | null; // String
     }
     removeHouseholdMember: { // args
-      id: string; // String!
+      householdId: string; // String!
       memberId: string; // String!
+    }
+    removeThreshold: { // args
+      groupId: string; // String!
+      id: string; // String!
     }
     signup: { // args
       email: string; // String!
@@ -613,11 +619,11 @@ export interface NexusGenArgTypes {
       password: string; // String!
     }
     updateGroup: { // args
-      id: string; // String!
+      groupId: string; // String!
       ownerId?: string | null; // String
     }
     updateHousehold: { // args
-      id: string; // String!
+      householdId: string; // String!
       ownerId?: string | null; // String
     }
     updateRecurringPayment: { // args

@@ -6,8 +6,8 @@ export const authIsLoggedIn = (_: any, __: any, ctx: Context) => (ctx.user ? tru
 export const authIsAdmin = (_: any, __: any, ctx: Context) => ctx.user.isAdmin;
 
 export const authIsGroupOwner = async (_: any, args: any, ctx: Context) => {
-  const group = await prisma.group.findFirst({
-    where: { id: args.id },
+  const group = await prisma.group.findUnique({
+    where: { id: args.groupId },
     include: { owners: true },
   });
   // Check if the user is the owner of the group.
@@ -17,8 +17,8 @@ export const authIsGroupOwner = async (_: any, args: any, ctx: Context) => {
 };
 
 export const authIsHouseholdOwner = async (_: any, args: any, ctx: Context) => {
-  const household = await prisma.household.findFirst({
-    where: { id: args.id },
+  const household = await prisma.household.findUnique({
+    where: { id: args.householdId },
   });
   // Check if the user is the owner of the household.
   const householdOwner = household?.ownerId === ctx.user.id;

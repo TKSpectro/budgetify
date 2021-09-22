@@ -132,7 +132,7 @@ type Mutation {
   """
   Add a new owner to a group. Need to be logged in and be owner of the group.
   """
-  addGroupOwner(id: String!, ownerId: String): Group!
+  addGroupOwner(groupId: String!, ownerId: String): Group!
 
   """
   This mutation should be called regularly (at least once a day)
@@ -171,7 +171,7 @@ type Mutation {
   createThreshold(groupId: String!, name: String!, type: ThresholdType!, value: Money!): Threshold!
 
   """Delete a existing group. Need to be logged in and owner of the group."""
-  deleteGroup(id: String!): Group!
+  deleteGroup(groupId: String!): Group!
 
   """Remove a invite. Need to be logged in."""
   deleteInvite(id: String!): Boolean
@@ -194,17 +194,20 @@ type Mutation {
   """
   Remove a member from the specified group. Need to be logged in and own the group.
   """
-  removeGroupMember(id: String!, memberId: String!): Group!
+  removeGroupMember(groupId: String!, memberId: String!): Group!
 
   """
   Remove a owner of a group. Need to be logged in and be owner of the group.
   """
-  removeGroupOwner(id: String!, ownerId: String): Group!
+  removeGroupOwner(groupId: String!, ownerId: String): Group!
 
   """
   Remove a member from the specified household. Need to be logged in and own the household.
   """
-  removeHouseholdMember(id: String!, memberId: String!): Household!
+  removeHouseholdMember(householdId: String!, memberId: String!): Household!
+
+  """Remove a threshold. Need to be logged in and own group."""
+  removeThreshold(groupId: String!, id: String!): Threshold!
 
   """
   This mutation takes the values for a new user as arguments. 
@@ -216,12 +219,12 @@ type Mutation {
   """
   Update a already existing group. Need to be logged in and be owner of the group.
   """
-  updateGroup(id: String!, ownerId: String): Group!
+  updateGroup(groupId: String!, ownerId: String): Group!
 
   """
   Update a already existing household. Need to be logged in and owner of the household.
   """
-  updateHousehold(id: String!, ownerId: String): Household!
+  updateHousehold(householdId: String!, ownerId: String): Household!
 
   """Update a new recurring payment. Need to be logged in."""
   updateRecurringPayment(categoryId: String, description: String, endDate: DateTime, householdId: String!, id: String!, interval: Interval, name: String, startDate: DateTime, value: Money): RecurringPayment!

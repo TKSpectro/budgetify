@@ -39,7 +39,7 @@ const QUERY = gql`
 
 const DELETE_GROUP_MUTATION = gql`
   mutation ($id: String!) {
-    deleteGroup(id: $id) {
+    deleteGroup(groupId: $id) {
       id
     }
   }

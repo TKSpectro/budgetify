@@ -18,7 +18,7 @@ interface Props {
 
 const ADD_GROUP_OWNER_MUTATION = gql`
   mutation UPDATE_GROUP_OWNER_MUTATION($id: String!, $ownerId: String!) {
-    addGroupOwner(id: $id, ownerId: $ownerId) {
+    addGroupOwner(groupId: $id, ownerId: $ownerId) {
       id
       owners {
         id
@@ -30,7 +30,7 @@ const ADD_GROUP_OWNER_MUTATION = gql`
 
 const REMOVE_GROUP_OWNER_MUTATION = gql`
   mutation REMOVE_GROUP_OWNER_MUTATION($id: String!, $ownerId: String!) {
-    removeGroupOwner(id: $id, ownerId: $ownerId) {
+    removeGroupOwner(groupId: $id, ownerId: $ownerId) {
       id
       owners {
         id
@@ -42,7 +42,7 @@ const REMOVE_GROUP_OWNER_MUTATION = gql`
 
 const REMOVE_GROUP_MEMBER_MUTATION = gql`
   mutation REMOVE_GROUP_MEMBER_MUTATION($id: String!, $memberId: String!) {
-    removeGroupMember(id: $id, memberId: $memberId) {
+    removeGroupMember(groupId: $id, memberId: $memberId) {
       id
       members {
         id

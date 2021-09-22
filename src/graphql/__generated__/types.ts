@@ -184,6 +184,8 @@ export type Mutation = {
   removeGroupOwner: Group;
   /** Remove a member from the specified household. Need to be logged in and own the household. */
   removeHouseholdMember: Household;
+  /** Remove a threshold. Need to be logged in and own group. */
+  removeThreshold: Threshold;
   /**
    * This mutation takes the values for a new user as arguments.
    *       Saves them and returns a JWT (JSON-Web-Token)
@@ -204,7 +206,7 @@ export type Mutation = {
 
 
 export type MutationAddGroupOwnerArgs = {
-  id: Scalars['String'];
+  groupId: Scalars['String'];
   ownerId?: Maybe<Scalars['String']>;
 };
 
@@ -281,7 +283,7 @@ export type MutationCreateThresholdArgs = {
 
 
 export type MutationDeleteGroupArgs = {
-  id: Scalars['String'];
+  groupId: Scalars['String'];
 };
 
 
@@ -302,20 +304,26 @@ export type MutationRemoveCategoryArgs = {
 
 
 export type MutationRemoveGroupMemberArgs = {
-  id: Scalars['String'];
+  groupId: Scalars['String'];
   memberId: Scalars['String'];
 };
 
 
 export type MutationRemoveGroupOwnerArgs = {
-  id: Scalars['String'];
+  groupId: Scalars['String'];
   ownerId?: Maybe<Scalars['String']>;
 };
 
 
 export type MutationRemoveHouseholdMemberArgs = {
-  id: Scalars['String'];
+  householdId: Scalars['String'];
   memberId: Scalars['String'];
+};
+
+
+export type MutationRemoveThresholdArgs = {
+  groupId: Scalars['String'];
+  id: Scalars['String'];
 };
 
 
@@ -328,13 +336,13 @@ export type MutationSignupArgs = {
 
 
 export type MutationUpdateGroupArgs = {
-  id: Scalars['String'];
+  groupId: Scalars['String'];
   ownerId?: Maybe<Scalars['String']>;
 };
 
 
 export type MutationUpdateHouseholdArgs = {
-  id: Scalars['String'];
+  householdId: Scalars['String'];
   ownerId?: Maybe<Scalars['String']>;
 };
 

@@ -55,5 +55,20 @@ export const ThresholdMutation = extendType({
         });
       },
     });
+
+    t.nonNull.field('removeThreshold', {
+      type: 'Threshold',
+      description: 'Remove a threshold. Need to be logged in and own group.',
+      authorize: authIsGroupOwner,
+      args: {
+        id: nonNull(stringArg()),
+        groupId: nonNull(stringArg()),
+      },
+      resolve(_, args) {
+        return prisma.threshold.delete({
+          where: { id: args.id },
+        });
+      },
+    });
   },
 });

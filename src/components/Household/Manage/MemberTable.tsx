@@ -15,7 +15,7 @@ interface Props {
 
 const UPDATE_HOUSEHOLD_MUTATION = gql`
   mutation UPDATE_OWNER_MUTATION($id: String!, $ownerId: String!) {
-    updateHousehold(id: $id, ownerId: $ownerId) {
+    updateHousehold(householdId: $id, ownerId: $ownerId) {
       id
       ownerId
     }
@@ -24,7 +24,7 @@ const UPDATE_HOUSEHOLD_MUTATION = gql`
 
 const REMOVE_HOUSEHOLD_MEMBER_MUTATION = gql`
   mutation REMOVE_HOUSEHOLD_MEMBER_MUTATION($id: String!, $memberId: String!) {
-    removeHouseholdMember(id: $id, memberId: $memberId) {
+    removeHouseholdMember(householdId: $id, memberId: $memberId) {
       id
       members {
         id

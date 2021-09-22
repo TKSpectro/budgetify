@@ -133,12 +133,12 @@ export const HouseholdMutation = extendType({
         'Update a already existing household. Need to be logged in and owner of the household.',
       authorize: authIsHouseholdOwner,
       args: {
-        id: nonNull(stringArg()),
+        householdId: nonNull(stringArg()),
         ownerId: stringArg(),
       },
       async resolve(_, args) {
         return prisma.household.update({
-          where: { id: args.id },
+          where: { id: args.householdId },
           data: { ownerId: args.ownerId || undefined },
         });
       },
@@ -150,12 +150,12 @@ export const HouseholdMutation = extendType({
         'Remove a member from the specified household. Need to be logged in and own the household.',
       authorize: authIsHouseholdOwner,
       args: {
-        id: nonNull(stringArg()),
+        householdId: nonNull(stringArg()),
         memberId: nonNull(stringArg()),
       },
       async resolve(_, args) {
         return prisma.household.update({
-          where: { id: args.id },
+          where: { id: args.householdId },
           data: { members: { disconnect: { id: args.memberId } } },
         });
       },

@@ -247,12 +247,12 @@ export const GroupMutation = extendType({
         'Update a already existing group. Need to be logged in and be owner of the group.',
       authorize: authIsGroupOwner,
       args: {
-        id: nonNull(stringArg()),
+        groupId: nonNull(stringArg()),
         ownerId: stringArg(),
       },
       async resolve(_, args) {
         return prisma.group.update({
-          where: { id: args.id },
+          where: { id: args.groupId },
           data: { owners: { connect: { id: args.ownerId || undefined } } },
         });
       },
@@ -263,15 +263,15 @@ export const GroupMutation = extendType({
       description: 'Delete a existing group. Need to be logged in and owner of the group.',
       authorize: authIsGroupOwner,
       args: {
-        id: nonNull(stringArg()),
+        groupId: nonNull(stringArg()),
       },
       async resolve(_, args) {
-        await prisma.groupTransaction.deleteMany({ where: { groupId: args.id } });
-        await prisma.threshold.deleteMany({ where: { groupId: args.id } });
-        await prisma.invite.deleteMany({ where: { groupId: args.id } });
+        await prisma.groupTransaction.deleteMany({ where: { groupId: args.groupId } });
+        await prisma.threshold.deleteMany({ where: { groupId: args.groupId } });
+        await prisma.invite.deleteMany({ where: { groupId: args.groupId } });
 
         return prisma.group.delete({
-          where: { id: args.id },
+          where: { id: args.groupId },
         });
       },
     });
@@ -281,12 +281,12 @@ export const GroupMutation = extendType({
       description: 'Add a new owner to a group. Need to be logged in and be owner of the group.',
       authorize: authIsGroupOwner,
       args: {
-        id: nonNull(stringArg()),
+        groupId: nonNull(stringArg()),
         ownerId: stringArg(),
       },
       async resolve(_, args) {
         return prisma.group.update({
-          where: { id: args.id },
+          where: { id: args.groupId },
           data: { owners: { connect: { id: args.ownerId || undefined } } },
         });
       },
@@ -297,11 +297,11 @@ export const GroupMutation = extendType({
       description: 'Remove a owner of a group. Need to be logged in and be owner of the group.',
       authorize: authIsGroupOwner,
       args: {
-        id: nonNull(stringArg()),
+        groupId: nonNull(stringArg()),
         ownerId: stringArg(),
       },
       async resolve(_, args) {
-        const owners = await prisma.group.findUnique({ where: { id: args.id } }).owners();
+        const owners = await prisma.group.findUnique({ where: { id: args.groupId } }).owners();
 
         // Cant remove the last owner of a group because then nobody could manage the group.
         if (owners.length <= 1) {
@@ -311,7 +311,7 @@ export const GroupMutation = extendType({
         }
 
         return prisma.group.update({
-          where: { id: args.id },
+          where: { id: args.groupId },
           data: { owners: { disconnect: { id: args.ownerId || undefined } } },
         });
       },
@@ -323,12 +323,12 @@ export const GroupMutation = extendType({
         'Remove a member from the specified group. Need to be logged in and own the group.',
       authorize: authIsGroupOwner,
       args: {
-        id: nonNull(stringArg()),
+        groupId: nonNull(stringArg()),
         memberId: nonNull(stringArg()),
       },
       async resolve(_, args, ctx) {
         const group = await prisma.group.findFirst({
-          where: { id: args.id },
+          where: { id: args.groupId },
           include: { owners: true },
         });
 
@@ -339,7 +339,7 @@ export const GroupMutation = extendType({
         }
 
         return prisma.group.update({
-          where: { id: args.id },
+          where: { id: args.groupId },
           data: {
             members: { disconnect: { id: args.memberId } },
             owners: { disconnect: { id: args.memberId } },
