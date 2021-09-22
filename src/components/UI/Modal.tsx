@@ -5,7 +5,7 @@ export interface Props extends ButtonProps {
   title: string;
   description?: string;
   onSubmit: () => void;
-  buttonText: string;
+  buttonText: string | React.ReactNode;
   buttonClassName?: string;
   submitText?: string | React.ReactNode;
   children?: ReactNode;
