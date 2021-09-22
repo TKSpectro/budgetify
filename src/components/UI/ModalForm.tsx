@@ -6,9 +6,10 @@ import { Form } from './Form';
 export interface Props<T> {
   title: string;
   description?: string;
-  submitText?: string;
+  submitText?: string | React.ReactNode;
   onSubmit: () => void;
-  buttonText: string;
+  onClick?: () => void;
+  buttonText: string | React.ReactNode;
   buttonClassName?: string;
   children: ReactNode;
   form: UseFormReturn<T>;
@@ -17,6 +18,7 @@ export interface Props<T> {
 export function ModalForm<T>({
   title,
   onSubmit,
+  onClick = () => {},
   buttonText,
   submitText = buttonText,
   buttonClassName,
@@ -40,7 +42,13 @@ export function ModalForm<T>({
 
   return (
     <>
-      <Button className={buttonClassName} onClick={() => setShowModal(true)}>
+      <Button
+        className={buttonClassName}
+        onClick={() => {
+          onClick();
+          setShowModal(true);
+        }}
+      >
         {buttonText}
       </Button>
       {showModal && (
