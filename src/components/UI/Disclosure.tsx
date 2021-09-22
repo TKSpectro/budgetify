@@ -6,15 +6,16 @@ interface Props {
   text: string;
   overflowText?: string;
   showOpen: boolean;
+  className?: string;
   children: React.ReactNode;
 }
 
-export function Disclosure({ text, overflowText, showOpen, children, ...props }: Props) {
+export function Disclosure({ text, overflowText, showOpen, className, children, ...props }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      <div className="hover:cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
+      <div className={'hover:cursor-pointer ' + className} onClick={() => setIsOpen(!isOpen)}>
         {text}
         {overflowText && (
           <span className="float-right hidden md:inline md:max-w-[16rem] truncate pr-5">
