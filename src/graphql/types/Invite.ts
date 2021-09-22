@@ -118,11 +118,16 @@ export const InviteMutation = extendType({
 
         // Send an email out to the invited person with the generated token
         const transporter = createNodemailerTransporter({});
+        const inviteUrl =
+          process.env.BASE_URL || 'https://' + process.env.DOMAIN + '/invite/' + invite.token;
         if (transporter) {
           const mailOptions: MailOptions = {
             from: `${process.env.DOMAIN} <no-reply@${process.env.DOMAIN}>`,
             to: invite.invitedEmail,
             subject: `Budgetify | Invite to household - ${foundHousehold[0].name}`,
+            html: `
+            <h3>You need to be logged in to use this invite.</h3>
+            <a target="_blank" href="${inviteUrl}">Use Token</a>`,
             text: `invite-token: ${invite.token}`,
           };
 
@@ -251,11 +256,16 @@ export const InviteGroupMutation = extendType({
 
         // Send an email out to the invited person with the generated token
         const transporter = createNodemailerTransporter({});
+        const inviteUrl =
+          process.env.BASE_URL || 'https://' + process.env.DOMAIN + '/invite/' + invite.token;
         if (transporter) {
           const mailOptions: MailOptions = {
             from: `${process.env.DOMAIN} <no-reply@${process.env.DOMAIN}>`,
             to: invite.invitedEmail,
             subject: `Budgetify | Invite to group - ${foundGroup[0].name}`,
+            html: `
+            <h3>You need to be logged in to use this invite.</h3>
+            <a target="_blank" href="${inviteUrl}">Use Token</a>`,
             text: `invite-token: ${invite.token}`,
           };
 
