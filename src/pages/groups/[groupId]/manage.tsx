@@ -62,9 +62,9 @@ export default function ManageGroup() {
   const currentUserId = data?.me.id;
   const group = data?.group;
 
-  const members = group?.members;
-  const owners = group?.owners;
-  const invites = group?.invites;
+  const members = group?.members || [];
+  const owners = group?.owners || [];
+  const invites = group?.invites || [];
 
   const deleteGroupHandler = () => {
     deleteGroup({ variables: { id: groupId } });
