@@ -44,7 +44,7 @@ export function NewThreshold() {
   };
 
   return (
-    <div className="mt-4 sm:mt-0">
+    <div className="mt-4 text-right">
       <Error title="Could not create threshold" error={createThresholdError} />
       <ModalForm
         title="New Threshold"
