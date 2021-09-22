@@ -11,10 +11,9 @@ interface Props {
 }
 
 export default function MonthOverview({ monthPayments: payments }: Props) {
-  // TODO: Find out if there is a nicer way to accomplish this
-  // Create a array of this type. Need to initialize it but then remove the needed init value again.
-  let data: [{ name: string; value: number }] = [{ name: '', value: 1 }];
-  data.pop();
+  // The data array contains a map with payments of this month mapped by their category name and
+  // the added up values spend in that category
+  let data: { name: string; value: number }[] = [];
 
   let monthIncome = 0.0;
   let monthExpenses = 0.0;
