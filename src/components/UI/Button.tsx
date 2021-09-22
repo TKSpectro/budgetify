@@ -10,7 +10,7 @@ export function Button({ variant = 'primary', className, ...props }: Props) {
   return (
     <button
       className={clsx(
-        'flex items-center justify-center px-6 py-2 rounded font-medium hover:bg-opacity-90 ' +
+        'items-center justify-center px-6 py-2 rounded font-medium hover:bg-opacity-90 ' +
           (className ? ' ' + className : ''),
         {
           'bg-brand-500 text-white': variant === 'primary',
