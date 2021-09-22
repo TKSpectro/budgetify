@@ -49,7 +49,7 @@ const RECURRING_PAYMENT_QUERY = gql`
 `;
 
 const UPDATE_RECURRING_PAYMENT_MUTATION = gql`
-  mutation EditRecurringPayment(
+  mutation UpdateRecurringPayment(
     $id: String!
     $name: String
     $value: Money
@@ -83,7 +83,7 @@ const UPDATE_RECURRING_PAYMENT_MUTATION = gql`
 `;
 
 // TODO:  Instead of a new page just build a modal form as a component. Probally kinda tricky.
-export default function EditRecurringPayment() {
+export default function UpdateRecurringPayment() {
   const router = useRouter();
   const { householdId, recurringPaymentId } = router.query;
 
@@ -94,7 +94,7 @@ export default function EditRecurringPayment() {
     },
   });
 
-  const [editRecurringPaymentMutation, { data: updateData }] = useMutation(
+  const [updateRecurringPaymentMutation, { data: updateData }] = useMutation(
     UPDATE_RECURRING_PAYMENT_MUTATION,
     {
       onCompleted: () => {
@@ -125,7 +125,7 @@ export default function EditRecurringPayment() {
   }, [recurringPayment, reset]);
 
   const onSubmit = (data: MutationUpdateRecurringPaymentArgs) => {
-    editRecurringPaymentMutation({
+    updateRecurringPaymentMutation({
       variables: {
         ...form.getValues(),
         startDate: new Date(form.getValues('startDate')!),
