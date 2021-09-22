@@ -1,17 +1,23 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import { CogIcon, TrashIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
 import { CreateGroupTransaction } from '~/components/Group/CreateGroupTransaction';
 import { NewThreshold } from '~/components/Group/NewThreshold';
 import { Container } from '~/components/UI/Container';
 import { Disclosure } from '~/components/UI/Disclosure';
 import { Error } from '~/components/UI/Error';
+import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
+import { Modal } from '~/components/UI/Modal';
+import { ModalForm } from '~/components/UI/ModalForm';
 import { Progressbar } from '~/components/UI/Progressbar';
 import {
   GroupTransaction,
+  MutationUpdateThresholdArgs,
   Participant,
   Threshold,
   ThresholdType,
@@ -61,11 +67,58 @@ const GROUP_QUERY = gql`
   }
 `;
 
+const UPDATE_THRESHOLD_MUTATION = gql`
+  mutation UPDATE_THRESHOLD_MUTATION(
+    $id: String!
+    $groupId: String!
+    $name: String
+    $value: Money
+    $type: ThresholdType
+  ) {
+    updateThreshold(id: $id, groupId: $groupId, name: $name, type: $type, value: $value) {
+      id
+      name
+      value
+      type
+    }
+  }
+`;
+
+const REMOVE_THRESHOLD_MUTATION = gql`
+  mutation REMOVE_THRESHOLD_MUTATION($id: String!, $groupId: String!) {
+    removeThreshold(id: $id, groupId: $groupId) {
+      id
+    }
+  }
+`;
+
 export default function Group() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
   const { data, loading, error, refetch } = useQuery(GROUP_QUERY, { variables: { id: groupId } });
+
+  const [updateThreshold, { error: updateThresholdError }] = useMutation(
+    UPDATE_THRESHOLD_MUTATION,
+    {
+      onCompleted: () => {},
+      onError: () => {},
+      refetchQueries: ['GROUP_QUERY'],
+    },
+  );
+
+  const [removeThreshold, { error: removeThresholdError }] = useMutation(
+    REMOVE_THRESHOLD_MUTATION,
+    {
+      onCompleted: () => {},
+      onError: () => {},
+      refetchQueries: ['GROUP_QUERY'],
+    },
+  );
+
+  const updateThresholdForm = useForm<MutationUpdateThresholdArgs>({
+    defaultValues: { id: '', name: '', value: 0, type: ThresholdType.Goal, groupId: '' },
+  });
 
   const group = data?.group;
 
@@ -73,6 +126,22 @@ export default function Group() {
   const memberBalances = data?.calculateMemberBalances;
 
   const thresholds = group?.thresholds;
+
+  const onUpdateThresholdSelectHandler = (threshold: Threshold) => {
+    updateThresholdForm.reset({
+      ...threshold,
+    });
+  };
+
+  const onUpdateThresholdHandler = (threshold: Threshold) => {
+    updateThreshold({
+      variables: { ...updateThresholdForm.getValues(), id: threshold.id, groupId: groupId },
+    });
+  };
+
+  const onRemoveThresholdHandler = (threshold: Threshold) => {
+    removeThreshold({ variables: { id: threshold.id, groupId: groupId } });
+  };
 
   return (
     <>
@@ -104,6 +173,9 @@ export default function Group() {
         {thresholds && (
           <Container>
             <Disclosure text="Thresholds" showOpen>
+              <Error title="Could not update threshold." error={updateThresholdError} />
+              <Error title="Could not remove threshold." error={removeThresholdError} />
+
               {thresholds.map((threshold: Threshold) => {
                 return (
                   <div key={threshold.id}>
@@ -128,6 +200,72 @@ export default function Group() {
                         type={threshold.type}
                         value={threshold.value + '€'}
                       />
+                    )}
+                    {/* // TODO: Could use transparent button style but would need other placement */}
+                    {!!group?.owners?.find((x: User) => x?.id === data?.me?.id).id && (
+                      <div className="text-right">
+                        <ModalForm
+                          form={updateThresholdForm}
+                          buttonText={<CogIcon className="w-5 h-5" />}
+                          buttonClassName="mr-2"
+                          onSubmit={() => {
+                            onUpdateThresholdHandler(threshold);
+                          }}
+                          onClick={() => {
+                            onUpdateThresholdSelectHandler(threshold);
+                          }}
+                          title="Edit"
+                        >
+                          <Input
+                            label="Name"
+                            type="text"
+                            {...updateThresholdForm.register('name', {
+                              required: { value: true, message: 'Name is required' },
+                              minLength: {
+                                value: 2,
+                                message: 'Name must be at least 2 characters',
+                              },
+                            })}
+                          />
+
+                          <Input
+                            label="Value"
+                            type="number"
+                            step="any"
+                            {...updateThresholdForm.register('value', {
+                              required: { value: true, message: 'Value is required' },
+                              valueAsNumber: true,
+                            })}
+                          />
+
+                          <label>
+                            Type
+                            <select
+                              className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
+                              {...updateThresholdForm.register('type', {
+                                required: { value: true, message: 'Please choose a type' },
+                              })}
+                            >
+                              <option key={ThresholdType.Goal} value={ThresholdType.Goal}>
+                                {ThresholdType.Goal}
+                              </option>
+                              <option key={ThresholdType.Max} value={ThresholdType.Max}>
+                                {ThresholdType.Max}
+                              </option>
+                              <option key={ThresholdType.Min} value={ThresholdType.Min}>
+                                {ThresholdType.Min}
+                              </option>
+                            </select>
+                          </label>
+                        </ModalForm>
+                        <Modal
+                          buttonText={<TrashIcon className="w-5 h-5" />}
+                          onSubmit={() => {
+                            onRemoveThresholdHandler(threshold);
+                          }}
+                          title="Remove threshold"
+                        />
+                      </div>
                     )}
                   </div>
                 );
