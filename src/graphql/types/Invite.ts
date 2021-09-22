@@ -94,7 +94,7 @@ export const InviteMutation = extendType({
         });
 
         // Send an email out to the invited person with the generated token
-        const transporter = createNodemailerTransporter({ enableLogger: false });
+        const transporter = createNodemailerTransporter({});
         if (transporter) {
           const mailOptions: MailOptions = {
             from: `${process.env.DOMAIN} <no-reply@${process.env.DOMAIN}>`,
@@ -227,7 +227,7 @@ export const InviteGroupMutation = extendType({
         });
 
         // Send an email out to the invited person with the generated token
-        const transporter = createNodemailerTransporter({ enableLogger: false });
+        const transporter = createNodemailerTransporter({});
         if (transporter) {
           const mailOptions: MailOptions = {
             from: `${process.env.DOMAIN} <no-reply@${process.env.DOMAIN}>`,
