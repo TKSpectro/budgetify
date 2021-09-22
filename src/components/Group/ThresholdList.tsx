@@ -1,5 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
 import { CogIcon, TrashIcon } from '@heroicons/react/outline';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Group,
@@ -9,10 +10,11 @@ import {
   User,
 } from '~/graphql/__generated__/types';
 import { roundOn2 } from '~/utils/helper';
+import { Button } from '../UI/Button';
 import { Error } from '../UI/Error';
 import { Input } from '../UI/Input';
-import { Modal } from '../UI/Modal';
-import { ModalForm } from '../UI/ModalForm';
+import { ManagedModal } from '../UI/ManagedModal';
+import { ManagedModalForm } from '../UI/ManagedModalForm';
 import { Progressbar } from '../UI/Progressbar';
 
 interface Props {
@@ -47,6 +49,17 @@ const REMOVE_THRESHOLD_MUTATION = gql`
 `;
 
 export function ThresholdList({ me, thresholds, group }: Props) {
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const setShowUpdateModalWrapper = (value: boolean) => {
+    setShowUpdateModal(value);
+  };
+
+  const [removeModalId, setRemoveModalId] = useState('');
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const setShowRemoveModalWrapper = (value: boolean) => {
+    setShowRemoveModal(value);
+  };
+
   const [updateThreshold, { error: updateThresholdError }] = useMutation(
     UPDATE_THRESHOLD_MUTATION,
     {
@@ -73,22 +86,92 @@ export function ThresholdList({ me, thresholds, group }: Props) {
     updateThresholdForm.reset({
       ...threshold,
     });
+    setShowUpdateModal(true);
   };
 
-  const onUpdateThresholdHandler = (threshold: Threshold) => {
+  const onUpdateThresholdHandler = () => {
     updateThreshold({
-      variables: { ...updateThresholdForm.getValues(), id: threshold.id, groupId: group.id },
+      variables: { ...updateThresholdForm.getValues(), groupId: group.id },
     });
   };
 
-  const onRemoveThresholdHandler = (threshold: Threshold) => {
-    removeThreshold({ variables: { id: threshold.id, groupId: group.id } });
+  const onRemoveThresholdSelectHandler = (threshold: Threshold) => {
+    setRemoveModalId(threshold.id);
+    setShowRemoveModal(true);
+  };
+
+  const onRemoveThresholdHandler = () => {
+    removeThreshold({ variables: { id: removeModalId, groupId: group.id } });
   };
 
   return (
     <>
       <Error title="Could not update threshold." error={updateThresholdError} />
       <Error title="Could not remove threshold." error={removeThresholdError} />
+
+      <ManagedModalForm
+        title="Edit Threshold"
+        buttonText={<CogIcon className="w-5 h-5" />}
+        buttonClassName="mr-2"
+        form={updateThresholdForm}
+        onSubmit={() => {
+          onUpdateThresholdHandler();
+        }}
+        showModal={showUpdateModal}
+        setShowModal={setShowUpdateModalWrapper}
+      >
+        <Input
+          label="Name"
+          type="text"
+          {...updateThresholdForm.register('name', {
+            required: { value: true, message: 'Name is required' },
+            minLength: {
+              value: 2,
+              message: 'Name must be at least 2 characters',
+            },
+          })}
+        />
+
+        <Input
+          label="Value"
+          type="number"
+          step="any"
+          {...updateThresholdForm.register('value', {
+            required: { value: true, message: 'Value is required' },
+            valueAsNumber: true,
+          })}
+        />
+
+        <label>
+          Type
+          <select
+            className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
+            {...updateThresholdForm.register('type', {
+              required: { value: true, message: 'Please choose a type' },
+            })}
+          >
+            <option key={ThresholdType.Goal} value={ThresholdType.Goal}>
+              {ThresholdType.Goal}
+            </option>
+            <option key={ThresholdType.Max} value={ThresholdType.Max}>
+              {ThresholdType.Max}
+            </option>
+            <option key={ThresholdType.Min} value={ThresholdType.Min}>
+              {ThresholdType.Min}
+            </option>
+          </select>
+        </label>
+      </ManagedModalForm>
+
+      <ManagedModal
+        buttonText={<TrashIcon className="w-5 h-5" />}
+        onSubmit={() => {
+          onRemoveThresholdHandler();
+        }}
+        title="Remove threshold"
+        showModal={showRemoveModal}
+        setShowModal={setShowRemoveModalWrapper}
+      />
 
       {thresholds.map((threshold: Threshold) => {
         return (
@@ -115,67 +198,12 @@ export function ThresholdList({ me, thresholds, group }: Props) {
             {/* // TODO: Could use transparent button style but would need other placement */}
             {!!group.owners?.find((x) => x?.id === me?.id)?.id && (
               <div className="text-right">
-                <ModalForm
-                  form={updateThresholdForm}
-                  buttonText={<CogIcon className="w-5 h-5" />}
-                  buttonClassName="mr-2"
-                  onSubmit={() => {
-                    onUpdateThresholdHandler(threshold);
-                  }}
-                  onClick={() => {
-                    onUpdateThresholdSelectHandler(threshold);
-                  }}
-                  title="Edit"
-                >
-                  <Input
-                    label="Name"
-                    type="text"
-                    {...updateThresholdForm.register('name', {
-                      required: { value: true, message: 'Name is required' },
-                      minLength: {
-                        value: 2,
-                        message: 'Name must be at least 2 characters',
-                      },
-                    })}
-                  />
-
-                  <Input
-                    label="Value"
-                    type="number"
-                    step="any"
-                    {...updateThresholdForm.register('value', {
-                      required: { value: true, message: 'Value is required' },
-                      valueAsNumber: true,
-                    })}
-                  />
-
-                  <label>
-                    Type
-                    <select
-                      className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
-                      {...updateThresholdForm.register('type', {
-                        required: { value: true, message: 'Please choose a type' },
-                      })}
-                    >
-                      <option key={ThresholdType.Goal} value={ThresholdType.Goal}>
-                        {ThresholdType.Goal}
-                      </option>
-                      <option key={ThresholdType.Max} value={ThresholdType.Max}>
-                        {ThresholdType.Max}
-                      </option>
-                      <option key={ThresholdType.Min} value={ThresholdType.Min}>
-                        {ThresholdType.Min}
-                      </option>
-                    </select>
-                  </label>
-                </ModalForm>
-                <Modal
-                  buttonText={<TrashIcon className="w-5 h-5" />}
-                  onSubmit={() => {
-                    onRemoveThresholdHandler(threshold);
-                  }}
-                  title="Remove threshold"
-                />
+                <Button onClick={() => onUpdateThresholdSelectHandler(threshold)}>
+                  <CogIcon className="w-5 h-5" />
+                </Button>
+                <Button onClick={() => onRemoveThresholdSelectHandler(threshold)}>
+                  <TrashIcon className="w-5 h-5" />
+                </Button>
               </div>
             )}
           </div>
