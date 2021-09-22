@@ -20,7 +20,11 @@ export function RecurringPaymentTable({ recurringPayments }: Props) {
         <tbody className="divide-y divide-gray-200 ">
           {recurringPayments.map((payment) => {
             return (
-              <tr key={payment.id} onClick={() => recurringPaymentClickHandler(payment)}>
+              <tr
+                key={payment.id}
+                onClick={() => recurringPaymentClickHandler(payment)}
+                className="hover:cursor-pointer"
+              >
                 <td className=" py-4">
                   <div className="flex items-center">
                     <TagIcon className="flex-shrink-0 h-6 w-6 text-brand-500" />
