@@ -88,7 +88,7 @@ export default function MonthOverview({ monthPayments: payments }: Props) {
                   callbacks: {
                     label: function (context: TooltipItemContext) {
                       // Change tooltip text. e.g.:" Category 1: 100€"
-                      return ' ' + context.label + ': ' + context.parsed + '€';
+                      return ' ' + context.label + ': ' + roundOn2(Number(context.parsed)) + '€';
                     },
                   },
                 },

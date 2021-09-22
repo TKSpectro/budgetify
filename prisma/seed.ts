@@ -76,6 +76,21 @@ async function main() {
       name: 'cat1',
     },
   });
+  const cat2 = await prisma.category.create({
+    data: {
+      name: 'cat2',
+    },
+  });
+  const cat3 = await prisma.category.create({
+    data: {
+      name: 'cat3',
+    },
+  });
+  const cat4 = await prisma.category.create({
+    data: {
+      name: 'cat4',
+    },
+  });
 
   const hou1 = await prisma.household.create({
     data: {
@@ -117,17 +132,18 @@ async function main() {
       },
     },
   });
-
+  const categories = [cat1, cat2, cat3, cat4];
   // Create a bunch of payments in the range of -100..100 euros
   for (let i = 0; i < 50; i++) {
+    const randomCat = categories[faker.datatype.number({ min: 0, max: 3 })];
     await prisma.payment.create({
       data: {
         name: faker.lorem.words(2),
         value: faker.datatype.number({ min: -10000, max: 10000, precision: 1 }),
-        categoryId: cat1.id,
+        categoryId: randomCat.id,
         userId: users[0].id,
         householdId: hou1.id,
-        createdAt: faker.date.past(1),
+        createdAt: faker.date.past(0.3),
       },
     });
   }
