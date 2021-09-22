@@ -229,6 +229,9 @@ type Mutation {
   """Update a new recurring payment. Need to be logged in."""
   updateRecurringPayment(categoryId: String, description: String, endDate: DateTime, householdId: String!, id: String!, interval: Interval, name: String, startDate: DateTime, value: Money): RecurringPayment!
 
+  """Update a existing threshold. Need to be logged in and own group."""
+  updateThreshold(groupId: String!, id: String!, name: String, type: ThresholdType, value: Money): Threshold!
+
   """Updates a user with the given data. Need to be logged in."""
   updateUser(email: String, firstname: String, lastname: String, receiveNotifications: Boolean): User!
 

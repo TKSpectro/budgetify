@@ -56,6 +56,30 @@ export const ThresholdMutation = extendType({
       },
     });
 
+    t.nonNull.field('updateThreshold', {
+      type: 'Threshold',
+      description: 'Update a existing threshold. Need to be logged in and own group.',
+      authorize: authIsGroupOwner,
+      args: {
+        id: nonNull(stringArg()),
+        name: stringArg(),
+        value: arg({ type: 'Money' }),
+        type: arg({ type: ThresholdType }),
+        groupId: nonNull(stringArg()),
+      },
+      resolve(_, args) {
+        return prisma.threshold.update({
+          where: { id: args.id },
+          data: {
+            name: args.name || undefined,
+            value: args.value || undefined,
+            type: args.type || undefined,
+            groupId: args.groupId || undefined,
+          },
+        });
+      },
+    });
+
     t.nonNull.field('removeThreshold', {
       type: 'Threshold',
       description: 'Remove a threshold. Need to be logged in and own group.',

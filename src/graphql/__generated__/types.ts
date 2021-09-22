@@ -198,6 +198,8 @@ export type Mutation = {
   updateHousehold: Household;
   /** Update a new recurring payment. Need to be logged in. */
   updateRecurringPayment: RecurringPayment;
+  /** Update a existing threshold. Need to be logged in and own group. */
+  updateThreshold: Threshold;
   /** Updates a user with the given data. Need to be logged in. */
   updateUser: User;
   /** Use a invite. Logged in user gets added to the household or group specified in the invite. Need to be logged in. */
@@ -356,6 +358,15 @@ export type MutationUpdateRecurringPaymentArgs = {
   interval?: Maybe<Interval>;
   name?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['DateTime']>;
+  value?: Maybe<Scalars['Money']>;
+};
+
+
+export type MutationUpdateThresholdArgs = {
+  groupId: Scalars['String'];
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  type?: Maybe<ThresholdType>;
   value?: Maybe<Scalars['Money']>;
 };
 

@@ -255,6 +255,7 @@ export interface NexusGenFieldTypes {
     updateGroup: NexusGenRootTypes['Group']; // Group!
     updateHousehold: NexusGenRootTypes['Household']; // Household!
     updateRecurringPayment: NexusGenRootTypes['RecurringPayment']; // RecurringPayment!
+    updateThreshold: NexusGenRootTypes['Threshold']; // Threshold!
     updateUser: NexusGenRootTypes['User']; // User!
     useInvite: NexusGenRootTypes['Invite'] | null; // Invite
   }
@@ -428,6 +429,7 @@ export interface NexusGenFieldTypeNames {
     updateGroup: 'Group'
     updateHousehold: 'Household'
     updateRecurringPayment: 'RecurringPayment'
+    updateThreshold: 'Threshold'
     updateUser: 'User'
     useInvite: 'Invite'
   }
@@ -635,6 +637,13 @@ export interface NexusGenArgTypes {
       interval?: NexusGenEnums['Interval'] | null; // Interval
       name?: string | null; // String
       startDate?: NexusGenScalars['DateTime'] | null; // DateTime
+      value?: NexusGenScalars['Money'] | null; // Money
+    }
+    updateThreshold: { // args
+      groupId: string; // String!
+      id: string; // String!
+      name?: string | null; // String
+      type?: NexusGenEnums['ThresholdType'] | null; // ThresholdType
       value?: NexusGenScalars['Money'] | null; // Money
     }
     updateUser: { // args
