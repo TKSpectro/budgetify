@@ -4,9 +4,7 @@ import { Button, Props as ButtonProps } from './Button';
 export interface Props extends ButtonProps {
   title: string;
   description?: string;
-  buttonText: string | React.ReactNode;
-  buttonClassName?: string;
-  submitText?: string | React.ReactNode;
+  submitText: string | React.ReactNode;
   children?: ReactNode;
   onSubmit: () => void;
   showModal: boolean;
@@ -16,9 +14,7 @@ export interface Props extends ButtonProps {
 export function ManagedModal({
   title,
   description,
-  buttonText,
-  buttonClassName,
-  submitText = buttonText,
+  submitText,
   children,
   variant,
   onSubmit,

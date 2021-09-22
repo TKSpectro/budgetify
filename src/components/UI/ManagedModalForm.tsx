@@ -6,9 +6,7 @@ import { Form } from './Form';
 export interface Props<T> {
   title: string;
   description?: string;
-  buttonText: string | React.ReactNode;
-  buttonClassName?: string;
-  submitText?: string | React.ReactNode;
+  submitText: string | React.ReactNode;
   children: ReactNode;
   form: UseFormReturn<T>;
   onSubmit: () => void;
@@ -20,9 +18,7 @@ export interface Props<T> {
 export function ManagedModalForm<T>({
   title,
   description,
-  buttonText,
-  buttonClassName,
-  submitText = buttonText,
+  submitText,
   children,
   form,
   onSubmit,

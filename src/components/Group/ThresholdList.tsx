@@ -111,8 +111,7 @@ export function ThresholdList({ me, thresholds, group }: Props) {
 
       <ManagedModalForm
         title="Edit Threshold"
-        buttonText={<CogIcon className="w-5 h-5" />}
-        buttonClassName="mr-2"
+        submitText="Update Threshold"
         form={updateThresholdForm}
         onSubmit={() => {
           onUpdateThresholdHandler();
@@ -164,11 +163,11 @@ export function ThresholdList({ me, thresholds, group }: Props) {
       </ManagedModalForm>
 
       <ManagedModal
-        buttonText={<TrashIcon className="w-5 h-5" />}
+        title="Remove threshold"
+        submitText="Remove Threshold"
         onSubmit={() => {
           onRemoveThresholdHandler();
         }}
-        title="Remove threshold"
         showModal={showRemoveModal}
         setShowModal={setShowRemoveModalWrapper}
       />
