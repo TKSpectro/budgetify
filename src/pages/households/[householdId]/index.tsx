@@ -92,7 +92,7 @@ export default function Household() {
             <div className="relative text-6xl text-brand-500">
               {data.household.name}
               {isOwner && (
-                <span className="absolute right-4 top-6 text-base">
+                <span className="hidden md:block absolute right-4 top-6 text-base">
                   <Link href={router.asPath + '/manage'} asButton>
                     Manage
                   </Link>
