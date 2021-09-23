@@ -12,7 +12,6 @@ import { Button } from './Button';
 interface Props extends ComponentProps<'a'> {}
 
 export function HeaderLink({ href, className, ...props }: Props) {
-  console.log(className);
   const content = (
     <a
       className={clsx(

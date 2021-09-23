@@ -133,12 +133,12 @@ export default function Profile() {
             <div className="mb-4">
               <div className="font-semibold text-xl">Profile</div>
               <div className="text-lg font-medium">Name</div>
-              <div className="overflow-auto ml-2">{me.name}</div>
+              <div className="overflow-auto ml-2">{me?.name}</div>
               <div className="text-lg font-medium">Email</div>
-              <div className="overflow-auto">{me.email}</div>
+              <div className="overflow-auto ml-2">{me?.email}</div>
               <div className="text-lg font-medium">Receive Notifications</div>
-              <div className="overflow-auto">
-                {me.receiveNotifications ? (
+              <div className="overflow-auto ml-2">
+                {me?.receiveNotifications ? (
                   <span className="flex">
                     Enabled
                     <CheckIcon className="w-5 h-5 ml-1 border-2 border-brand-500 rounded-lg text-brand-500" />
