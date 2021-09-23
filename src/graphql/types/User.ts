@@ -17,6 +17,10 @@ export const User = objectType({
     });
     t.nonNull.string('email');
     t.nonNull.string('hashedPassword', { description: "The user's safely encrypted password" });
+    t.string('otp', {
+      description:
+        'When a user forgets his password we can set this one time password for resetting purposes.',
+    });
     t.nonNull.boolean('isAdmin', {
       description:
         "The user's role. This could be extended to a complete role system in the future",

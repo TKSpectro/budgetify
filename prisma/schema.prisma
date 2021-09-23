@@ -25,6 +25,7 @@ model User {
   lastname                     String
   email                        String             @unique
   hashedPassword               String
+  otp                          String?            @unique
   isAdmin                      Boolean            @default(false)
   receiveNotifications         Boolean            @default(true)
   createdAt                    DateTime           @default(now())
