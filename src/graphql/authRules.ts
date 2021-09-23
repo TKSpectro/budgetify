@@ -16,6 +16,18 @@ export const authIsGroupOwner = async (_: any, args: any, ctx: Context) => {
   return !!ctx.user && !!groupOwner;
 };
 
+export const authIsHouseholdMember = async (_: any, args: any, ctx: Context) => {
+  const householdMembers = await prisma.household
+    .findUnique({
+      where: { id: args.householdId },
+    })
+    .members();
+  // Check if the user is a member of the household.
+  const householdMember = householdMembers?.find((x) => x.id === ctx.user.id);
+  // User must be logged in and be a member the household
+  return !!ctx.user && !!householdMember;
+};
+
 export const authIsHouseholdOwner = async (_: any, args: any, ctx: Context) => {
   const household = await prisma.household.findUnique({
     where: { id: args.householdId },
