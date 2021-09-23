@@ -1,9 +1,12 @@
 import { ApolloError, AuthenticationError } from 'apollo-server-micro';
 import { compareSync, hashSync } from 'bcrypt';
+import { randomUUID } from 'crypto';
 import jwt from 'jsonwebtoken';
 import { extendType, nonNull, objectType, stringArg } from 'nexus';
+import { MailOptions } from 'nodemailer/lib/sendmail-transport';
 import { destroyCookie, setCookie } from 'nookies';
 import prisma from '~/utils/prisma';
+import { createNodemailerTransporter } from '../helper';
 
 export const AuthToken = objectType({
   name: 'AuthToken',
@@ -148,6 +151,83 @@ export const AuthMutation = extendType({
         });
 
         return 'Logged out!';
+      },
+    });
+
+    t.nonNull.field('requestPasswordReset', {
+      type: 'String',
+      description: 'This mutation creates a otp for a user and sends it to the users email.',
+      args: {
+        email: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx) {
+        try {
+          const user = await prisma.user.update({
+            where: {
+              email: args.email,
+            },
+            data: {
+              otp: randomUUID(),
+            },
+          });
+          if (user) {
+            const { email, otp } = user;
+
+            const transporter = createNodemailerTransporter({});
+            if (transporter) {
+              const mailOptions: MailOptions = {
+                from: `${process.env.DOMAIN} <no-reply@${process.env.DOMAIN}>`,
+                to: email,
+                subject: 'budgetify | Password reset requested',
+                text: `OTP: ${otp}`,
+              };
+
+              // Send mail and close the connection
+              transporter.sendMail(mailOptions);
+              transporter.close();
+            }
+          }
+        } catch (error) {
+          // We just need to try-catch because we dont wont to send the user any errors.
+          // Instead we just give the the return text
+        }
+
+        return 'If account exists, an email will be sent with further instructions.';
+      },
+    });
+
+    t.nonNull.field('resetPassword', {
+      type: 'User',
+      description: 'Reset a users password with a valid OTP.',
+      args: {
+        email: nonNull(stringArg()),
+        otp: nonNull(stringArg()),
+        password: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx) {
+        args.password = hashSync(args.password, 10);
+
+        const foundUser = await prisma.user.findUnique({
+          where: {
+            email: args.email,
+          },
+        });
+
+        if (!foundUser || foundUser?.otp !== args.otp) {
+          throw new ApolloError('No account found for the given email or OTP is not valid.');
+        }
+
+        const user = await prisma.user.update({
+          where: {
+            email: args.email,
+          },
+          data: {
+            hashedPassword: args.password,
+            otp: null,
+          },
+        });
+
+        return user;
       },
     });
   },

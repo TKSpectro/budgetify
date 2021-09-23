@@ -189,6 +189,10 @@ export type Mutation = {
   removeHouseholdMember: Household;
   /** Remove a threshold. Need to be logged in and own group. */
   removeThreshold: Threshold;
+  /** This mutation creates a otp for a user and sends it to the users email. */
+  requestPasswordReset: Scalars['String'];
+  /** Reset a users password with a valid OTP. */
+  resetPassword: User;
   /**
    * This mutation takes the values for a new user as arguments.
    *       Saves them and returns a JWT (JSON-Web-Token)
@@ -329,6 +333,18 @@ export type MutationRemoveHouseholdMemberArgs = {
 export type MutationRemoveThresholdArgs = {
   groupId: Scalars['String'];
   id: Scalars['String'];
+};
+
+
+export type MutationRequestPasswordResetArgs = {
+  email: Scalars['String'];
+};
+
+
+export type MutationResetPasswordArgs = {
+  email: Scalars['String'];
+  otp: Scalars['String'];
+  password: Scalars['String'];
 };
 
 
@@ -538,6 +554,8 @@ export type User = {
   isAdmin: Scalars['Boolean'];
   lastname: Scalars['String'];
   name: Scalars['String'];
+  /** When a user forgets his password we can set this one time password for resetting purposes. */
+  otp?: Maybe<Scalars['String']>;
   /** The groups's in which the user is the current owner */
   ownedGroups?: Maybe<Array<Maybe<Group>>>;
   /** The household's in which the user is the current owner */

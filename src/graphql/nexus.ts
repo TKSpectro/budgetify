@@ -152,6 +152,7 @@ export interface NexusGenObjects {
     id: string; // String!
     isAdmin: boolean; // Boolean!
     lastname: string; // String!
+    otp?: string | null; // String
     receiveNotifications: boolean; // Boolean!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
@@ -252,6 +253,8 @@ export interface NexusGenFieldTypes {
     removeGroupOwner: NexusGenRootTypes['Group']; // Group!
     removeHouseholdMember: NexusGenRootTypes['Household']; // Household!
     removeThreshold: NexusGenRootTypes['Threshold']; // Threshold!
+    requestPasswordReset: string; // String!
+    resetPassword: NexusGenRootTypes['User']; // User!
     signup: NexusGenRootTypes['AuthToken']; // AuthToken!
     updateGroup: NexusGenRootTypes['Group']; // Group!
     updateHousehold: NexusGenRootTypes['Household']; // Household!
@@ -334,6 +337,7 @@ export interface NexusGenFieldTypes {
     isAdmin: boolean; // Boolean!
     lastname: string; // String!
     name: string; // String!
+    otp: string | null; // String
     ownedGroups: Array<NexusGenRootTypes['Group'] | null> | null; // [Group]
     ownedHouseholds: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     payments: Array<NexusGenRootTypes['Payment'] | null> | null; // [Payment]
@@ -427,6 +431,8 @@ export interface NexusGenFieldTypeNames {
     removeGroupOwner: 'Group'
     removeHouseholdMember: 'Household'
     removeThreshold: 'Threshold'
+    requestPasswordReset: 'String'
+    resetPassword: 'User'
     signup: 'AuthToken'
     updateGroup: 'Group'
     updateHousehold: 'Household'
@@ -509,6 +515,7 @@ export interface NexusGenFieldTypeNames {
     isAdmin: 'Boolean'
     lastname: 'String'
     name: 'String'
+    otp: 'String'
     ownedGroups: 'Group'
     ownedHouseholds: 'Household'
     payments: 'Payment'
@@ -616,6 +623,14 @@ export interface NexusGenArgTypes {
     removeThreshold: { // args
       groupId: string; // String!
       id: string; // String!
+    }
+    requestPasswordReset: { // args
+      email: string; // String!
+    }
+    resetPassword: { // args
+      email: string; // String!
+      otp: string; // String!
+      password: string; // String!
     }
     signup: { // args
       email: string; // String!
