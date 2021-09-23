@@ -518,10 +518,11 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Household: {
     payments: { // args
-      endDate?: string | null; // String
+      calcBeforeStartDate?: boolean | null; // Boolean
+      endDate?: NexusGenScalars['DateTime'] | null; // DateTime
       limit?: number | null; // Int
       skip?: number | null; // Int
-      startDate?: string | null; // String
+      startDate?: NexusGenScalars['DateTime'] | null; // DateTime
     }
     recurringPayments: { // args
       id?: string | null; // String

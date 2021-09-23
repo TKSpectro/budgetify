@@ -1,6 +1,7 @@
-import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
+import { arg, booleanArg, extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
 import { authIsAdmin, authIsHouseholdOwner, authIsLoggedIn } from '../authRules';
+import { Payment } from '../__generated__/types';
 
 export const Household = objectType({
   name: 'Household',
@@ -38,20 +39,69 @@ export const Household = objectType({
     t.list.field('payments', {
       type: 'Payment',
       description: "A list of all payment's which where booked into this household.",
-      args: { skip: intArg(), limit: intArg(), startDate: stringArg(), endDate: stringArg() },
-      resolve(source, args) {
-        return prisma.household.findUnique({ where: { id: source.id || undefined } }).payments({
-          where: {
-            createdAt: {
-              gte: args.startDate ? new Date(args.startDate) : undefined,
-              lte: args.endDate ? new Date(args.endDate) : undefined,
-            },
-          },
+      args: {
+        skip: intArg(),
+        limit: intArg(),
+        startDate: arg({ type: 'DateTime' }),
+        endDate: arg({ type: 'DateTime' }),
+        calcBeforeStartDate: booleanArg(),
+      },
+      async resolve(source, args) {
+        const test = await prisma.household
+          .findUnique({ where: { id: source.id || undefined } })
+          .payments({
+            orderBy: { createdAt: 'asc' },
+          });
+        console.log(test.reduce((sum: number, payment: Payment) => +sum + +payment.value, 0.0));
 
-          orderBy: { createdAt: 'asc' },
-          skip: args.skip || undefined,
-          take: args.limit || undefined,
-        });
+        let payments = await prisma.household
+          .findUnique({ where: { id: source.id || undefined } })
+          .payments({
+            where: {
+              createdAt: {
+                gte: args.startDate ? new Date(args.startDate) : undefined,
+                lte: args.endDate ? new Date(args.endDate) : undefined,
+              },
+            },
+
+            orderBy: { createdAt: 'asc' },
+            skip: args.skip || undefined,
+            take: args.limit || undefined,
+          });
+
+        if (args.calcBeforeStartDate) {
+          const beforePayments = await prisma.household
+            .findUnique({ where: { id: source.id || undefined } })
+            .payments({
+              where: {
+                createdAt: {
+                  lt: args.startDate ? new Date(args.startDate) : undefined,
+                },
+              },
+
+              orderBy: { createdAt: 'asc' },
+            });
+
+          const beforeSum = beforePayments.reduce(
+            (sum: number, payment: Payment) => +sum + +payment.value,
+            0.0,
+          );
+
+          payments.unshift({
+            id: '',
+            name: `Start Value at ${new Date(args.startDate).toDateString()}`,
+            value: beforeSum,
+            description: '',
+            categoryId: payments[0].categoryId,
+            createdAt: payments[0].createdAt,
+            updatedAt: payments[0].updatedAt,
+            householdId: '',
+            userId: '',
+            recurringPaymentId: '',
+          });
+        }
+
+        return payments;
       },
     });
     t.list.field('recurringPayments', {

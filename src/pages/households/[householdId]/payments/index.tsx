@@ -27,11 +27,20 @@ type DateFilterInput = {
 };
 
 const QUERY = gql`
-  query QUERY($householdId: String, $startDate: String, $endDate: String) {
+  query QUERY(
+    $householdId: String
+    $startDate: DateTime
+    $endDate: DateTime
+    $calcBeforeStartDate: Boolean
+  ) {
     household(id: $householdId) {
       id
       name
-      payments(startDate: $startDate, endDate: $endDate) {
+      payments(
+        startDate: $startDate
+        endDate: $endDate
+        calcBeforeStartDate: $calcBeforeStartDate
+      ) {
         id
         name
         value
@@ -93,6 +102,7 @@ export default function Payments() {
       householdId,
       startDate: form.getValues('startDate') || startOfMonth(subMonths(new Date(), 3)),
       endDate: form.getValues('endDate') || undefined,
+      calcBeforeStartDate: true,
     },
   });
 
@@ -100,10 +110,19 @@ export default function Payments() {
     reset({ startDate: dateToFormInput(startOfMonth(subMonths(new Date(), 3))) });
   }, [reset]);
 
-  const payments = data?.household?.payments || [];
+  let payments = data?.household?.payments || [];
   const categories = data?.categories || [];
 
+  // The payments array we receive will have a startValue Payment at the start.
+  // In this we get all payments before the startDate added up, so we can
+  // show the correct starting value
   let addedPaymentValues = 0.0;
+  if (payments.length > 0) {
+    // Set the starting value to the fake payments value and then remove the first
+    // element from the array
+    addedPaymentValues = payments[0].value;
+    payments = payments.slice(1);
+  }
   const labels = payments.map((payment: Payment) => payment.createdAt);
   const chartData = payments.map((payment: Payment) => (addedPaymentValues += payment.value));
 
@@ -190,6 +209,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       householdId: ctx.params!.householdId,
       startDate: startOfMonth(subMonths(new Date(), 3)),
       endDate: undefined,
+      calcBeforeStartDate: true,
     },
   });
 };

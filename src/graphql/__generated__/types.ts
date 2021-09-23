@@ -91,10 +91,11 @@ export type Household = {
 
 
 export type HouseholdPaymentsArgs = {
-  endDate?: Maybe<Scalars['String']>;
+  calcBeforeStartDate?: Maybe<Scalars['Boolean']>;
+  endDate?: Maybe<Scalars['DateTime']>;
   limit?: Maybe<Scalars['Int']>;
   skip?: Maybe<Scalars['Int']>;
-  startDate?: Maybe<Scalars['String']>;
+  startDate?: Maybe<Scalars['DateTime']>;
 };
 
 

@@ -16,7 +16,7 @@ import { authenticatedRoute } from '~/utils/auth';
 import { roundOn2 } from '~/utils/helper';
 
 const HOUSEHOLD_QUERY = gql`
-  query HOUSEHOLD_QUERY($householdId: String, $startDate: String, $endDate: String) {
+  query HOUSEHOLD_QUERY($householdId: String, $startDate: DateTime, $endDate: DateTime) {
     me {
       id
     }

@@ -81,7 +81,7 @@ type Household {
   ownerId: String!
 
   """A list of all payment's which where booked into this household."""
-  payments(endDate: String, limit: Int, skip: Int, startDate: String): [Payment]
+  payments(calcBeforeStartDate: Boolean, endDate: DateTime, limit: Int, skip: Int, startDate: DateTime): [Payment]
 
   """
   A list of all recurring payment's which will be booked into this household.
