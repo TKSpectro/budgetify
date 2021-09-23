@@ -38,7 +38,7 @@ const USE_INVITE_TOKEN_MUTATION = gql`
   }
 `;
 
-const CREATE_HOUESHOLD_MUTATION = gql`
+const CREATE_HOUSEHOLD_MUTATION = gql`
   mutation ($name: String!) {
     createHousehold(name: $name) {
       id
@@ -62,7 +62,7 @@ export default function Households() {
   });
 
   const [createHouseholdMutation, { error: createHouseholdError }] =
-    useMutation<MutationCreateHouseholdArgs>(CREATE_HOUESHOLD_MUTATION, {
+    useMutation<MutationCreateHouseholdArgs>(CREATE_HOUSEHOLD_MUTATION, {
       onCompleted: () => {
         refetch();
       },

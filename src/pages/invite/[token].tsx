@@ -43,6 +43,7 @@ export default function UseInvite() {
 
   const [useTokenMutation, { error: useTokenError }] = useMutation(USE_TOKEN_MUTATION, {
     onCompleted: () => {
+      // Depending on what invite was used, redirect to the corresponding page
       if (invite.groupId) {
         router.push(`/groups/${invite.groupId}`);
       }
