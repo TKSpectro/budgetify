@@ -53,6 +53,7 @@ export const ME_QUERY = gql`
       id
       firstname
       lastname
+      name
       email
       receiveNotifications
     }
@@ -129,9 +130,29 @@ export default function Profile() {
 
         {!loading && !error && data && (
           <>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
+            <div className="mb-4">
+              <div className="font-semibold text-xl">Profile</div>
+              <div className="text-lg font-medium">Name</div>
+              <div className="overflow-auto ml-2">{me.name}</div>
+              <div className="text-lg font-medium">Email</div>
+              <div className="overflow-auto">{me.email}</div>
+              <div className="text-lg font-medium">Receive Notifications</div>
+              <div className="overflow-auto">
+                {me.receiveNotifications ? (
+                  <span className="flex">
+                    Enabled
+                    <CheckIcon className="w-5 h-5 ml-1 border-2 border-brand-500 rounded-lg text-brand-500" />
+                  </span>
+                ) : (
+                  <span className="flex">
+                    Disabled
+                    <XIcon className="w-5 h-5 ml-1 border-2 border-red-500 rounded-lg text-red-500" />
+                  </span>
+                )}
+              </div>
+            </div>
 
-            <div className="flex">
+            <div className="">
               <Modal
                 title="Delete Account"
                 description="If you delete your account all your data will be lost. All households you own will be transferred to another person."
