@@ -17,6 +17,7 @@ import {
 } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
+import { dateToFormInput } from '~/utils/helper';
 
 const RECURRING_PAYMENT_QUERY = gql`
   query RECURRING_PAYMENT_QUERY($householdId: String, $recurringPaymentId: String) {
@@ -115,10 +116,8 @@ export default function UpdateRecurringPayment() {
     const data: MutationUpdateRecurringPaymentArgs = {
       ...recurringPayment,
       startDate:
-        recurringPayment.startDate &&
-        new Date(recurringPayment.startDate).toISOString().split('T')[0],
-      endDate:
-        recurringPayment.endDate && new Date(recurringPayment.endDate).toISOString().split('T')[0],
+        recurringPayment.startDate && dateToFormInput(new Date(recurringPayment.startDate)),
+      endDate: recurringPayment.endDate && dateToFormInput(new Date(recurringPayment.endDate)),
     };
 
     // Reset must be used here to get the form to render the actual default values

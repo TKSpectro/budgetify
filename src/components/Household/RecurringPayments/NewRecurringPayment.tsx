@@ -10,6 +10,7 @@ import {
   Interval,
   MutationCreateRecurringPaymentArgs,
 } from '~/graphql/__generated__/types';
+import { dateToFormInput } from '~/utils/helper';
 
 interface Props {
   categories: Category[];
@@ -57,7 +58,7 @@ export function NewRecurringPayment({ categories, ...props }: Props) {
     // Reset must be used here to get the form to render the actual default values
     reset({
       householdId: householdId as string,
-      startDate: new Date().toISOString().split('T')[0],
+      startDate: dateToFormInput(new Date()),
     });
   }, [householdId, reset]);
 

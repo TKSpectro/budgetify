@@ -13,6 +13,7 @@ import {
   MutationUpdateRecurringPaymentArgs,
   RecurringPayment,
 } from '~/graphql/__generated__/types';
+import { dateToFormInput } from '~/utils/helper';
 
 interface Props {
   recurringPayments: RecurringPayment[];
@@ -85,12 +86,8 @@ export function RecurringPaymentTable({ recurringPayments, categories }: Props) 
   const recurringPaymentClickHandler = (recPayment: RecurringPayment) => {
     updateRecPaymentForm.reset({
       ...recPayment,
-      startDate: recPayment.startDate
-        ? new Date(recPayment.startDate).toISOString().split('T')[0]
-        : undefined,
-      endDate: recPayment.endDate
-        ? new Date(recPayment.endDate).toISOString().split('T')[0]
-        : undefined,
+      startDate: recPayment.startDate ? dateToFormInput(new Date(recPayment.startDate)) : undefined,
+      endDate: recPayment.endDate ? dateToFormInput(new Date(recPayment.endDate)) : undefined,
     });
     setShowUpdateModal(true);
   };

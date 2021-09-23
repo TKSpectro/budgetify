@@ -19,6 +19,7 @@ import {
 } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
+import { dateToFormInput } from '~/utils/helper';
 
 const CATEGORIES_QUERY = gql`
   query CATEGORIES_QUERY {
@@ -83,7 +84,7 @@ export default function NewRecurringPayment() {
     // Reset must be used here to get the form to render the actual default values
     reset({
       householdId: householdId as string,
-      startDate: new Date().toISOString().split('T')[0],
+      startDate: dateToFormInput(new Date()),
     });
   }, [householdId, reset]);
 
