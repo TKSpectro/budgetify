@@ -9,16 +9,15 @@ import { Form } from '~/components/UI/Form';
 import { ME_QUERY } from '~/components/UI/Header';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
-
-type Inputs = {
-  firstname: string;
-  lastname: string;
-  email: string;
-  password: string;
-};
+import { MutationSignupArgs } from '~/graphql/__generated__/types';
 
 const SIGNUP_MUTATION = gql`
-  mutation Signup($email: String!, $password: String!, $firstname: String!, $lastname: String!) {
+  mutation SIGNUP_MUTATION(
+    $email: String!
+    $password: String!
+    $firstname: String!
+    $lastname: String!
+  ) {
     signup(email: $email, password: $password, firstname: $firstname, lastname: $lastname) {
       token
     }
@@ -27,12 +26,10 @@ const SIGNUP_MUTATION = gql`
 
 export default function Signup() {
   const { refetch } = useQuery(ME_QUERY);
-  const [signupMutation, { data, loading, error }] = useMutation(SIGNUP_MUTATION, {
-    onError: (error) => {
-      // Just need to catch the error. The user gets feedback through the Error component
-      try {
-      } catch (error) {}
-    },
+  const router = useRouter();
+
+  const [signupMutation, { error }] = useMutation(SIGNUP_MUTATION, {
+    onError: () => {},
     onCompleted: () => {
       // Refetch the user for the cache to get updated and then redirect to the homepage
       refetch();
@@ -40,17 +37,11 @@ export default function Signup() {
     },
   });
 
-  const router = useRouter();
-  const form = useForm<Inputs>();
+  const signupForm = useForm<MutationSignupArgs>();
 
-  function onSubmit(data: Inputs) {
+  function onSubmit() {
     signupMutation({
-      variables: {
-        email: data.email,
-        password: data.password,
-        firstname: data.firstname,
-        lastname: data.lastname,
-      },
+      variables: { ...signupForm.getValues() },
     });
   }
 
@@ -60,25 +51,40 @@ export default function Signup() {
         <Error title="Failed to login. Email or password is wrong!" error={error} />
       </div>
 
-      <Form form={form} onSubmit={onSubmit}>
+      <Form form={signupForm} onSubmit={onSubmit}>
         <Input
           label="Firstname"
           type="text"
-          {...form.register('firstname', { required: true, maxLength: 60 })}
+          {...signupForm.register('firstname', {
+            required: { value: true, message: 'Firstname is required.' },
+            maxLength: { value: 60, message: 'Firstname cant be longer than 60 characters.' },
+          })}
         />
 
         <Input
           label="Lastname"
           type="text"
-          {...form.register('lastname', { required: true, maxLength: 60 })}
+          {...signupForm.register('lastname', {
+            required: { value: true, message: 'Lastname is required.' },
+            maxLength: { value: 60, message: 'Lastname cant be longer than 60 characters.' },
+          })}
         />
 
-        <Input label="Email" type="email" {...form.register('email', { required: true })} />
+        <Input
+          label="Email"
+          type="email"
+          {...signupForm.register('email', {
+            required: { value: true, message: 'Email is required.' },
+          })}
+        />
 
         <Input
           label="Password"
           type="password"
-          {...form.register('password', { required: true, minLength: 6 })}
+          {...signupForm.register('password', {
+            required: { value: true, message: 'Password is required.' },
+            minLength: { value: 6, message: 'Password must be at least 6 characters.' },
+          })}
         />
 
         <Button type="submit">Signup</Button>
