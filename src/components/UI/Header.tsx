@@ -11,11 +11,14 @@ import { Button } from './Button';
 
 interface Props extends ComponentProps<'a'> {}
 
-export function HeaderLink({ href, ...props }: Props) {
+export function HeaderLink({ href, className, ...props }: Props) {
+  console.log(className);
   const content = (
     <a
       className={clsx(
-        'p-2 lg:px-4 md:mx-2 text-gray-600 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-700  transition-colors duration-300',
+        'p-2 lg:px-4 md:mx-2 rounded hover:bg-gray-300 dark:hover:bg-gray-700  transition-colors duration-300',
+        !className && 'text-gray-600 dark:text-gray-200',
+        className,
       )}
       {...props}
     />
@@ -97,11 +100,17 @@ export function Header() {
                 >
                   Dashboard
                 </HeaderLink>
-                <HeaderLink href={'/households/' + router.query.householdId + '/payments'}>
+                <HeaderLink
+                  href={'/households/' + router.query.householdId + '/payments'}
+                  className="hidden lg:block text-gray-600 dark:text-gray-200"
+                >
                   Payments
                 </HeaderLink>
-                <HeaderLink href={'/households/' + router.query.householdId + '/recurringPayments'}>
-                  Recurring Payments
+                <HeaderLink
+                  href={'/households/' + router.query.householdId + '/recurringPayments'}
+                  className="hidden lg:block text-gray-600 dark:text-gray-200"
+                >
+                  RecurringPayments
                 </HeaderLink>
                 <HeaderLink href={'/households'}>Households</HeaderLink>
                 <HeaderLink href={'/groups'}>Groups</HeaderLink>
