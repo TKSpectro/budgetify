@@ -10,7 +10,6 @@ import RecurringPaymentOverview from '~/components/Household/RecurringPaymentOve
 import { Error } from '~/components/UI/Error';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
-import { Payment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { roundOn2 } from '~/utils/helper';
@@ -38,6 +37,7 @@ const HOUSEHOLD_QUERY = gql`
           name
         }
       }
+      sumOfAllPayments
       thisMonthsPayments: payments(startDate: $startDate, endDate: $endDate) {
         name
         value
@@ -69,10 +69,8 @@ export default function Household() {
   });
 
   const household = data?.household;
-  const payments = data?.household?.payments || [];
-
-  // Add up the value of all payments for the total balance
-  const paymentSum = payments.reduce((sum: number, payment: Payment) => +sum + +payment.value, 0.0);
+  const payments = household?.payments || [];
+  const sumOfAllPayments = household.sumOfAllPayments || 0;
 
   const isOwner = household?.owner?.id === data?.me?.id;
 
@@ -102,11 +100,13 @@ export default function Household() {
               )}
             </div>
 
-            <div className="mt-4 text-4xl">Total balance{' ' + roundOn2(paymentSum) + '€'}</div>
+            <div className="mt-4 text-4xl">
+              Total balance{' ' + roundOn2(sumOfAllPayments) + '€'}
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-y-8 lg:gap-x-16 overflow-auto">
-            <PaymentOverview payments={household.payments} />
+            <PaymentOverview payments={payments} />
 
             <RecurringPaymentOverview recurringPayments={household.recurringPayments} />
 
