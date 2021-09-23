@@ -9,14 +9,10 @@ import { Form } from '~/components/UI/Form';
 import { ME_QUERY } from '~/components/UI/Header';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
-
-type Inputs = {
-  email: string;
-  password: string;
-};
+import { MutationLoginArgs } from '~/graphql/__generated__/types';
 
 const LOGIN_MUTATION = gql`
-  mutation Login($email: String!, $password: String!) {
+  mutation LOGIN_MUTATION($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
     }
@@ -25,12 +21,10 @@ const LOGIN_MUTATION = gql`
 
 export default function Login() {
   const { refetch } = useQuery(ME_QUERY);
-  const [loginMutation, { data, loading, error }] = useMutation(LOGIN_MUTATION, {
-    onError: (error) => {
-      // Just need to catch the error. The user gets feedback through the Error component
-      try {
-      } catch (error) {}
-    },
+  const router = useRouter();
+
+  const [loginMutation, { error }] = useMutation(LOGIN_MUTATION, {
+    onError: () => {},
     onCompleted: () => {
       // Refetch the user for the cache to get updated and then redirect to the homepage
       refetch();
@@ -38,14 +32,12 @@ export default function Login() {
     },
   });
 
-  const router = useRouter();
-  const form = useForm<Inputs>();
+  const loginForm = useForm<MutationLoginArgs>();
 
-  function onSubmit(data: Inputs) {
+  function onSubmit() {
     loginMutation({
       variables: {
-        email: data.email,
-        password: data.password,
+        ...loginForm.getValues(),
       },
     });
   }
@@ -56,10 +48,22 @@ export default function Login() {
         <Error title="Failed to login. Email or password is wrong!" error={error} />
       </div>
 
-      <Form form={form} onSubmit={onSubmit}>
-        <Input label="Email" type="email" {...form.register('email', {})} />
+      <Form form={loginForm} onSubmit={onSubmit}>
+        <Input
+          label="Email"
+          type="email"
+          {...loginForm.register('email', {
+            required: { value: true, message: 'Email is required.' },
+          })}
+        />
 
-        <Input label="Password" type="password" {...form.register('password', {})} />
+        <Input
+          label="Password"
+          type="password"
+          {...loginForm.register('password', {
+            required: { value: true, message: 'Password is required.' },
+          })}
+        />
 
         <Button type="submit">Login</Button>
       </Form>
