@@ -212,6 +212,7 @@ export interface NexusGenFieldTypes {
     ownerId: string; // String!
     payments: Array<NexusGenRootTypes['Payment'] | null> | null; // [Payment]
     recurringPayments: Array<NexusGenRootTypes['RecurringPayment'] | null> | null; // [RecurringPayment]
+    sumOfAllPayments: NexusGenScalars['Money'] | null; // Money
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Invite: { // field return type
@@ -386,6 +387,7 @@ export interface NexusGenFieldTypeNames {
     ownerId: 'String'
     payments: 'Payment'
     recurringPayments: 'RecurringPayment'
+    sumOfAllPayments: 'Money'
     updatedAt: 'DateTime'
   }
   Invite: { // field return type name

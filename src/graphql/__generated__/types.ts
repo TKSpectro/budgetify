@@ -86,6 +86,8 @@ export type Household = {
   payments?: Maybe<Array<Maybe<Payment>>>;
   /** A list of all recurring payment's which will be booked into this household. */
   recurringPayments?: Maybe<Array<Maybe<RecurringPayment>>>;
+  /** All payment values summed up. */
+  sumOfAllPayments?: Maybe<Scalars['Money']>;
   updatedAt: Scalars['DateTime'];
 };
 

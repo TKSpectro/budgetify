@@ -52,7 +52,6 @@ export const Household = objectType({
           .payments({
             orderBy: { createdAt: 'asc' },
           });
-        console.log(test.reduce((sum: number, payment: Payment) => +sum + +payment.value, 0.0));
 
         let payments = await prisma.household
           .findUnique({ where: { id: source.id || undefined } })
@@ -102,6 +101,17 @@ export const Household = objectType({
         }
 
         return payments;
+      },
+    });
+    t.field('sumOfAllPayments', {
+      type: 'Money',
+      description: 'All payment values summed up.',
+      async resolve(source) {
+        const payments = await prisma.household
+          .findUnique({ where: { id: source.id || undefined } })
+          .payments();
+
+        return payments.reduce((sum: number, payment: Payment) => +sum + +payment.value, 0.0);
       },
     });
     t.list.field('recurringPayments', {

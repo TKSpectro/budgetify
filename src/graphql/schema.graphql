@@ -87,6 +87,9 @@ type Household {
   A list of all recurring payment's which will be booked into this household.
   """
   recurringPayments(id: String, limit: Int, skip: Int): [RecurringPayment]
+
+  """All payment values summed up."""
+  sumOfAllPayments: Money
   updatedAt: DateTime!
 }
 
