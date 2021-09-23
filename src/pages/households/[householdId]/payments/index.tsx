@@ -1,10 +1,11 @@
 import { gql, useQuery } from '@apollo/client';
 import { ChartOptions } from 'chart.js';
 import 'chartjs-adapter-date-fns';
+import { startOfMonth, subMonths } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { useForm } from 'react-hook-form';
 import { NewPayment } from '~/components/Household/Payments/NewPayment';
@@ -15,14 +16,14 @@ import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
 import { Loader } from '~/components/UI/Loader';
-import { Payment } from '~/graphql/__generated__/types';
+import { Payment, Scalars } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
-import { roundOn2 } from '~/utils/helper';
+import { dateToFormInput, roundOn2 } from '~/utils/helper';
 
 type DateFilterInput = {
-  startDate: Date;
-  endDate: Date;
+  startDate: Scalars['DateTime'];
+  endDate: Scalars['DateTime'];
 };
 
 const QUERY = gql`
@@ -84,15 +85,20 @@ let paymentChartOptions: ChartOptions = {
 export default function Payments() {
   const router = useRouter();
   const form = useForm<DateFilterInput>();
+  const { reset } = form;
 
   const { householdId } = router.query;
   const { data, loading, error, refetch } = useQuery(QUERY, {
     variables: {
       householdId,
-      startDate: form.getValues('startDate') || undefined,
+      startDate: form.getValues('startDate') || startOfMonth(subMonths(new Date(), 3)),
       endDate: form.getValues('endDate') || undefined,
     },
   });
+
+  useEffect(() => {
+    reset({ startDate: dateToFormInput(startOfMonth(subMonths(new Date(), 3))) });
+  }, [reset]);
 
   const payments = data?.household?.payments || [];
   const categories = data?.categories || [];
@@ -128,13 +134,13 @@ export default function Payments() {
                   className="lg:col-span-2"
                   label="StartDate"
                   type="date"
-                  {...form.register('startDate', {})}
+                  {...form.register('startDate', { valueAsDate: true })}
                 />
                 <Input
                   className="lg:col-span-2"
                   label="EndDate"
                   type="date"
-                  {...form.register('endDate', {})}
+                  {...form.register('endDate', { valueAsDate: true })}
                 />
                 <Button className="lg:mt-6" type="submit">
                   Refresh
@@ -182,7 +188,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     query: QUERY,
     variables: {
       householdId: ctx.params!.householdId,
-      startDate: undefined,
+      startDate: startOfMonth(subMonths(new Date(), 3)),
       endDate: undefined,
     },
   });
