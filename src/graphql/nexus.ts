@@ -234,6 +234,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addGroupOwner: NexusGenRootTypes['Group']; // Group!
     bookRecurringPayments: Array<NexusGenRootTypes['RecurringPayment'] | null> | null; // [RecurringPayment]
+    changePassword: NexusGenRootTypes['User']; // User!
     createCategory: NexusGenRootTypes['Category']; // Category!
     createGroup: NexusGenRootTypes['Group'] | null; // Group
     createGroupInvite: NexusGenRootTypes['Invite']; // Invite!
@@ -254,7 +255,6 @@ export interface NexusGenFieldTypes {
     removeHouseholdMember: NexusGenRootTypes['Household']; // Household!
     removeThreshold: NexusGenRootTypes['Threshold']; // Threshold!
     requestPasswordReset: string; // String!
-    resetPassword: NexusGenRootTypes['User']; // User!
     signup: NexusGenRootTypes['AuthToken']; // AuthToken!
     updateGroup: NexusGenRootTypes['Group']; // Group!
     updateHousehold: NexusGenRootTypes['Household']; // Household!
@@ -412,6 +412,7 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     addGroupOwner: 'Group'
     bookRecurringPayments: 'RecurringPayment'
+    changePassword: 'User'
     createCategory: 'Category'
     createGroup: 'Group'
     createGroupInvite: 'Invite'
@@ -432,7 +433,6 @@ export interface NexusGenFieldTypeNames {
     removeHouseholdMember: 'Household'
     removeThreshold: 'Threshold'
     requestPasswordReset: 'String'
-    resetPassword: 'User'
     signup: 'AuthToken'
     updateGroup: 'Group'
     updateHousehold: 'Household'
@@ -547,6 +547,10 @@ export interface NexusGenArgTypes {
     bookRecurringPayments: { // args
       secretKey: string; // String!
     }
+    changePassword: { // args
+      password: string; // String!
+      passwordRepeat: string; // String!
+    }
     createCategory: { // args
       name: string; // String!
     }
@@ -603,6 +607,7 @@ export interface NexusGenArgTypes {
     }
     login: { // args
       email: string; // String!
+      isOTP?: boolean | null; // Boolean
       password: string; // String!
     }
     removeCategory: { // args
@@ -626,11 +631,6 @@ export interface NexusGenArgTypes {
     }
     requestPasswordReset: { // args
       email: string; // String!
-    }
-    resetPassword: { // args
-      email: string; // String!
-      otp: string; // String!
-      password: string; // String!
     }
     signup: { // args
       email: string; // String!

@@ -2,10 +2,11 @@ import { ApolloError, AuthenticationError } from 'apollo-server-micro';
 import { compareSync, hashSync } from 'bcrypt';
 import { randomUUID } from 'crypto';
 import jwt from 'jsonwebtoken';
-import { extendType, nonNull, objectType, stringArg } from 'nexus';
+import { booleanArg, extendType, nonNull, objectType, stringArg } from 'nexus';
 import { MailOptions } from 'nodemailer/lib/sendmail-transport';
 import { destroyCookie, setCookie } from 'nookies';
 import prisma from '~/utils/prisma';
+import { authIsLoggedIn } from '../authRules';
 import { createNodemailerTransporter } from '../helper';
 
 export const AuthToken = objectType({
@@ -108,6 +109,7 @@ export const AuthMutation = extendType({
       args: {
         email: nonNull(stringArg()),
         password: nonNull(stringArg()),
+        isOTP: booleanArg(),
       },
       async resolve(_, args, ctx) {
         const user = await prisma.user.findUnique({
@@ -118,9 +120,21 @@ export const AuthMutation = extendType({
         if (!user) {
           throw new ApolloError('Authorization Error');
         }
-        const { id, hashedPassword } = user;
-        if (!compareSync(args.password, hashedPassword)) {
-          throw new Error('Authorization Error');
+        const { id, hashedPassword, otp } = user;
+
+        // If the client requested to be logged in via OTP we check against that, else we check
+        // against the real password.
+        if (args.isOTP) {
+          // If the otp matches we can log the user in and remove the otp from the account.
+          if (args.password === otp) {
+            await prisma.user.update({ where: { id: user.id }, data: { otp: null } });
+          } else {
+            throw new Error('Authorization Error');
+          }
+        } else {
+          if (!compareSync(args.password, hashedPassword)) {
+            throw new Error('Authorization Error');
+          }
         }
 
         const token = jwt.sign({ id }, process.env.JWT_SECRET!, {
@@ -139,6 +153,7 @@ export const AuthMutation = extendType({
         };
       },
     });
+
     t.field('logout', {
       type: 'String',
       description: `This mutation removes the authToken on the user side.`,
@@ -151,6 +166,45 @@ export const AuthMutation = extendType({
         });
 
         return 'Logged out!';
+      },
+    });
+
+    t.nonNull.field('changePassword', {
+      type: 'User',
+      description: 'Change a users password.',
+      args: {
+        password: nonNull(stringArg()),
+        passwordRepeat: nonNull(stringArg()),
+      },
+      authorize: authIsLoggedIn,
+      async resolve(_, args, ctx) {
+        if (args.password !== args.passwordRepeat) {
+          throw new ApolloError('Passwords did not match! Try again.');
+        }
+
+        args.password = hashSync(args.password, 10);
+
+        const foundUser = await prisma.user.findUnique({
+          where: {
+            email: ctx.user.email,
+          },
+        });
+
+        if (!foundUser) {
+          throw new ApolloError('No account found for the given email.');
+        }
+
+        const user = await prisma.user.update({
+          where: {
+            email: ctx.user.email,
+          },
+          data: {
+            hashedPassword: args.password,
+            otp: null,
+          },
+        });
+
+        return user;
       },
     });
 
@@ -175,11 +229,20 @@ export const AuthMutation = extendType({
 
             const transporter = createNodemailerTransporter({});
             if (transporter) {
+              let url = process.env.BASE_URL || 'https://' + process.env.DOMAIN;
+              url += '/auth/otpLogin';
+
               const mailOptions: MailOptions = {
                 from: `${process.env.DOMAIN} <no-reply@${process.env.DOMAIN}>`,
                 to: email,
                 subject: 'budgetify | Password reset requested',
                 text: `OTP: ${otp}`,
+                html: `<h3>You requested a password reset.</h3>
+                  <h4>Your One-Time-Password is: ${otp}</h4>
+                  <div>Please login with this password on the following page</div>
+                  <a target="_blank" href="${url}">Login | budgetify</a>
+                  <h5>After that you should change your password immediately or else you need to request another one-time-password when you want to log in again.</h5>
+                  `,
               };
 
               // Send mail and close the connection
@@ -193,41 +256,6 @@ export const AuthMutation = extendType({
         }
 
         return 'If account exists, an email will be sent with further instructions.';
-      },
-    });
-
-    t.nonNull.field('resetPassword', {
-      type: 'User',
-      description: 'Reset a users password with a valid OTP.',
-      args: {
-        email: nonNull(stringArg()),
-        otp: nonNull(stringArg()),
-        password: nonNull(stringArg()),
-      },
-      async resolve(_, args, ctx) {
-        args.password = hashSync(args.password, 10);
-
-        const foundUser = await prisma.user.findUnique({
-          where: {
-            email: args.email,
-          },
-        });
-
-        if (!foundUser || foundUser?.otp !== args.otp) {
-          throw new ApolloError('No account found for the given email or OTP is not valid.');
-        }
-
-        const user = await prisma.user.update({
-          where: {
-            email: args.email,
-          },
-          data: {
-            hashedPassword: args.password,
-            otp: null,
-          },
-        });
-
-        return user;
       },
     });
   },

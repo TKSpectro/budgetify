@@ -148,6 +148,8 @@ export type Mutation = {
    *         which need to be booked.
    */
   bookRecurringPayments?: Maybe<Array<Maybe<RecurringPayment>>>;
+  /** Change a users password. */
+  changePassword: User;
   /** Create a new category. Can just be called by an admin. */
   createCategory: Category;
   /** Creates a new group with the given arguments and returns it. */
@@ -191,8 +193,6 @@ export type Mutation = {
   removeThreshold: Threshold;
   /** This mutation creates a otp for a user and sends it to the users email. */
   requestPasswordReset: Scalars['String'];
-  /** Reset a users password with a valid OTP. */
-  resetPassword: User;
   /**
    * This mutation takes the values for a new user as arguments.
    *       Saves them and returns a JWT (JSON-Web-Token)
@@ -222,6 +222,12 @@ export type MutationAddGroupOwnerArgs = {
 
 export type MutationBookRecurringPaymentsArgs = {
   secretKey: Scalars['String'];
+};
+
+
+export type MutationChangePasswordArgs = {
+  password: Scalars['String'];
+  passwordRepeat: Scalars['String'];
 };
 
 
@@ -303,6 +309,7 @@ export type MutationDeleteInviteArgs = {
 
 export type MutationLoginArgs = {
   email: Scalars['String'];
+  isOTP?: Maybe<Scalars['Boolean']>;
   password: Scalars['String'];
 };
 
@@ -338,13 +345,6 @@ export type MutationRemoveThresholdArgs = {
 
 export type MutationRequestPasswordResetArgs = {
   email: Scalars['String'];
-};
-
-
-export type MutationResetPasswordArgs = {
-  email: Scalars['String'];
-  otp: Scalars['String'];
-  password: Scalars['String'];
 };
 
 

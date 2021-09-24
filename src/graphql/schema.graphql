@@ -144,6 +144,9 @@ type Mutation {
   """
   bookRecurringPayments(secretKey: String!): [RecurringPayment]
 
+  """Change a users password."""
+  changePassword(password: String!, passwordRepeat: String!): User!
+
   """Create a new category. Can just be called by an admin."""
   createCategory(name: String!): Category!
 
@@ -186,7 +189,7 @@ type Mutation {
   This mutation takes the email and password of an existing user.
         Returns a JWT (JSON-Web-Token) for further authentication with the graphql-api.
   """
-  login(email: String!, password: String!): AuthToken!
+  login(email: String!, isOTP: Boolean, password: String!): AuthToken!
 
   """This mutation removes the authToken on the user side."""
   logout: String
@@ -216,9 +219,6 @@ type Mutation {
   This mutation creates a otp for a user and sends it to the users email.
   """
   requestPasswordReset(email: String!): String!
-
-  """Reset a users password with a valid OTP."""
-  resetPassword(email: String!, otp: String!, password: String!): User!
 
   """
   This mutation takes the values for a new user as arguments. 
