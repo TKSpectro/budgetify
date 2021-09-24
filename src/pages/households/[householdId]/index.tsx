@@ -70,7 +70,7 @@ export default function Household() {
 
   const household = data?.household;
   const payments = household?.payments || [];
-  const sumOfAllPayments = household.sumOfAllPayments || 0;
+  const sumOfAllPayments = household?.sumOfAllPayments || 0;
 
   const isOwner = household?.owner?.id === data?.me?.id;
 
@@ -90,7 +90,7 @@ export default function Household() {
         <>
           <div className="mx-4 my-4">
             <div className="relative text-6xl text-brand-500">
-              {data.household.name}
+              {household.name}
               {isOwner && (
                 <span className="hidden md:block absolute right-4 top-6 text-base">
                   <Link href={router.asPath + '/manage'} asButton>
@@ -108,9 +108,9 @@ export default function Household() {
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-y-8 lg:gap-x-16 overflow-auto">
             <PaymentOverview payments={payments} />
 
-            <RecurringPaymentOverview recurringPayments={household.recurringPayments} />
+            <RecurringPaymentOverview recurringPayments={household?.recurringPayments} />
 
-            <MonthOverview monthPayments={household.thisMonthsPayments} />
+            <MonthOverview monthPayments={household?.thisMonthsPayments} />
           </div>
         </>
       )}
