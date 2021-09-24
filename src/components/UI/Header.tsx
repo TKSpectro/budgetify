@@ -15,7 +15,7 @@ export function HeaderLink({ href, className, ...props }: Props) {
   const content = (
     <a
       className={clsx(
-        'p-2 lg:px-4 md:mx-2 rounded hover:bg-gray-300 dark:hover:bg-gray-700  transition-colors duration-300',
+        'p-2 lg:px-4 md:mx-2 rounded hover:bg-opacity-70 dark:hover:bg-opacity-80 transition-colors duration-300',
         !className && 'text-gray-600 dark:text-gray-200',
         className,
       )}
@@ -77,16 +77,10 @@ export function Header() {
           >
             {!router.query.householdId && isLoggedIn && (
               <>
-                <HeaderLink
-                  href={'/households'}
-                  className="p-2 lg:px-4 md:mx-2 text-white rounded bg-brand-500"
-                >
+                <HeaderLink href={'/households'} className="text-white  bg-brand-500">
                   Households
                 </HeaderLink>
-                <HeaderLink
-                  href={'/groups'}
-                  className="p-2 lg:px-4 md:mx-2 text-white rounded bg-brand-500"
-                >
+                <HeaderLink href={'/groups'} className="text-white  bg-brand-500">
                   Groups
                 </HeaderLink>
               </>
@@ -95,7 +89,7 @@ export function Header() {
               <>
                 <HeaderLink
                   href={'/households/' + router.query.householdId}
-                  className="p-2 lg:px-4 md:mx-2 text-white rounded font-medium bg-brand-500 hover:bg-opacity-90"
+                  className="text-white font-medium bg-brand-500"
                 >
                   Dashboard
                 </HeaderLink>
