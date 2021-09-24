@@ -1,5 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
 import { CogIcon, TrashIcon } from '@heroicons/react/outline';
+import clsx from 'clsx';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -171,43 +172,55 @@ export function ThresholdList({ me, thresholds, group }: Props) {
         showModal={showRemoveModal}
         setShowModal={setShowRemoveModalWrapper}
       />
-
-      {thresholds.map((threshold: Threshold) => {
-        return (
-          <div key={threshold.id}>
-            {(threshold.type === ThresholdType.Goal || threshold.type === ThresholdType.Max) && (
-              <Progressbar
-                progress={roundOn2((group.value / threshold.value) * 100)}
-                text={threshold.name}
-                type={threshold.type}
-                value={threshold.value + '€'}
-              />
-            )}
-            {/* // TODO: Figure out how to smartly show a min type threshold */}
-            {threshold.type === ThresholdType.Min && (
-              <Progressbar
-                progress={roundOn2(
-                  (threshold.value !== 0 ? group.value - threshold.value : group.value - 0) * 1,
+      <div className="divide-y-4">
+        {thresholds.map((threshold: Threshold) => {
+          return (
+            <div key={threshold.id} className="pt-2 pb-1">
+              <div className="md:inline-block md:w-2/3">
+                {(threshold.type === ThresholdType.Goal ||
+                  threshold.type === ThresholdType.Max) && (
+                  <Progressbar
+                    progress={roundOn2((group.value / threshold.value) * 100)}
+                    text={threshold.name}
+                    type={threshold.type}
+                    value={threshold.value + '€'}
+                  />
                 )}
-                text={threshold.name}
-                type={threshold.type}
-                value={threshold.value + '€'}
-              />
-            )}
-            {/* // TODO: Could use transparent button style but would need other placement */}
-            {!!group.owners?.find((x) => x?.id === me?.id)?.id && (
-              <div className="text-right">
-                <Button onClick={() => onUpdateThresholdSelectHandler(threshold)}>
-                  <CogIcon className="w-5 h-5" />
-                </Button>
-                <Button className="ml-4" onClick={() => onRemoveThresholdSelectHandler(threshold)}>
-                  <TrashIcon className="w-5 h-5" />
-                </Button>
+                {threshold.type === ThresholdType.Min && (
+                  <Progressbar
+                    progress={roundOn2(
+                      (threshold.value !== 0 ? group.value - threshold.value : group.value - 0) * 1,
+                    )}
+                    text={threshold.name}
+                    type={threshold.type}
+                    value={threshold.value + '€'}
+                    barHidden={true}
+                  />
+                )}
               </div>
-            )}
-          </div>
-        );
-      })}
+              {/* // TODO: Could use transparent button style but would need other placement */}
+              {!!group.owners?.find((x) => x?.id === me?.id)?.id && (
+                <div
+                  className={clsx(
+                    'md:w-1/3 flex justify-end md:justify-center md:float-right ',
+                    threshold.type !== ThresholdType.Min && ' mt-1',
+                  )}
+                >
+                  <Button onClick={() => onUpdateThresholdSelectHandler(threshold)}>
+                    <CogIcon className="w-5 h-5" />
+                  </Button>
+                  <Button
+                    className="ml-4"
+                    onClick={() => onRemoveThresholdSelectHandler(threshold)}
+                  >
+                    <TrashIcon className="w-5 h-5" />
+                  </Button>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </>
   );
 }
