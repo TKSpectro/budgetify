@@ -100,7 +100,7 @@ export default function Payments() {
   const { data, loading, error, refetch } = useQuery(QUERY, {
     variables: {
       householdId,
-      startDate: form.getValues('startDate') || startOfMonth(subMonths(new Date(), 3)),
+      startDate: new Date(form.getValues('startDate')) || startOfMonth(subMonths(new Date(), 3)),
       endDate: form.getValues('endDate') || undefined,
       calcBeforeStartDate: true,
     },
