@@ -1,11 +1,9 @@
-import { ReactNode } from 'react';
 import { Button, Props as ButtonProps } from './Button';
 
 export interface Props extends ButtonProps {
   title: string;
   description?: string;
   submitText: string | React.ReactNode;
-  children?: ReactNode;
   onSubmit: () => void;
   showModal: boolean;
   setShowModal: (value: boolean) => void;
@@ -15,8 +13,6 @@ export function ManagedModal({
   title,
   description,
   submitText,
-  children,
-  variant,
   onSubmit,
   showModal,
   setShowModal,
@@ -37,12 +33,9 @@ export function ManagedModal({
                   <h3 className="text-3xl font-semibold">{title}</h3>
                 </div>
                 {/*body*/}
-                <div className="relative p-6 flex-auto">
-                  {description && (
-                    <p className="my-4 text-blueGray-500 text-lg leading-relaxed">{description}</p>
-                  )}
-                  {children}
-                </div>
+                {description && (
+                  <p className="m-4 text-blueGray-500 text-lg leading-relaxed">{description}</p>
+                )}
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
                   <Button variant="transparent" onClick={() => setShowModal(false)}>
