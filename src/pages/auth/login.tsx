@@ -69,6 +69,9 @@ export default function Login() {
       </Form>
 
       <Link href="/auth/signup">No Account? No Problem! Signup</Link>
+      <div>
+        <Link href="/auth/forgotPassword">Forgot your password? No Problem! Reset it.</Link>
+      </div>
     </Container>
   );
 }

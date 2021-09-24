@@ -162,6 +162,9 @@ export default function Profile() {
                 variant="danger"
                 buttonClassName="mr-4"
               />
+              <Button className="mr-4" onClick={() => router.push('/auth/changePassword')}>
+                Change password
+              </Button>
               <ModalForm
                 form={updateUserForm}
                 buttonText="Update account"
