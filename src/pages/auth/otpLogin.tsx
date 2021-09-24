@@ -1,4 +1,4 @@
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -6,51 +6,52 @@ import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
+import { ME_QUERY } from '~/components/UI/Header';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
-import { MutationResetPasswordArgs } from '~/graphql/__generated__/types';
+import { MutationLoginArgs } from '~/graphql/__generated__/types';
 
-const RESET_PASSWORD = gql`
-  mutation RESET_PASSWORD($email: String!, $otp: String!, $password: String!) {
-    resetPassword(email: $email, otp: $otp, password: $password) {
-      id
+const LOGIN_MUTATION = gql`
+  mutation LOGIN_MUTATION($email: String!, $password: String!) {
+    login(email: $email, password: $password, isOTP: true) {
+      token
     }
   }
 `;
 
-export default function ResetPassword() {
+export default function OTPLogin() {
+  const { refetch } = useQuery(ME_QUERY);
   const router = useRouter();
-  const { otp } = router.query;
 
-  const [resetPassword, { data, error }] = useMutation(RESET_PASSWORD, {
+  const [loginMutation, { error }] = useMutation(LOGIN_MUTATION, {
     onError: () => {},
     onCompleted: () => {
-      // Refetch the user for the cache to get updated and then redirect to the homepage
-      router.push('/auth/login');
+      refetch();
+      router.push('/auth/changePassword?isOTP=true');
     },
   });
 
-  const resetPasswordForm = useForm<MutationResetPasswordArgs>();
+  const loginForm = useForm<MutationLoginArgs>();
 
   function onSubmit() {
-    resetPassword({
+    loginMutation({
       variables: {
-        ...resetPasswordForm.getValues(),
-        otp,
+        ...loginForm.getValues(),
       },
     });
   }
 
   return (
     <Container>
-      <Error title="Failed to reset password." error={error} />
+      <div className="mb-2">
+        <Error title="Failed to login. Email or password is wrong!" error={error} />
+      </div>
 
-      {/* // TODO: Started with this maybe dont even let the user put his email */}
-      <Form form={resetPasswordForm} onSubmit={onSubmit}>
+      <Form form={loginForm} onSubmit={onSubmit}>
         <Input
           label="Email"
           type="email"
-          {...resetPasswordForm.register('email', {
+          {...loginForm.register('email', {
             required: { value: true, message: 'Email is required.' },
           })}
         />
@@ -58,7 +59,7 @@ export default function ResetPassword() {
         <Input
           label="Password"
           type="password"
-          {...resetPasswordForm.register('password', {
+          {...loginForm.register('password', {
             required: { value: true, message: 'Password is required.' },
           })}
         />
