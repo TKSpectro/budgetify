@@ -5,7 +5,7 @@ import { startOfMonth, subMonths } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { useForm } from 'react-hook-form';
 import { NewPayment } from '~/components/Household/Payments/NewPayment';
@@ -94,21 +94,24 @@ let paymentChartOptions: ChartOptions = {
 export default function Payments() {
   const router = useRouter();
   const form = useForm<DateFilterInput>();
-  const { reset } = form;
+
+  const [startDateSave, setStartDateSave] = useState(
+    dateToFormInput(startOfMonth(subMonths(new Date(), 3))),
+  );
 
   const { householdId } = router.query;
   const { data, loading, error, refetch } = useQuery(QUERY, {
     variables: {
       householdId,
-      startDate: new Date(form.getValues('startDate')) || startOfMonth(subMonths(new Date(), 3)),
+      startDate: form.getValues('startDate') || startOfMonth(subMonths(new Date(), 3)),
       endDate: form.getValues('endDate') || undefined,
       calcBeforeStartDate: true,
     },
   });
 
   useEffect(() => {
-    reset({ startDate: dateToFormInput(startOfMonth(subMonths(new Date(), 3))) });
-  }, [reset]);
+    form.setValue('startDate', startDateSave);
+  });
 
   let payments = data?.household?.payments || [];
   const categories = data?.categories || [];
@@ -128,6 +131,7 @@ export default function Payments() {
 
   const onDateFilterSubmit = () => {
     // Re-Query with the newly set parameters
+    setStartDateSave(dateToFormInput(form.getValues('startDate')));
     refetch();
   };
 
