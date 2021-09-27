@@ -47,12 +47,6 @@ export const Household = objectType({
         calcBeforeStartDate: booleanArg(),
       },
       async resolve(source, args) {
-        const test = await prisma.household
-          .findUnique({ where: { id: source.id || undefined } })
-          .payments({
-            orderBy: { createdAt: 'asc' },
-          });
-
         let payments = await prisma.household
           .findUnique({ where: { id: source.id || undefined } })
           .payments({

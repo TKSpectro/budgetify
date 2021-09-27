@@ -186,6 +186,7 @@ export interface NexusGenFieldTypes {
     name: string; // String!
     owners: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     thresholds: Array<NexusGenRootTypes['Threshold'] | null> | null; // [Threshold]
+    transactionCount: number | null; // Int
     transactions: Array<NexusGenRootTypes['GroupTransaction'] | null> | null; // [GroupTransaction]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     value: NexusGenScalars['Money']; // Money!
@@ -364,6 +365,7 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     owners: 'User'
     thresholds: 'Threshold'
+    transactionCount: 'Int'
     transactions: 'GroupTransaction'
     updatedAt: 'DateTime'
     value: 'Money'
@@ -525,6 +527,12 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
+  Group: {
+    transactions: { // args
+      limit?: number | null; // Int
+      skip?: number | null; // Int
+    }
+  }
   Household: {
     payments: { // args
       calcBeforeStartDate?: boolean | null; // Boolean

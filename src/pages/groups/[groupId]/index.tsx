@@ -1,10 +1,13 @@
 import { gql, useQuery } from '@apollo/client';
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { CreateGroupTransaction } from '~/components/Group/CreateGroupTransaction';
 import { NewThreshold } from '~/components/Group/NewThreshold';
 import { ThresholdList } from '~/components/Group/ThresholdList';
+import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
 import { Disclosure } from '~/components/UI/Disclosure';
 import { Error } from '~/components/UI/Error';
@@ -15,7 +18,7 @@ import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 
 const GROUP_QUERY = gql`
-  query GROUP_QUERY($id: String!) {
+  query GROUP_QUERY($id: String!, $skip: Int, $limit: Int) {
     me {
       id
     }
@@ -23,7 +26,8 @@ const GROUP_QUERY = gql`
       id
       name
       value
-      transactions {
+      transactionCount
+      transactions(skip: $skip, limit: $limit) {
         id
         name
         value
@@ -58,7 +62,12 @@ export default function Group() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
-  const { data, loading, error, refetch } = useQuery(GROUP_QUERY, { variables: { id: groupId } });
+  const limit = 2;
+  const [skip, setSkip] = useState(0);
+
+  const { data, loading, error, fetchMore } = useQuery(GROUP_QUERY, {
+    variables: { id: groupId, skip, limit },
+  });
 
   const group = data?.group;
   const me = data?.me;
@@ -131,6 +140,27 @@ export default function Group() {
         {group?.transactions && (
           <Container>
             <div className="text-lg font-semibold">Transactions</div>
+
+            <div>
+              <Button
+                onClick={() => {
+                  fetchMore({ variables: { skip: skip - limit < 0 ? 0 : skip - limit } });
+                  setSkip(skip - limit < 0 ? 0 : skip - limit);
+                }}
+              >
+                <ArrowLeftIcon className="w-5 h-5" />
+              </Button>
+              {`Page ${1 + skip / limit}/${group?.transactionCount / limit}`}
+              <Button
+                disabled={skip + limit >= group?.transactionCount}
+                onClick={() => {
+                  fetchMore({ variables: { skip: skip + limit } });
+                  setSkip(skip + limit);
+                }}
+              >
+                <ArrowRightIcon className="w-5 h-5" />
+              </Button>
+            </div>
             <div className="divide-y-2">
               {group.transactions.map((transaction: GroupTransaction) => {
                 // TODO: Need to style this a bit better
@@ -172,6 +202,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     query: GROUP_QUERY,
     variables: {
       id: ctx.params!.groupId,
+      limit: 2,
     },
   });
 };

@@ -1,5 +1,5 @@
 import { ApolloError } from 'apollo-server-errors';
-import { arg, extendType, nonNull, objectType, stringArg } from 'nexus';
+import { arg, extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
 import { authIsGroupMember, authIsGroupOwner, authIsLoggedIn } from '../authRules';
 import { Participant as ParticipantType } from '../__generated__/types';
@@ -29,8 +29,24 @@ export const Group = objectType({
     t.list.field('transactions', {
       type: 'GroupTransaction',
       description: 'A list of all transactions which happened in this group.',
-      resolve(source) {
-        return prisma.group.findUnique({ where: { id: source.id || undefined } }).transactions();
+      args: {
+        skip: intArg(),
+        limit: intArg(),
+      },
+      resolve(source, args) {
+        return prisma.group
+          .findUnique({ where: { id: source.id || undefined } })
+          .transactions({ skip: args.skip || undefined, take: args.limit || undefined });
+      },
+    });
+    t.field('transactionCount', {
+      type: 'Int',
+      description: 'The count of all transactions in this group.',
+      async resolve(source) {
+        const transactions = await prisma.group
+          .findUnique({ where: { id: source.id || undefined } })
+          .transactions();
+        return transactions.length;
       },
     });
     t.list.field('invites', {

@@ -46,10 +46,18 @@ export type Group = {
   owners?: Maybe<Array<Maybe<User>>>;
   /** A list of all thresholds hooked to this group. */
   thresholds?: Maybe<Array<Maybe<Threshold>>>;
+  /** The count of all transactions in this group. */
+  transactionCount?: Maybe<Scalars['Int']>;
   /** A list of all transactions which happened in this group. */
   transactions?: Maybe<Array<Maybe<GroupTransaction>>>;
   updatedAt: Scalars['DateTime'];
   value: Scalars['Money'];
+};
+
+
+export type GroupTransactionsArgs = {
+  limit?: Maybe<Scalars['Int']>;
+  skip?: Maybe<Scalars['Int']>;
 };
 
 export type GroupTransaction = {

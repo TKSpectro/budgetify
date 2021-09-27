@@ -22,7 +22,26 @@ export function initializeApollo({ initialState, headers }: ApolloClientParamete
         uri: typeof window === 'undefined' ? 'http://localhost:3000/api/graphql' : '/api/graphql',
         headers: headers,
       }),
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({
+        typePolicies: {
+          Group: {
+            fields: {
+              transactions: {
+                read(existing, { args }) {
+                  return (
+                    existing &&
+                    existing.slice(args?.skip || 0, args?.skip + args?.limit || existing.length)
+                  );
+                },
+                keyArgs: false,
+                merge(existing = [], incoming) {
+                  return [...existing, ...incoming];
+                },
+              },
+            },
+          },
+        },
+      }),
     });
   }
 

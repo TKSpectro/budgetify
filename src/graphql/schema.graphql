@@ -39,8 +39,11 @@ type Group {
   """A list of all thresholds hooked to this group."""
   thresholds: [Threshold]
 
+  """The count of all transactions in this group."""
+  transactionCount: Int
+
   """A list of all transactions which happened in this group."""
-  transactions: [GroupTransaction]
+  transactions(limit: Int, skip: Int): [GroupTransaction]
   updatedAt: DateTime!
   value: Money!
 }
