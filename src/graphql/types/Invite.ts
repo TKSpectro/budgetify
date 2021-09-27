@@ -3,6 +3,7 @@ import { compareAsc } from 'date-fns';
 import addDays from 'date-fns/addDays';
 import { extendType, nonNull, objectType, stringArg } from 'nexus';
 import { MailOptions } from 'nodemailer/lib/sendmail-transport';
+import { getBaseUrl } from '~/utils/helper';
 import prisma from '~/utils/prisma';
 import { authIsLoggedIn } from '../authRules';
 import { Context } from '../context';
@@ -118,8 +119,7 @@ export const InviteMutation = extendType({
 
         // Send an email out to the invited person with the generated token
         const transporter = createNodemailerTransporter({});
-        const inviteUrl =
-          process.env.BASE_URL || 'https://' + process.env.DOMAIN + '/invite/' + invite.token;
+        const inviteUrl = getBaseUrl() + '/invite/' + invite.token;
         if (transporter) {
           const mailOptions: MailOptions = {
             from: `${process.env.DOMAIN} <no-reply@${process.env.DOMAIN}>`,
@@ -256,8 +256,7 @@ export const InviteGroupMutation = extendType({
 
         // Send an email out to the invited person with the generated token
         const transporter = createNodemailerTransporter({});
-        const inviteUrl =
-          process.env.BASE_URL || 'https://' + process.env.DOMAIN + '/invite/' + invite.token;
+        const inviteUrl = getBaseUrl() + '/invite/' + invite.token;
         if (transporter) {
           const mailOptions: MailOptions = {
             from: `${process.env.DOMAIN} <no-reply@${process.env.DOMAIN}>`,

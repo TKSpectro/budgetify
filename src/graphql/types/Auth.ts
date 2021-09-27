@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { booleanArg, extendType, nonNull, objectType, stringArg } from 'nexus';
 import { MailOptions } from 'nodemailer/lib/sendmail-transport';
 import { destroyCookie, setCookie } from 'nookies';
+import { getBaseUrl } from '~/utils/helper';
 import prisma from '~/utils/prisma';
 import { authIsLoggedIn } from '../authRules';
 import { createNodemailerTransporter } from '../helper';
@@ -229,8 +230,7 @@ export const AuthMutation = extendType({
 
             const transporter = createNodemailerTransporter({});
             if (transporter) {
-              let url = process.env.BASE_URL || 'https://' + process.env.DOMAIN;
-              url += '/auth/otpLogin';
+              let url = getBaseUrl() + '/auth/otpLogin';
 
               const mailOptions: MailOptions = {
                 from: `${process.env.DOMAIN} <no-reply@${process.env.DOMAIN}>`,

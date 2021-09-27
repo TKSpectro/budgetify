@@ -9,3 +9,8 @@ export const uuidRegex =
 export const dateToFormInput = (date: Date) => {
   return date.toISOString().split('T')[0];
 };
+
+// Returns the base url of the website. Either the specified base url or https://DOMAIN
+export const getBaseUrl = () => {
+  return process.env.BASE_URL || 'https://' + process.env.DOMAIN;
+};
