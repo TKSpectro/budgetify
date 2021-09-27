@@ -175,18 +175,22 @@ export default function Profile() {
               >
                 <Input
                   label="Firstname"
+                  autoComplete="given-name"
                   {...updateUserForm.register('firstname', {
                     required: { value: true, message: 'Please input your firstname' },
                   })}
                 ></Input>
                 <Input
                   label="Lastname"
+                  autoComplete="family-name"
                   {...updateUserForm.register('lastname', {
                     required: { value: true, message: 'Please input your lastname' },
                   })}
                 ></Input>
                 <Input
                   label="Email"
+                  type="email"
+                  autoComplete="email"
                   {...updateUserForm.register('email', {
                     required: { value: true, message: 'Please input your email' },
                   })}

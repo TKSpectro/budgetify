@@ -51,16 +51,18 @@ export default function OTPLogin() {
         <Input
           label="Email"
           type="email"
+          autoComplete="email"
           {...loginForm.register('email', {
             required: { value: true, message: 'Email is required.' },
           })}
         />
 
         <Input
-          label="Password"
+          label="One Time Password"
           type="password"
+          autoComplete="one-time-code"
           {...loginForm.register('password', {
-            required: { value: true, message: 'Password is required.' },
+            required: { value: true, message: 'One Time Password is required.' },
           })}
         />
 

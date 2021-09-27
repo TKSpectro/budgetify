@@ -52,6 +52,7 @@ export default function Login() {
         <Input
           label="Email"
           type="email"
+          autoComplete="email"
           {...loginForm.register('email', {
             required: { value: true, message: 'Email is required.' },
           })}
@@ -60,6 +61,7 @@ export default function Login() {
         <Input
           label="Password"
           type="password"
+          autoComplete="current-password"
           {...loginForm.register('password', {
             required: { value: true, message: 'Password is required.' },
           })}

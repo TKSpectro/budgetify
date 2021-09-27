@@ -43,6 +43,7 @@ export default function ForgotPassword() {
           <Input
             label="Your email"
             type="text"
+            autoComplete="email"
             {...requestOTPForm.register('email', {
               required: { value: true, message: 'Email is required.' },
             })}

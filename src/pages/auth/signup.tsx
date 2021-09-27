@@ -55,6 +55,7 @@ export default function Signup() {
         <Input
           label="Firstname"
           type="text"
+          autoComplete="given-name"
           {...signupForm.register('firstname', {
             required: { value: true, message: 'Firstname is required.' },
             maxLength: { value: 60, message: 'Firstname cant be longer than 60 characters.' },
@@ -64,6 +65,7 @@ export default function Signup() {
         <Input
           label="Lastname"
           type="text"
+          autoComplete="family-name"
           {...signupForm.register('lastname', {
             required: { value: true, message: 'Lastname is required.' },
             maxLength: { value: 60, message: 'Lastname cant be longer than 60 characters.' },
@@ -73,6 +75,7 @@ export default function Signup() {
         <Input
           label="Email"
           type="email"
+          autoComplete="email"
           {...signupForm.register('email', {
             required: { value: true, message: 'Email is required.' },
           })}
@@ -81,6 +84,7 @@ export default function Signup() {
         <Input
           label="Password"
           type="password"
+          autoComplete="new-password"
           {...signupForm.register('password', {
             required: { value: true, message: 'Password is required.' },
             minLength: { value: 6, message: 'Password must be at least 6 characters.' },

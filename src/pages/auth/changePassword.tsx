@@ -51,6 +51,7 @@ export default function ChangePassword() {
         <Input
           label="Password"
           type="password"
+          autoComplete="new-password"
           {...changePasswordForm.register('password', {
             required: { value: true, message: 'Password is required.' },
           })}
@@ -59,6 +60,7 @@ export default function ChangePassword() {
         <Input
           label="Repeat Password"
           type="password"
+          autoComplete="new-password"
           {...changePasswordForm.register('passwordRepeat', {
             required: { value: true, message: 'Repeat Password is required.' },
             validate: (value) =>
