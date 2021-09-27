@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
-import { StarIcon } from '@heroicons/react/outline';
+import { StarIcon, UserRemoveIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Error } from '~/components/UI/Error';
@@ -76,29 +76,23 @@ export default function MemberTable({ members, owner, ...props }: Props) {
       <Error title="Could not update household." error={updateHouseholdError} />
       <Error title="Could not remove member." error={removeMemberError} />
 
-      <table className="w-full">
-        <tbody className="divide-y divide-gray-200 ">
+      <table className="table-fixed w-full break-words">
+        <thead>
+          <tr>
+            <th className="w-1/3">Name</th>
+            <th className="w-1/3">Email</th>
+            <th className="w-1/3">Actions</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200 text-center">
           {members.map((member: User) => {
             return (
-              <tr key={member.id} className="">
-                <td className="pl-4 py-4 w-1">
-                  {member.id === owner.id && (
-                    <StarIcon className="flex-shrink-0 h-6 w-6 text-brand-500" />
-                  )}
+              <tr key={member.id}>
+                <td>
+                  <div className="font-bold text-gray-800 dark:text-gray-100">{member.name}</div>
                 </td>
-                <td className="py-4">
-                  <div className="max-w-xl overflow-auto">
-                    <div className="ml-2 font-bold text-gray-800 dark:text-gray-100">
-                      {member.name}
-                    </div>
-                  </div>
-                </td>
-                <td className="py-4">
-                  <div className="max-w-xl overflow-auto">
-                    <div className="ml-2 font-bold text-gray-800 dark:text-gray-100">
-                      {member.email}
-                    </div>
-                  </div>
+                <td>
+                  <div className="font-bold text-gray-800 dark:text-gray-100">{member.email}</div>
                 </td>
                 <td className="py-4">
                   {owner.id !== member.id ? (
@@ -106,14 +100,16 @@ export default function MemberTable({ members, owner, ...props }: Props) {
                       title="Remove user from household"
                       description={`Are you sure that you want to remove ${member.name} from this household?`}
                       onSubmit={() => removeHandler(member.id)}
-                      buttonText="Remove"
+                      buttonText={<UserRemoveIcon className="w-5 h-5" />}
+                      buttonClassName="mr-2"
                     />
                   ) : (
                     <ModalForm
                       form={leaveHouseholdForm}
                       onSubmit={onLeaveSubmit}
                       title="Leave household"
-                      buttonText="Leave"
+                      buttonText={<UserRemoveIcon className="w-5 h-5" />}
+                      buttonClassName="mr-2"
                     >
                       <label>
                         New Owner
@@ -138,14 +134,12 @@ export default function MemberTable({ members, owner, ...props }: Props) {
                       </label>
                     </ModalForm>
                   )}
-                </td>
-                <td className="py-4">
                   {owner.id !== member.id && (
                     <Modal
                       title="Make owner of household"
                       description={`Are you sure that you want to make ${member.name} the new owner of this household?`}
                       onSubmit={() => makeOwnerHandler(member.id)}
-                      buttonText="Make Owner"
+                      buttonText={<StarIcon className="w-5 h-5" />}
                     />
                   )}
                 </td>
