@@ -42,7 +42,7 @@ const NEW_RECURRING_PAYMENT_MUTATION = gql`
   }
 `;
 
-export function NewRecurringPayment({ categories, ...props }: Props) {
+export function NewRecurringPayment({ categories }: Props) {
   const router = useRouter();
   const { householdId } = router.query;
 

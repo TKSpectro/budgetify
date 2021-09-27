@@ -18,7 +18,6 @@ export function Progressbar({
   value,
   reverse,
   barHidden = false,
-  ...props
 }: Props) {
   return (
     <>

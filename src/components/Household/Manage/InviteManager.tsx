@@ -27,7 +27,7 @@ interface Props {
   refetch: () => void;
 }
 
-export default function InviteManager({ invites, refetch, ...props }: Props) {
+export default function InviteManager({ invites, refetch }: Props) {
   const router = useRouter();
   const form = useForm<MutationCreateInviteArgs>({
     defaultValues: { householdId: router.query.householdId as string, invitedEmail: '' },

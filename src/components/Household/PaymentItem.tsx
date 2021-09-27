@@ -4,7 +4,7 @@ interface Props {
   payment: Payment;
 }
 
-export default function PaymentItem({ payment, ...props }: Props) {
+export default function PaymentItem({ payment }: Props) {
   return (
     <div className="border-t-2 first:border-t-0 border-gray-600">
       <div className="max-w-7xl mx-auto py-1 px-3 sm:px-6 lg:px-8">

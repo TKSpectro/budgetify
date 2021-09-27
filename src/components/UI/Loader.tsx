@@ -2,7 +2,7 @@ interface Props {
   loading: boolean;
 }
 
-export function Loader({ loading, ...props }: Props) {
+export function Loader({ loading }: Props) {
   if (!loading) return null;
 
   return (

@@ -36,7 +36,7 @@ const REMOVE_HOUSEHOLD_MEMBER_MUTATION = gql`
   }
 `;
 
-export default function MemberTable({ members, owner, ...props }: Props) {
+export default function MemberTable({ members, owner }: Props) {
   const router = useRouter();
   const groupId = router.query.householdId as string;
 

@@ -25,7 +25,6 @@ export function ModalForm<T>({
   children,
   form,
   description,
-  ...props
 }: Props<T>) {
   const [showModal, setShowModal] = useState(false);
 

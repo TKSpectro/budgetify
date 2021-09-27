@@ -8,7 +8,7 @@ interface Props {
   toggleItem: (item: User) => void;
 }
 
-export function UserDropdown({ items, toggleItem, ...props }: Props) {
+export function UserDropdown({ items, toggleItem }: Props) {
   return (
     <div
       id="dropdown"

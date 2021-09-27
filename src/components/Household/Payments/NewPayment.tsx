@@ -30,7 +30,7 @@ interface Props {
   categories: Category[];
 }
 
-export function NewPayment({ categories, ...props }: Props) {
+export function NewPayment({ categories }: Props) {
   const router = useRouter();
   const { householdId } = router.query;
 

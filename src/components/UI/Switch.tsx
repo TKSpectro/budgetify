@@ -8,7 +8,7 @@ interface Props {
   big?: boolean;
 }
 
-export function Switch({ isLeft, onClick, leftIcon, rightIcon, big, ...props }: Props) {
+export function Switch({ isLeft, onClick, leftIcon, rightIcon, big }: Props) {
   return (
     <div className="items-center" onClick={() => onClick()}>
       <div

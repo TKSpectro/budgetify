@@ -20,7 +20,6 @@ export function Modal({
   variant,
   submitText = buttonText,
   children,
-  ...props
 }: Props) {
   const [showModal, setShowModal] = useState(false);
   return (

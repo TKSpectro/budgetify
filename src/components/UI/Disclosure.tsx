@@ -10,7 +10,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export function Disclosure({ text, overflowText, showOpen, className, children, ...props }: Props) {
+export function Disclosure({ text, overflowText, showOpen, className, children }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

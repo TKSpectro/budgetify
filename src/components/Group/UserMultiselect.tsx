@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const UserMultiSelect = forwardRef<HTMLFormControlsCollection, Props>(
-  function UserMultiSelect({ items, setValue, ...props }: Props, ref) {
+  function UserMultiSelect({ items, setValue }: Props, ref) {
     // state showing if dropdown is open or closed
     const [dropdown, setDropdown] = useState(false);
     // contains selected items
