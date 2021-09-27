@@ -9,36 +9,40 @@ interface Props {
 export function PaymentTable({ payments }: Props) {
   return (
     <Container>
-      <table className="w-full">
-        <tbody className="divide-y divide-gray-200 ">
+      <table className="table-fixed w-full break-words">
+        <thead>
+          <tr>
+            <th className="w-1/4 hidden md:table-cell">Name</th>
+            <th className="w-1/4 hidden md:table-cell">Date</th>
+            <th className="w-1/4 hidden lg:table-cell">Category</th>
+            <th className="w-1/4 hidden md:table-cell">Value</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200 text-center">
           {payments.map((payment: Payment) => {
             return (
               <tr key={payment.id}>
-                <td className=" py-4">
-                  <div className="flex items-center">
-                    <TagIcon className="flex-shrink-0 h-6 w-6 text-brand-500" />
+                <td className="py-2">
+                  <div className="text-left items-center">
+                    <TagIcon className="inline-block h-6 w-6 text-brand-500" />
 
-                    <div className="max-w-xl overflow-auto">
-                      <div className="ml-2 font-bold dark:text-gray-100">
-                        {payment.name}
-                        <span className="hidden md:inline text-sm dark:text-gray-400 ml-8">
-                          {new Date(payment.createdAt).toDateString()}
-                        </span>
-                      </div>
-                      <span className="md:hidden ml-2 text-sm text-gray-400">
-                        {new Date(payment.createdAt).toDateString()}
-                      </span>
-                      <div className="hidden md:table-cell pl-2 text-sm dark:text-gray-400">
-                        {payment.description}
-                      </div>
+                    <span className="ml-2 font-bold dark:text-gray-100">{payment.name}</span>
+                    <div className="md:hidden ml-2 text-sm text-gray-400">
+                      {new Date(payment.createdAt).toDateString()}
+                    </div>
+                    <div className="hidden md:table-cell pl-2 text-sm dark:text-gray-400">
+                      {payment.description}
                     </div>
                   </div>
                 </td>
-                <td className="py-4 hidden md:table-cell">
-                  <div className="font-light dark:text-gray-400">{payment.category!.name}</div>
+                <td className="hidden md:table-cell text-right dark:text-gray-400 ">
+                  {new Date(payment.createdAt).toDateString()}
                 </td>
-                <td className="pl-4 py-4 text-right">
-                  <div className="font-bold dark:text-gray-100">{payment.value + '€'}</div>
+                <td className="hidden lg:table-cell text-center font-light dark:text-gray-400">
+                  {payment.category!.name}
+                </td>
+                <td className="text-right md:pr-8 font-bold dark:text-gray-100">
+                  {payment.value + '€'}
                 </td>
               </tr>
             );
