@@ -150,7 +150,7 @@ export default function Payments() {
         <title>Payments | budgetify</title>
       </Head>
 
-      <div className="md:mt-8 md:mx-32">
+      <div>
         <>
           <Container>
             <Error title="Failed to load payments" error={error} />
@@ -173,7 +173,7 @@ export default function Payments() {
                   type="date"
                   {...form.register('endDate', { valueAsDate: true })}
                 />
-                <Button className="lg:mt-6" type="submit">
+                <Button className="lg:mt-8" type="submit">
                   Refresh
                 </Button>
               </div>
