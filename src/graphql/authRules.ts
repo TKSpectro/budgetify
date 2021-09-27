@@ -6,6 +6,7 @@ export const authIsLoggedIn = (_: any, __: any, ctx: Context) => (ctx.user ? tru
 export const authIsAdmin = (_: any, __: any, ctx: Context) => ctx.user.isAdmin;
 
 export const authIsGroupMember = async (_: any, args: any, ctx: Context) => {
+  // Find the group and in that just the member with the current user id
   const groupMember = await prisma.group
     .findUnique({
       where: { id: args.groupId },
@@ -16,34 +17,34 @@ export const authIsGroupMember = async (_: any, args: any, ctx: Context) => {
 };
 
 export const authIsGroupOwner = async (_: any, args: any, ctx: Context) => {
-  const group = await prisma.group.findUnique({
-    where: { id: args.groupId },
-    include: { owners: true },
-  });
-  // Check if the user is the owner of the group.
-  const groupOwner = group?.owners.find((x) => x.id === ctx.user.id);
-  // User must be logged in and own the group
-  return !!ctx.user && !!groupOwner;
+  // Find the group and in that just the owner with the current user id
+  const groupOwner = await prisma.group
+    .findUnique({
+      where: { id: args.groupId },
+    })
+    .owners({ where: { id: ctx.user.id } });
+
+  return groupOwner.length > 0;
 };
 
 export const authIsHouseholdMember = async (_: any, args: any, ctx: Context) => {
-  const householdMembers = await prisma.household
+  // Find the household and in that just the memeber with the current user id
+  const householdMember = await prisma.household
     .findUnique({
       where: { id: args.householdId },
     })
-    .members();
-  // Check if the user is a member of the household.
-  const householdMember = householdMembers?.find((x) => x.id === ctx.user.id);
-  // User must be logged in and be a member the household
-  return !!ctx.user && !!householdMember;
+    .members({ where: { id: ctx.user.id } });
+
+  return householdMember.length > 0;
 };
 
 export const authIsHouseholdOwner = async (_: any, args: any, ctx: Context) => {
-  const household = await prisma.household.findUnique({
-    where: { id: args.householdId },
-  });
-  // Check if the user is the owner of the household.
-  const householdOwner = household?.ownerId === ctx.user.id;
-  // User must be logged in and own the household
-  return !!ctx.user && householdOwner;
+  // Find the household and in that just the owner with the current user id
+  const householdOwner = await prisma.household
+    .findUnique({
+      where: { id: args.householdId },
+    })
+    .owner();
+
+  return householdOwner?.id === ctx.user.id;
 };
