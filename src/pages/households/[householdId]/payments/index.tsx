@@ -75,8 +75,17 @@ let paymentChartOptions: ChartOptions = {
       // Enable automatic scaling for the ticks
       ticks: { source: 'auto' },
     },
+    y: {
+      ticks: {
+        // Include a dollar sign in the ticks
+        callback: function (value, index, values) {
+          return value + '€';
+        },
+      },
+    },
   },
   plugins: {
+    legend: { display: false },
     tooltip: {
       callbacks: {
         label: function (this) {
