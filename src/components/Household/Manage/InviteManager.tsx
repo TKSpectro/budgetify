@@ -1,4 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
+import { TrashIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Error } from '~/components/UI/Error';
@@ -76,35 +77,45 @@ export default function InviteManager({ invites, refetch, ...props }: Props) {
         />
       </ModalForm>
 
-      <table className="w-full">
-        <tbody className="divide-y divide-gray-200 ">
+      <table className="table-fixed w-full break-words mt-4">
+        <thead>
+          <tr>
+            <th className="w-1/3 hidden sm:table-cell">Email</th>
+            <th className="w-1/3 hidden sm:table-cell">Expires</th>
+            <th className="w-1/3 hidden sm:table-cell">Actions</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200 text-center">
           {invites.map((invite: Invite) => {
             return (
-              <tr key={invite.id} className="">
-                <td className="py-4">
-                  <div className="max-w-xl ml-2 overflow-auto">
-                    <div className="font-bold text-gray-800 dark:text-gray-100">
-                      {invite.invitedEmail}
-                    </div>
-                    <div className="table-cell sm:hidden  font-bold text-gray-800 dark:text-gray-100">
-                      {new Date(invite.validUntil).toDateString()}
-                    </div>
+              <tr key={invite.id}>
+                <td className="py-2">
+                  <div className="font-bold text-gray-800 dark:text-gray-100">
+                    {invite.invitedEmail}
+                  </div>
+                  <div className="block sm:hidden font-bold text-gray-800 dark:text-gray-100">
+                    {new Date(invite.validUntil).toDateString()}
+                  </div>
+                  <div className="block sm:hidden font-bold text-gray-800 dark:text-gray-100">
+                    <Modal
+                      title="Remove invite"
+                      description={`Are you sure that you want to remove the invite to ${invite.invitedEmail}?`}
+                      onSubmit={() => removeHandler(invite)}
+                      buttonText={<TrashIcon className="w-5 h-5" />}
+                    />
                   </div>
                 </td>
                 <td className="py-4 hidden sm:table-cell">
-                  <div className="max-w-xl overflow-auto">
-                    <div className="ml-2 font-bold text-gray-800 dark:text-gray-100">
-                      {new Date(invite.validUntil).toDateString()}
-                    </div>
+                  <div className="font-bold text-gray-800 dark:text-gray-100">
+                    {new Date(invite.validUntil).toDateString()}
                   </div>
                 </td>
-                <td className="py-4 mr-4 float-right">
+                <td className="py-4 hidden sm:table-cell">
                   <Modal
-                    title="Remove user from household"
+                    title="Remove invite"
                     description={`Are you sure that you want to remove the invite to ${invite.invitedEmail}?`}
                     onSubmit={() => removeHandler(invite)}
-                    buttonText="Remove"
-                    submitText="Remove Invite"
+                    buttonText={<TrashIcon className="w-5 h-5" />}
                   />
                 </td>
               </tr>
