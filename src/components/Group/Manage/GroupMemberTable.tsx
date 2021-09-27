@@ -1,5 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
-import { StarIcon } from '@heroicons/react/outline';
+import { StarIcon, UserRemoveIcon } from '@heroicons/react/outline';
+import { StarIcon as StarIconSolid } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import { Error } from '~/components/UI/Error';
 import { Modal } from '~/components/UI/Modal';
@@ -52,7 +53,7 @@ const REMOVE_GROUP_MEMBER_MUTATION = gql`
   }
 `;
 
-export default function GroupMemberTable({ members, owners, currentUserId, ...props }: Props) {
+export default function GroupMemberTable({ members, owners, currentUserId }: Props) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
@@ -103,63 +104,55 @@ export default function GroupMemberTable({ members, owners, currentUserId, ...pr
       <Error title="Could not remove member from group." error={removeMemberError} />
       <Error title="Could not leave group." error={leaveGroupError} />
 
-      <table className="w-full">
-        <tbody className="divide-y divide-gray-200 ">
+      <table className="table-fixed w-full break-words">
+        <thead>
+          <tr>
+            <th className="w-3/12">Name</th>
+            <th className="w-3/12">Email</th>
+            <th className="w-6/12">Actions</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200 text-center">
           {members.map((member: User) => {
             return (
-              <tr key={member.id} className="">
-                <td className="pl-4 py-4 w-1">
-                  {!!owners.find((x) => x.id === member.id) && (
-                    <StarIcon className="flex-shrink-0 h-6 w-6 text-brand-500" />
-                  )}
+              <tr key={member.id}>
+                <td>
+                  <div className="font-bold text-gray-800 dark:text-gray-100">{member.name}</div>
                 </td>
-                <td className="py-4">
-                  <div className="max-w-xl overflow-auto">
-                    <div className="ml-2 font-bold text-gray-800 dark:text-gray-100">
-                      {member.name}
-                    </div>
-                  </div>
+                <td>
+                  <div className="font-bold text-gray-800 dark:text-gray-100">{member.email}</div>
                 </td>
-                <td className="py-4">
-                  <div className="max-w-xl overflow-auto">
-                    <div className="ml-2 font-bold text-gray-800 dark:text-gray-100">
-                      {member.email}
-                    </div>
-                  </div>
-                </td>
-                <td className="py-4">
-                  {member.id !== currentUserId && (
+                <td>
+                  {member.id !== currentUserId ? (
                     <Modal
                       title="Remove user from group"
                       description={`Are you sure that you want to remove ${member.name} from this group?`}
                       onSubmit={() => removeMemberHandler(member.id)}
-                      buttonText="Remove"
+                      buttonText={<UserRemoveIcon className="w-5 h-5" />}
+                      buttonClassName="mr-2"
                     />
-                  )}
-                  {member.id === currentUserId && (
+                  ) : (
                     <Modal
                       title="Leave group."
                       description={`Are you sure that you want to remove ${member.name} from this group?`}
                       onSubmit={() => leaveGroupHandler(member.id)}
-                      buttonText="Leave"
+                      buttonText={<UserRemoveIcon className="w-5 h-5" />}
+                      buttonClassName="mr-2"
                     />
                   )}
-                </td>
-                <td className="py-4">
-                  {!owners.find((x) => x.id === member.id) && (
+                  {!owners.find((x) => x.id === member.id) ? (
                     <Modal
-                      title="Make owner of household"
+                      title="Give owner role"
                       description={`Are you sure that you want to make ${member.name} a owner of this group?`}
                       onSubmit={() => makeOwnerHandler(member.id)}
-                      buttonText="Make Owner"
+                      buttonText={<StarIcon className="w-5 h-5" />}
                     />
-                  )}
-                  {!!owners.find((x) => x.id === member.id) && (
+                  ) : (
                     <Modal
                       title="Remove owner role"
                       description={`Are you sure that you want to remove ${member.name} from the owners?`}
                       onSubmit={() => removeOwnerHandler(member.id)}
-                      buttonText="Remove Owner"
+                      buttonText={<StarIconSolid className="w-5 h-5" />}
                     />
                   )}
                 </td>

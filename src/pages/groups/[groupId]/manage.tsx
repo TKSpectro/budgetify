@@ -27,6 +27,7 @@ const QUERY = gql`
       members {
         id
         name
+        email
       }
       invites {
         id
@@ -72,7 +73,7 @@ export default function ManageGroup() {
 
   return (
     <>
-      <Container>
+      <Container big>
         <Error title="Could not load group." error={error} />
         <Error title="Could not delete group." error={deleteGroupError} />
         <Loader loading={loading} />
