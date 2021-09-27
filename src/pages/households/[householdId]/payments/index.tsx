@@ -77,8 +77,8 @@ let paymentChartOptions: ChartOptions = {
     },
     y: {
       ticks: {
-        // Include a dollar sign in the ticks
-        callback: function (value, index, values) {
+        // Include a euro sign in the ticks
+        callback: function (value) {
           return value + '€';
         },
       },
@@ -158,7 +158,6 @@ export default function Payments() {
               title="Could not find any payments. Please create a new one."
               error={!loading && !error && payments.length === 0 ? '' : undefined}
             />
-            <Loader loading={loading} />
 
             <Form form={form} onSubmit={onDateFilterSubmit}>
               <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 mb-4">
@@ -203,11 +202,10 @@ export default function Payments() {
               <NewPayment categories={categories} />
             </div>
           </Container>
-          {payments.length !== 0 && (
-            <div className="my-8">
-              <PaymentTable payments={payments} />
-            </div>
-          )}
+          <Container>
+            <Loader loading={loading} />
+            <PaymentTable payments={payments} />
+          </Container>
         </>
       </div>
     </>
