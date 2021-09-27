@@ -5,6 +5,16 @@ export const authIsLoggedIn = (_: any, __: any, ctx: Context) => (ctx.user ? tru
 
 export const authIsAdmin = (_: any, __: any, ctx: Context) => ctx.user.isAdmin;
 
+export const authIsGroupMember = async (_: any, args: any, ctx: Context) => {
+  const groupMember = await prisma.group
+    .findUnique({
+      where: { id: args.groupId },
+    })
+    .members({ where: { id: ctx.user.id } });
+
+  return groupMember.length > 0;
+};
+
 export const authIsGroupOwner = async (_: any, args: any, ctx: Context) => {
   const group = await prisma.group.findUnique({
     where: { id: args.groupId },

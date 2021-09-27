@@ -470,7 +470,7 @@ export type QueryGetInviteByTokenArgs = {
 
 
 export type QueryGroupArgs = {
-  id: Scalars['String'];
+  groupId: Scalars['String'];
 };
 
 

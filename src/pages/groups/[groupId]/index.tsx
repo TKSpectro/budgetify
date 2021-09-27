@@ -19,7 +19,7 @@ const GROUP_QUERY = gql`
     me {
       id
     }
-    group(id: $id) {
+    group(groupId: $id) {
       id
       name
       value

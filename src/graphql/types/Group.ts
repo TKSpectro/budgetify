@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-server-errors';
 import { arg, extendType, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
-import { authIsGroupOwner, authIsLoggedIn } from '../authRules';
+import { authIsGroupMember, authIsGroupOwner, authIsLoggedIn } from '../authRules';
 import { Participant as ParticipantType } from '../__generated__/types';
 
 export const Group = objectType({
@@ -65,13 +65,13 @@ export const GroupQuery = extendType({
   definition(t) {
     t.field('group', {
       type: Group,
-      args: { id: nonNull(stringArg()) },
+      args: { groupId: nonNull(stringArg()) },
       description: 'Returns a group by searching for the given id.',
-      authorize: authIsLoggedIn,
+      authorize: authIsGroupMember,
       resolve(_, args) {
         return prisma.group.findFirst({
           where: {
-            id: args.id,
+            id: args.groupId,
           },
         });
       },

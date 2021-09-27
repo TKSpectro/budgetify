@@ -686,7 +686,7 @@ export interface NexusGenArgTypes {
       token: string; // String!
     }
     group: { // args
-      id: string; // String!
+      groupId: string; // String!
     }
     household: { // args
       id?: string | null; // String

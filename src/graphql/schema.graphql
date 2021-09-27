@@ -299,7 +299,7 @@ type Query {
   getInviteByToken(token: String!): Invite
 
   """Returns a group by searching for the given id."""
-  group(id: String!): Group
+  group(groupId: String!): Group
   household(id: String): Household
   households: [Household]
 
