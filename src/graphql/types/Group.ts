@@ -147,95 +147,89 @@ export const GroupQuery = extendType({
           }
         });
 
-        try {
-          // The moneypools are used to get a list of all different variants of transactions
-          let moneypools: any = {};
-          group.transactions.forEach((transaction) => {
-            // Take the userIds of all the participants in the current transaction
-            // so we can build our hashmap by concatenating the sorted ids.
-            let participants = transaction.participants.map((participant) => participant.id);
-            // Need to sort the ids so we always get the same order if the same participants are there
-            participants.sort();
+        // The moneypools are used to get a list of all different variants of transactions
+        let moneypools: any = {};
+        group.transactions.forEach((transaction) => {
+          // Take the userIds of all the participants in the current transaction
+          // so we can build our hashmap by concatenating the sorted ids.
+          let participants = transaction.participants.map((participant) => participant.id);
+          // Need to sort the ids so we always get the same order if the same participants are there
+          participants.sort();
 
-            // ! Hashes can be insanely long as we concatenate the UUIDs of all the participants
-            // But we cant use SHA-1 as we then would not know which ids were involved
-            // and cant split them up again
-            let hash = '';
-            for (let i = 0; i < participants.length; i++) {
-              hash += participants[i];
-              if (i < participants.length - 1) hash += ',';
-            }
+          // ! Hashes can be insanely long as we concatenate the UUIDs of all the participants
+          // But we cant use SHA-1 as we then would not know which ids were involved
+          // and cant split them up again
+          let hash = '';
+          for (let i = 0; i < participants.length; i++) {
+            hash += participants[i];
+            if (i < participants.length - 1) hash += ',';
+          }
 
-            // Write the value of the transaction into our hashmap of moneypools
-            // Add a new entry if it does not exist
-            if (!moneypools[hash]) {
-              moneypools[hash] = transaction.value;
-            } else {
-              moneypools[hash] += transaction.value;
+          // Write the value of the transaction into our hashmap of moneypools
+          // Add a new entry if it does not exist
+          if (!moneypools[hash]) {
+            moneypools[hash] = transaction.value;
+          } else {
+            moneypools[hash] += transaction.value;
+          }
+        });
+
+        // Now we have a hashmap of all transactions which we can use to calculate
+        // the virtual balances of the members
+        for (let hash in moneypools) {
+          // Revert the concatenation of the ids by splitting them up again
+          const ids = hash.split(',');
+          // Calculate the rest for this transaction group, as we need that for the
+          // value splitting between the participants
+          const rest = moneypools[hash] % ids.length;
+
+          let nearestWholeNumber;
+          // Run through all the participants in this pool/transaction and calculate based
+          // on the value what to add to their virtual balance
+          ids.forEach((id) => {
+            // Find in which slot the current id sits in the final array of participants.
+            const index = resultParticipants.findIndex((el) => el.userId === id);
+
+            // If the value is positive we can just add the value onto the virtual balance,
+            // because this is basically a balance top up, which does not get split
+            // between participants
+            if (moneypools[hash] >= 0) resultParticipants[index].value += moneypools[hash];
+
+            if (moneypools[hash] < 0) {
+              if (rest === 0 || rest === -0) {
+                // If the rest is 0 we can just divide the transaction value by the amount of
+                // participants, as there will be a whole number for everybody to add
+                resultParticipants[index].value += moneypools[hash] / ids.length;
+              } else {
+                // If the rest is unequal to 0 we calculate the nearest whole number which we can
+                // then add to the participant
+                nearestWholeNumber = Math.round(moneypools[hash] / ids.length);
+                resultParticipants[index].value += nearestWholeNumber;
+              }
             }
           });
 
-          console.log(moneypools);
-
-          // Now we have a hashmap of all transactions which we can use to calculate
-          // the virtual balances of the members
-          for (let hash in moneypools) {
-            // Revert the concatenation of the ids by splitting them up again
-            const ids = hash.split(',');
-            // Calculate the rest for this transaction group, as we need that for the
-            // value splitting between the participants
-            const rest = moneypools[hash] % ids.length;
-
-            let nearestWholeNumber;
-            // Run through all the participants in this pool/transaction and calculate based
-            // on the value what to add to their virtual balance
-            console.log(ids);
-            ids.forEach((id) => {
-              // Find in which slot the current id sits in the final array of participants.
-              const index = resultParticipants.findIndex((el) => el.userId === id);
-
-              // If the value is positive we can just add the value onto the virtual balance,
-              // because this is basically a balance top up, which does not get split
-              // between participants
-              if (moneypools[hash] >= 0) resultParticipants[index].value += moneypools[hash];
-
-              if (moneypools[hash] < 0) {
-                if (rest === 0 || rest === -0) {
-                  // If the rest is 0 we can just divide the transaction value by the amount of
-                  // participants, as there will be a whole number for everybody to add
-                  resultParticipants[index].value += moneypools[hash] / ids.length;
-                } else {
-                  // If the rest is unequal to 0 we calculate the nearest whole number which we can
-                  // then add to the participant
-                  nearestWholeNumber = Math.round(moneypools[hash] / ids.length);
-                  resultParticipants[index].value += nearestWholeNumber;
-                }
+          // If the transaction value cant be split between the participant directly
+          // We now look for the "richest" participant and then add the missing part
+          // of the division onto his account.
+          if (rest !== 0 && rest !== -0) {
+            // Find the richest person
+            let currentlyRichestParticipant = resultParticipants[0];
+            resultParticipants.forEach((participant) => {
+              if (participant.value > currentlyRichestParticipant.value) {
+                currentlyRichestParticipant = participant;
               }
             });
 
-            // If the transaction value cant be split between the participant directly
-            // We now look for the "richest" participant and then add the missing part
-            // of the division onto his account.
-            if (rest !== 0 && rest !== -0) {
-              // Find the richest person
-              let currentlyRichestParticipant = resultParticipants[0];
-              resultParticipants.forEach((participant) => {
-                if (participant.value > currentlyRichestParticipant.value) {
-                  currentlyRichestParticipant = participant;
-                }
-              });
+            // Add the rest value to the before found richest person in this participant group
+            const index = resultParticipants.findIndex(
+              (el) => el.userId === currentlyRichestParticipant.userId,
+            );
 
-              // Add the rest value to the before found richest person in this participant group
-              const index = resultParticipants.findIndex(
-                (el) => el.userId === currentlyRichestParticipant.userId,
-              );
-
-              resultParticipants[index].value += rest;
-            }
+            resultParticipants[index].value += rest;
           }
-        } catch (error) {
-          console.log(error);
         }
+
         return resultParticipants;
       },
     });
