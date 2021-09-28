@@ -105,7 +105,7 @@ export default function Household() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-y-8 lg:gap-x-16 overflow-auto">
+          <div className="grid grid-cols-1 xl:grid-cols-3 lg:gap-x-16 overflow-auto">
             <PaymentOverview payments={payments} />
 
             <RecurringPaymentOverview recurringPayments={household?.recurringPayments} />

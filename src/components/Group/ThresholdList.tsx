@@ -172,7 +172,8 @@ export function ThresholdList({ me, thresholds, group }: Props) {
         showModal={showRemoveModal}
         setShowModal={setShowRemoveModalWrapper}
       />
-      <div className="divide-y-2">
+
+      <div className="divide-y-2 divide-gray-700">
         {thresholds.map((threshold: Threshold) => {
           return (
             <div key={threshold.id} className="pt-2 pb-1">
