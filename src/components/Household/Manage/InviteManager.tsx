@@ -1,10 +1,12 @@
 import { gql, useMutation } from '@apollo/client';
 import { TrashIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Button } from '~/components/UI/Button';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
-import { Modal } from '~/components/UI/Modal';
+import { ManagedModal } from '~/components/UI/ManagedModal';
 import { ModalForm } from '~/components/UI/ModalForm';
 import { Invite, MutationCreateInviteArgs } from '~/graphql/__generated__/types';
 
@@ -54,14 +56,32 @@ export default function InviteManager({ invites, refetch }: Props) {
     createInviteMutation();
   };
 
-  const removeHandler = (invite: Invite) => {
-    deleteInviteMutation({ variables: { id: invite.id } });
+  const [removeModalInvite, setRemoveModalInvite] = useState<Invite>();
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const onRemoveClickHandler = (invite: Invite) => {
+    setRemoveModalInvite(invite);
+    setShowRemoveModal(true);
+  };
+
+  const removeHandler = () => {
+    deleteInviteMutation({ variables: { id: removeModalInvite?.id } });
   };
 
   return (
     <>
       <Error title="Could not create invite." error={createInviteError} />
       <Error title="Could not delete invite." error={deleteInviteError} />
+
+      <ManagedModal
+        title="Remove invite"
+        description={`Are you sure that you want to remove the invite to ${removeModalInvite?.invitedEmail}?`}
+        submitText={<TrashIcon className="w-5 h-5" />}
+        onSubmit={() => {
+          removeHandler();
+        }}
+        showModal={showRemoveModal}
+        setShowModal={setShowRemoveModal}
+      />
 
       <ModalForm
         title="New Invite"
@@ -97,12 +117,9 @@ export default function InviteManager({ invites, refetch }: Props) {
                     {new Date(invite.validUntil).toDateString()}
                   </div>
                   <div className="block sm:hidden font-bold text-gray-800 dark:text-gray-100">
-                    <Modal
-                      title="Remove invite"
-                      description={`Are you sure that you want to remove the invite to ${invite.invitedEmail}?`}
-                      onSubmit={() => removeHandler(invite)}
-                      buttonText={<TrashIcon className="w-5 h-5" />}
-                    />
+                    <Button onClick={() => onRemoveClickHandler(invite)}>
+                      <TrashIcon className="w-5 h-5" />
+                    </Button>
                   </div>
                 </td>
                 <td className="py-4 hidden sm:table-cell">
@@ -111,12 +128,9 @@ export default function InviteManager({ invites, refetch }: Props) {
                   </div>
                 </td>
                 <td className="py-4 hidden sm:table-cell">
-                  <Modal
-                    title="Remove invite"
-                    description={`Are you sure that you want to remove the invite to ${invite.invitedEmail}?`}
-                    onSubmit={() => removeHandler(invite)}
-                    buttonText={<TrashIcon className="w-5 h-5" />}
-                  />
+                  <Button onClick={() => onRemoveClickHandler(invite)}>
+                    <TrashIcon className="w-5 h-5" />
+                  </Button>
                 </td>
               </tr>
             );
