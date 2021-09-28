@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { hashSync } from 'bcrypt';
-import { addDays, subDays } from 'date-fns';
+import { addDays, subDays, subMinutes } from 'date-fns';
 import faker from 'faker';
 import { TransactionType } from '../src/graphql/__generated__/types';
 
@@ -338,6 +338,25 @@ async function main() {
       },
     },
   });
+
+  for (let i = 0; i < 15; i++) {
+    const test = await prisma.groupTransaction.create({
+      data: {
+        name: faker.lorem.words(2),
+        value: faker.datatype.number({ min: 1, max: 5000, precision: 1 }),
+        type: TransactionType.TopUp,
+        userId: testUser.id,
+        groupId: group1.id,
+        createdAt: subMinutes(new Date(), 1),
+        updatedAt: subMinutes(new Date(), 1),
+      },
+    });
+
+    await prisma.groupTransaction.update({
+      where: { id: test.id },
+      data: { participants: { connect: { id: testUser.id } } },
+    });
+  }
 }
 
 main()
