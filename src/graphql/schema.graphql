@@ -310,7 +310,6 @@ type Query {
   Returns the data of the currently logged in user. Returns null if no user is logged in
   """
   me: User
-  recurringPayments: [RecurringPayment]
 }
 
 type RecurringPayment {

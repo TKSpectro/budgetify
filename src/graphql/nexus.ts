@@ -292,7 +292,6 @@ export interface NexusGenFieldTypes {
     household: NexusGenRootTypes['Household'] | null; // Household
     households: Array<NexusGenRootTypes['Household'] | null> | null; // [Household]
     me: NexusGenRootTypes['User'] | null; // User
-    recurringPayments: Array<NexusGenRootTypes['RecurringPayment'] | null> | null; // [RecurringPayment]
   }
   RecurringPayment: { // field return type
     category: NexusGenRootTypes['Category'] | null; // Category
@@ -471,7 +470,6 @@ export interface NexusGenFieldTypeNames {
     household: 'Household'
     households: 'Household'
     me: 'User'
-    recurringPayments: 'RecurringPayment'
   }
   RecurringPayment: { // field return type name
     category: 'Category'

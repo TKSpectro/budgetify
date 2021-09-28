@@ -91,18 +91,6 @@ export const RecurringPayment = objectType({
   },
 });
 
-export const RecurringPaymentQuery = extendType({
-  type: 'Query',
-  definition(t) {
-    t.list.field('recurringPayments', {
-      type: RecurringPayment,
-      resolve(_, __, { user }) {
-        return prisma.recurringPayment.findMany();
-      },
-    });
-  },
-});
-
 export const RecurringPaymentMutation = extendType({
   type: 'Mutation',
   definition(t) {
@@ -200,6 +188,7 @@ export const RecurringPaymentMutation = extendType({
         return null;
       },
     });
+
     t.nonNull.field('createRecurringPayment', {
       type: RecurringPayment,
       description: 'Create a new recurring payment. Need to be logged in.',
@@ -243,6 +232,7 @@ export const RecurringPaymentMutation = extendType({
         });
       },
     });
+
     t.nonNull.field('updateRecurringPayment', {
       type: RecurringPayment,
       description: 'Update a new recurring payment. Need to be logged in.',

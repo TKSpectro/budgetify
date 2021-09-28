@@ -457,7 +457,6 @@ export type Query = {
   households?: Maybe<Array<Maybe<Household>>>;
   /** Returns the data of the currently logged in user. Returns null if no user is logged in */
   me?: Maybe<User>;
-  recurringPayments?: Maybe<Array<Maybe<RecurringPayment>>>;
 };
 
 
