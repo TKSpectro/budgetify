@@ -18,11 +18,12 @@ export function HeaderLink({ href, className, brand = false, noBorder = false, .
   const content = (
     <a
       className={clsx(
-        'p-2 md:px-4 my-1 md:my-0 md:mx-2 text-center rounded hover:bg-opacity-70 dark:hover:bg-opacity-80 transition-colors duration-300',
-        !className && 'text-gray-600 dark:text-gray-200',
+        'p-2 md:px-4 my-1 md:my-0 md:mx-2 text-center rounded transition-colors duration-300',
         className,
         !noBorder && 'border md:border-0 border-brand-500',
-        brand && 'text-white  bg-brand-500',
+        brand && 'text-white  bg-brand-500 hover:bg-opacity-70 dark:hover:bg-opacity-80',
+        !brand &&
+          'text-gray-600 hover:bg-gray-300 hover:bg-opacity-100 dark:hover:bg-gray-700 dark:hover:bg-opacity-100',
       )}
       {...props}
     />
@@ -93,10 +94,7 @@ export function Header() {
             )}
             {router.query.householdId && (
               <>
-                <HeaderLink
-                  href={'/households/' + router.query.householdId}
-                  className="text-white font-medium bg-brand-500"
-                >
+                <HeaderLink href={'/households/' + router.query.householdId} brand>
                   Dashboard
                 </HeaderLink>
                 <HeaderLink
@@ -111,14 +109,22 @@ export function Header() {
                 >
                   RecurringPayments
                 </HeaderLink>
-                <HeaderLink href={'/households'}>Households</HeaderLink>
-                <HeaderLink href={'/groups'}>Groups</HeaderLink>
+                <HeaderLink href={'/households'} className="text-gray-600 dark:text-gray-200">
+                  Households
+                </HeaderLink>
+                <HeaderLink href={'/groups'} className="text-gray-600 dark:text-gray-200">
+                  Groups
+                </HeaderLink>
               </>
             )}
 
             {!isLoggedIn && <HeaderLink href="/auth/login">Login</HeaderLink>}
             {!isLoggedIn && <HeaderLink href="/auth/signup">Signup</HeaderLink>}
-            {isLoggedIn && <HeaderLink href="/profile">Profile</HeaderLink>}
+            {isLoggedIn && (
+              <HeaderLink href="/profile" className="text-gray-600 dark:text-gray-200">
+                Profile
+              </HeaderLink>
+            )}
 
             <ThemeSwitch />
           </div>
