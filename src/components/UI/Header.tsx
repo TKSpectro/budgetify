@@ -9,15 +9,20 @@ import { preloadQuery } from '~/utils/apollo';
 import { ThemeSwitch } from '../ThemeSwitch';
 import { Button } from './Button';
 
-interface Props extends ComponentProps<'a'> {}
+interface Props extends ComponentProps<'a'> {
+  noBorder?: boolean;
+  brand?: boolean;
+}
 
-export function HeaderLink({ href, className, ...props }: Props) {
+export function HeaderLink({ href, className, brand = false, noBorder = false, ...props }: Props) {
   const content = (
     <a
       className={clsx(
-        'p-2 lg:px-4 md:mx-2 rounded hover:bg-opacity-70 dark:hover:bg-opacity-80 transition-colors duration-300',
+        'p-2 md:px-4 my-1 md:my-0 md:mx-2 text-center rounded hover:bg-opacity-70 dark:hover:bg-opacity-80 transition-colors duration-300',
         !className && 'text-gray-600 dark:text-gray-200',
         className,
+        !noBorder && 'border md:border-0 border-brand-500',
+        brand && 'text-white  bg-brand-500',
       )}
       {...props}
     />
@@ -57,6 +62,7 @@ export function Header() {
             <HeaderLink
               className="text-2xl text-brand-500 dark:text-brand-500 font-medium"
               href="/"
+              noBorder
             >
               budgetify
             </HeaderLink>
@@ -77,10 +83,10 @@ export function Header() {
           >
             {!router.query.householdId && isLoggedIn && (
               <>
-                <HeaderLink href={'/households'} className="text-white  bg-brand-500">
+                <HeaderLink href={'/households'} brand>
                   Households
                 </HeaderLink>
-                <HeaderLink href={'/groups'} className="text-white  bg-brand-500">
+                <HeaderLink href={'/groups'} brand>
                   Groups
                 </HeaderLink>
               </>
@@ -95,13 +101,13 @@ export function Header() {
                 </HeaderLink>
                 <HeaderLink
                   href={'/households/' + router.query.householdId + '/payments'}
-                  className="hidden lg:block text-gray-600 dark:text-gray-200"
+                  className="hidden xl:block text-gray-600 dark:text-gray-200"
                 >
                   Payments
                 </HeaderLink>
                 <HeaderLink
                   href={'/households/' + router.query.householdId + '/recurringPayments'}
-                  className="hidden lg:block text-gray-600 dark:text-gray-200"
+                  className="hidden xl:block text-gray-600 dark:text-gray-200"
                 >
                   RecurringPayments
                 </HeaderLink>
@@ -113,6 +119,7 @@ export function Header() {
             {!isLoggedIn && <HeaderLink href="/auth/login">Login</HeaderLink>}
             {!isLoggedIn && <HeaderLink href="/auth/signup">Signup</HeaderLink>}
             {isLoggedIn && <HeaderLink href="/profile">Profile</HeaderLink>}
+
             <ThemeSwitch />
           </div>
         </div>
