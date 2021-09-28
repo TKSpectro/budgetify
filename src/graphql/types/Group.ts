@@ -34,9 +34,12 @@ export const Group = objectType({
         limit: intArg(),
       },
       resolve(source, args) {
-        return prisma.group
-          .findUnique({ where: { id: source.id || undefined } })
-          .transactions({ skip: args.skip || undefined, take: args.limit || undefined });
+        return prisma.groupTransaction.findMany({
+          where: { groupId: source.id },
+          orderBy: { createdAt: 'desc' },
+          skip: args.skip || undefined,
+          take: args.limit || undefined,
+        });
       },
     });
     t.field('transactionCount', {
@@ -172,6 +175,8 @@ export const GroupQuery = extendType({
             }
           });
 
+          console.log(moneypools);
+
           // Now we have a hashmap of all transactions which we can use to calculate
           // the virtual balances of the members
           for (let hash in moneypools) {
@@ -184,6 +189,7 @@ export const GroupQuery = extendType({
             let nearestWholeNumber;
             // Run through all the participants in this pool/transaction and calculate based
             // on the value what to add to their virtual balance
+            console.log(ids);
             ids.forEach((id) => {
               // Find in which slot the current id sits in the final array of participants.
               const index = resultParticipants.findIndex((el) => el.userId === id);
@@ -223,6 +229,7 @@ export const GroupQuery = extendType({
               const index = resultParticipants.findIndex(
                 (el) => el.userId === currentlyRichestParticipant.userId,
               );
+
               resultParticipants[index].value += rest;
             }
           }

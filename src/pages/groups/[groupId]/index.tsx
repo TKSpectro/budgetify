@@ -58,11 +58,12 @@ const GROUP_QUERY = gql`
   }
 `;
 
+const limit = 10;
+
 export default function Group() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
-  const limit = 2;
   const [skip, setSkip] = useState(0);
 
   const { data, loading, error, fetchMore } = useQuery(GROUP_QUERY, {
@@ -76,6 +77,9 @@ export default function Group() {
   const memberBalances = data?.calculateMemberBalances;
 
   const thresholds = group?.thresholds || [];
+
+  const transactions = group?.transactions || [];
+  const transactionCount = group?.transactionCount;
 
   return (
     <>
@@ -137,59 +141,99 @@ export default function Group() {
           </Container>
         )}
 
-        {group?.transactions && (
+        {transactions && (
           <Container>
             <div className="text-lg font-semibold">Transactions</div>
-
-            <div>
-              <Button
-                onClick={() => {
-                  fetchMore({ variables: { skip: skip - limit <= 0 ? 0 : skip - limit } });
-                  setSkip(skip - limit < 0 ? 0 : skip - limit);
-                }}
-              >
-                <ArrowLeftIcon className="w-5 h-5" />
-              </Button>
-              {`Page ${1 + skip / limit}/${Math.ceil(group?.transactionCount / limit)}`}
-
-              <Button
-                disabled={skip + limit >= group?.transactionCount}
-                onClick={() => {
-                  fetchMore({ variables: { skip: skip + limit } });
-                  setSkip(skip + limit);
-                }}
-              >
-                <ArrowRightIcon className="w-5 h-5" />
-              </Button>
-            </div>
-            <div className="divide-y-2">
-              {group.transactions.map((transaction: GroupTransaction) => {
-                // TODO: Need to style this a bit better
-                return (
-                  <div key={transaction.id}>
-                    <Disclosure
-                      text={transaction.name + ' : ' + transaction.value + '€'}
-                      overflowText={
-                        transaction.participants?.length === 1
-                          ? transaction.participants[0]?.name
-                          : ''
-                      }
-                      showOpen={!!transaction.participants && transaction.participants?.length > 1}
-                    >
-                      <div>
-                        {transaction.participants?.map((user, id, array) => {
-                          return (
-                            <span key={user?.id || id}>
-                              {user?.name + (id !== array.length - 1 ? ' | ' : '')}
-                            </span>
-                          );
-                        })}
+            {transactions.length > 0 || transactionCount > 0 ? (
+              <>
+                <div className="divide-y-2">
+                  {transactions.map((transaction: GroupTransaction) => {
+                    // TODO: Need to style this a bit better
+                    return (
+                      <div key={transaction.id}>
+                        <Disclosure
+                          text={transaction.name + ' : ' + transaction.value + '€'}
+                          overflowText={
+                            transaction.participants?.length === 1
+                              ? transaction.participants[0]?.name
+                              : ''
+                          }
+                          showOpen={
+                            !!transaction.participants && transaction.participants?.length > 1
+                          }
+                        >
+                          <div>
+                            {transaction.participants?.map((user, id, array) => {
+                              return (
+                                <span key={user?.id || id}>
+                                  {user?.name + (id !== array.length - 1 ? ' | ' : '')}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </Disclosure>
                       </div>
-                    </Disclosure>
+                    );
+                  })}
+                </div>
+
+                <div>
+                  <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 select-none">
+                    <div className="flex-1 flex justify-between sm:hidden">
+                      <a
+                        href="#"
+                        className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                      >
+                        Previous
+                      </a>
+                      <a
+                        href="#"
+                        className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                      >
+                        Next
+                      </a>
+                    </div>
+                    <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                      <div>
+                        <p className="text-sm text-gray-700">
+                          Showing <span className="font-medium">{skip + 1}</span> to{' '}
+                          <span className="font-medium">
+                            {skip + limit < transactionCount ? skip + limit : transactionCount}
+                          </span>{' '}
+                          of <span className="font-medium">{transactionCount}</span> transactions
+                        </p>
+                      </div>
+                      <div>
+                        <Button
+                          disabled={skip - limit < 0}
+                          onClick={() => {
+                            fetchMore({ variables: { skip: skip - limit < 0 ? 0 : skip - limit } });
+                            setSkip(skip - limit < 0 ? 0 : skip - limit);
+                          }}
+                          variant="transparent"
+                        >
+                          <ArrowLeftIcon className="w-5 h-5" />
+                        </Button>
+
+                        <Button
+                          disabled={skip + limit >= transactionCount}
+                          onClick={() => {
+                            fetchMore({ variables: { skip: skip + limit } });
+                            setSkip(skip + limit);
+                          }}
+                          className="ml-4"
+                          variant="secondary"
+                        >
+                          <ArrowRightIcon className="w-5 h-5" />
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              </>
+            ) : (
+              <Error title="Could not find any transactions. Create your first one" error="" />
+            )}
           </Container>
         )}
       </div>
@@ -203,7 +247,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     query: GROUP_QUERY,
     variables: {
       id: ctx.params!.groupId,
-      limit: 2,
+      limit,
     },
   });
 };
