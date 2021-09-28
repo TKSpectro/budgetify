@@ -23,10 +23,16 @@ export function initializeApollo({ initialState, headers }: ApolloClientParamete
         headers: headers,
       }),
       cache: new InMemoryCache({
+        // https://www.apollographql.com/docs/react/pagination/core-api/#paginated-read-functions
+        // typePolicies or fieldPolicies are used to customize how data is read and written
+        // inside the clients cache.
         typePolicies: {
           Group: {
             fields: {
+              // We need to specify the read and merge function for groupTransactions because
+              // those are able to be paginated.
               transactions: {
+                // Read the existing from skip to skip + limit -> standard offset pagination
                 read(existing, { args }) {
                   return (
                     existing &&
@@ -34,8 +40,13 @@ export function initializeApollo({ initialState, headers }: ApolloClientParamete
                   );
                 },
                 keyArgs: false,
-                merge(existing = [], incoming) {
-                  return [...existing, ...incoming];
+                // Concatenate the incoming list with the already existing items
+                merge(existing = [], incoming, { args }) {
+                  const merged = existing ? existing.slice(0) : [];
+                  for (let i = 0; i < incoming.length; ++i) {
+                    merged[(args?.skip || 0) + i] = incoming[i];
+                  }
+                  return merged;
                 },
               },
             },

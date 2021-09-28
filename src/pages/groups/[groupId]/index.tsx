@@ -144,13 +144,14 @@ export default function Group() {
             <div>
               <Button
                 onClick={() => {
-                  fetchMore({ variables: { skip: skip - limit < 0 ? 0 : skip - limit } });
+                  fetchMore({ variables: { skip: skip - limit <= 0 ? 0 : skip - limit } });
                   setSkip(skip - limit < 0 ? 0 : skip - limit);
                 }}
               >
                 <ArrowLeftIcon className="w-5 h-5" />
               </Button>
-              {`Page ${1 + skip / limit}/${group?.transactionCount / limit}`}
+              {`Page ${1 + skip / limit}/${Math.ceil(group?.transactionCount / limit)}`}
+
               <Button
                 disabled={skip + limit >= group?.transactionCount}
                 onClick={() => {
