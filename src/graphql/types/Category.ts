@@ -1,6 +1,6 @@
 import { extendType, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
-import { authIsAdmin } from '../authRules';
+import { authIsAdmin, authIsLoggedIn } from '../authRules';
 
 export const Category = objectType({
   name: 'Category',
@@ -22,6 +22,7 @@ export const CategoryQuery = extendType({
         id: stringArg(),
         name: stringArg(),
       },
+      authorize: authIsLoggedIn,
       resolve(_, args) {
         return prisma.category.findMany({
           where: { id: args.id || undefined, name: args.name || undefined },

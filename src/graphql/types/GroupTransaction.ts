@@ -1,7 +1,7 @@
 import { arg, enumType, extendType, list, nonNull, objectType, stringArg } from 'nexus';
 import { MailOptions } from 'nodemailer/lib/sendmail-transport';
 import prisma from '~/utils/prisma';
-import { authIsLoggedIn } from '../authRules';
+import { authIsGroupMember } from '../authRules';
 import { Context } from '../context';
 import { createNodemailerTransporter } from '../helper';
 
@@ -67,7 +67,7 @@ export const GroupTransactionMutation = extendType({
       },
       description:
         'Creates a new transaction in the specified group with the given arguments and returns it.',
-      authorize: authIsLoggedIn,
+      authorize: authIsGroupMember,
       async resolve(_, args, ctx: Context) {
         // Update value of the group with the transaction value
         const group = await prisma.group.update({

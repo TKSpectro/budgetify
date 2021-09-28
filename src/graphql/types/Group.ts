@@ -92,6 +92,7 @@ export const GroupQuery = extendType({
         });
       },
     });
+
     t.list.field('calculateMemberBalances', {
       type: Participant,
       args: { id: nonNull(stringArg()) },
