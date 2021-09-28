@@ -49,7 +49,7 @@ export function Modal({
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                  <Button variant="transparent" onClick={() => setShowModal(false)}>
+                  <Button className="mr-4" variant="secondary" onClick={() => setShowModal(false)}>
                     Close
                   </Button>
                   <Button

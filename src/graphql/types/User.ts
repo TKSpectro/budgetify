@@ -108,7 +108,6 @@ export const UserMutation = extendType({
       },
       authorize: authIsLoggedIn,
       async resolve(_, args, ctx) {
-        console.log(args);
         return prisma.user.update({
           where: { id: ctx.user.id },
           data: {
