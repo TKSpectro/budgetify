@@ -150,7 +150,7 @@ export default function Group() {
                   {transactions.map((transaction: GroupTransaction) => {
                     // TODO: Need to style this a bit better
                     return (
-                      <div key={transaction.id}>
+                      <div key={transaction.id} className="py-1 sm:px-2">
                         <Disclosure
                           text={transaction.name + ' : ' + transaction.value + '€'}
                           overflowText={
@@ -177,57 +177,41 @@ export default function Group() {
                   })}
                 </div>
 
-                <div>
-                  <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 select-none">
-                    <div className="flex-1 flex justify-between sm:hidden">
-                      <a
-                        href="#"
-                        className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                      >
-                        Previous
-                      </a>
-                      <a
-                        href="#"
-                        className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                      >
-                        Next
-                      </a>
-                    </div>
-                    <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                      <div>
-                        <p className="text-sm text-gray-700">
-                          Showing <span className="font-medium">{skip + 1}</span> to{' '}
-                          <span className="font-medium">
-                            {skip + limit < transactionCount ? skip + limit : transactionCount}
-                          </span>{' '}
-                          of <span className="font-medium">{transactionCount}</span> transactions
-                        </p>
-                      </div>
-                      <div>
-                        <Button
-                          disabled={skip - limit < 0}
-                          onClick={() => {
-                            fetchMore({ variables: { skip: skip - limit < 0 ? 0 : skip - limit } });
-                            setSkip(skip - limit < 0 ? 0 : skip - limit);
-                          }}
-                          variant="transparent"
-                        >
-                          <ArrowLeftIcon className="w-5 h-5" />
-                        </Button>
+                <div className="px-4 mt-4 sm:flex sm:items-center sm:justify-between sm:px-6 select-none">
+                  <div className="hidden sm:flex">
+                    <p className="text-sm text-gray-700 dark:text-gray-200">
+                      Showing <span className="font-medium">{skip + 1}</span> to{' '}
+                      <span className="font-medium">
+                        {skip + limit < transactionCount ? skip + limit : transactionCount}
+                      </span>{' '}
+                      of <span className="font-medium">{transactionCount}</span> transactions
+                    </p>
+                  </div>
 
-                        <Button
-                          disabled={skip + limit >= transactionCount}
-                          onClick={() => {
-                            fetchMore({ variables: { skip: skip + limit } });
-                            setSkip(skip + limit);
-                          }}
-                          className="ml-4"
-                          variant="secondary"
-                        >
-                          <ArrowRightIcon className="w-5 h-5" />
-                        </Button>
-                      </div>
-                    </div>
+                  <div className="flex justify-between">
+                    <Button
+                      disabled={skip - limit < 0}
+                      onClick={() => {
+                        fetchMore({ variables: { skip: skip - limit < 0 ? 0 : skip - limit } });
+                        setSkip(skip - limit < 0 ? 0 : skip - limit);
+                      }}
+                      className="flex"
+                      variant="transparent"
+                    >
+                      <ArrowLeftIcon className="w-5 h-5" />
+                    </Button>
+
+                    <Button
+                      disabled={skip + limit >= transactionCount}
+                      onClick={() => {
+                        fetchMore({ variables: { skip: skip + limit } });
+                        setSkip(skip + limit);
+                      }}
+                      className="ml-4 flex"
+                      variant="transparent"
+                    >
+                      <ArrowRightIcon className="w-5 h-5" />
+                    </Button>
                   </div>
                 </div>
               </>
