@@ -128,7 +128,7 @@ export default function GroupMemberTable({ members, owners, currentUserId }: Pro
                       title="Remove user from group"
                       description={`Are you sure that you want to remove ${member.name} from this group?`}
                       onSubmit={() => removeMemberHandler(member.id)}
-                      buttonText={<UserRemoveIcon className="w-5 h-5" />}
+                      buttonText={<UserRemoveIcon className="w-6 h-6" />}
                       buttonClassName="mr-2"
                     />
                   ) : (
@@ -136,7 +136,7 @@ export default function GroupMemberTable({ members, owners, currentUserId }: Pro
                       title="Leave group."
                       description={`Are you sure that you want to remove ${member.name} from this group?`}
                       onSubmit={() => leaveGroupHandler(member.id)}
-                      buttonText={<UserRemoveIcon className="w-5 h-5" />}
+                      buttonText={<UserRemoveIcon className="w-6 h-6" />}
                       buttonClassName="mr-2"
                     />
                   )}
@@ -145,14 +145,14 @@ export default function GroupMemberTable({ members, owners, currentUserId }: Pro
                       title="Give owner role"
                       description={`Are you sure that you want to make ${member.name} a owner of this group?`}
                       onSubmit={() => makeOwnerHandler(member.id)}
-                      buttonText={<StarIcon className="w-5 h-5" />}
+                      buttonText={<StarIcon className="w-6 h-6" />}
                     />
                   ) : (
                     <Modal
                       title="Remove owner role"
                       description={`Are you sure that you want to remove ${member.name} from the owners?`}
                       onSubmit={() => removeOwnerHandler(member.id)}
-                      buttonText={<StarIconSolid className="w-5 h-5" />}
+                      buttonText={<StarIconSolid className="w-6 h-6" />}
                     />
                   )}
                 </td>

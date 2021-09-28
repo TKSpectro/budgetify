@@ -24,7 +24,7 @@ export function Disclosure({ text, overflowText, showOpen, className, children }
         )}
         {showOpen && (
           <span className="float-right pr-4">
-            <ChevronDownIcon className="w-5 h-5" />
+            <ChevronDownIcon className="w-6 h-6" />
           </span>
         )}
       </div>

@@ -96,7 +96,7 @@ export default function MemberTable({ members, owner }: Props) {
         title="Make owner of household"
         description={`Are you sure that you want to make ${makeOwnerModalUser?.name} the new owner of this household?`}
         onSubmit={() => makeOwner()}
-        submitText={<StarIcon className="w-5 h-5" />}
+        submitText={<StarIcon className="w-6 h-6" />}
         showModal={showMakeOwnerModal}
         setShowModal={setShowMakeOwnerModal}
       />
@@ -104,7 +104,7 @@ export default function MemberTable({ members, owner }: Props) {
       <ManagedModal
         title="Remove user from household"
         description={`Are you sure that you want to make ${removeMemberModalUser?.name} the new owner of this household?`}
-        submitText={<StarIcon className="w-5 h-5" />}
+        submitText={<StarIcon className="w-6 h-6" />}
         showModal={showRemoveMemberModal}
         setShowModal={setShowRemoveMemberModal}
         onSubmit={() => removeHandler()}
@@ -131,7 +131,7 @@ export default function MemberTable({ members, owner }: Props) {
                 <td className="py-4">
                   {owner.id !== member.id ? (
                     <Button onClick={() => onRemoveMemberClickHandler(member)} className="mr-2">
-                      <UserRemoveIcon className="w-5 h-5" />
+                      <UserRemoveIcon className="w-6 h-6" />
                     </Button>
                   ) : (
                     // No need to do this one as managed because it is always just spawned once as
@@ -140,7 +140,7 @@ export default function MemberTable({ members, owner }: Props) {
                       form={leaveHouseholdForm}
                       onSubmit={onLeaveSubmit}
                       title="Leave household"
-                      buttonText={<UserRemoveIcon className="w-5 h-5" />}
+                      buttonText={<UserRemoveIcon className="w-6 h-6" />}
                       buttonClassName="mr-2"
                     >
                       <label>
@@ -168,7 +168,7 @@ export default function MemberTable({ members, owner }: Props) {
                   )}
                   {owner.id !== member.id && (
                     <Button onClick={() => onMakeOwnerClickHandler(member)}>
-                      <StarIcon className="w-5 h-5" />
+                      <StarIcon className="w-6 h-6" />
                     </Button>
                   )}
                 </td>

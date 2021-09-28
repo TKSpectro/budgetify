@@ -141,12 +141,12 @@ export default function Profile() {
                 {me?.receiveNotifications ? (
                   <span className="flex">
                     Enabled
-                    <CheckIcon className="w-5 h-5 ml-1 border-2 border-brand-500 rounded-lg text-brand-500" />
+                    <CheckIcon className="w-6 h-6 ml-1 border-2 border-brand-500 rounded-lg text-brand-500" />
                   </span>
                 ) : (
                   <span className="flex">
                     Disabled
-                    <XIcon className="w-5 h-5 ml-1 border-2 border-red-500 rounded-lg text-red-500" />
+                    <XIcon className="w-6 h-6 ml-1 border-2 border-red-500 rounded-lg text-red-500" />
                   </span>
                 )}
               </div>

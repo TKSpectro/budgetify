@@ -208,13 +208,13 @@ export function ThresholdList({ me, thresholds, group }: Props) {
                   )}
                 >
                   <Button onClick={() => onUpdateThresholdSelectHandler(threshold)}>
-                    <CogIcon className="w-5 h-5" />
+                    <CogIcon className="w-6 h-6" />
                   </Button>
                   <Button
                     className="ml-4"
                     onClick={() => onRemoveThresholdSelectHandler(threshold)}
                   >
-                    <TrashIcon className="w-5 h-5" />
+                    <TrashIcon className="w-6 h-6" />
                   </Button>
                 </div>
               )}

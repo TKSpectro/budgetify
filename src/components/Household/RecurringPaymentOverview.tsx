@@ -34,7 +34,7 @@ export default function RecurringPaymentOverview({ recurringPayments }: Props) {
       </div>
       <div className="absolute bottom-4 text-xl">
         <Link href={router.asPath + '/recurringPayments'}>
-          <CurrencyDollarIcon className="w-5 h-5 mb-1 inline-block" />
+          <CurrencyDollarIcon className="w-6 h-6 mb-1 inline-block" />
           All planned Payments
         </Link>
       </div>

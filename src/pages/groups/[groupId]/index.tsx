@@ -197,7 +197,7 @@ export default function Group() {
                     className="flex"
                     variant="transparent"
                   >
-                    <ArrowLeftIcon className="w-5 h-5" />
+                    <ArrowLeftIcon className="w-6 h-6" />
                   </Button>
 
                   <Button
@@ -209,7 +209,7 @@ export default function Group() {
                     className="ml-4 flex"
                     variant="transparent"
                   >
-                    <ArrowRightIcon className="w-5 h-5" />
+                    <ArrowRightIcon className="w-6 h-6" />
                   </Button>
                 </div>
               </div>

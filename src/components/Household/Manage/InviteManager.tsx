@@ -75,7 +75,7 @@ export default function InviteManager({ invites, refetch }: Props) {
       <ManagedModal
         title="Remove invite"
         description={`Are you sure that you want to remove the invite to ${removeModalInvite?.invitedEmail}?`}
-        submitText={<TrashIcon className="w-5 h-5" />}
+        submitText={<TrashIcon className="w-6 h-6" />}
         onSubmit={() => {
           removeHandler();
         }}
@@ -118,7 +118,7 @@ export default function InviteManager({ invites, refetch }: Props) {
                   </div>
                   <div className="block sm:hidden font-bold text-gray-800 dark:text-gray-100">
                     <Button onClick={() => onRemoveClickHandler(invite)}>
-                      <TrashIcon className="w-5 h-5" />
+                      <TrashIcon className="w-6 h-6" />
                     </Button>
                   </div>
                 </td>
@@ -129,7 +129,7 @@ export default function InviteManager({ invites, refetch }: Props) {
                 </td>
                 <td className="py-4 hidden sm:table-cell">
                   <Button onClick={() => onRemoveClickHandler(invite)}>
-                    <TrashIcon className="w-5 h-5" />
+                    <TrashIcon className="w-6 h-6" />
                   </Button>
                 </td>
               </tr>
