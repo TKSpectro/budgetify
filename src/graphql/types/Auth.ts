@@ -4,7 +4,7 @@ import { randomUUID } from 'crypto';
 import jwt from 'jsonwebtoken';
 import { booleanArg, extendType, nonNull, objectType, stringArg } from 'nexus';
 import { MailOptions } from 'nodemailer/lib/sendmail-transport';
-import { destroyCookie, setCookie } from 'nookies';
+import { destroyCookie } from 'nookies';
 import { getBaseUrl } from '~/utils/helper';
 import prisma from '~/utils/prisma';
 import { authIsLoggedIn } from '../authRules';
@@ -86,13 +86,6 @@ export const AuthMutation = extendType({
             expiresIn: '30d',
           });
 
-          setCookie(ctx, 'authToken', token, {
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: 72576000,
-            httpOnly: true,
-            path: '/',
-          });
-
           return {
             token,
           };
@@ -142,19 +135,13 @@ export const AuthMutation = extendType({
           expiresIn: '30d',
         });
 
-        setCookie(ctx, 'authToken', token, {
-          secure: process.env.NODE_ENV === 'production',
-          maxAge: 72576000,
-          httpOnly: true,
-          path: '/',
-        });
-
         return {
           token,
         };
       },
     });
 
+    // TODO: can technically be removed!
     t.field('logout', {
       type: 'String',
       description: `This mutation removes the authToken on the user side.`,

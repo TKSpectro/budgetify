@@ -107,7 +107,10 @@ export default function Profile() {
   }, [me, reset]);
 
   function logoutHandler() {
-    logoutMutation();
+    localStorage.removeItem('token');
+    client.resetStore();
+    router.push('/auth/login');
+    //logoutMutation();
   }
 
   const updateUserHandler = () => {
@@ -222,6 +225,7 @@ export default function Profile() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  console.log(ctx.req.headers);
   authenticatedRoute(ctx);
   return preloadQuery(ctx, { query: ME_QUERY });
 };

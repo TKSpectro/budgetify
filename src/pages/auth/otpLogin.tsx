@@ -25,8 +25,9 @@ export default function OTPLogin() {
 
   const [loginMutation, { error }] = useMutation(LOGIN_MUTATION, {
     onError: () => {},
-    onCompleted: () => {
-      refetch();
+    onCompleted: async (data) => {
+      await localStorage.setItem('token', data?.login?.token);
+      await refetch();
       router.push('/auth/changePassword?isOTP=true');
     },
   });

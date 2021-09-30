@@ -1,4 +1,5 @@
 import { ApolloClient, HttpLink, InMemoryCache, QueryOptions } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import { useMemo } from 'react';
 
@@ -9,6 +10,22 @@ interface ApolloClientParameters {
   initialState?: Record<string, any>;
 }
 
+const httpLink = new HttpLink({
+  uri: typeof window === 'undefined' ? 'http://localhost:3000/api/graphql' : '/api/graphql',
+});
+
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem('token');
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
 // Call this function to get access to a apollo client for queries to graphql
 // Technically not needed because we cant just use preloadQuery for this
 export function initializeApollo({ initialState, headers }: ApolloClientParameters) {
@@ -17,11 +34,8 @@ export function initializeApollo({ initialState, headers }: ApolloClientParamete
   if (!nextClient) {
     nextClient = new ApolloClient({
       ssrMode: typeof window === 'undefined',
-      credentials: 'same-origin',
-      link: new HttpLink({
-        uri: typeof window === 'undefined' ? 'http://localhost:3000/api/graphql' : '/api/graphql',
-        headers: headers,
-      }),
+      //credentials: 'same-origin',
+      link: authLink.concat(httpLink),
       cache: new InMemoryCache({
         // https://www.apollographql.com/docs/react/pagination/core-api/#paginated-read-functions
         // typePolicies or fieldPolicies are used to customize how data is read and written

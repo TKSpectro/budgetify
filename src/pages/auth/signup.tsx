@@ -30,9 +30,9 @@ export default function Signup() {
 
   const [signupMutation, { error }] = useMutation(SIGNUP_MUTATION, {
     onError: () => {},
-    onCompleted: () => {
-      // Refetch the user for the cache to get updated and then redirect to the homepage
-      refetch();
+    onCompleted: async (data) => {
+      await localStorage.setItem('token', data?.signup?.token);
+      await refetch();
       router.push('/');
     },
   });

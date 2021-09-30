@@ -17,6 +17,7 @@ export enum AuthRouteChecks {
   CHECK_GROUP_OWNER = 'CHECK_GROUP_OWNER',
 }
 
+//TODO: Figure out how to get access to auth header stuff
 // This function can be called in the getServerSideProps function of a component
 // to enforce that the user is logged in, else we will redirect him to either
 // the login page or a given route
@@ -26,8 +27,12 @@ export async function authenticatedRoute(
   checks?: { [key in AuthRouteChecks]?: string },
 ): Promise<GetServerSidePropsResult<{}>> {
   try {
+    console.log(context.req.cookies);
     // Check if the send authToken is a valid jwt.
-    const data = jwt.verify(context.req.cookies.authToken, process.env.JWT_SECRET!) as EncodedToken;
+    const data = jwt.verify(
+      context.req.headers.authorization?.replace('Bearer ', '') || '',
+      process.env.JWT_SECRET!,
+    ) as EncodedToken;
     if (!data.id) throw new AuthenticationError('Client sent a non valid jwt');
 
     // Check if there is an actual user with the sent userId.

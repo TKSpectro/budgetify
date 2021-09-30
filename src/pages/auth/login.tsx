@@ -25,9 +25,9 @@ export default function Login() {
 
   const [loginMutation, { error }] = useMutation(LOGIN_MUTATION, {
     onError: () => {},
-    onCompleted: () => {
-      // Refetch the user for the cache to get updated and then redirect to the homepage
-      refetch();
+    onCompleted: async (data) => {
+      await localStorage.setItem('token', data?.login?.token);
+      await refetch();
       router.push('/');
     },
   });

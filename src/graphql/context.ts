@@ -23,7 +23,8 @@ export interface Context {
 export async function context({ req, res }: ContextInput): Promise<Context> {
   // Get the token from authToken cookie. This is a secure http-only cookie
   // and contains the JWT
-  const token = req.cookies.authToken || undefined;
+  //const token = req.cookies.authToken || undefined;
+  const token = req.headers.authorization?.replace('Bearer ', '') || '';
 
   let user: ContextUser = { id: '', email: '', isAdmin: false };
 
