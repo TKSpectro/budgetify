@@ -1,5 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
 import { CheckIcon, MinusIcon, PlusIcon, XIcon } from '@heroicons/react/outline';
+import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -111,9 +112,9 @@ export function CreateGroupTransaction({ members }: Props) {
         description={`You can switch between topping up your account (account balance) and buying food / taking money out of the group balance`}
         onSubmit={onSubmitHandler}
       >
-        {/* // TODO: Somehow make this look and feel better */}
         <label>
-          Switch between transaction modes
+          <span className={clsx(formStateIsCashout && 'text-gray-400')}>Top Up Balance</span> |
+          <span className={clsx(!formStateIsCashout && 'text-gray-400')}> Buy/Take out money</span>
           <Switch
             isLeft={formStateIsCashout}
             onClick={() => setFormStateIsCashout(!formStateIsCashout)}
@@ -132,15 +133,18 @@ export function CreateGroupTransaction({ members }: Props) {
         />
 
         {formStateIsCashout && (
-          <label>
-            Take out money / Bought food
-            <Switch
-              isLeft={formStateIsBuyingFood}
-              onClick={() => setFormStateIsBuyingFood(!formStateIsBuyingFood)}
-              leftIcon={<XIcon className="w-4 h-4 " />}
-              rightIcon={<CheckIcon className="w-4 h-4 text-brand-400" />}
-            />
-          </label>
+          <div className="mt-2">
+            <label>
+              <span className={clsx(formStateIsBuyingFood && 'text-gray-400')}>Take out money</span>{' '}
+              |<span className={clsx(!formStateIsBuyingFood && 'text-gray-400')}> Bought food</span>
+              <Switch
+                isLeft={formStateIsBuyingFood}
+                onClick={() => setFormStateIsBuyingFood(!formStateIsBuyingFood)}
+                leftIcon={<XIcon className="w-4 h-4 " />}
+                rightIcon={<CheckIcon className="w-4 h-4 text-brand-400" />}
+              />
+            </label>
+          </div>
         )}
 
         <Input
@@ -160,17 +164,18 @@ export function CreateGroupTransaction({ members }: Props) {
           })}
         />
 
-        {/* // TODO: Somehow make this look and feel better */}
         {formStateIsCashout && formStateIsBuyingFood && (
-          <label>
-            All group members?
-            <Switch
-              isLeft={formAllGroupMembers}
-              onClick={() => setFormAllGroupMembers(!formAllGroupMembers)}
-              leftIcon={<XIcon className="w-4 h-4 " />}
-              rightIcon={<CheckIcon className="w-4 h-4 text-brand-400" />}
-            />
-          </label>
+          <div className="mt-2">
+            <label>
+              All group members?
+              <Switch
+                isLeft={formAllGroupMembers}
+                onClick={() => setFormAllGroupMembers(!formAllGroupMembers)}
+                leftIcon={<XIcon className="w-4 h-4 " />}
+                rightIcon={<CheckIcon className="w-4 h-4 text-brand-400" />}
+              />
+            </label>
+          </div>
         )}
 
         {formStateIsCashout && !formAllGroupMembers && (
