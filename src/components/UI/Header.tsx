@@ -14,24 +14,6 @@ interface Props extends ComponentProps<'a'> {
   brand?: boolean;
 }
 
-export function HeaderLink({ href, className, brand = false, noBorder = false, ...props }: Props) {
-  const content = (
-    <a
-      className={clsx(
-        'p-2 md:px-4 my-1 md:my-0 md:mx-2 text-center rounded transition-colors duration-300',
-        className,
-        !noBorder && 'border md:border-0 border-brand-500',
-        brand && 'text-white  bg-brand-500 hover:bg-opacity-70 dark:hover:bg-opacity-80',
-        !brand &&
-          'text-gray-600 hover:bg-gray-300 hover:bg-opacity-100 dark:hover:bg-gray-700 dark:hover:bg-opacity-100',
-      )}
-      {...props}
-    />
-  );
-
-  return <Link href={href!}>{content}</Link>;
-}
-
 export const ME_QUERY = gql`
   query ME_QUERY {
     me {
@@ -44,6 +26,27 @@ export const ME_QUERY = gql`
 `;
 
 export function Header() {
+  function HeaderLink({ href, className, brand = false, noBorder = false, ...props }: Props) {
+    const content = (
+      <a
+        className={clsx(
+          'p-2 md:px-4 my-1 md:my-0 md:mx-2 text-center rounded transition-colors duration-300',
+          className,
+          !noBorder && 'border md:border-0 border-brand-500',
+          brand && 'text-white  bg-brand-500 hover:bg-opacity-70 dark:hover:bg-opacity-80',
+          !brand &&
+            'text-gray-600 hover:bg-gray-300 hover:bg-opacity-100 dark:hover:bg-gray-700 dark:hover:bg-opacity-100',
+        )}
+        onClick={() => {
+          if (window.screen.width < 768) toggleNavbarHandler();
+        }}
+        {...props}
+      />
+    );
+
+    return <Link href={href!}>{content}</Link>;
+  }
+
   const [navBarCollapsed, setNavBarCollapsed] = useState(false);
   const { data, loading, error } = useQuery(ME_QUERY);
 
@@ -75,7 +78,6 @@ export function Header() {
             </div>
           </div>
 
-          {/* // TODO: Maybe automatically hide the navbar if a link is clicked */}
           <div
             className={clsx('md:flex flex-col md:flex-row md:ml-auto mt-3 md:mt-0', {
               flex: navBarCollapsed === true,
