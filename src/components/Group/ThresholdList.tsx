@@ -199,7 +199,6 @@ export function ThresholdList({ me, thresholds, group }: Props) {
                   />
                 )}
               </div>
-              {/* // TODO: Could use transparent button style but would need other placement */}
               {!!group.owners?.find((x) => x?.id === me?.id)?.id && (
                 <div
                   className={clsx(
@@ -207,10 +206,14 @@ export function ThresholdList({ me, thresholds, group }: Props) {
                     threshold.type !== ThresholdType.Min && ' mt-1',
                   )}
                 >
-                  <Button onClick={() => onUpdateThresholdSelectHandler(threshold)}>
+                  <Button
+                    variant="transparent"
+                    onClick={() => onUpdateThresholdSelectHandler(threshold)}
+                  >
                     <CogIcon className="w-6 h-6" />
                   </Button>
                   <Button
+                    variant="transparent"
                     className="ml-4"
                     onClick={() => onRemoveThresholdSelectHandler(threshold)}
                   >
