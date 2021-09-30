@@ -1,7 +1,6 @@
 import { TagIcon } from '@heroicons/react/outline';
 import { Doughnut } from 'react-chartjs-2';
 import { Payment } from '~/graphql/__generated__/types';
-import { TooltipItemContext } from '~/utils/charts';
 import { roundOn2 } from '~/utils/helper';
 import { Container } from '../UI/Container';
 import { Error } from '../UI/Error';
@@ -86,7 +85,7 @@ export default function MonthOverview({ monthPayments: payments }: Props) {
               plugins: {
                 tooltip: {
                   callbacks: {
-                    label: function (context: TooltipItemContext) {
+                    label: function (context) {
                       // Change tooltip text. e.g.:" Category 1: 100€"
                       return ' ' + context.label + ': ' + roundOn2(Number(context.parsed)) + '€';
                     },
