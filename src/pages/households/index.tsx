@@ -22,9 +22,11 @@ const HOUSEHOLD_LIST_QUERY = gql`
     households {
       id
       name
+      sumOfAllPayments
       owner {
         firstname
         lastname
+        name
       }
     }
   }
@@ -79,9 +81,6 @@ export default function Households() {
 
   const households = data?.households || [];
 
-  // TODO: What info should be shown for each household?
-  // Maybe even the net-value of the household?
-  // Add a open button?
   return (
     <>
       <Head>
@@ -137,10 +136,14 @@ export default function Households() {
           return (
             <Link href={`/households/${household.id}`} passHref key={household.id}>
               <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer">
-                <div className="text-xl">{household.name}</div>
-                <div>
-                  Owner: {household.owner?.firstname} {household.owner?.lastname}
+                <div className="text-xl">
+                  {household.name}
+                  <span className="float-right hidden sm:block">
+                    Balance: {household.sumOfAllPayments}€
+                  </span>
                 </div>
+                <div className="">Owner: {household.owner?.name}</div>
+                <span className="sm:hidden">Balance: {household.sumOfAllPayments}€</span>
               </div>
             </Link>
           );
