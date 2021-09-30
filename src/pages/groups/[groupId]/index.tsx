@@ -89,15 +89,14 @@ export default function Group() {
         <Loader loading={loading} />
 
         {group && (
-          <div className="relative">
+          <div className="relative text-center md:text-left">
             <div className="text-xl font-bold ">{group.name}</div>
             <div className="text-lg font-medium">Group balance: {group.value}€</div>
 
-            <div className="text-right">
+            <span className="text-right">
               <CreateGroupTransaction members={members} />
-            </div>
+            </span>
 
-            {/* // TODO: Style better */}
             {data && !!group?.owners?.find((x: User) => x?.id === data.me.id) && (
               <div className="hidden md:block absolute right-48 top-2 text-base">
                 <Link href={`${router.asPath}/manage`} asButton>
