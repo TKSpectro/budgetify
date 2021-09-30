@@ -146,7 +146,6 @@ export default function Group() {
             <>
               <div className="divide-y-2">
                 {transactions.map((transaction: GroupTransaction) => {
-                  // TODO: Need to style this a bit better
                   return (
                     <div key={transaction.id} className="py-1 sm:px-2">
                       <Disclosure

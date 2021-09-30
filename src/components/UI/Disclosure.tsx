@@ -18,9 +18,14 @@ export function Disclosure({ text, overflowText, showOpen, className, children }
       <div className={'hover:cursor-pointer ' + className} onClick={() => setIsOpen(!isOpen)}>
         {text}
         {overflowText && (
-          <span className="float-right hidden md:inline md:max-w-[16rem] truncate pr-5">
-            {overflowText}
-          </span>
+          <>
+            <span className="float-right hidden sm:inline sm:max-w-[16rem] truncate pr-5">
+              {overflowText}
+            </span>
+            <div className="mx-4 block sm:hidden sm:max-w-[16rem] truncate pr-5">
+              {overflowText}
+            </div>
+          </>
         )}
         {showOpen && (
           <span className="float-right pr-4">
