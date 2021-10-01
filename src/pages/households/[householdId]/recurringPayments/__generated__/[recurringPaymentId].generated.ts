@@ -1,12 +1,12 @@
 import * as Types from '../../../../../graphql/__generated__/types';
 
-export type Recurring_Payment_QueryVariables = Types.Exact<{
+export type RecurringPaymentQueryVariables = Types.Exact<{
   householdId?: Types.Maybe<Types.Scalars['String']>;
   recurringPaymentId?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type Recurring_Payment_Query = { __typename?: 'Query', household?: { __typename?: 'Household', id: string, name: string, recurringPayments?: Array<{ __typename?: 'RecurringPayment', id: string, name: string, value: any, description?: string | null | undefined, createdAt: any, startDate: any, endDate?: any | null | undefined, nextBooking?: any | null | undefined, lastBooking?: any | null | undefined, interval: Types.Interval, householdId: string, categoryId: string, category?: { __typename?: 'Category', name: string } | null | undefined } | null | undefined> | null | undefined } | null | undefined, categories?: Array<{ __typename?: 'Category', id: string, name: string } | null | undefined> | null | undefined };
+export type RecurringPaymentQuery = { __typename?: 'Query', household?: { __typename?: 'Household', id: string, name: string, recurringPayments?: Array<{ __typename?: 'RecurringPayment', id: string, name: string, value: any, description?: string | null | undefined, createdAt: any, startDate: any, endDate?: any | null | undefined, nextBooking?: any | null | undefined, lastBooking?: any | null | undefined, interval: Types.Interval, householdId: string, categoryId: string, category?: { __typename?: 'Category', name: string } | null | undefined } | null | undefined> | null | undefined } | null | undefined, categories?: Array<{ __typename?: 'Category', id: string, name: string } | null | undefined> | null | undefined };
 
 export type UpdateRecurringPaymentMutationVariables = Types.Exact<{
   id: Types.Scalars['String'];

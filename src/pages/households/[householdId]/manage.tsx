@@ -7,11 +7,16 @@ import MemberTable from '~/components/Household/Manage/MemberTable';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Loader } from '~/components/UI/Loader';
+import { Invite, User } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
+import {
+  HouseholdManageQuery,
+  HouseholdManageQueryVariables,
+} from './__generated__/manage.generated';
 
 const HOUSEHOLD_QUERY = gql`
-  query HOUSEHOLD_MANAGE_QUERY($householdId: String!) {
+  query householdManageQuery($householdId: String!) {
     household(id: $householdId) {
       id
       name
@@ -44,22 +49,25 @@ const HOUSEHOLD_QUERY = gql`
 
 export default function ManageHousehold() {
   const router = useRouter();
-  const { householdId } = router.query;
-  const { data, loading, error, refetch } = useQuery(HOUSEHOLD_QUERY, {
+  const householdId = router.query.householdId as string;
+  const { data, loading, error, refetch } = useQuery<
+    HouseholdManageQuery,
+    HouseholdManageQueryVariables
+  >(HOUSEHOLD_QUERY, {
     variables: {
       householdId: householdId,
     },
   });
 
-  const household = data?.household || {};
-  const owner = household.owner || {};
-  const members = household.members || [];
-  const invites = household.invites || [];
+  const household = data?.household;
+  const owner = household?.owner;
+  const members = household?.members;
+  const invites = household?.invites;
 
   return (
     <>
       <Head>
-        <title>{'Manage ' + household.name + ' | ' + 'budgetify'}</title>
+        <title>{'Manage ' + household?.name + ' | ' + 'budgetify'}</title>
       </Head>
       <Container>
         <Error title="Failed to load household" error={error} />
@@ -69,14 +77,18 @@ export default function ManageHousehold() {
         />
         <Loader loading={loading} />
 
-        {!loading && !error && members && <MemberTable members={members} owner={owner} />}
+        {!loading && !error && members && (
+          <MemberTable members={members as User[]} owner={owner as User} />
+        )}
       </Container>
       <Container>
         <Error title="Failed to load invites" error={error} />
         <Error title="Could not find any invites." error={!loading && !invites ? '' : undefined} />
         <Loader loading={loading} />
 
-        {!loading && !error && invites && <InviteManager invites={invites} refetch={refetch} />}
+        {!loading && !error && invites && (
+          <InviteManager invites={invites as Invite[]} refetch={refetch} />
+        )}
       </Container>
     </>
   );

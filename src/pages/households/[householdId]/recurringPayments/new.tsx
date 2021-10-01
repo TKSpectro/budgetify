@@ -17,12 +17,14 @@ import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { dateToFormInput, urlOneUp } from '~/utils/helper';
 import {
+  CategoriesQuery,
+  CategoriesQueryVariables,
   NewRecurringPaymentMutation,
   NewRecurringPaymentMutationVariables,
 } from './__generated__/new.generated';
 
 const CATEGORIES_QUERY = gql`
-  query CATEGORIES_QUERY {
+  query categoriesQuery {
     categories {
       id
       name
@@ -62,11 +64,11 @@ export default function NewRecurringPayment() {
   const router = useRouter();
   const { householdId } = router.query;
 
-  const {
-    data: { categories },
-    loading,
-    error,
-  } = useQuery(CATEGORIES_QUERY);
+  const { data, loading, error } = useQuery<CategoriesQuery, CategoriesQueryVariables>(
+    CATEGORIES_QUERY,
+  );
+
+  const categories = data?.categories as Category[];
 
   const form = useForm<NewRecurringPaymentMutationVariables>();
   const { reset } = form;

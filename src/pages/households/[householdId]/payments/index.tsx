@@ -16,10 +16,14 @@ import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
 import { Loader } from '~/components/UI/Loader';
-import { Payment, Scalars } from '~/graphql/__generated__/types';
+import { Category, Payment, Scalars } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { dateToFormInput, roundOn2 } from '~/utils/helper';
+import {
+  HouseholdPaymentsQuery,
+  HouseholdPaymentsQueryVariables,
+} from './__generated__/index.generated';
 
 type DateFilterInput = {
   startDate: Scalars['DateTime'];
@@ -27,7 +31,7 @@ type DateFilterInput = {
 };
 
 const QUERY = gql`
-  query HOUSEHOLD_PAYMENTS_QUERY(
+  query householdPaymentsQuery(
     $householdId: String
     $startDate: DateTime
     $endDate: DateTime
@@ -102,14 +106,18 @@ let paymentChartOptions: ChartOptions = {
 
 export default function Payments() {
   const router = useRouter();
+  const householdId = router.query.householdId as string;
+
   const form = useForm<DateFilterInput>();
 
   const [startDateSave, setStartDateSave] = useState(
     dateToFormInput(startOfMonth(subMonths(new Date(), 3))),
   );
 
-  const { householdId } = router.query;
-  const { data, loading, error, refetch } = useQuery(QUERY, {
+  const { data, loading, error, refetch } = useQuery<
+    HouseholdPaymentsQuery,
+    HouseholdPaymentsQueryVariables
+  >(QUERY, {
     variables: {
       householdId,
       startDate: form.getValues('startDate') || startOfMonth(subMonths(new Date(), 3)),
@@ -132,11 +140,11 @@ export default function Payments() {
   if (payments.length > 0) {
     // Set the starting value to the fake payments value and then remove the first
     // element from the array
-    addedPaymentValues = payments[0].value;
+    addedPaymentValues = payments[0]?.value;
     payments = payments.slice(1);
   }
-  const labels = payments.map((payment: Payment) => payment.createdAt);
-  const chartData = payments.map((payment: Payment) => (addedPaymentValues += payment.value));
+  const labels = payments.map((payment) => payment?.createdAt);
+  const chartData = payments.map((payment) => (addedPaymentValues += payment?.value));
 
   const onDateFilterSubmit = () => {
     // Re-Query with the newly set parameters
@@ -199,12 +207,12 @@ export default function Payments() {
               />
             </div>
             <div className="mt-8 flex flex-row-reverse">
-              <NewPayment categories={categories} />
+              <NewPayment categories={categories as Category[]} />
             </div>
           </Container>
           <Container>
             <Loader loading={loading} />
-            <PaymentTable payments={payments} />
+            <PaymentTable payments={payments as Payment[]} />
           </Container>
         </>
       </div>

@@ -10,21 +10,19 @@ import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
 import { Loader } from '~/components/UI/Loader';
-import {
-  Category,
-  Interval,
-  MutationUpdateRecurringPaymentArgs,
-} from '~/graphql/__generated__/types';
+import { Interval } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { dateToFormInput, urlOneUp } from '~/utils/helper';
 import {
+  RecurringPaymentQuery,
+  RecurringPaymentQueryVariables,
   UpdateRecurringPaymentMutation,
   UpdateRecurringPaymentMutationVariables,
 } from './__generated__/[recurringPaymentId].generated';
 
 const RECURRING_PAYMENT_QUERY = gql`
-  query RECURRING_PAYMENT_QUERY($householdId: String, $recurringPaymentId: String) {
+  query recurringPaymentQuery($householdId: String, $recurringPaymentId: String) {
     household(id: $householdId) {
       id
       name
@@ -91,9 +89,13 @@ const UPDATE_RECURRING_PAYMENT_MUTATION = gql`
 // Need to remove this page.
 export default function UpdateRecurringPayment() {
   const router = useRouter();
-  const { householdId, recurringPaymentId } = router.query;
+  const householdId = router.query.householdId as string;
+  const recurringPaymentId = router.query.recurringPaymentId as string;
 
-  const { data, loading, error, refetch } = useQuery(RECURRING_PAYMENT_QUERY, {
+  const { data, loading, error, refetch } = useQuery<
+    RecurringPaymentQuery,
+    RecurringPaymentQueryVariables
+  >(RECURRING_PAYMENT_QUERY, {
     variables: {
       householdId,
       recurringPaymentId,
@@ -111,24 +113,24 @@ export default function UpdateRecurringPayment() {
   });
 
   const form = useForm<UpdateRecurringPaymentMutationVariables>();
-  const recurringPayment = data?.household?.recurringPayments[0];
+  const recurringPayments = data?.household?.recurringPayments;
+
+  const recurringPayment = recurringPayments && recurringPayments[0];
   const categories = data?.categories;
 
   const { reset } = form;
 
   useEffect(() => {
-    const data: UpdateRecurringPaymentMutationVariables = {
+    // Reset must be used here to get the form to render the actual default values
+    reset({
       ...recurringPayment,
       startDate:
-        recurringPayment.startDate && dateToFormInput(new Date(recurringPayment.startDate)),
-      endDate: recurringPayment.endDate && dateToFormInput(new Date(recurringPayment.endDate)),
-    };
-
-    // Reset must be used here to get the form to render the actual default values
-    reset(data);
+        recurringPayment?.startDate && dateToFormInput(new Date(recurringPayment?.startDate)),
+      endDate: recurringPayment?.endDate && dateToFormInput(new Date(recurringPayment?.endDate)),
+    });
   }, [recurringPayment, reset]);
 
-  const onSubmit = (data: MutationUpdateRecurringPaymentArgs) => {
+  const onSubmit = () => {
     updateRecurringPaymentMutation({
       variables: {
         ...form.getValues(),
@@ -191,10 +193,10 @@ export default function UpdateRecurringPayment() {
                   className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
                   {...form.register('categoryId', { required: true })}
                 >
-                  {categories.map((category: Category) => {
+                  {categories?.map((category) => {
                     return (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
+                      <option key={category?.id} value={category?.id}>
+                        {category?.name}
                       </option>
                     );
                   })}

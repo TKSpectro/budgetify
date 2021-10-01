@@ -13,12 +13,13 @@ import { Disclosure } from '~/components/UI/Disclosure';
 import { Error } from '~/components/UI/Error';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
-import { GroupTransaction, Participant, User } from '~/graphql/__generated__/types';
+import { Group, Threshold, User } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
+import { GroupQuery, GroupQueryVariables } from './__generated__/index.generated';
 
 const GROUP_QUERY = gql`
-  query GROUP_QUERY($id: String!, $skip: Int, $limit: Int) {
+  query groupQuery($id: String!, $skip: Int, $limit: Int) {
     me {
       id
     }
@@ -32,6 +33,7 @@ const GROUP_QUERY = gql`
         name
         value
         participants {
+          id
           name
         }
       }
@@ -60,20 +62,23 @@ const GROUP_QUERY = gql`
 
 const limit = 10;
 
-export default function Group() {
+export default function GroupPage() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
   const [skip, setSkip] = useState(0);
 
-  const { data, loading, error, fetchMore } = useQuery(GROUP_QUERY, {
-    variables: { id: groupId, skip, limit },
-  });
+  const { data, loading, error, fetchMore } = useQuery<GroupQuery, GroupQueryVariables>(
+    GROUP_QUERY,
+    {
+      variables: { id: groupId, skip, limit },
+    },
+  );
 
   const group = data?.group;
   const me = data?.me;
 
-  const members: User[] = group?.members || [];
+  const members = group?.members || [];
   const memberBalances = data?.calculateMemberBalances;
 
   const thresholds = group?.thresholds || [];
@@ -94,10 +99,10 @@ export default function Group() {
             <div className="text-lg font-medium">Group balance: {group.value}€</div>
 
             <span className="text-right">
-              <NewTransaction members={members} />
+              <NewTransaction members={members as User[]} />
             </span>
 
-            {data && !!group?.owners?.find((x: User) => x?.id === data.me.id) && (
+            {data && !!group?.owners?.find((x) => x?.id === data?.me?.id) && (
               <div className="hidden md:block absolute right-48 top-2 text-base">
                 <Link href={`${router.asPath}/manage`} asButton>
                   Manage
@@ -111,7 +116,11 @@ export default function Group() {
       {thresholds && (
         <Container>
           <Disclosure text="Thresholds" showOpen className="text-lg font-semibold">
-            <ThresholdList me={me} group={group} thresholds={thresholds} />
+            <ThresholdList
+              me={me as User}
+              group={group as Group}
+              thresholds={thresholds as Threshold[]}
+            />
             <NewThreshold />
           </Disclosure>
         </Container>
@@ -121,16 +130,16 @@ export default function Group() {
         <Container>
           <div className="text-lg font-semibold">Member Balances</div>
           <div className="w-full divide-y-2">
-            {memberBalances.map((member: Participant) => {
+            {memberBalances.map((member) => {
               return (
-                <div key={member.userId} className="grid grid-cols-2 py-1">
-                  <div className="">{member.name}</div>
+                <div key={member?.userId} className="grid grid-cols-2 py-1">
+                  <div className="">{member?.name}</div>
                   <div
                     className={clsx('text-right', {
-                      'text-red-600 dark:text-red-500': member.value < 0,
+                      'text-red-600 dark:text-red-500': member?.value < 0,
                     })}
                   >
-                    {member.value + '€'}
+                    {member?.value + '€'}
                   </div>{' '}
                 </div>
               );
@@ -139,28 +148,28 @@ export default function Group() {
         </Container>
       )}
 
-      {transactions && (
+      {transactions && transactionCount && (
         <Container>
           <div className="text-lg font-semibold">Transactions</div>
           {transactions.length > 0 || transactionCount > 0 ? (
             <>
               <div className="divide-y-2">
-                {transactions.map((transaction: GroupTransaction) => {
+                {transactions.map((transaction) => {
                   return (
-                    <div key={transaction.id} className="py-1 sm:px-2">
+                    <div key={transaction?.id} className="py-1 sm:px-2">
                       <Disclosure
-                        text={transaction.name + ' : ' + transaction.value + '€'}
+                        text={transaction?.name + ' : ' + transaction?.value + '€'}
                         overflowText={
-                          transaction.participants?.length === 1
-                            ? transaction.participants[0]?.name
+                          transaction?.participants?.length === 1
+                            ? transaction?.participants[0]?.name
                             : ''
                         }
                         showOpen={
-                          !!transaction.participants && transaction.participants?.length > 1
+                          !!transaction?.participants && transaction?.participants?.length > 1
                         }
                       >
                         <div>
-                          {transaction.participants?.map((user, id, array) => {
+                          {transaction?.participants?.map((user, id, array) => {
                             return (
                               <span key={user?.id || id}>
                                 {user?.name + (id !== array.length - 1 ? ' | ' : '')}

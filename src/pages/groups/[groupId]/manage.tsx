@@ -8,16 +8,19 @@ import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Loader } from '~/components/UI/Loader';
 import { Modal } from '~/components/UI/Modal';
+import { Invite, User } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { urlOneUp } from '~/utils/helper';
 import {
   DeleteGroupMutation,
   DeleteGroupMutationVariables,
+  GroupManageQuery,
+  GroupManageQueryVariables,
 } from './__generated__/manage.generated';
 
 const QUERY = gql`
-  query GROUP_MANAGE_QUERY($id: String!) {
+  query groupManageQuery($id: String!) {
     me {
       id
     }
@@ -55,7 +58,9 @@ export default function ManageGroup() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
-  const { data, loading, error } = useQuery(QUERY, { variables: { id: groupId } });
+  const { data, loading, error } = useQuery<GroupManageQuery, GroupManageQueryVariables>(QUERY, {
+    variables: { id: groupId },
+  });
 
   const [deleteGroup, { error: deleteGroupError }] = useMutation<
     DeleteGroupMutation,
@@ -67,7 +72,7 @@ export default function ManageGroup() {
     onError: () => {},
   });
 
-  const currentUserId = data?.me.id;
+  const currentUserId = data?.me?.id;
   const group = data?.group;
 
   const members = group?.members || [];
@@ -85,7 +90,13 @@ export default function ManageGroup() {
         <Error title="Could not delete group." error={deleteGroupError} />
         <Loader loading={loading} />
 
-        {data && <MemberTable members={members} owners={owners} currentUserId={currentUserId} />}
+        {data && (
+          <MemberTable
+            members={members as User[]}
+            owners={owners as User[]}
+            currentUserId={currentUserId as string}
+          />
+        )}
         <Modal
           buttonText="Delete Group"
           buttonClassName="bg-red-500 mt-4"
@@ -98,7 +109,7 @@ export default function ManageGroup() {
 
       <Container>
         <Loader loading={loading} />
-        <InviteManager invites={invites} />
+        <InviteManager invites={invites as Invite[]} />
         <Error title="No pending invites." error={invites.length === 0 ? '' : undefined} />
       </Container>
     </>

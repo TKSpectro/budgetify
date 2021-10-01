@@ -10,12 +10,14 @@ import RecurringPaymentOverview from '~/components/Household/RecurringPaymentOve
 import { Error } from '~/components/UI/Error';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
+import { Payment, RecurringPayment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { roundOn2 } from '~/utils/helper';
+import { HouseholdQuery, HouseholdQueryVariables } from './__generated__/index.generated';
 
 const HOUSEHOLD_QUERY = gql`
-  query HOUSEHOLD_QUERY($householdId: String, $startDate: DateTime, $endDate: DateTime) {
+  query householdQuery($householdId: String, $startDate: DateTime, $endDate: DateTime) {
     me {
       id
     }
@@ -59,14 +61,18 @@ const HOUSEHOLD_QUERY = gql`
 
 export default function Household() {
   const router = useRouter();
-  const { householdId } = router.query;
-  const { data, loading, error } = useQuery(HOUSEHOLD_QUERY, {
-    variables: {
-      householdId,
-      startDate: startOfMonth(new Date()).toISOString(),
-      endDate: endOfMonth(new Date()).toISOString(),
+  const householdId = router.query.householdId as string;
+
+  const { data, loading, error } = useQuery<HouseholdQuery, HouseholdQueryVariables>(
+    HOUSEHOLD_QUERY,
+    {
+      variables: {
+        householdId,
+        startDate: startOfMonth(new Date()).toISOString(),
+        endDate: endOfMonth(new Date()).toISOString(),
+      },
     },
-  });
+  );
 
   const household = data?.household;
   const payments = household?.payments || [];
@@ -106,11 +112,13 @@ export default function Household() {
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-3 lg:gap-x-16 overflow-auto">
-            <PaymentOverview payments={payments} />
+            <PaymentOverview payments={payments as Payment[]} />
 
-            <RecurringPaymentOverview recurringPayments={household?.recurringPayments} />
+            <RecurringPaymentOverview
+              recurringPayments={household?.recurringPayments as RecurringPayment[]}
+            />
 
-            <MonthOverview monthPayments={household?.thisMonthsPayments} />
+            <MonthOverview monthPayments={household?.thisMonthsPayments as Payment[]} />
           </div>
         </>
       )}
