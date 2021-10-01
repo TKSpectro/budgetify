@@ -12,7 +12,7 @@ import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
-import { Category, MutationCreatePaymentArgs } from '~/graphql/__generated__/types';
+import { Category } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { urlOneUp } from '~/utils/helper';
@@ -59,7 +59,7 @@ export default function NewPayment() {
     error,
   } = useQuery(CATEGORIES_QUERY);
 
-  const form = useForm<MutationCreatePaymentArgs>({
+  const form = useForm<NewPaymentMutationVariables>({
     defaultValues: { householdId: householdId as string },
   });
 

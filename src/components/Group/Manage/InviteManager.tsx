@@ -5,7 +5,7 @@ import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { Modal } from '~/components/UI/Modal';
 import { ModalForm } from '~/components/UI/ModalForm';
-import { Invite, MutationCreateGroupInviteArgs } from '~/graphql/__generated__/types';
+import { Invite } from '~/graphql/__generated__/types';
 import {
   CreateGroupInviteMutation,
   CreateGroupInviteMutationVariables,
@@ -35,7 +35,7 @@ export function InviteManager({ invites }: Props) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
-  const form = useForm<MutationCreateGroupInviteArgs>({
+  const form = useForm<CreateGroupInviteMutationVariables>({
     defaultValues: { groupId: groupId, invitedEmail: '' },
   });
 

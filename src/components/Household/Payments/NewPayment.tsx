@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { ModalForm } from '~/components/UI/ModalForm';
-import { Category, MutationCreatePaymentArgs } from '~/graphql/__generated__/types';
+import { Category } from '~/graphql/__generated__/types';
 import {
   NewPaymentMutation,
   NewPaymentMutationVariables,
@@ -38,7 +38,7 @@ export function NewPayment({ categories }: Props) {
   const router = useRouter();
   const { householdId } = router.query;
 
-  const form = useForm<MutationCreatePaymentArgs>({
+  const form = useForm<NewPaymentMutationVariables>({
     defaultValues: { householdId: householdId as string },
   });
 

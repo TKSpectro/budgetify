@@ -110,14 +110,14 @@ export default function UpdateRecurringPayment() {
     },
   });
 
-  const form = useForm<MutationUpdateRecurringPaymentArgs>();
+  const form = useForm<UpdateRecurringPaymentMutationVariables>();
   const recurringPayment = data?.household?.recurringPayments[0];
   const categories = data?.categories;
 
   const { reset } = form;
 
   useEffect(() => {
-    const data: MutationUpdateRecurringPaymentArgs = {
+    const data: UpdateRecurringPaymentMutationVariables = {
       ...recurringPayment,
       startDate:
         recurringPayment.startDate && dateToFormInput(new Date(recurringPayment.startDate)),

@@ -1,7 +1,7 @@
 import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { MutationCreateThresholdArgs, ThresholdType } from '~/graphql/__generated__/types';
+import { ThresholdType } from '~/graphql/__generated__/types';
 import { Error } from '../UI/Error';
 import { Input } from '../UI/Input';
 import { ModalForm } from '../UI/ModalForm';
@@ -39,7 +39,7 @@ export function NewThreshold() {
     refetchQueries: ['GROUP_QUERY'],
   });
 
-  const formCreateThreshold = useForm<MutationCreateThresholdArgs>({
+  const formCreateThreshold = useForm<CreateThresholdMutationVariables>({
     defaultValues: { name: '', value: 0, groupId: groupId },
   });
 

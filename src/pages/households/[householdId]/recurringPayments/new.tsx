@@ -12,11 +12,7 @@ import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
-import {
-  Category,
-  Interval,
-  MutationCreateRecurringPaymentArgs,
-} from '~/graphql/__generated__/types';
+import { Category, Interval } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { dateToFormInput, urlOneUp } from '~/utils/helper';
@@ -72,7 +68,7 @@ export default function NewRecurringPayment() {
     error,
   } = useQuery(CATEGORIES_QUERY);
 
-  const form = useForm<MutationCreateRecurringPaymentArgs>();
+  const form = useForm<NewRecurringPaymentMutationVariables>();
   const { reset } = form;
 
   const [createRecurringPaymentMutation, { data: createRecurringPaymentData }] = useMutation<

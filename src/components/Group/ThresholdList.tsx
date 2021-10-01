@@ -3,13 +3,7 @@ import { CogIcon, TrashIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Group,
-  MutationUpdateThresholdArgs,
-  Threshold,
-  ThresholdType,
-  User,
-} from '~/graphql/__generated__/types';
+import { Group, Threshold, ThresholdType, User } from '~/graphql/__generated__/types';
 import { roundOn2 } from '~/utils/helper';
 import { Button } from '../UI/Button';
 import { Error } from '../UI/Error';
@@ -85,7 +79,7 @@ export function ThresholdList({ me, thresholds, group }: Props) {
     refetchQueries: ['GROUP_QUERY'],
   });
 
-  const updateThresholdForm = useForm<MutationUpdateThresholdArgs>({
+  const updateThresholdForm = useForm<UpdateThresholdMutationVariables>({
     defaultValues: { id: '', name: '', value: 0, type: ThresholdType.Goal, groupId: '' },
   });
 

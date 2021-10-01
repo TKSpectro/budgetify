@@ -8,11 +8,7 @@ import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
 import { ModalForm } from '~/components/UI/ModalForm';
-import {
-  Group,
-  MutationCreateGroupArgs,
-  MutationUseInviteArgs,
-} from '~/graphql/__generated__/types';
+import { Group, MutationUseInviteArgs } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { uuidRegex } from '~/utils/helper';
@@ -66,7 +62,7 @@ export default function Groups() {
   const router = useRouter();
 
   const form = useForm<MutationUseInviteArgs>();
-  const createGroupForm = useForm<MutationCreateGroupArgs>();
+  const createGroupForm = useForm<CreateGroupMutationVariables>();
 
   const [useGroupTokenMutation, { error: inviteError }] = useMutation<
     UseInviteTokenMutation,

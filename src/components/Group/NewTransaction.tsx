@@ -4,11 +4,7 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  MutationCreateGroupTransactionArgs,
-  TransactionType,
-  User,
-} from '~/graphql/__generated__/types';
+import { TransactionType, User } from '~/graphql/__generated__/types';
 import { Error } from '../UI/Error';
 import { Input } from '../UI/Input';
 import { ModalForm } from '../UI/ModalForm';
@@ -56,7 +52,7 @@ export function NewTransaction({ members }: Props) {
     refetchQueries: ['GROUP_QUERY'],
   });
 
-  const formCreateGroupTransaction = useForm<MutationCreateGroupTransactionArgs>({
+  const formCreateGroupTransaction = useForm<CreateGroupTransactionMutationVariables>({
     defaultValues: { name: '', value: 0, groupId: groupId as string, participantIds: [] },
   });
 

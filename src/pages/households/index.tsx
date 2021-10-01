@@ -8,11 +8,7 @@ import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { Loader } from '~/components/UI/Loader';
 import { ModalForm } from '~/components/UI/ModalForm';
-import {
-  Household,
-  MutationCreateHouseholdArgs,
-  MutationUseInviteArgs,
-} from '~/graphql/__generated__/types';
+import { Household } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { uuidRegex } from '~/utils/helper';
@@ -56,8 +52,10 @@ const CREATE_HOUSEHOLD_MUTATION = gql`
 
 export default function Households() {
   const { data, loading, error, refetch } = useQuery(HOUSEHOLD_LIST_QUERY);
-  const form = useForm<MutationUseInviteArgs>({ defaultValues: { token: '' } });
-  const createHouseholdForm = useForm<MutationCreateHouseholdArgs>({ defaultValues: { name: '' } });
+  const form = useForm<UseInviteTokenMutationVariables>({ defaultValues: { token: '' } });
+  const createHouseholdForm = useForm<CreateHouseholdMutationVariables>({
+    defaultValues: { name: '' },
+  });
 
   const [UseInviteMutation, { error: useInviteError }] = useMutation<
     UseInviteTokenMutation,

@@ -7,12 +7,7 @@ import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { ManagedModalForm } from '~/components/UI/ManagedModalForm';
-import {
-  Category,
-  Interval,
-  MutationUpdateRecurringPaymentArgs,
-  RecurringPayment,
-} from '~/graphql/__generated__/types';
+import { Category, Interval, RecurringPayment } from '~/graphql/__generated__/types';
 import { dateToFormInput } from '~/utils/helper';
 import {
   UpdateRecurringPaymentMutation,
@@ -76,7 +71,7 @@ export function RecurringPaymentTable({ recurringPayments, categories }: Props) 
     refetchQueries: ['QUERY'],
   });
 
-  const updateRecPaymentForm = useForm<MutationUpdateRecurringPaymentArgs>();
+  const updateRecPaymentForm = useForm<UpdateRecurringPaymentMutationVariables>();
 
   const onUpdateThresholdHandler = () => {
     updateRecurringPaymentMutation({

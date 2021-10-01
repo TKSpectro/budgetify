@@ -8,7 +8,7 @@ import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { ManagedModal } from '~/components/UI/ManagedModal';
 import { ModalForm } from '~/components/UI/ModalForm';
-import { Invite, MutationCreateInviteArgs } from '~/graphql/__generated__/types';
+import { Invite } from '~/graphql/__generated__/types';
 import {
   CreateInviteMutation,
   CreateInviteMutationVariables,
@@ -37,7 +37,7 @@ interface Props {
 
 export default function InviteManager({ invites, refetch }: Props) {
   const router = useRouter();
-  const form = useForm<MutationCreateInviteArgs>({
+  const form = useForm<CreateInviteMutationVariables>({
     defaultValues: { householdId: router.query.householdId as string, invitedEmail: '' },
   });
 

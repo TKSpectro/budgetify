@@ -5,11 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { ModalForm } from '~/components/UI/ModalForm';
-import {
-  Category,
-  Interval,
-  MutationCreateRecurringPaymentArgs,
-} from '~/graphql/__generated__/types';
+import { Category, Interval } from '~/graphql/__generated__/types';
 import { dateToFormInput } from '~/utils/helper';
 import {
   NewRecurringPaymentMutation,
@@ -50,7 +46,7 @@ export function NewRecurringPayment({ categories }: Props) {
   const router = useRouter();
   const { householdId } = router.query;
 
-  const form = useForm<MutationCreateRecurringPaymentArgs>();
+  const form = useForm<NewRecurringPaymentMutationVariables>();
   const { reset } = form;
 
   const [createRecurringPaymentMutation, { error: createRecurringPaymentError }] = useMutation<
