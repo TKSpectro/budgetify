@@ -39,7 +39,7 @@ interface Props {
   members: User[];
 }
 
-export function CreateGroupTransaction({ members }: Props) {
+export function NewGroupTransaction({ members }: Props) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
