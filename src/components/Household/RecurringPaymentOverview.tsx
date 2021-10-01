@@ -15,14 +15,16 @@ export default function RecurringPaymentOverview({ recurringPayments }: Props) {
   return (
     <Container>
       <div className="text-2xl text-brand-500">
-        <CurrencyDollarIcon className="h-8 w-8 inline-block" />
-        &nbsp;Next payments
+        <CurrencyDollarIcon className="h-8 w-8 inline-block" /> Next payments
       </div>
+
       <Error
         title="Could not find any recurring payments."
         error={recurringPayments?.length === 0 ? '' : undefined}
+        className="mt-4"
       />
-      <div className="my-8">
+
+      <div className="mt-4 mb-8">
         {recurringPayments?.map((recPayment: RecurringPayment) => {
           return (
             <RecurringPaymentItem

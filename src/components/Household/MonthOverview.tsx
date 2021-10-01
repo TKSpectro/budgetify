@@ -65,13 +65,13 @@ export default function MonthOverview({ monthPayments: payments }: Props) {
   return (
     <Container>
       <div className="text-2xl text-brand-500">
-        <TagIcon className="h-8 w-8 inline-block" />
-        &nbsp;This Month
+        <TagIcon className="h-8 w-8 inline-block" /> This Month
       </div>
 
       <Error
         title="Could not find any payments this month."
         error={payments?.length === 0 ? '' : undefined}
+        className="sm:mt-4"
       />
 
       {payments?.length !== 0 && (

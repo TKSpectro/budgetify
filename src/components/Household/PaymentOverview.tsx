@@ -16,11 +16,16 @@ export default function PaymentOverview({ payments }: Props) {
   return (
     <Container>
       <div className="text-2xl text-brand-500">
-        <CurrencyDollarIcon className="h-8 w-8 inline-block" />
-        &nbsp;Payments
+        <CurrencyDollarIcon className="h-8 w-8 inline-block" /> Payments
       </div>
-      <Error title="Could not find any payments." error={payments?.length === 0 ? '' : undefined} />
-      <div className="my-8">
+
+      <Error
+        title="Could not find any payments."
+        error={payments?.length === 0 ? '' : undefined}
+        className="mt-4"
+      />
+
+      <div className="mt-4 mb-8">
         {payments?.map((payment: Payment) => {
           return <PaymentItem payment={payment} key={payment.id}></PaymentItem>;
         })}
