@@ -200,7 +200,6 @@ export default function Profile() {
                   Receive Notifications?
                   <Switch
                     isLeft={!!updateUserForm.watch('receiveNotifications')}
-                    // onClick={() => setIsReceivingNotification(!isReceivingNotification)}
                     onClick={() =>
                       updateUserForm.setValue(
                         'receiveNotifications',

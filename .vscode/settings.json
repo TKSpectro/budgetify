@@ -5,10 +5,14 @@
     "Cashout",
     "chartjs",
     "clsx",
+    "codegen",
     "firstname",
+    "heroicons",
     "lastname",
     "Moneypool",
     "moneypools",
-    "signup"
+    "semibold",
+    "signup",
+    "tailwindcss"
   ]
 }
