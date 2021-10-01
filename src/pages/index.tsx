@@ -6,9 +6,10 @@ import { Error } from '~/components/UI/Error';
 import { ME_QUERY } from '~/components/UI/Header';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
+import { MeQuery, MeQueryVariables } from '~/components/UI/__generated__/Header.generated';
 
 export default function Home() {
-  const { data, loading, error } = useQuery(ME_QUERY);
+  const { data, loading, error } = useQuery<MeQuery, MeQueryVariables>(ME_QUERY);
 
   return (
     <div>

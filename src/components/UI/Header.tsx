@@ -8,7 +8,7 @@ import { ComponentProps, useState } from 'react';
 import { preloadQuery } from '~/utils/apollo';
 import { ThemeSwitch } from '../ThemeSwitch';
 import { Button } from './Button';
-import { Me_Query } from './__generated__/Header.generated';
+import { MeQuery, MeQueryVariables } from './__generated__/Header.generated';
 
 interface Props extends ComponentProps<'a'> {
   noBorder?: boolean;
@@ -16,7 +16,7 @@ interface Props extends ComponentProps<'a'> {
 }
 
 export const ME_QUERY = gql`
-  query ME_QUERY {
+  query meQuery {
     me {
       id
       firstname
@@ -49,7 +49,7 @@ export function Header() {
   }
 
   const [navBarCollapsed, setNavBarCollapsed] = useState(false);
-  const { data, loading, error } = useQuery<Me_Query>(ME_QUERY);
+  const { data } = useQuery<MeQuery, MeQueryVariables>(ME_QUERY);
 
   const router = useRouter();
 

@@ -7,21 +7,27 @@ import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
-import { MutationRequestPasswordResetArgs } from '~/graphql/__generated__/types';
+import {
+  RequestOtpMutation,
+  RequestOtpMutationVariables,
+} from './__generated__/forgotPassword.generated';
 
 const REQUEST_OTP = gql`
-  mutation REQUEST_OTP($email: String!) {
+  mutation requestOTPMutation($email: String!) {
     requestPasswordReset(email: $email)
   }
 `;
 
 export default function ForgotPassword() {
-  const [requestOTP, { data, error }] = useMutation(REQUEST_OTP, {
+  const [requestOTP, { data, error }] = useMutation<
+    RequestOtpMutation,
+    RequestOtpMutationVariables
+  >(REQUEST_OTP, {
     onError: () => {},
     onCompleted: () => {},
   });
 
-  const requestOTPForm = useForm<MutationRequestPasswordResetArgs>();
+  const requestOTPForm = useForm<RequestOtpMutationVariables>();
 
   function onSubmit() {
     requestOTP({

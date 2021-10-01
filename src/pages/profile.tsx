@@ -13,7 +13,6 @@ import { Loader } from '~/components/UI/Loader';
 import { Modal } from '~/components/UI/Modal';
 import { ModalForm } from '~/components/UI/ModalForm';
 import { Switch } from '~/components/UI/Switch';
-import { MutationUpdateUserArgs, User } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import {
@@ -21,12 +20,14 @@ import {
   DeleteUserMutationVariables,
   LogoutMutation,
   LogoutMutationVariables,
+  ProfileMeQuery,
+  ProfileMeQueryVariables,
   UpdateUserMutation,
   UpdateUserMutationVariables,
 } from './__generated__/profile.generated';
 
 export const PROFILE_ME_QUERY = gql`
-  query PROFILE_ME_QUERY {
+  query profileMeQuery {
     me {
       id
       firstname
@@ -77,10 +78,12 @@ export default function Profile() {
   const router = useRouter();
   const client = useApolloClient();
 
-  const updateUserForm = useForm<MutationUpdateUserArgs>();
+  const updateUserForm = useForm<UpdateUserMutationVariables>();
   const { reset } = updateUserForm;
 
-  const { data, loading, error, refetch } = useQuery(PROFILE_ME_QUERY);
+  const { data, loading, error, refetch } = useQuery<ProfileMeQuery, ProfileMeQueryVariables>(
+    PROFILE_ME_QUERY,
+  );
 
   const [updateUser, { error: updateUserError }] = useMutation<
     UpdateUserMutation,
@@ -116,13 +119,10 @@ export default function Profile() {
   });
 
   // Need to reset the updateUser form data with the data from the ME_QUERY
-  const me: User = data?.me;
+  const me = data?.me;
   useEffect(() => {
-    const data: MutationUpdateUserArgs = {
-      ...me,
-    };
     // Set state for switch as its not getting handled automatically
-    reset(data);
+    reset({ ...me });
   }, [me, reset]);
 
   function logoutHandler() {

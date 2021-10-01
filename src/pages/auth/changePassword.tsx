@@ -7,10 +7,13 @@ import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
-import { MutationChangePasswordArgs } from '~/graphql/__generated__/types';
+import {
+  ChangePasswordMutation,
+  ChangePasswordMutationVariables,
+} from './__generated__/changePassword.generated';
 
 const CHANGE_PASSWORD = gql`
-  mutation CHANGE_PASSWORD($password: String!, $passwordRepeat: String!) {
+  mutation changePasswordMutation($password: String!, $passwordRepeat: String!) {
     changePassword(password: $password, passwordRepeat: $passwordRepeat) {
       id
     }
@@ -20,14 +23,17 @@ const CHANGE_PASSWORD = gql`
 export default function ChangePassword() {
   const router = useRouter();
 
-  const [changePassword, { error }] = useMutation(CHANGE_PASSWORD, {
+  const [changePassword, { error }] = useMutation<
+    ChangePasswordMutation,
+    ChangePasswordMutationVariables
+  >(CHANGE_PASSWORD, {
     onError: () => {},
     onCompleted: () => {
       router.push('/profile');
     },
   });
 
-  const changePasswordForm = useForm<MutationChangePasswordArgs>();
+  const changePasswordForm = useForm<ChangePasswordMutationVariables>();
 
   function onSubmit() {
     changePassword({

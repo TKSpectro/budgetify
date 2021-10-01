@@ -9,10 +9,11 @@ import { Form } from '~/components/UI/Form';
 import { ME_QUERY } from '~/components/UI/Header';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
-import { MutationSignupArgs } from '~/graphql/__generated__/types';
+import { MeQuery, MeQueryVariables } from '~/components/UI/__generated__/Header.generated';
+import { SignupMutation, SignupMutationVariables } from './__generated__/signup.generated';
 
 const SIGNUP_MUTATION = gql`
-  mutation SIGNUP_MUTATION(
+  mutation signupMutation(
     $email: String!
     $password: String!
     $firstname: String!
@@ -25,19 +26,22 @@ const SIGNUP_MUTATION = gql`
 `;
 
 export default function Signup() {
-  const { refetch } = useQuery(ME_QUERY);
+  const { refetch } = useQuery<MeQuery, MeQueryVariables>(ME_QUERY);
   const router = useRouter();
 
-  const [signupMutation, { error }] = useMutation(SIGNUP_MUTATION, {
-    onError: () => {},
-    onCompleted: () => {
-      // Refetch the user for the cache to get updated and then redirect to the homepage
-      refetch();
-      router.push('/');
+  const [signupMutation, { error }] = useMutation<SignupMutation, SignupMutationVariables>(
+    SIGNUP_MUTATION,
+    {
+      onError: () => {},
+      onCompleted: () => {
+        // Refetch the user for the cache to get updated and then redirect to the homepage
+        refetch();
+        router.push('/');
+      },
     },
-  });
+  );
 
-  const signupForm = useForm<MutationSignupArgs>();
+  const signupForm = useForm<SignupMutationVariables>();
 
   function onSubmit() {
     signupMutation({

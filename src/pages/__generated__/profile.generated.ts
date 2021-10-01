@@ -1,9 +1,9 @@
 import * as Types from '../../graphql/__generated__/types';
 
-export type Profile_Me_QueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type ProfileMeQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type Profile_Me_Query = { __typename?: 'Query', me?: { __typename?: 'User', id: string, firstname: string, lastname: string, name: string, email: string, receiveNotifications: boolean } | null | undefined };
+export type ProfileMeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, firstname: string, lastname: string, name: string, email: string, receiveNotifications: boolean } | null | undefined };
 
 export type UpdateUserMutationVariables = Types.Exact<{
   firstname?: Types.Maybe<Types.Scalars['String']>;

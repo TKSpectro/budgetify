@@ -1,8 +1,8 @@
 import * as Types from '../../../graphql/__generated__/types';
 
-export type Request_OtpVariables = Types.Exact<{
+export type RequestOtpMutationVariables = Types.Exact<{
   email: Types.Scalars['String'];
 }>;
 
 
-export type Request_Otp = { __typename?: 'Mutation', requestPasswordReset: string };
+export type RequestOtpMutation = { __typename?: 'Mutation', requestPasswordReset: string };

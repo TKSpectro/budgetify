@@ -9,10 +9,11 @@ import { Form } from '~/components/UI/Form';
 import { ME_QUERY } from '~/components/UI/Header';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
-import { MutationLoginArgs } from '~/graphql/__generated__/types';
+import { MeQuery, MeQueryVariables } from '~/components/UI/__generated__/Header.generated';
+import { OtpLoginMutation, OtpLoginMutationVariables } from './__generated__/otpLogin.generated';
 
 const LOGIN_MUTATION = gql`
-  mutation OTP_LOGIN_MUTATION($email: String!, $password: String!) {
+  mutation otpLoginMutation($email: String!, $password: String!) {
     login(email: $email, password: $password, isOTP: true) {
       token
     }
@@ -20,18 +21,21 @@ const LOGIN_MUTATION = gql`
 `;
 
 export default function OTPLogin() {
-  const { refetch } = useQuery(ME_QUERY);
+  const { refetch } = useQuery<MeQuery, MeQueryVariables>(ME_QUERY);
   const router = useRouter();
 
-  const [loginMutation, { error }] = useMutation(LOGIN_MUTATION, {
-    onError: () => {},
-    onCompleted: () => {
-      refetch();
-      router.push('/auth/changePassword?isOTP=true');
+  const [loginMutation, { error }] = useMutation<OtpLoginMutation, OtpLoginMutationVariables>(
+    LOGIN_MUTATION,
+    {
+      onError: () => {},
+      onCompleted: () => {
+        refetch();
+        router.push('/auth/changePassword?isOTP=true');
+      },
     },
-  });
+  );
 
-  const loginForm = useForm<MutationLoginArgs>();
+  const loginForm = useForm<OtpLoginMutationVariables>();
 
   function onSubmit() {
     loginMutation({
