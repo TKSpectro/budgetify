@@ -12,6 +12,7 @@ import {
   MutationUpdateHouseholdArgs,
   User,
 } from '~/graphql/__generated__/types';
+import { urlOneUp } from '~/utils/helper';
 
 interface Props {
   members: User[];
@@ -47,7 +48,7 @@ export default function MemberTable({ members, owner }: Props) {
   const [updateHouseholdMutation, { error: updateHouseholdError }] =
     useMutation<MutationUpdateHouseholdArgs>(UPDATE_HOUSEHOLD_MUTATION, {
       onCompleted: () => {
-        router.push(router.asPath.substring(0, router.asPath.lastIndexOf('/')));
+        router.push(urlOneUp(router.asPath));
       },
       onError: () => {},
     });

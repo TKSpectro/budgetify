@@ -17,7 +17,7 @@ import {
 } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
-import { dateToFormInput } from '~/utils/helper';
+import { dateToFormInput, urlOneUp } from '~/utils/helper';
 
 const RECURRING_PAYMENT_QUERY = gql`
   query RECURRING_PAYMENT_QUERY($householdId: String, $recurringPaymentId: String) {
@@ -101,7 +101,7 @@ export default function UpdateRecurringPayment() {
     {
       onCompleted: () => {
         // Redirect back to recurringPayments page
-        router.push(router.asPath.substring(0, router.asPath.lastIndexOf('/')));
+        router.push(urlOneUp(router.asPath));
       },
     },
   );

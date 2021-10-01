@@ -19,7 +19,7 @@ import {
 } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
-import { dateToFormInput } from '~/utils/helper';
+import { dateToFormInput, urlOneUp } from '~/utils/helper';
 
 const CATEGORIES_QUERY = gql`
   query CATEGORIES_QUERY {
@@ -104,7 +104,7 @@ export default function NewRecurringPayment() {
   };
 
   if (createRecurringPaymentData) {
-    const returnUrl = router.asPath.substring(0, router.asPath.lastIndexOf('/'));
+    const returnUrl = urlOneUp(router.asPath);
     setTimeout(() => {
       router.push(returnUrl);
     }, 2000);

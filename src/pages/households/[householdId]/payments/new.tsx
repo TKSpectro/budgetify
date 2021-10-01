@@ -15,6 +15,7 @@ import { Loader } from '~/components/UI/Loader';
 import { Category, MutationCreatePaymentArgs } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
+import { urlOneUp } from '~/utils/helper';
 
 const CATEGORIES_QUERY = gql`
   query CATEGORIES_QUERY {
@@ -83,7 +84,7 @@ export default function NewPayment() {
   };
 
   if (createPaymentData) {
-    const returnUrl = router.asPath.substring(0, router.asPath.lastIndexOf('/'));
+    const returnUrl = urlOneUp(router.asPath);
     setTimeout(() => {
       router.push(returnUrl);
     }, 2000);

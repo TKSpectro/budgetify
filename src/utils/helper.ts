@@ -14,3 +14,8 @@ export const dateToFormInput = (date: Date) => {
 export const getBaseUrl = () => {
   return process.env.BASE_URL || 'https://' + process.env.DOMAIN;
 };
+
+// Returns the string with the last part cut off (/api/households/1 -> /api/households)
+export const urlOneUp = (url: String) => {
+  return url.substring(0, url.lastIndexOf('/'));
+};

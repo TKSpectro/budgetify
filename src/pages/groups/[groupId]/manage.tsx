@@ -10,6 +10,7 @@ import { Loader } from '~/components/UI/Loader';
 import { Modal } from '~/components/UI/Modal';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
+import { urlOneUp } from '~/utils/helper';
 
 const QUERY = gql`
   query QUERY($id: String!) {
@@ -54,8 +55,7 @@ export default function ManageGroup() {
 
   const [deleteGroup, { error: deleteGroupError }] = useMutation(DELETE_GROUP_MUTATION, {
     onCompleted: () => {
-      let goUpOne = router.asPath.substring(0, router.asPath.lastIndexOf('/'));
-      router.push(goUpOne.substring(0, goUpOne.lastIndexOf('/')));
+      router.push(urlOneUp(urlOneUp(router.asPath)));
     },
     onError: () => {},
   });
