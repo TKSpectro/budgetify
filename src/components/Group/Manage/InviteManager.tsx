@@ -6,13 +6,19 @@ import { Input } from '~/components/UI/Input';
 import { Modal } from '~/components/UI/Modal';
 import { ModalForm } from '~/components/UI/ModalForm';
 import { Invite, MutationCreateGroupInviteArgs } from '~/graphql/__generated__/types';
+import {
+  CreateGroupInviteMutation,
+  CreateGroupInviteMutationVariables,
+  DeleteGroupInviteMutation,
+  DeleteGroupInviteMutationVariables,
+} from './__generated__/InviteManager.generated';
 
 interface Props {
   invites: Invite[];
 }
 
 const CREATE_INVITE_MUTATION = gql`
-  mutation createGroupInvite($invitedEmail: String!, $groupId: String!) {
+  mutation createGroupInviteMutation($invitedEmail: String!, $groupId: String!) {
     createGroupInvite(invitedEmail: $invitedEmail, groupId: $groupId) {
       id
     }
@@ -20,7 +26,7 @@ const CREATE_INVITE_MUTATION = gql`
 `;
 
 const DELETE_INVITE_MUTATION = gql`
-  mutation DeleteInvite($id: String!) {
+  mutation deleteGroupInviteMutation($id: String!) {
     deleteInvite(id: $id)
   }
 `;
@@ -33,16 +39,22 @@ export function InviteManager({ invites }: Props) {
     defaultValues: { groupId: groupId, invitedEmail: '' },
   });
 
-  const [deleteInvite, { error: deleteInviteError }] = useMutation(DELETE_INVITE_MUTATION, {
+  const [deleteInvite, { error: deleteInviteError }] = useMutation<
+    DeleteGroupInviteMutation,
+    DeleteGroupInviteMutationVariables
+  >(DELETE_INVITE_MUTATION, {
     onCompleted: () => {},
     onError: () => {},
-    refetchQueries: ['QUERY'],
+    refetchQueries: ['GROUP_MANAGE_QUERY'],
   });
 
-  const [createInvite, { error: createInviteError }] = useMutation(CREATE_INVITE_MUTATION, {
+  const [createInvite, { error: createInviteError }] = useMutation<
+    CreateGroupInviteMutation,
+    CreateGroupInviteMutationVariables
+  >(CREATE_INVITE_MUTATION, {
     onCompleted: () => {},
     onError: () => {},
-    refetchQueries: ['QUERY'],
+    refetchQueries: ['GROUP_MANAGE_QUERY'],
   });
 
   const removeHandler = (invite: Invite) => {

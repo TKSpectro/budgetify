@@ -16,6 +16,12 @@ import {
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { uuidRegex } from '~/utils/helper';
+import {
+  CreateGroupMutation,
+  CreateGroupMutationVariables,
+  UseInviteTokenMutation,
+  UseInviteTokenMutationVariables,
+} from './__generated__/index.generated';
 
 const GROUPS_QUERY = gql`
   query GROUPS_QUERY {
@@ -34,7 +40,7 @@ const GROUPS_QUERY = gql`
 `;
 
 const USE_INVITE_TOKEN_MUTATION = gql`
-  mutation USE_INVITE_TOKEN_MUTATION($token: String!) {
+  mutation useInviteTokenMutation($token: String!) {
     useInvite(token: $token) {
       id
     }
@@ -42,7 +48,7 @@ const USE_INVITE_TOKEN_MUTATION = gql`
 `;
 
 const CREATE_GROUP_MUTATION = gql`
-  mutation CREATE_GROUP_MUTATION($name: String!) {
+  mutation createGroupMutation($name: String!) {
     createGroup(name: $name) {
       id
       name
@@ -62,14 +68,20 @@ export default function Groups() {
   const form = useForm<MutationUseInviteArgs>();
   const createGroupForm = useForm<MutationCreateGroupArgs>();
 
-  const [useGroupTokenMutation, { error: inviteError }] = useMutation(USE_INVITE_TOKEN_MUTATION, {
+  const [useGroupTokenMutation, { error: inviteError }] = useMutation<
+    UseInviteTokenMutation,
+    UseInviteTokenMutationVariables
+  >(USE_INVITE_TOKEN_MUTATION, {
     onCompleted: () => {
       refetch();
     },
     onError: () => {},
   });
 
-  const [createGroupMutation, { error: createGroupError }] = useMutation(CREATE_GROUP_MUTATION, {
+  const [createGroupMutation, { error: createGroupError }] = useMutation<
+    CreateGroupMutation,
+    CreateGroupMutationVariables
+  >(CREATE_GROUP_MUTATION, {
     onCompleted: () => {
       refetch();
     },

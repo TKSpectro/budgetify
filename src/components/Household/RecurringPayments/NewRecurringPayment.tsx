@@ -11,13 +11,17 @@ import {
   MutationCreateRecurringPaymentArgs,
 } from '~/graphql/__generated__/types';
 import { dateToFormInput } from '~/utils/helper';
+import {
+  NewRecurringPaymentMutation,
+  NewRecurringPaymentMutationVariables,
+} from './__generated__/NewRecurringPayment.generated';
 
 interface Props {
   categories: Category[];
 }
 
 const NEW_RECURRING_PAYMENT_MUTATION = gql`
-  mutation NEW_RECURRING_PAYMENT_MUTATION(
+  mutation newRecurringPaymentMutation(
     $name: String!
     $value: Money!
     $description: String
@@ -49,10 +53,14 @@ export function NewRecurringPayment({ categories }: Props) {
   const form = useForm<MutationCreateRecurringPaymentArgs>();
   const { reset } = form;
 
-  const [createRecurringPaymentMutation, { error: createRecurringPaymentError }] = useMutation(
-    NEW_RECURRING_PAYMENT_MUTATION,
-    { onCompleted: () => {}, onError: () => {}, refetchQueries: ['QUERY'] },
-  );
+  const [createRecurringPaymentMutation, { error: createRecurringPaymentError }] = useMutation<
+    NewRecurringPaymentMutation,
+    NewRecurringPaymentMutationVariables
+  >(NEW_RECURRING_PAYMENT_MUTATION, {
+    onCompleted: () => {},
+    onError: () => {},
+    refetchQueries: ['QUERY'],
+  });
 
   useEffect(() => {
     // Reset must be used here to get the form to render the actual default values

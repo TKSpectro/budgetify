@@ -8,6 +8,7 @@ import { Error } from '~/components/UI/Error';
 import { Loader } from '~/components/UI/Loader';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
+import { UseTokenMutation, UseTokenMutationVariables } from './__generated__/[token].generated';
 
 const QUERY = gql`
   query GET_TOKEN($token: String!) {
@@ -22,7 +23,7 @@ const QUERY = gql`
 `;
 
 const USE_TOKEN_MUTATION = gql`
-  mutation USE_TOKEN_MUTATION($token: String!) {
+  mutation useTokenMutation($token: String!) {
     useInvite(token: $token) {
       id
     }
@@ -31,7 +32,7 @@ const USE_TOKEN_MUTATION = gql`
 
 export default function UseInvite() {
   const router = useRouter();
-  const { token } = router.query;
+  const token = router.query.token as string;
 
   const {
     data: queryData,
@@ -41,7 +42,10 @@ export default function UseInvite() {
 
   const invite = queryData?.getInviteByToken;
 
-  const [useTokenMutation, { error: useTokenError }] = useMutation(USE_TOKEN_MUTATION, {
+  const [useTokenMutation, { error: useTokenError }] = useMutation<
+    UseTokenMutation,
+    UseTokenMutationVariables
+  >(USE_TOKEN_MUTATION, {
     onCompleted: () => {
       // Depending on what invite was used, redirect to the corresponding page
       if (invite.groupId) {

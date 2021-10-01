@@ -18,6 +18,10 @@ import {
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { dateToFormInput, urlOneUp } from '~/utils/helper';
+import {
+  UpdateRecurringPaymentMutation,
+  UpdateRecurringPaymentMutationVariables,
+} from './__generated__/[recurringPaymentId].generated';
 
 const RECURRING_PAYMENT_QUERY = gql`
   query RECURRING_PAYMENT_QUERY($householdId: String, $recurringPaymentId: String) {
@@ -50,7 +54,7 @@ const RECURRING_PAYMENT_QUERY = gql`
 `;
 
 const UPDATE_RECURRING_PAYMENT_MUTATION = gql`
-  mutation UpdateRecurringPayment(
+  mutation updateRecurringPaymentMutation(
     $id: String!
     $name: String
     $value: Money
@@ -96,15 +100,15 @@ export default function UpdateRecurringPayment() {
     },
   });
 
-  const [updateRecurringPaymentMutation, { data: updateData }] = useMutation(
-    UPDATE_RECURRING_PAYMENT_MUTATION,
-    {
-      onCompleted: () => {
-        // Redirect back to recurringPayments page
-        router.push(urlOneUp(router.asPath));
-      },
+  const [updateRecurringPaymentMutation, { data: updateData }] = useMutation<
+    UpdateRecurringPaymentMutation,
+    UpdateRecurringPaymentMutationVariables
+  >(UPDATE_RECURRING_PAYMENT_MUTATION, {
+    onCompleted: () => {
+      // Redirect back to recurringPayments page
+      router.push(urlOneUp(router.asPath));
     },
-  );
+  });
 
   const form = useForm<MutationUpdateRecurringPaymentArgs>();
   const recurringPayment = data?.household?.recurringPayments[0];

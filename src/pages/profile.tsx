@@ -16,9 +16,35 @@ import { Switch } from '~/components/UI/Switch';
 import { MutationUpdateUserArgs, User } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
+import {
+  DeleteUserMutation,
+  DeleteUserMutationVariables,
+  LogoutMutation,
+  LogoutMutationVariables,
+  UpdateUserMutation,
+  UpdateUserMutationVariables,
+} from './__generated__/profile.generated';
 
-const UPDATE_USER_QUERY = gql`
-  mutation ($firstname: String, $lastname: String, $email: String, $receiveNotifications: Boolean) {
+export const PROFILE_ME_QUERY = gql`
+  query PROFILE_ME_QUERY {
+    me {
+      id
+      firstname
+      lastname
+      name
+      email
+      receiveNotifications
+    }
+  }
+`;
+
+const UPDATE_USER_MUTATION = gql`
+  mutation updateUserMutation(
+    $firstname: String
+    $lastname: String
+    $email: String
+    $receiveNotifications: Boolean
+  ) {
     updateUser(
       firstname: $firstname
       lastname: $lastname
@@ -33,8 +59,8 @@ const UPDATE_USER_QUERY = gql`
   }
 `;
 
-const DELETE_USER_QUERY = gql`
-  mutation DeleteUser {
+const DELETE_USER_MUTATION = gql`
+  mutation deleteUserMutation {
     deleteUser {
       id
     }
@@ -42,21 +68,8 @@ const DELETE_USER_QUERY = gql`
 `;
 
 const LOGOUT_MUTATION = gql`
-  mutation Logout {
+  mutation logoutMutation {
     logout
-  }
-`;
-
-export const ME_QUERY = gql`
-  query ME_QUERY {
-    me {
-      id
-      firstname
-      lastname
-      name
-      email
-      receiveNotifications
-    }
   }
 `;
 
@@ -67,26 +80,32 @@ export default function Profile() {
   const updateUserForm = useForm<MutationUpdateUserArgs>();
   const { reset } = updateUserForm;
 
-  const { data, loading, error, refetch } = useQuery(ME_QUERY);
+  const { data, loading, error, refetch } = useQuery(PROFILE_ME_QUERY);
 
-  const [updateUser, { error: updateUserError }] = useMutation<MutationUpdateUserArgs>(
-    UPDATE_USER_QUERY,
-    {
-      onCompleted: () => {
-        refetch();
-      },
-      onError: () => {},
+  const [updateUser, { error: updateUserError }] = useMutation<
+    UpdateUserMutation,
+    UpdateUserMutationVariables
+  >(UPDATE_USER_MUTATION, {
+    onCompleted: () => {
+      refetch();
     },
-  );
+    onError: () => {},
+  });
 
-  const [deleteUser, { error: deleteUserError }] = useMutation(DELETE_USER_QUERY, {
+  const [deleteUser, { error: deleteUserError }] = useMutation<
+    DeleteUserMutation,
+    DeleteUserMutationVariables
+  >(DELETE_USER_MUTATION, {
     onCompleted: () => {
       logoutHandler();
     },
     onError: () => {},
   });
 
-  const [logoutMutation, { error: logoutError }] = useMutation(LOGOUT_MUTATION, {
+  const [logoutMutation, { error: logoutError }] = useMutation<
+    LogoutMutation,
+    LogoutMutationVariables
+  >(LOGOUT_MUTATION, {
     onCompleted: () => {
       // Clear apollo client cache -> remove user data from cache
       client.resetStore();
@@ -222,5 +241,5 @@ export default function Profile() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
-  return preloadQuery(ctx, { query: ME_QUERY });
+  return preloadQuery(ctx, { query: PROFILE_ME_QUERY });
 };

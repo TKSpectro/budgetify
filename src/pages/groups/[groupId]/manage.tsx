@@ -11,9 +11,13 @@ import { Modal } from '~/components/UI/Modal';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { urlOneUp } from '~/utils/helper';
+import {
+  DeleteGroupMutation,
+  DeleteGroupMutationVariables,
+} from './__generated__/manage.generated';
 
 const QUERY = gql`
-  query QUERY($id: String!) {
+  query GROUP_MANAGE_QUERY($id: String!) {
     me {
       id
     }
@@ -40,7 +44,7 @@ const QUERY = gql`
 `;
 
 const DELETE_GROUP_MUTATION = gql`
-  mutation ($id: String!) {
+  mutation deleteGroupMutation($id: String!) {
     deleteGroup(groupId: $id) {
       id
     }
@@ -53,7 +57,10 @@ export default function ManageGroup() {
 
   const { data, loading, error } = useQuery(QUERY, { variables: { id: groupId } });
 
-  const [deleteGroup, { error: deleteGroupError }] = useMutation(DELETE_GROUP_MUTATION, {
+  const [deleteGroup, { error: deleteGroupError }] = useMutation<
+    DeleteGroupMutation,
+    DeleteGroupMutationVariables
+  >(DELETE_GROUP_MUTATION, {
     onCompleted: () => {
       router.push(urlOneUp(urlOneUp(router.asPath)));
     },

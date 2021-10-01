@@ -12,7 +12,7 @@ import { Link } from '~/components/UI/Link';
 import { MutationLoginArgs } from '~/graphql/__generated__/types';
 
 const LOGIN_MUTATION = gql`
-  mutation LOGIN_MUTATION($email: String!, $password: String!) {
+  mutation OTP_LOGIN_MUTATION($email: String!, $password: String!) {
     login(email: $email, password: $password, isOTP: true) {
       token
     }

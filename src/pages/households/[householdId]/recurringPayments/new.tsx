@@ -20,6 +20,10 @@ import {
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { dateToFormInput, urlOneUp } from '~/utils/helper';
+import {
+  NewRecurringPaymentMutation,
+  NewRecurringPaymentMutationVariables,
+} from './__generated__/new.generated';
 
 const CATEGORIES_QUERY = gql`
   query CATEGORIES_QUERY {
@@ -31,7 +35,7 @@ const CATEGORIES_QUERY = gql`
 `;
 
 const NEW_RECURRING_PAYMENT_MUTATION = gql`
-  mutation NEW_RECURRING_PAYMENT_MUTATION(
+  mutation newRecurringPaymentMutation(
     $name: String!
     $value: Money!
     $description: String
@@ -71,14 +75,10 @@ export default function NewRecurringPayment() {
   const form = useForm<MutationCreateRecurringPaymentArgs>();
   const { reset } = form;
 
-  const [
-    createRecurringPaymentMutation,
-    {
-      data: createRecurringPaymentData,
-      loading: createRecurringPaymentLoading,
-      error: createRecurringPaymentError,
-    },
-  ] = useMutation(NEW_RECURRING_PAYMENT_MUTATION);
+  const [createRecurringPaymentMutation, { data: createRecurringPaymentData }] = useMutation<
+    NewRecurringPaymentMutation,
+    NewRecurringPaymentMutationVariables
+  >(NEW_RECURRING_PAYMENT_MUTATION);
 
   useEffect(() => {
     // Reset must be used here to get the form to render the actual default values

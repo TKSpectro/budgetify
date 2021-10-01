@@ -7,12 +7,14 @@ import { Button } from '~/components/UI/Button';
 import { Error } from '~/components/UI/Error';
 import { ManagedModal } from '~/components/UI/ManagedModal';
 import { ModalForm } from '~/components/UI/ModalForm';
-import {
-  MutationRemoveHouseholdMemberArgs,
-  MutationUpdateHouseholdArgs,
-  User,
-} from '~/graphql/__generated__/types';
+import { User } from '~/graphql/__generated__/types';
 import { urlOneUp } from '~/utils/helper';
+import {
+  RemoveHouseholdMemberMutation,
+  RemoveHouseholdMemberMutationVariables,
+  UpdateHouseholdOwnerMutation,
+  UpdateHouseholdOwnerMutationVariables,
+} from './__generated__/MemberTable.generated';
 
 interface Props {
   members: User[];
@@ -20,7 +22,7 @@ interface Props {
 }
 
 const UPDATE_HOUSEHOLD_MUTATION = gql`
-  mutation UPDATE_OWNER_MUTATION($id: String!, $ownerId: String!) {
+  mutation updateHouseholdOwnerMutation($id: String!, $ownerId: String!) {
     updateHousehold(householdId: $id, ownerId: $ownerId) {
       id
       ownerId
@@ -29,7 +31,7 @@ const UPDATE_HOUSEHOLD_MUTATION = gql`
 `;
 
 const REMOVE_HOUSEHOLD_MEMBER_MUTATION = gql`
-  mutation REMOVE_HOUSEHOLD_MEMBER_MUTATION($id: String!, $memberId: String!) {
+  mutation removeHouseholdMemberMutation($id: String!, $memberId: String!) {
     removeHouseholdMember(householdId: $id, memberId: $memberId) {
       id
       members {
@@ -45,19 +47,23 @@ export default function MemberTable({ members, owner }: Props) {
 
   const leaveHouseholdForm = useForm();
 
-  const [updateHouseholdMutation, { error: updateHouseholdError }] =
-    useMutation<MutationUpdateHouseholdArgs>(UPDATE_HOUSEHOLD_MUTATION, {
-      onCompleted: () => {
-        router.push(urlOneUp(router.asPath));
-      },
-      onError: () => {},
-    });
+  const [updateHouseholdMutation, { error: updateHouseholdError }] = useMutation<
+    UpdateHouseholdOwnerMutation,
+    UpdateHouseholdOwnerMutationVariables
+  >(UPDATE_HOUSEHOLD_MUTATION, {
+    onCompleted: () => {
+      router.push(urlOneUp(router.asPath));
+    },
+    onError: () => {},
+  });
 
-  const [removeMemberMutation, { error: removeMemberError }] =
-    useMutation<MutationRemoveHouseholdMemberArgs>(REMOVE_HOUSEHOLD_MEMBER_MUTATION, {
-      onCompleted: () => {},
-      onError: () => {},
-    });
+  const [removeMemberMutation, { error: removeMemberError }] = useMutation<
+    RemoveHouseholdMemberMutation,
+    RemoveHouseholdMemberMutationVariables
+  >(REMOVE_HOUSEHOLD_MEMBER_MUTATION, {
+    onCompleted: () => {},
+    onError: () => {},
+  });
 
   const [makeOwnerModalUser, setMakeOwnerModalUser] = useState<User>();
   const [showMakeOwnerModal, setShowMakeOwnerModal] = useState(false);
@@ -66,7 +72,7 @@ export default function MemberTable({ members, owner }: Props) {
     setShowMakeOwnerModal(true);
   };
   const makeOwner = () => {
-    updateHouseholdMutation({ variables: { id: groupId, ownerId: makeOwnerModalUser?.id } });
+    updateHouseholdMutation({ variables: { id: groupId, ownerId: makeOwnerModalUser?.id || '' } });
   };
 
   const [removeMemberModalUser, setRemoveMemberModalUser] = useState<User>();
@@ -76,7 +82,7 @@ export default function MemberTable({ members, owner }: Props) {
     setShowRemoveMemberModal(true);
   };
   const removeHandler = () => {
-    removeMemberMutation({ variables: { id: groupId, memberId: removeMemberModalUser?.id } });
+    removeMemberMutation({ variables: { id: groupId, memberId: removeMemberModalUser?.id || '' } });
   };
 
   const onLeaveSubmit = async () => {

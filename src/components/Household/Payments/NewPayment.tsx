@@ -5,9 +5,13 @@ import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { ModalForm } from '~/components/UI/ModalForm';
 import { Category, MutationCreatePaymentArgs } from '~/graphql/__generated__/types';
+import {
+  NewPaymentMutation,
+  NewPaymentMutationVariables,
+} from './__generated__/NewPayment.generated';
 
 const NEW_PAYMENT_MUTATION = gql`
-  mutation NEW_PAYMENT_MUTATION(
+  mutation newPaymentMutation(
     $name: String!
     $value: Money!
     $description: String
@@ -38,10 +42,13 @@ export function NewPayment({ categories }: Props) {
     defaultValues: { householdId: householdId as string },
   });
 
-  const [createPaymentMutation, { error: createPaymentError }] = useMutation(NEW_PAYMENT_MUTATION, {
+  const [createPaymentMutation, { error: createPaymentError }] = useMutation<
+    NewPaymentMutation,
+    NewPaymentMutationVariables
+  >(NEW_PAYMENT_MUTATION, {
     onCompleted: () => {},
     onError: () => {},
-    refetchQueries: ['QUERY'],
+    refetchQueries: ['HOUSEHOLD_PAYMENTS_QUERY'],
   });
 
   const onNewPaymentSubmit = () => {

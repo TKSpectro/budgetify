@@ -11,7 +11,7 @@ import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 
 const HOUSEHOLD_QUERY = gql`
-  query HOUSEHOLD_QUERY($householdId: String!) {
+  query HOUSEHOLD_MANAGE_QUERY($householdId: String!) {
     household(id: $householdId) {
       id
       name

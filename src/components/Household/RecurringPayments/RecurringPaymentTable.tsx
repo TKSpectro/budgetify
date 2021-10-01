@@ -14,6 +14,10 @@ import {
   RecurringPayment,
 } from '~/graphql/__generated__/types';
 import { dateToFormInput } from '~/utils/helper';
+import {
+  UpdateRecurringPaymentMutation,
+  UpdateRecurringPaymentMutationVariables,
+} from './__generated__/RecurringPaymentTable.generated';
 
 interface Props {
   recurringPayments: RecurringPayment[];
@@ -21,7 +25,7 @@ interface Props {
 }
 
 const UPDATE_RECURRING_PAYMENT_MUTATION = gql`
-  mutation UpdateRecurringPayment(
+  mutation updateRecurringPaymentMutation(
     $id: String!
     $name: String
     $value: Money
@@ -56,21 +60,21 @@ const UPDATE_RECURRING_PAYMENT_MUTATION = gql`
 
 export function RecurringPaymentTable({ recurringPayments, categories }: Props) {
   const router = useRouter();
-  const { householdId } = router.query;
+  const householdId = router.query.householdId as string;
 
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const setShowUpdateModalWrapper = (value: boolean) => {
     setShowUpdateModal(value);
   };
 
-  const [updateRecurringPaymentMutation, { error: updateRecPaymentError }] = useMutation(
-    UPDATE_RECURRING_PAYMENT_MUTATION,
-    {
-      onCompleted: () => {},
-      onError: () => {},
-      refetchQueries: ['QUERY'],
-    },
-  );
+  const [updateRecurringPaymentMutation, { error: updateRecPaymentError }] = useMutation<
+    UpdateRecurringPaymentMutation,
+    UpdateRecurringPaymentMutationVariables
+  >(UPDATE_RECURRING_PAYMENT_MUTATION, {
+    onCompleted: () => {},
+    onError: () => {},
+    refetchQueries: ['QUERY'],
+  });
 
   const updateRecPaymentForm = useForm<MutationUpdateRecurringPaymentArgs>();
 

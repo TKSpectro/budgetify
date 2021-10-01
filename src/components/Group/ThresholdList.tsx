@@ -17,6 +17,12 @@ import { Input } from '../UI/Input';
 import { ManagedModal } from '../UI/ManagedModal';
 import { ManagedModalForm } from '../UI/ManagedModalForm';
 import { Progressbar } from '../UI/Progressbar';
+import {
+  RemoveThresholdMutation,
+  RemoveThresholdMutationVariables,
+  UpdateThresholdMutation,
+  UpdateThresholdMutationVariables,
+} from './__generated__/ThresholdList.generated';
 
 interface Props {
   me: User;
@@ -25,7 +31,7 @@ interface Props {
 }
 
 const UPDATE_THRESHOLD_MUTATION = gql`
-  mutation UPDATE_THRESHOLD_MUTATION(
+  mutation updateThresholdMutation(
     $id: String!
     $groupId: String!
     $name: String
@@ -42,7 +48,7 @@ const UPDATE_THRESHOLD_MUTATION = gql`
 `;
 
 const REMOVE_THRESHOLD_MUTATION = gql`
-  mutation REMOVE_THRESHOLD_MUTATION($id: String!, $groupId: String!) {
+  mutation removeThresholdMutation($id: String!, $groupId: String!) {
     removeThreshold(id: $id, groupId: $groupId) {
       id
     }
@@ -61,23 +67,23 @@ export function ThresholdList({ me, thresholds, group }: Props) {
     setShowRemoveModal(value);
   };
 
-  const [updateThreshold, { error: updateThresholdError }] = useMutation(
-    UPDATE_THRESHOLD_MUTATION,
-    {
-      onCompleted: () => {},
-      onError: () => {},
-      refetchQueries: ['GROUP_QUERY'],
-    },
-  );
+  const [updateThreshold, { error: updateThresholdError }] = useMutation<
+    UpdateThresholdMutation,
+    UpdateThresholdMutationVariables
+  >(UPDATE_THRESHOLD_MUTATION, {
+    onCompleted: () => {},
+    onError: () => {},
+    refetchQueries: ['GROUP_QUERY'],
+  });
 
-  const [removeThreshold, { error: removeThresholdError }] = useMutation(
-    REMOVE_THRESHOLD_MUTATION,
-    {
-      onCompleted: () => {},
-      onError: () => {},
-      refetchQueries: ['GROUP_QUERY'],
-    },
-  );
+  const [removeThreshold, { error: removeThresholdError }] = useMutation<
+    RemoveThresholdMutation,
+    RemoveThresholdMutationVariables
+  >(REMOVE_THRESHOLD_MUTATION, {
+    onCompleted: () => {},
+    onError: () => {},
+    refetchQueries: ['GROUP_QUERY'],
+  });
 
   const updateThresholdForm = useForm<MutationUpdateThresholdArgs>({
     defaultValues: { id: '', name: '', value: 0, type: ThresholdType.Goal, groupId: '' },

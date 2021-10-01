@@ -7,9 +7,14 @@ import { Modal } from '~/components/UI/Modal';
 import {
   MutationAddGroupOwnerArgs,
   MutationRemoveGroupMemberArgs,
-  MutationRemoveGroupOwnerArgs,
   User,
 } from '~/graphql/__generated__/types';
+import {
+  RemoveGroupMemberMutation,
+  RemoveGroupMemberMutationVariables,
+  RemoveGroupOwnerMutation,
+  RemoveGroupOwnerMutationVariables,
+} from './__generated__/MemberTable.generated';
 
 interface Props {
   members: User[];
@@ -18,7 +23,7 @@ interface Props {
 }
 
 const ADD_GROUP_OWNER_MUTATION = gql`
-  mutation UPDATE_GROUP_OWNER_MUTATION($id: String!, $ownerId: String!) {
+  mutation updateGroupOwnerMutation($id: String!, $ownerId: String!) {
     addGroupOwner(groupId: $id, ownerId: $ownerId) {
       id
       owners {
@@ -30,7 +35,7 @@ const ADD_GROUP_OWNER_MUTATION = gql`
 `;
 
 const REMOVE_GROUP_OWNER_MUTATION = gql`
-  mutation REMOVE_GROUP_OWNER_MUTATION($id: String!, $ownerId: String!) {
+  mutation removeGroupOwnerMutation($id: String!, $ownerId: String!) {
     removeGroupOwner(groupId: $id, ownerId: $ownerId) {
       id
       owners {
@@ -42,7 +47,7 @@ const REMOVE_GROUP_OWNER_MUTATION = gql`
 `;
 
 const REMOVE_GROUP_MEMBER_MUTATION = gql`
-  mutation REMOVE_GROUP_MEMBER_MUTATION($id: String!, $memberId: String!) {
+  mutation removeGroupMemberMutation($id: String!, $memberId: String!) {
     removeGroupMember(groupId: $id, memberId: $memberId) {
       id
       members {
@@ -62,17 +67,21 @@ export default function MemberTable({ members, owners, currentUserId }: Props) {
     onError: () => {},
   });
 
-  const [removeGroupOwnerMutation, { error: removeOwnerError }] =
-    useMutation<MutationRemoveGroupOwnerArgs>(REMOVE_GROUP_OWNER_MUTATION, {
-      onCompleted: () => {},
-      onError: () => {},
-    });
+  const [removeGroupOwnerMutation, { error: removeOwnerError }] = useMutation<
+    RemoveGroupOwnerMutation,
+    RemoveGroupOwnerMutationVariables
+  >(REMOVE_GROUP_OWNER_MUTATION, {
+    onCompleted: () => {},
+    onError: () => {},
+  });
 
-  const [removeMemberMutation, { error: removeMemberError }] =
-    useMutation<MutationRemoveGroupMemberArgs>(REMOVE_GROUP_MEMBER_MUTATION, {
-      onCompleted: () => {},
-      onError: () => {},
-    });
+  const [removeMemberMutation, { error: removeMemberError }] = useMutation<
+    RemoveGroupMemberMutation,
+    RemoveGroupMemberMutationVariables
+  >(REMOVE_GROUP_MEMBER_MUTATION, {
+    onCompleted: () => {},
+    onError: () => {},
+  });
 
   const [leaveGroupMutation, { error: leaveGroupError }] =
     useMutation<MutationRemoveGroupMemberArgs>(REMOVE_GROUP_MEMBER_MUTATION, {

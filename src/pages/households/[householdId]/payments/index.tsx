@@ -27,7 +27,7 @@ type DateFilterInput = {
 };
 
 const QUERY = gql`
-  query QUERY(
+  query HOUSEHOLD_PAYMENTS_QUERY(
     $householdId: String
     $startDate: DateTime
     $endDate: DateTime

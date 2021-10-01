@@ -16,6 +16,12 @@ import {
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { uuidRegex } from '~/utils/helper';
+import { UseInviteTokenMutationVariables } from '../groups/__generated__/index.generated';
+import {
+  CreateHouseholdMutation,
+  CreateHouseholdMutationVariables,
+  UseInviteTokenMutation,
+} from './__generated__/index.generated';
 
 const HOUSEHOLD_LIST_QUERY = gql`
   query HOUSEHOLD_LIST_QUERY {
@@ -33,7 +39,7 @@ const HOUSEHOLD_LIST_QUERY = gql`
 `;
 
 const USE_INVITE_TOKEN_MUTATION = gql`
-  mutation USE_INVITE_TOKEN_MUTATION($token: String!) {
+  mutation useInviteTokenMutation($token: String!) {
     useInvite(token: $token) {
       id
     }
@@ -41,7 +47,7 @@ const USE_INVITE_TOKEN_MUTATION = gql`
 `;
 
 const CREATE_HOUSEHOLD_MUTATION = gql`
-  mutation ($name: String!) {
+  mutation createHouseholdMutation($name: String!) {
     createHousehold(name: $name) {
       id
     }
@@ -53,7 +59,10 @@ export default function Households() {
   const form = useForm<MutationUseInviteArgs>({ defaultValues: { token: '' } });
   const createHouseholdForm = useForm<MutationCreateHouseholdArgs>({ defaultValues: { name: '' } });
 
-  const [UseInviteMutation, { error: useInviteError }] = useMutation(USE_INVITE_TOKEN_MUTATION, {
+  const [UseInviteMutation, { error: useInviteError }] = useMutation<
+    UseInviteTokenMutation,
+    UseInviteTokenMutationVariables
+  >(USE_INVITE_TOKEN_MUTATION, {
     onCompleted: () => {
       refetch();
       form.reset();
@@ -63,13 +72,15 @@ export default function Households() {
     },
   });
 
-  const [createHouseholdMutation, { error: createHouseholdError }] =
-    useMutation<MutationCreateHouseholdArgs>(CREATE_HOUSEHOLD_MUTATION, {
-      onCompleted: () => {
-        refetch();
-      },
-      onError: () => {},
-    });
+  const [createHouseholdMutation, { error: createHouseholdError }] = useMutation<
+    CreateHouseholdMutation,
+    CreateHouseholdMutationVariables
+  >(CREATE_HOUSEHOLD_MUTATION, {
+    onCompleted: () => {
+      refetch();
+    },
+    onError: () => {},
+  });
 
   const onSubmitHandler = () => {
     UseInviteMutation({ variables: { token: form.getValues('token') } });

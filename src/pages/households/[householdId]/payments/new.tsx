@@ -16,6 +16,7 @@ import { Category, MutationCreatePaymentArgs } from '~/graphql/__generated__/typ
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { urlOneUp } from '~/utils/helper';
+import { NewPaymentMutation, NewPaymentMutationVariables } from './__generated__/new.generated';
 
 const CATEGORIES_QUERY = gql`
   query CATEGORIES_QUERY {
@@ -27,7 +28,7 @@ const CATEGORIES_QUERY = gql`
 `;
 
 const NEW_PAYMENT_MUTATION = gql`
-  mutation NEW_PAYMENT_MUTATION(
+  mutation newPaymentMutation(
     $name: String!
     $value: Money!
     $description: String
@@ -62,18 +63,16 @@ export default function NewPayment() {
     defaultValues: { householdId: householdId as string },
   });
 
-  const [
-    createPaymentMutation,
-    { data: createPaymentData, loading: createPaymentLoading, error: createPaymentError },
-  ] = useMutation(NEW_PAYMENT_MUTATION, {
-    variables: {
-      name: form.getValues('name'),
-      value: +form.getValues('value'),
-      description: form.getValues('description'),
-      categoryId: form.getValues('categoryId'),
-      householdId: form.getValues('householdId'),
-    },
-  });
+  const [createPaymentMutation, { data: createPaymentData, error: createPaymentError }] =
+    useMutation<NewPaymentMutation, NewPaymentMutationVariables>(NEW_PAYMENT_MUTATION, {
+      variables: {
+        name: form.getValues('name'),
+        value: +form.getValues('value'),
+        description: form.getValues('description'),
+        categoryId: form.getValues('categoryId'),
+        householdId: form.getValues('householdId'),
+      },
+    });
 
   const onNewPaymentSubmit = () => {
     try {

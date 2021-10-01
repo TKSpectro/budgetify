@@ -5,9 +5,13 @@ import { MutationCreateThresholdArgs, ThresholdType } from '~/graphql/__generate
 import { Error } from '../UI/Error';
 import { Input } from '../UI/Input';
 import { ModalForm } from '../UI/ModalForm';
+import {
+  CreateThresholdMutation,
+  CreateThresholdMutationVariables,
+} from './__generated__/NewThreshold.generated';
 
 const CREATE_THRESHOLD_MUTATION = gql`
-  mutation CREATE_THRESHOLD_MUTATION(
+  mutation createThresholdMutation(
     $name: String!
     $value: Money!
     $type: ThresholdType!
@@ -26,14 +30,14 @@ export function NewThreshold() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
-  const [createThreshold, { error: createThresholdError }] = useMutation(
-    CREATE_THRESHOLD_MUTATION,
-    {
-      onCompleted: () => {},
-      onError: () => {},
-      refetchQueries: ['GROUP_QUERY'],
-    },
-  );
+  const [createThreshold, { error: createThresholdError }] = useMutation<
+    CreateThresholdMutation,
+    CreateThresholdMutationVariables
+  >(CREATE_THRESHOLD_MUTATION, {
+    onCompleted: () => {},
+    onError: () => {},
+    refetchQueries: ['GROUP_QUERY'],
+  });
 
   const formCreateThreshold = useForm<MutationCreateThresholdArgs>({
     defaultValues: { name: '', value: 0, groupId: groupId },

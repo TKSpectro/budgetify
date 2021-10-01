@@ -9,9 +9,15 @@ import { Input } from '~/components/UI/Input';
 import { ManagedModal } from '~/components/UI/ManagedModal';
 import { ModalForm } from '~/components/UI/ModalForm';
 import { Invite, MutationCreateInviteArgs } from '~/graphql/__generated__/types';
+import {
+  CreateInviteMutation,
+  CreateInviteMutationVariables,
+  DeleteInviteMutation,
+  DeleteInviteMutationVariables,
+} from './__generated__/InviteManager.generated';
 
 const CREATE_INVITE_MUTATION = gql`
-  mutation CreateInvite($invitedEmail: String!, $householdId: String!) {
+  mutation createInviteMutation($invitedEmail: String!, $householdId: String!) {
     createInvite(invitedEmail: $invitedEmail, householdId: $householdId) {
       id
     }
@@ -19,7 +25,7 @@ const CREATE_INVITE_MUTATION = gql`
 `;
 
 const DELETE_INVITE_MUTATION = gql`
-  mutation DeleteInvite($id: String!) {
+  mutation deleteInviteMutation($id: String!) {
     deleteInvite(id: $id)
   }
 `;
@@ -35,7 +41,10 @@ export default function InviteManager({ invites, refetch }: Props) {
     defaultValues: { householdId: router.query.householdId as string, invitedEmail: '' },
   });
 
-  const [createInviteMutation, { error: createInviteError }] = useMutation(CREATE_INVITE_MUTATION, {
+  const [createInviteMutation, { error: createInviteError }] = useMutation<
+    CreateInviteMutation,
+    CreateInviteMutationVariables
+  >(CREATE_INVITE_MUTATION, {
     variables: {
       ...form.getValues(),
     },
@@ -45,7 +54,10 @@ export default function InviteManager({ invites, refetch }: Props) {
     onError: (error) => {},
   });
 
-  const [deleteInviteMutation, { error: deleteInviteError }] = useMutation(DELETE_INVITE_MUTATION, {
+  const [deleteInviteMutation, { error: deleteInviteError }] = useMutation<
+    DeleteInviteMutation,
+    DeleteInviteMutationVariables
+  >(DELETE_INVITE_MUTATION, {
     onCompleted: () => {
       refetch();
     },
@@ -64,7 +76,7 @@ export default function InviteManager({ invites, refetch }: Props) {
   };
 
   const removeHandler = () => {
-    deleteInviteMutation({ variables: { id: removeModalInvite?.id } });
+    deleteInviteMutation({ variables: { id: removeModalInvite?.id || '' } });
   };
 
   return (

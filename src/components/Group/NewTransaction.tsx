@@ -14,9 +14,13 @@ import { Input } from '../UI/Input';
 import { ModalForm } from '../UI/ModalForm';
 import { Switch } from '../UI/Switch';
 import { UserMultiSelect } from './UserMultiselect';
+import {
+  CreateGroupTransactionMutation,
+  CreateGroupTransactionMutationVariables,
+} from './__generated__/NewTransaction.generated';
 
 const CREATE_GROUP_TRANSACTION_MUTATION = gql`
-  mutation CREATE_GROUP_TRANSACTION_MUTATION(
+  mutation createGroupTransactionMutation(
     $name: String!
     $value: Money!
     $type: TransactionType!
@@ -43,14 +47,10 @@ export function NewTransaction({ members }: Props) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
-  const [
-    createGroupTransaction,
-    {
-      data: createGroupTransactionData,
-      loading: createGroupTransactionLoading,
-      error: createGroupTransactionError,
-    },
-  ] = useMutation(CREATE_GROUP_TRANSACTION_MUTATION, {
+  const [createGroupTransaction, { error: createGroupTransactionError }] = useMutation<
+    CreateGroupTransactionMutation,
+    CreateGroupTransactionMutationVariables
+  >(CREATE_GROUP_TRANSACTION_MUTATION, {
     onCompleted: () => {},
     onError: () => {},
     refetchQueries: ['GROUP_QUERY'],
