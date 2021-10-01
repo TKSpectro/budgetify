@@ -4,8 +4,8 @@ import clsx from 'clsx';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { NewGroupTransaction } from '~/components/Group/NewGroupTransaction';
 import { NewThreshold } from '~/components/Group/NewThreshold';
+import { NewTransaction } from '~/components/Group/NewTransaction';
 import { ThresholdList } from '~/components/Group/ThresholdList';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
@@ -94,7 +94,7 @@ export default function Group() {
             <div className="text-lg font-medium">Group balance: {group.value}€</div>
 
             <span className="text-right">
-              <NewGroupTransaction members={members} />
+              <NewTransaction members={members} />
             </span>
 
             {data && !!group?.owners?.find((x: User) => x?.id === data.me.id) && (

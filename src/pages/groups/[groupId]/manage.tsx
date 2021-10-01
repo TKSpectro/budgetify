@@ -2,8 +2,8 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import { TrashIcon } from '@heroicons/react/outline';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { GroupInviteManager } from '~/components/Group/Manage/GroupInviteManager';
-import GroupMemberTable from '~/components/Group/Manage/GroupMemberTable';
+import { InviteManager } from '~/components/Group/Manage/InviteManager';
+import MemberTable from '~/components/Group/Manage/MemberTable';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Loader } from '~/components/UI/Loader';
@@ -78,9 +78,7 @@ export default function ManageGroup() {
         <Error title="Could not delete group." error={deleteGroupError} />
         <Loader loading={loading} />
 
-        {data && (
-          <GroupMemberTable members={members} owners={owners} currentUserId={currentUserId} />
-        )}
+        {data && <MemberTable members={members} owners={owners} currentUserId={currentUserId} />}
         <Modal
           buttonText="Delete Group"
           buttonClassName="bg-red-500 mt-4"
@@ -93,7 +91,7 @@ export default function ManageGroup() {
 
       <Container>
         <Loader loading={loading} />
-        <GroupInviteManager invites={invites} />
+        <InviteManager invites={invites} />
         <Error title="No pending invites." error={invites.length === 0 ? '' : undefined} />
       </Container>
     </>

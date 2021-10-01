@@ -25,7 +25,7 @@ const DELETE_INVITE_MUTATION = gql`
   }
 `;
 
-export function GroupInviteManager({ invites }: Props) {
+export function InviteManager({ invites }: Props) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
