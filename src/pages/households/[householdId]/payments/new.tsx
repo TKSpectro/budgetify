@@ -12,14 +12,18 @@ import { Form } from '~/components/UI/Form';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
-import { Category } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { urlOneUp } from '~/utils/helper';
-import { NewPaymentMutation, NewPaymentMutationVariables } from './__generated__/new.generated';
+import {
+  CategoriesQuery,
+  CategoriesQueryVariables,
+  NewPaymentMutation,
+  NewPaymentMutationVariables,
+} from './__generated__/new.generated';
 
 const CATEGORIES_QUERY = gql`
-  query CATEGORIES_QUERY {
+  query categoriesQuery {
     categories {
       id
       name
@@ -53,11 +57,11 @@ export default function NewPayment() {
   const router = useRouter();
   const { householdId } = router.query;
 
-  const {
-    data: { categories },
-    loading,
-    error,
-  } = useQuery(CATEGORIES_QUERY);
+  const { data, loading, error } = useQuery<CategoriesQuery, CategoriesQueryVariables>(
+    CATEGORIES_QUERY,
+  );
+
+  const categories = data?.categories;
 
   const form = useForm<NewPaymentMutationVariables>({
     defaultValues: { householdId: householdId as string },
@@ -120,10 +124,10 @@ export default function NewPayment() {
                   className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
                   {...form.register('categoryId', { required: true })}
                 >
-                  {categories.map((category: Category) => {
+                  {categories?.map((category) => {
                     return (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
+                      <option key={category?.id} value={category?.id}>
+                        {category?.name}
                       </option>
                     );
                   })}

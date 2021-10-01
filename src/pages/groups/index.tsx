@@ -8,19 +8,21 @@ import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
 import { ModalForm } from '~/components/UI/ModalForm';
-import { Group, MutationUseInviteArgs } from '~/graphql/__generated__/types';
+import { MutationUseInviteArgs } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { uuidRegex } from '~/utils/helper';
 import {
   CreateGroupMutation,
   CreateGroupMutationVariables,
+  GroupsQuery,
+  GroupsQueryVariables,
   UseInviteTokenMutation,
   UseInviteTokenMutationVariables,
 } from './__generated__/index.generated';
 
 const GROUPS_QUERY = gql`
-  query GROUPS_QUERY {
+  query groupsQuery {
     me {
       id
       groups {
@@ -58,7 +60,9 @@ const CREATE_GROUP_MUTATION = gql`
 `;
 
 export default function Groups() {
-  const { data, loading, error, refetch } = useQuery(GROUPS_QUERY);
+  const { data, loading, error, refetch } = useQuery<GroupsQuery, GroupsQueryVariables>(
+    GROUPS_QUERY,
+  );
   const router = useRouter();
 
   const form = useForm<MutationUseInviteArgs>();
@@ -98,7 +102,7 @@ export default function Groups() {
     });
   };
 
-  const groups = data?.me.groups;
+  const groups = data?.me?.groups;
 
   return (
     <Container>
@@ -143,12 +147,12 @@ export default function Groups() {
         </div>
       </div>
       {groups &&
-        groups.map((group: Group) => {
+        groups.map((group) => {
           return (
-            <Link href={`/groups/${group.id}`} key={group.id} noUnderline>
+            <Link href={`/groups/${group?.id}`} key={group?.id} noUnderline>
               <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer">
-                <div className="text-xl">{group.name}</div>
-                <span className="font-light">Current value: {group.value}€</span>
+                <div className="text-xl">{group?.name}</div>
+                <span className="font-light">Current value: {group?.value}€</span>
               </div>
             </Link>
           );

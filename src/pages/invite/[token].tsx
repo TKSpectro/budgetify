@@ -8,10 +8,15 @@ import { Error } from '~/components/UI/Error';
 import { Loader } from '~/components/UI/Loader';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
-import { UseTokenMutation, UseTokenMutationVariables } from './__generated__/[token].generated';
+import {
+  GetTokenQuery,
+  GetTokenQueryVariables,
+  UseTokenMutation,
+  UseTokenMutationVariables,
+} from './__generated__/[token].generated';
 
 const QUERY = gql`
-  query GET_TOKEN($token: String!) {
+  query getTokenQuery($token: String!) {
     getInviteByToken(token: $token) {
       id
       invitedEmail
@@ -38,7 +43,7 @@ export default function UseInvite() {
     data: queryData,
     loading: queryLoading,
     error: queryError,
-  } = useQuery(QUERY, { variables: { token: token } });
+  } = useQuery<GetTokenQuery, GetTokenQueryVariables>(QUERY, { variables: { token: token } });
 
   const invite = queryData?.getInviteByToken;
 
@@ -48,10 +53,10 @@ export default function UseInvite() {
   >(USE_TOKEN_MUTATION, {
     onCompleted: () => {
       // Depending on what invite was used, redirect to the corresponding page
-      if (invite.groupId) {
+      if (invite?.groupId) {
         router.push(`/groups/${invite.groupId}`);
       }
-      if (invite.householdId) {
+      if (invite?.householdId) {
         router.push(`/households/${invite.householdId}`);
       }
     },

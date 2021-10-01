@@ -1,9 +1,9 @@
 import * as Types from '../../../../../graphql/__generated__/types';
 
-export type Categories_QueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type CategoriesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type Categories_Query = { __typename?: 'Query', categories?: Array<{ __typename?: 'Category', id: string, name: string } | null | undefined> | null | undefined };
+export type CategoriesQuery = { __typename?: 'Query', categories?: Array<{ __typename?: 'Category', id: string, name: string } | null | undefined> | null | undefined };
 
 export type NewPaymentMutationVariables = Types.Exact<{
   name: Types.Scalars['String'];

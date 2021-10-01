@@ -8,7 +8,6 @@ import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { Loader } from '~/components/UI/Loader';
 import { ModalForm } from '~/components/UI/ModalForm';
-import { Household } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { uuidRegex } from '~/utils/helper';
@@ -16,11 +15,13 @@ import { UseInviteTokenMutationVariables } from '../groups/__generated__/index.g
 import {
   CreateHouseholdMutation,
   CreateHouseholdMutationVariables,
+  HouseholdListQuery,
+  HouseholdListQueryVariables,
   UseInviteTokenMutation,
 } from './__generated__/index.generated';
 
 const HOUSEHOLD_LIST_QUERY = gql`
-  query HOUSEHOLD_LIST_QUERY {
+  query householdListQuery {
     households {
       id
       name
@@ -51,7 +52,10 @@ const CREATE_HOUSEHOLD_MUTATION = gql`
 `;
 
 export default function Households() {
-  const { data, loading, error, refetch } = useQuery(HOUSEHOLD_LIST_QUERY);
+  const { data, loading, error, refetch } = useQuery<
+    HouseholdListQuery,
+    HouseholdListQueryVariables
+  >(HOUSEHOLD_LIST_QUERY);
   const form = useForm<UseInviteTokenMutationVariables>({ defaultValues: { token: '' } });
   const createHouseholdForm = useForm<CreateHouseholdMutationVariables>({
     defaultValues: { name: '' },
@@ -141,18 +145,18 @@ export default function Households() {
           </div>
         </div>
 
-        {households?.map((household: Household) => {
+        {households?.map((household) => {
           return (
-            <Link href={`/households/${household.id}`} passHref key={household.id}>
+            <Link href={`/households/${household?.id}`} passHref key={household?.id}>
               <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer">
                 <div className="text-xl">
-                  {household.name}
+                  {household?.name}
                   <span className="float-right hidden sm:block">
-                    Balance: {household.sumOfAllPayments}€
+                    Balance: {household?.sumOfAllPayments}€
                   </span>
                 </div>
-                <div className="">Owner: {household.owner?.name}</div>
-                <span className="sm:hidden">Balance: {household.sumOfAllPayments}€</span>
+                <div className="">Owner: {household?.owner?.name}</div>
+                <span className="sm:hidden">Balance: {household?.sumOfAllPayments}€</span>
               </div>
             </Link>
           );

@@ -1,9 +1,9 @@
 import * as Types from '../../../graphql/__generated__/types';
 
-export type Household_List_QueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type HouseholdListQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type Household_List_Query = { __typename?: 'Query', households?: Array<{ __typename?: 'Household', id: string, name: string, sumOfAllPayments?: any | null | undefined, owner?: { __typename?: 'User', firstname: string, lastname: string, name: string } | null | undefined } | null | undefined> | null | undefined };
+export type HouseholdListQuery = { __typename?: 'Query', households?: Array<{ __typename?: 'Household', id: string, name: string, sumOfAllPayments?: any | null | undefined, owner?: { __typename?: 'User', firstname: string, lastname: string, name: string } | null | undefined } | null | undefined> | null | undefined };
 
 export type UseInviteTokenMutationVariables = Types.Exact<{
   token: Types.Scalars['String'];

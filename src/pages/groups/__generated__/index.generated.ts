@@ -1,9 +1,9 @@
 import * as Types from '../../../graphql/__generated__/types';
 
-export type Groups_QueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type GroupsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type Groups_Query = { __typename?: 'Query', me?: { __typename?: 'User', id: string, groups?: Array<{ __typename?: 'Group', id: string, name: string, value: any, owners?: Array<{ __typename?: 'User', id: string } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined };
+export type GroupsQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, groups?: Array<{ __typename?: 'Group', id: string, name: string, value: any, owners?: Array<{ __typename?: 'User', id: string } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined };
 
 export type UseInviteTokenMutationVariables = Types.Exact<{
   token: Types.Scalars['String'];
