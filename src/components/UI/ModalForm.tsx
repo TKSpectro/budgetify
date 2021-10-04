@@ -1,3 +1,4 @@
+import { XIcon } from '@heroicons/react/outline';
 import { ReactNode, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { Button } from './Button';
@@ -76,7 +77,7 @@ export function ModalForm<T>({
                       variant="secondary"
                       onClick={onCloseHandler}
                     >
-                      Close
+                      <XIcon className="w-6 h-6" />
                     </Button>
                     <Button type="submit">{submitText}</Button>
                   </div>

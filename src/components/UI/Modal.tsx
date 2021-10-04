@@ -1,3 +1,4 @@
+import { XIcon } from '@heroicons/react/outline';
 import { ReactNode, useState } from 'react';
 import { Button, Props as ButtonProps } from './Button';
 
@@ -47,7 +48,7 @@ export function Modal({
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
                   <Button className="mr-4" variant="secondary" onClick={() => setShowModal(false)}>
-                    Close
+                    <XIcon className="w-6 h-6" />
                   </Button>
                   <Button
                     onClick={() => {
