@@ -1,4 +1,7 @@
 import { gql, useMutation } from '@apollo/client';
+import { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -21,6 +24,8 @@ const CHANGE_PASSWORD = gql`
 `;
 
 export default function ChangePassword() {
+  const { t } = useTranslation(['common', 'auth']);
+
   const router = useRouter();
 
   const [changePassword, { error }] = useMutation<
@@ -45,37 +50,46 @@ export default function ChangePassword() {
 
   return (
     <Container>
-      <Error title="Failed to change password." error={error} />
+      <Error title={t('auth:changePasswordError')} error={error} />
 
       {router?.query?.isOTP && (
-        <div className="font-semibold text-lg mb-2">
-          You just logged in with an one-time-password. Please change your password immediately.
-        </div>
+        <div className="font-semibold text-lg mb-2">{t('auth:changePasswordOTP')}</div>
       )}
 
       <Form form={changePasswordForm} onSubmit={onSubmit}>
         <Input
-          label="Password"
+          label={t('password')}
           type="password"
           autoComplete="new-password"
           {...changePasswordForm.register('password', {
-            required: { value: true, message: 'Password is required.' },
+            required: { value: true, message: t('passwordMessage') },
+            minLength: { value: 6, message: t('passwordLengthMessage') },
           })}
         />
 
         <Input
-          label="Repeat Password"
+          label={t('auth:repeatPassword')}
           type="password"
           autoComplete="new-password"
           {...changePasswordForm.register('passwordRepeat', {
-            required: { value: true, message: 'Repeat Password is required.' },
+            required: { value: true, message: t('passwordMessage') },
+            minLength: { value: 6, message: t('passwordLengthMessage') },
             validate: (value) =>
-              value === changePasswordForm.getValues('password') || 'Passwords dont match.',
+              value === changePasswordForm.getValues('password') ||
+              t('auth:repeatPasswordNoMatch') + '',
           })}
         />
 
-        <Button type="submit">Change Password</Button>
+        <Button type="submit">{t('auth:changePassword')}</Button>
       </Form>
     </Container>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common', 'auth'])),
+    },
+  };
+};
