@@ -1,5 +1,8 @@
 import { gql, useMutation } from '@apollo/client';
 import { CheckIcon } from '@heroicons/react/outline';
+import { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '~/components/UI/Button';
@@ -19,6 +22,8 @@ const REQUEST_OTP = gql`
 `;
 
 export default function ForgotPassword() {
+  const { t } = useTranslation(['common', 'auth']);
+
   const [requestOTP, { data, error }] = useMutation<
     RequestOtpMutation,
     RequestOtpMutationVariables
@@ -41,28 +46,38 @@ export default function ForgotPassword() {
     <Container>
       <Error title="Failed to request one-time-password." error={error} />
 
-      <div className="font-semibold text-lg mb-2">Recover Password</div>
-      <div className="font-medium text-md mb-2">Don&apos;t worry, happens to the best of us.</div>
+      <div className="font-semibold text-lg mb-2">{t('auth:recoverPassword')}</div>
+      <div className="font-medium text-md mb-2">{t('auth:recoverPasswordText')}</div>
 
       {!data ? (
         <Form form={requestOTPForm} onSubmit={onSubmit}>
           <Input
-            label="Your email"
-            type="text"
+            label={t('email')}
+            type="email"
             autoComplete="email"
             {...requestOTPForm.register('email', {
-              required: { value: true, message: 'Email is required.' },
+              required: { value: true, message: t('emailMessage') },
             })}
           />
 
-          <Button type="submit">Email me a recovery link</Button>
+          <Button type="submit">{t('auth:recoverPasswordSubmit')}</Button>
         </Form>
       ) : (
         <>
           <CheckIcon className="w-2/5 sm:w-1/5 sm:h-1/5 mx-auto mt-4 text-brand-500 border-4 border-brand-500 rounded-full" />
-          <div className="text-center text-lg font-medium mt-2">{data.requestPasswordReset}</div>
+          <div className="text-center text-lg font-medium mt-2">
+            {t('auth:recoverPasswordSubmitText')}
+          </div>
         </>
       )}
     </Container>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common', 'auth'])),
+    },
+  };
+};
