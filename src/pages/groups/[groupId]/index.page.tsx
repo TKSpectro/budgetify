@@ -2,6 +2,7 @@ import { gql, useQuery } from '@apollo/client';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { NewThreshold } from '~/components/Group/NewThreshold';
@@ -232,11 +233,13 @@ export default function GroupPage() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
-  return preloadQuery(ctx, {
-    query: GROUP_QUERY,
-    variables: {
-      id: ctx.params!.groupId,
-      limit,
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await preloadQuery(ctx, {
+        query: GROUP_QUERY,
+        variables: { id: ctx.params!.groupId, limit },
+      })),
     },
-  });
+  };
 };

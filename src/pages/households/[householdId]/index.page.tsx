@@ -1,6 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { endOfMonth, startOfMonth } from 'date-fns';
 import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -128,12 +129,18 @@ export default function Household() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
-  return preloadQuery(ctx, {
-    query: HOUSEHOLD_QUERY,
-    variables: {
-      householdId: ctx.params!.householdId,
-      startDate: startOfMonth(new Date()).toISOString(),
-      endDate: endOfMonth(new Date()).toISOString(),
+
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await preloadQuery(ctx, {
+        query: HOUSEHOLD_QUERY,
+        variables: {
+          householdId: ctx.params!.householdId,
+          startDate: startOfMonth(new Date()).toISOString(),
+          endDate: endOfMonth(new Date()).toISOString(),
+        },
+      })),
     },
-  });
+  };
 };

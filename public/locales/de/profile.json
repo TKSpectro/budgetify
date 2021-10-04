@@ -1,0 +1,11 @@
+{
+  "pageTitle": "Profil",
+  "receiveNotifications": "Benarichtigungen erhalten",
+  "deleteAccount": "Konto löschen",
+  "deleteAccountDescription": "Mit dem Löschen des Kontos werden alle personenbezogenen Daten gelöscht. Eine Reaktivierung ist ebenfalls NICHT möglich.",
+  "deleteAccountError": "Fehler beim Löschen des Kontos.",
+  "updateAccount": "Konto bearbeiten",
+  "updateAccountError": "Fehler beim Aktualisieren des Kontos.",
+  "changePassword": "Passwort ändern",
+  "logoutError": "Fehler beim Abmelden."
+}

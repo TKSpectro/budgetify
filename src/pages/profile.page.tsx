@@ -1,6 +1,8 @@
 import { gql, useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
 import { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -75,6 +77,8 @@ const LOGOUT_MUTATION = gql`
 `;
 
 export default function Profile() {
+  const { t } = useTranslation(['common', 'profile']);
+
   const router = useRouter();
   const client = useApolloClient();
 
@@ -138,33 +142,33 @@ export default function Profile() {
   return (
     <>
       <Head>
-        <title>Profile | budgetify</title>
+        <title>{t('profile:pageTitle')} | budgetify</title>
       </Head>
       <Container>
-        <Error title="Failed to load user data!" error={error} />
-        <Error title="Failed to delete user!" error={deleteUserError} />
-        <Error title="Failed to logout!" error={logoutError} />
-        <Error title="Failed to update user!" error={updateUserError} />
+        <Error title={t('loadingError')} error={error} />
+        <Error title={t('profile:deleteAccountError')} error={deleteUserError} />
+        <Error title={t('profile:logoutError')} error={logoutError} />
+        <Error title={t('profile:updateAccountError')} error={updateUserError} />
         <Loader loading={loading} />
 
         {!loading && !error && data && (
           <>
             <div className="mb-4">
-              <div className="font-semibold text-xl">Profile</div>
-              <div className="text-lg font-medium">Name</div>
+              <div className="font-semibold text-xl">{t('profile:pageTitle')}</div>
+              <div className="text-lg font-medium">{t('name')}</div>
               <div className="overflow-auto ml-2">{me?.name}</div>
-              <div className="text-lg font-medium">Email</div>
+              <div className="text-lg font-medium">{t('email')}</div>
               <div className="overflow-auto ml-2">{me?.email}</div>
-              <div className="text-lg font-medium">Receive Notifications</div>
+              <div className="text-lg font-medium">{t('profile:receiveNotifications')}</div>
               <div className="overflow-auto ml-2">
                 {me?.receiveNotifications ? (
                   <span className="flex">
-                    Enabled
+                    {t('enabled')}
                     <CheckIcon className="w-6 h-6 ml-1 border-2 border-brand-500 rounded-lg text-brand-500" />
                   </span>
                 ) : (
                   <span className="flex">
-                    Disabled
+                    {t('disabled')}
                     <XIcon className="w-6 h-6 ml-1 border-2 border-red-500 rounded-lg text-red-500" />
                   </span>
                 )}
@@ -173,50 +177,49 @@ export default function Profile() {
 
             <div className="">
               <Modal
-                title="Delete Account"
-                description="If you delete your account all your data will be lost. All households you own will be transferred to another person."
+                title={t('profile:deleteAccount')}
+                description={t('profile:deleteAccountDescription')}
                 submitText="Submit"
                 onSubmit={deleteUser}
-                buttonText="DELETE ACCOUNT"
+                buttonText={t('profile:deleteAccount')}
                 variant="danger"
                 buttonClassName="mr-4"
               />
               <Button className="mr-4" onClick={() => router.push('/auth/changePassword')}>
-                Change password
+                {t('profile:changePassword')}
               </Button>
               <ModalForm
                 form={updateUserForm}
-                buttonText="Update account"
-                title="Update account data"
+                buttonText={t('profile:updateAccount')}
+                title={t('profile:updateAccount')}
                 onSubmit={updateUserHandler}
-                submitText="Update account"
                 buttonClassName="mr-4"
               >
                 <Input
-                  label="Firstname"
+                  label={t('firstname')}
                   autoComplete="given-name"
                   {...updateUserForm.register('firstname', {
-                    required: { value: true, message: 'Please input your firstname' },
+                    required: { value: true, message: t('firstnameMessage') },
                   })}
                 ></Input>
                 <Input
-                  label="Lastname"
+                  label={t('lastname')}
                   autoComplete="family-name"
                   {...updateUserForm.register('lastname', {
-                    required: { value: true, message: 'Please input your lastname' },
+                    required: { value: true, message: t('lastnameMessage') },
                   })}
                 ></Input>
                 <Input
-                  label="Email"
+                  label={t('email')}
                   type="email"
                   autoComplete="email"
                   {...updateUserForm.register('email', {
-                    required: { value: true, message: 'Please input your email' },
+                    required: { value: true, message: t('emailMessage') },
                   })}
                 ></Input>
 
                 <label>
-                  Receive Notifications?
+                  {t('profile:receiveNotifications')}
                   <Switch
                     isLeft={!!updateUserForm.watch('receiveNotifications')}
                     onClick={() =>
@@ -230,7 +233,7 @@ export default function Profile() {
                   />
                 </label>
               </ModalForm>
-              <Button onClick={logoutHandler}>Logout</Button>
+              <Button onClick={logoutHandler}>{t('logout')}</Button>
             </div>
           </>
         )}
@@ -241,5 +244,11 @@ export default function Profile() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
-  return preloadQuery(ctx, { query: PROFILE_ME_QUERY });
+
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common', 'profile'])),
+      ...(await preloadQuery(ctx, { query: PROFILE_ME_QUERY })),
+    },
+  };
 };

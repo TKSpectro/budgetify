@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import InviteManager from '~/components/Household/Manage/InviteManager';
@@ -98,10 +99,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx, undefined, {
     CHECK_HOUSEHOLD_OWNER: ctx.query.householdId as string,
   });
-  return preloadQuery(ctx, {
-    query: HOUSEHOLD_QUERY,
-    variables: {
-      householdId: ctx.params!.householdId,
+
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await preloadQuery(ctx, {
+        query: HOUSEHOLD_QUERY,
+        variables: {
+          householdId: ctx.params!.householdId,
+        },
+      })),
     },
-  });
+  };
 };

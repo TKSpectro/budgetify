@@ -1,11 +1,10 @@
 import { gql, useQuery } from '@apollo/client';
 import { MenuIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
-import { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ComponentProps, useState } from 'react';
-import { preloadQuery } from '~/utils/apollo';
 import { ThemeSwitch } from '../ThemeSwitch';
 import { Button } from './Button';
 import { MeQuery, MeQueryVariables } from './__generated__/Header.generated';
@@ -27,6 +26,14 @@ export const ME_QUERY = gql`
 `;
 
 export function Header() {
+  const router = useRouter();
+  const { locale } = router;
+
+  // useEffect(() => {
+  //   i18n?.addResourceBundle(locale || 'en', 'header', {});
+  // }, [locale]);
+  const { t } = useTranslation('header');
+
   function HeaderLink({ href, className, brand = false, noBorder = false, ...props }: Props) {
     const content = (
       <a
@@ -50,8 +57,6 @@ export function Header() {
 
   const [navBarCollapsed, setNavBarCollapsed] = useState(false);
   const { data } = useQuery<MeQuery, MeQueryVariables>(ME_QUERY);
-
-  const router = useRouter();
 
   const isLoggedIn = data?.me?.id;
 
@@ -136,8 +141,3 @@ export function Header() {
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (ctx) =>
-  preloadQuery(ctx, {
-    query: ME_QUERY,
-  });

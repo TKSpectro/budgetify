@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { NewRecurringPayment } from '~/components/Household/RecurringPayments/NewRecurringPayment';
@@ -84,8 +85,14 @@ export default function RecurringPayments() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
-  return preloadQuery(ctx, {
-    query: QUERY,
-    variables: { householdId: ctx.params!.householdId },
-  });
+
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await preloadQuery(ctx, {
+        query: QUERY,
+        variables: { householdId: ctx.params!.householdId },
+      })),
+    },
+  };
 };

@@ -1,0 +1,11 @@
+{
+  "pageTitle": "Profile",
+  "receiveNotifications": "Receive Notifications",
+  "deleteAccount": "Delete Account",
+  "deleteAccountDescription": "If you delete your account all your data will be lost. All households you own will be transferred to another person.",
+  "deleteAccountError": "Failed to delete account.",
+  "updateAccount": "Update Account",
+  "updateAccountError": "Failed to update account.",
+  "changePassword": "Change Password",
+  "logoutError": "Failed to logout."
+}

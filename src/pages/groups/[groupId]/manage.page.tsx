@@ -1,6 +1,7 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { TrashIcon } from '@heroicons/react/outline';
 import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { InviteManager } from '~/components/Group/Manage/InviteManager';
 import MemberTable from '~/components/Group/Manage/MemberTable';
@@ -120,10 +121,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx, undefined, {
     CHECK_GROUP_OWNER: ctx.query.groupId as string,
   });
-  return preloadQuery(ctx, {
-    query: QUERY,
-    variables: {
-      id: ctx.params!.groupId,
+
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await preloadQuery(ctx, { query: QUERY, variables: { id: ctx.params!.groupId } })),
     },
-  });
+  };
 };

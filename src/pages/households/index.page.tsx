@@ -1,5 +1,6 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -168,7 +169,11 @@ export default function Households() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
-  return preloadQuery(ctx, {
-    query: HOUSEHOLD_LIST_QUERY,
-  });
+
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await preloadQuery(ctx, { query: HOUSEHOLD_LIST_QUERY })),
+    },
+  };
 };

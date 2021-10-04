@@ -1,5 +1,5 @@
 import { ApolloClient, HttpLink, InMemoryCache, QueryOptions } from '@apollo/client';
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
+import { GetServerSidePropsContext } from 'next';
 import { useMemo } from 'react';
 
 let apolloClient: ApolloClient<any>;
@@ -85,10 +85,7 @@ export function useApollo(initialState?: Record<string, any>) {
 
 // This function can be used in getServerSideProps to preload queries for SSR
 // You have to give the request context and also all queries you want to be loaded
-export async function preloadQuery(
-  context: GetServerSidePropsContext,
-  ...queries: QueryOptions[]
-): Promise<GetServerSidePropsResult<{}>> {
+export async function preloadQuery(context: GetServerSidePropsContext, ...queries: QueryOptions[]) {
   const client = initializeApollo({
     headers: context.req.headers as Record<string, string>,
   });
@@ -97,12 +94,10 @@ export async function preloadQuery(
     // Wait for all queries to be finished
     await Promise.all(queries.map((queryOptions) => client.query(queryOptions)));
     return {
-      props: {
-        initialClientState: client.cache.extract(),
-      },
+      initialClientState: client.cache.extract(),
     };
   } catch (e) {
     // Even if an error occurs return empty props so the client just can request the data again
-    return { props: {} };
+    return {};
   }
 }

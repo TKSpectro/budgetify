@@ -1,0 +1,14 @@
+{
+  "name": "Name",
+  "email": "Email",
+  "emailMessage": "Please input your message.",
+  "firstname": "Firstname",
+  "firstnameMessage": "Please input your firstname.",
+  "lastname": "Lastname",
+  "lastnameMessage": "Please input your lastname.",
+  "enabled": "Enabled",
+  "disabled": "Disabled",
+  "login": "login",
+  "logout": "Logout",
+  "loadingError": "Failed to load data."
+}

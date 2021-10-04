@@ -3,6 +3,7 @@ import { ChartOptions } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { startOfMonth, subMonths } from 'date-fns';
 import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -222,13 +223,19 @@ export default function Payments() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
-  return preloadQuery(ctx, {
-    query: QUERY,
-    variables: {
-      householdId: ctx.params!.householdId,
-      startDate: startOfMonth(subMonths(new Date(), 3)),
-      endDate: undefined,
-      calcBeforeStartDate: true,
+
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await preloadQuery(ctx, {
+        query: QUERY,
+        variables: {
+          householdId: ctx.params!.householdId,
+          startDate: startOfMonth(subMonths(new Date(), 3)),
+          endDate: undefined,
+          calcBeforeStartDate: true,
+        },
+      })),
     },
-  });
+  };
 };

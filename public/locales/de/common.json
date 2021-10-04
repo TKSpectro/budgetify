@@ -1,0 +1,14 @@
+{
+  "name": "Name",
+  "email": "Email",
+  "emailMessage": "Bitte ihre Email eingeben.",
+  "firstname": "Vorname",
+  "firstnameMessage": "Bitte ihren Vornamen eingeben.",
+  "lastname": "Nachname",
+  "lastnameMessage": "Bitte ihren Nachnamen eingeben.",
+  "enabled": "Aktiviert",
+  "disabled": "Deaktiviert",
+  "login": "Anmelden",
+  "logout": "Abmelden",
+  "loadingError": "Fehler beim Laden der Daten."
+}

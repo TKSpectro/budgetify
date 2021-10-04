@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
@@ -85,8 +86,11 @@ export default function UseInvite() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
-  return preloadQuery(ctx, {
-    query: QUERY,
-    variables: { token: ctx.params!.token },
-  });
+
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await preloadQuery(ctx, { query: QUERY, variables: { token: ctx.params!.token } })),
+    },
+  };
 };

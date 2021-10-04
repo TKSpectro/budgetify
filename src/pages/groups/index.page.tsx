@@ -1,5 +1,6 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Container } from '~/components/UI/Container';
@@ -163,7 +164,11 @@ export default function Groups() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
-  return preloadQuery(ctx, {
-    query: GROUPS_QUERY,
-  });
+
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await preloadQuery(ctx, { query: GROUPS_QUERY })),
+    },
+  };
 };
