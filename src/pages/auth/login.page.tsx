@@ -1,4 +1,7 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
+import { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -21,6 +24,8 @@ const LOGIN_MUTATION = gql`
 `;
 
 export default function Login() {
+  const { t } = useTranslation(['common', 'auth']);
+
   const { refetch } = useQuery<MeQuery, MeQueryVariables>(ME_QUERY);
   const router = useRouter();
 
@@ -49,35 +54,43 @@ export default function Login() {
   return (
     <Container>
       <div className="mb-2">
-        <Error title="Failed to login. Email or password is wrong!" error={error} />
+        <Error title={t('auth:loginError')} error={error} />
       </div>
 
       <Form form={loginForm} onSubmit={onSubmit}>
         <Input
-          label="Email"
+          label={t('email')}
           type="email"
           autoComplete="email"
           {...loginForm.register('email', {
-            required: { value: true, message: 'Email is required.' },
+            required: { value: true, message: t('emailMessage') },
           })}
         />
 
         <Input
-          label="Password"
+          label={t('password')}
           type="password"
           autoComplete="current-password"
           {...loginForm.register('password', {
-            required: { value: true, message: 'Password is required.' },
+            required: { value: true, message: t('passwordMessage') },
           })}
         />
 
-        <Button type="submit">Login</Button>
+        <Button type="submit">{t('login')}</Button>
       </Form>
 
-      <Link href="/auth/signup">No Account? No Problem! Signup</Link>
+      <Link href="/auth/signup">{t('auth:noAccountText')}</Link>
       <div>
-        <Link href="/auth/forgotPassword">Forgot your password? No Problem! Reset it.</Link>
+        <Link href="/auth/forgotPassword">{t('auth:forgotPasswordText')}</Link>
       </div>
     </Container>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common', 'auth'])),
+    },
+  };
+};

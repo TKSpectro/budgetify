@@ -2,6 +2,8 @@
   "name": "Name",
   "email": "Email",
   "emailMessage": "Bitte ihre Email eingeben.",
+  "password": "Passwort",
+  "passwordMessage": "Bitte ihr Passwort eingeben.",
   "firstname": "Vorname",
   "firstnameMessage": "Bitte ihren Vornamen eingeben.",
   "lastname": "Nachname",

@@ -1,7 +1,9 @@
 {
   "name": "Name",
   "email": "Email",
-  "emailMessage": "Please input your message.",
+  "emailMessage": "Please input your email.",
+  "password": "Password",
+  "passwordMessage": "Please input your password.",
   "firstname": "Firstname",
   "firstnameMessage": "Please input your firstname.",
   "lastname": "Lastname",
