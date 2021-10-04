@@ -1,0 +1,5 @@
+{
+  "useToken": "Use Token",
+  "inviteError": "Could not find invite.",
+  "useInviteError": "Could not use token."
+}

@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { Button } from '~/components/UI/Button';
@@ -37,6 +38,8 @@ const USE_TOKEN_MUTATION = gql`
 `;
 
 export default function UseInvite() {
+  const { t } = useTranslation(['common', 'invite']);
+
   const router = useRouter();
   const token = router.query.token as string;
 
@@ -68,15 +71,15 @@ export default function UseInvite() {
 
   return (
     <Container>
-      <Error title="Could not find invite." error={queryError} />
-      <Error title="Could not use token." error={useTokenError} />
+      <Error title={t('invite:inviteError')} error={queryError} />
+      <Error title={t('invite:useInviteError')} error={useTokenError} />
       <Loader loading={queryLoading} />
 
       {invite && (
         <div className="text-center">
           <div>{invite.token}</div>
           <div className="mx-auto mt-2 block">
-            <Button onClick={useTokenHandler}>Use Token</Button>
+            <Button onClick={useTokenHandler}>{t('invite:useToken')}</Button>
           </div>
         </div>
       )}
@@ -89,7 +92,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await serverSideTranslations(ctx.locale || 'en', ['common', 'invite'])),
       ...(await preloadQuery(ctx, { query: QUERY, variables: { token: ctx.params!.token } })),
     },
   };

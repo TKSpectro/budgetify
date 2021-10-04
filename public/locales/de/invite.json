@@ -1,0 +1,5 @@
+{
+  "useToken": "Token benutzen",
+  "inviteError": "Invite mit diesem Token nicht gefunden.",
+  "useInviteError": "Token konnte nicht benutzt werden."
+}
