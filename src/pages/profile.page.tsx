@@ -15,6 +15,7 @@ import { ModalForm } from '~/components/UI/ModalForm';
 import { Switch } from '~/components/UI/Switch';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
+import { useAuth } from '~/utils/authTest';
 import {
   DeleteUserMutation,
   DeleteUserMutationVariables,
@@ -135,6 +136,8 @@ export default function Profile() {
     });
   };
 
+  const { signIn, signOut, isSignedIn, signOut: signOut2 } = useAuth();
+
   return (
     <>
       <Head>
@@ -234,6 +237,29 @@ export default function Profile() {
             </div>
           </>
         )}
+      </Container>
+      <Container>
+        <Button
+          onClick={() => {
+            signIn({ email: 'tom@budgetify.xyz', password: '12345678' });
+          }}
+        >
+          Login
+        </Button>
+        <Button
+          onClick={() => {
+            signOut2();
+          }}
+        >
+          Logout
+        </Button>
+        <Button
+          onClick={() => {
+            console.log(isSignedIn);
+          }}
+        >
+          Test
+        </Button>
       </Container>
     </>
   );

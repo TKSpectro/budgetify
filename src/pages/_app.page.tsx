@@ -1,21 +1,32 @@
-import { ApolloProvider } from '@apollo/client';
+import { appWithTranslation } from 'next-i18next';
 import { ThemeProvider } from 'next-themes';
 import type { AppProps } from 'next/app';
-import { Header } from '~/components/UI/Header';
-import { useApollo } from '~/utils/apollo';
+import { Layout } from '~/components/Layout';
+import { AuthProvider } from '~/utils/authTest';
 import '../styles.css';
 
 function App({ Component, pageProps }: AppProps) {
-  // create the apolloClient when opening the page
-  const client = useApollo(pageProps.initialClientState);
-
   return (
-    <ApolloProvider client={client}>
+    <AuthProvider>
       <ThemeProvider defaultTheme="system" storageKey="theme" attribute="class">
-        <Header />
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </ThemeProvider>
-    </ApolloProvider>
+    </AuthProvider>
   );
 }
-export default App;
+
+// export const getServerSideProps: GetServerSideProps = async (ctx) => {
+//   return {
+//     props: {
+//       ...(await serverSideTranslations(ctx.locale || '', ['common', 'header'])),
+//       ...preloadQuery(ctx, {
+//         query: ME_QUERY,
+//       }),
+//     },
+//   };
+// };
+
+// Wrap the whole app in the HOC for i18n
+export default appWithTranslation(App);

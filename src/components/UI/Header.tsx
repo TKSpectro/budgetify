@@ -1,14 +1,12 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
 import { MenuIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
-import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ComponentProps, useState } from 'react';
-import { preloadQuery } from '~/utils/apollo';
+import { useAuth } from '~/utils/authTest';
 import { ThemeSwitch } from '../ThemeSwitch';
 import { Button } from './Button';
-import { MeQuery, MeQueryVariables } from './__generated__/Header.generated';
 
 interface Props extends ComponentProps<'a'> {
   noBorder?: boolean;
@@ -49,11 +47,13 @@ export function Header() {
   }
 
   const [navBarCollapsed, setNavBarCollapsed] = useState(false);
-  const { data } = useQuery<MeQuery, MeQueryVariables>(ME_QUERY);
+  // const { data } = useQuery<MeQuery, MeQueryVariables>(ME_QUERY);
 
   const router = useRouter();
 
-  const isLoggedIn = data?.me?.id;
+  const { isSignedIn } = useAuth();
+
+  const isLoggedIn = isSignedIn;
 
   function toggleNavbarHandler() {
     setNavBarCollapsed(!navBarCollapsed);
@@ -137,7 +137,7 @@ export function Header() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) =>
-  preloadQuery(ctx, {
-    query: ME_QUERY,
-  });
+// export const getServerSideProps: GetServerSideProps = async (ctx) =>
+//   preloadQuery(ctx, {
+//     query: ME_QUERY,
+//   });
