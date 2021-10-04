@@ -4,13 +4,17 @@
   "emailMessage": "Please input your email.",
   "password": "Password",
   "passwordMessage": "Please input your password.",
+  "passwordLengthMessage": "Please input a password with at least 6 characters.",
   "firstname": "Firstname",
   "firstnameMessage": "Please input your firstname.",
+  "firstnameLengthMessage": "Please input your firstname. (Maximum 60 characters)",
   "lastname": "Lastname",
   "lastnameMessage": "Please input your lastname.",
+  "lastnameLengthMessage": "Please input your lastname. (Maximum 60 characters)",
   "enabled": "Enabled",
   "disabled": "Disabled",
   "login": "login",
   "logout": "Logout",
+  "signup": "Signup",
   "loadingError": "Failed to load data."
 }

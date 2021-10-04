@@ -4,13 +4,17 @@
   "emailMessage": "Bitte ihre Email eingeben.",
   "password": "Passwort",
   "passwordMessage": "Bitte ihr Passwort eingeben.",
+  "passwordLengthMessage": "Bitte ein Passwort mit mindestens 6 Zeichen eingeben.",
   "firstname": "Vorname",
   "firstnameMessage": "Bitte ihren Vornamen eingeben.",
+  "firstnameLengthMessage": "Bitte ihren Vornamen eingeben. (Maximal 60 Zeichen)",
   "lastname": "Nachname",
   "lastnameMessage": "Bitte ihren Nachnamen eingeben.",
+  "lastnameLengthMessage": "Bitte ihren Nachnamen eingeben. (Maximal 60 Zeichen)",
   "enabled": "Aktiviert",
   "disabled": "Deaktiviert",
   "login": "Anmelden",
   "logout": "Abmelden",
+  "signup": "Registieren",
   "loadingError": "Fehler beim Laden der Daten."
 }
