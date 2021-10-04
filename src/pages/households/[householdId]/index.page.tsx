@@ -14,7 +14,7 @@ import { Payment, RecurringPayment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { roundOn2 } from '~/utils/helper';
-import { HouseholdQuery, HouseholdQueryVariables } from './__generated__/index.generated';
+import { HouseholdQuery, HouseholdQueryVariables } from './__generated__/index.page.generated';
 
 const HOUSEHOLD_QUERY = gql`
   query householdQuery($householdId: String, $startDate: DateTime, $endDate: DateTime) {

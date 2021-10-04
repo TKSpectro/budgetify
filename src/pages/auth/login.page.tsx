@@ -10,7 +10,7 @@ import { ME_QUERY } from '~/components/UI/Header';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
 import { MeQuery, MeQueryVariables } from '~/components/UI/__generated__/Header.generated';
-import { LoginMutation, LoginMutationVariables } from './__generated__/login.generated';
+import { LoginMutation, LoginMutationVariables } from './__generated__/login.page.generated';
 
 const LOGIN_MUTATION = gql`
   mutation loginMutation($email: String!, $password: String!) {

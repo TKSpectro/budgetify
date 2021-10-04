@@ -10,7 +10,7 @@ import { Input } from '~/components/UI/Input';
 import {
   ChangePasswordMutation,
   ChangePasswordMutationVariables,
-} from './__generated__/changePassword.generated';
+} from './__generated__/changePassword.page.generated';
 
 const CHANGE_PASSWORD = gql`
   mutation changePasswordMutation($password: String!, $passwordRepeat: String!) {

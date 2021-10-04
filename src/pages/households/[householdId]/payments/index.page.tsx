@@ -23,7 +23,7 @@ import { dateToFormInput, roundOn2 } from '~/utils/helper';
 import {
   HouseholdPaymentsQuery,
   HouseholdPaymentsQueryVariables,
-} from './__generated__/index.generated';
+} from './__generated__/index.page.generated';
 
 type DateFilterInput = {
   startDate: Scalars['DateTime'];

@@ -10,7 +10,7 @@ import { Input } from '~/components/UI/Input';
 import {
   RequestOtpMutation,
   RequestOtpMutationVariables,
-} from './__generated__/forgotPassword.generated';
+} from './__generated__/forgotPassword.page.generated';
 
 const REQUEST_OTP = gql`
   mutation requestOTPMutation($email: String!) {

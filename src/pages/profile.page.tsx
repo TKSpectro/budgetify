@@ -24,7 +24,7 @@ import {
   ProfileMeQueryVariables,
   UpdateUserMutation,
   UpdateUserMutationVariables,
-} from './__generated__/profile.generated';
+} from './__generated__/profile.page.generated';
 
 export const PROFILE_ME_QUERY = gql`
   query profileMeQuery {

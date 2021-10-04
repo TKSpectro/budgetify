@@ -10,7 +10,7 @@ import { ME_QUERY } from '~/components/UI/Header';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
 import { MeQuery, MeQueryVariables } from '~/components/UI/__generated__/Header.generated';
-import { SignupMutation, SignupMutationVariables } from './__generated__/signup.generated';
+import { SignupMutation, SignupMutationVariables } from './__generated__/signup.page.generated';
 
 const SIGNUP_MUTATION = gql`
   mutation signupMutation(

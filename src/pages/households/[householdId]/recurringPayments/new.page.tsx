@@ -21,7 +21,7 @@ import {
   CategoriesQueryVariables,
   NewRecurringPaymentMutation,
   NewRecurringPaymentMutationVariables,
-} from './__generated__/new.generated';
+} from './__generated__/new.page.generated';
 
 const CATEGORIES_QUERY = gql`
   query categoriesQuery {

@@ -13,7 +13,7 @@ import { authenticatedRoute } from '~/utils/auth';
 import {
   HouseholdManageQuery,
   HouseholdManageQueryVariables,
-} from './__generated__/manage.generated';
+} from './__generated__/manage.page.generated';
 
 const HOUSEHOLD_QUERY = gql`
   query householdManageQuery($householdId: String!) {

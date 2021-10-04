@@ -16,7 +16,7 @@ import { Loader } from '~/components/UI/Loader';
 import { Group, Threshold, User } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
-import { GroupQuery, GroupQueryVariables } from './__generated__/index.generated';
+import { GroupQuery, GroupQueryVariables } from './__generated__/index.page.generated';
 
 const GROUP_QUERY = gql`
   query groupQuery($id: String!, $skip: Int, $limit: Int) {

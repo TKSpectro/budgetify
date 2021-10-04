@@ -10,7 +10,10 @@ import { ME_QUERY } from '~/components/UI/Header';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
 import { MeQuery, MeQueryVariables } from '~/components/UI/__generated__/Header.generated';
-import { OtpLoginMutation, OtpLoginMutationVariables } from './__generated__/otpLogin.generated';
+import {
+  OtpLoginMutation,
+  OtpLoginMutationVariables,
+} from './__generated__/otpLogin.page.generated';
 
 const LOGIN_MUTATION = gql`
   mutation otpLoginMutation($email: String!, $password: String!) {

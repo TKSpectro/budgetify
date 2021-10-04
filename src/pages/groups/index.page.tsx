@@ -19,7 +19,7 @@ import {
   GroupsQueryVariables,
   UseInviteTokenMutation,
   UseInviteTokenMutationVariables,
-} from './__generated__/index.generated';
+} from './__generated__/index.page.generated';
 
 const GROUPS_QUERY = gql`
   query groupsQuery {

@@ -11,14 +11,14 @@ import { ModalForm } from '~/components/UI/ModalForm';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { uuidRegex } from '~/utils/helper';
-import { UseInviteTokenMutationVariables } from '../groups/__generated__/index.generated';
+import { UseInviteTokenMutationVariables } from '../groups/__generated__/index.page.generated';
 import {
   CreateHouseholdMutation,
   CreateHouseholdMutationVariables,
   HouseholdListQuery,
   HouseholdListQueryVariables,
   UseInviteTokenMutation,
-} from './__generated__/index.generated';
+} from './__generated__/index.page.generated';
 
 const HOUSEHOLD_LIST_QUERY = gql`
   query householdListQuery {

@@ -13,7 +13,7 @@ import {
   GetTokenQueryVariables,
   UseTokenMutation,
   UseTokenMutationVariables,
-} from './__generated__/[token].generated';
+} from './__generated__/[token].page.generated';
 
 const QUERY = gql`
   query getTokenQuery($token: String!) {

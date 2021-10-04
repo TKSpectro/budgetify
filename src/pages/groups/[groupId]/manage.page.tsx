@@ -17,7 +17,7 @@ import {
   DeleteGroupMutationVariables,
   GroupManageQuery,
   GroupManageQueryVariables,
-} from './__generated__/manage.generated';
+} from './__generated__/manage.page.generated';
 
 const QUERY = gql`
   query groupManageQuery($id: String!) {

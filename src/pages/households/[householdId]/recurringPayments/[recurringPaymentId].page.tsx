@@ -19,7 +19,7 @@ import {
   RecurringPaymentQueryVariables,
   UpdateRecurringPaymentMutation,
   UpdateRecurringPaymentMutationVariables,
-} from './__generated__/[recurringPaymentId].generated';
+} from './__generated__/[recurringPaymentId].page.generated';
 
 const RECURRING_PAYMENT_QUERY = gql`
   query recurringPaymentQuery($householdId: String, $recurringPaymentId: String) {
