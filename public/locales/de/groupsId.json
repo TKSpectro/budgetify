@@ -1,0 +1,31 @@
+{
+  "groupBalance": "Gruppen Balance",
+  "memberBalances": "Mitglieder Balancen",
+  "transactionsNotFoundError": "Keine Transaktionen gefunden.",
+
+  "showing": "Zeige",
+  "to": "bis",
+  "of": "von",
+  "transactions": "Transaktionen",
+
+  "newThreshold": "Neuer Schwellenwert",
+  "createThreshold": "Erstelle Schwellenwert",
+  "createThresholdError": "Konnte Schwellenwert nicht erstellen.",
+
+  "updateThreshold": "Aktualisiere Schwellenwert",
+  "updateThresholdError": "Konnte Schwellenwert nicht aktualisieren.",
+
+  "removeThreshold": "Schwellenwert entfernen",
+  "removeThresholdDescription": "Sicher, dass dieser Schwellenwert entfernt werden soll?",
+  "removeThresholdError": "Konnte Schwellenwert nicht entfernen.",
+
+  "newTransaction": "Neue Transaktion",
+  "createTransaction": "Erstelle Transaktion",
+  "createTransactionDescription": "You can switch between topping up your account (account balance) and buying food / taking money out of the group balance",
+  "createTransactionError": "Konnte Transaktion nicht erstellen.",
+  "topUpBalance": "Balance aufladen",
+  "boughtFood": "Essen gekauft",
+  "takeOutMoney": "Geld rausnehmen",
+  "valueMustBePositive": "Wert muss positiv sein.",
+  "allGroupMembers": "Alle Gruppen Mitglieder?"
+}

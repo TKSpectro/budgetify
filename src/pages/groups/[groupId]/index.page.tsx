@@ -2,7 +2,9 @@ import { gql, useQuery } from '@apollo/client';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Head from 'next/dist/shared/lib/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { NewThreshold } from '~/components/Group/NewThreshold';
@@ -64,6 +66,8 @@ const GROUP_QUERY = gql`
 const limit = 10;
 
 export default function GroupPage() {
+  const { t } = useTranslation(['groupsId', 'common']);
+
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
@@ -89,24 +93,29 @@ export default function GroupPage() {
 
   return (
     <>
+      <Head>
+        <title>{group?.name} | budgetify</title>
+      </Head>
       <Container>
-        <Error title="Could not load group." error={error} />
+        <Error title={t('common:loadingError')} error={error} />
 
         <Loader loading={loading} />
 
         {group && (
           <div className="relative text-center md:text-left">
             <div className="text-xl font-bold ">{group.name}</div>
-            <div className="text-lg font-medium">Group balance: {group.value}€</div>
+            <div className="text-lg font-medium">
+              {t('groupBalance')}: {group.value}€
+            </div>
 
             <span className="text-right">
-              <NewTransaction members={members as User[]} />
+              <NewTransaction members={members as User[]} t={t} />
             </span>
 
             {data && !!group?.owners?.find((x) => x?.id === data?.me?.id) && (
               <div className="hidden md:block absolute right-48 top-2 text-base">
                 <Link href={`${router.asPath}/manage`} asButton>
-                  Manage
+                  {t('common:manage')}
                 </Link>
               </div>
             )}
@@ -116,32 +125,33 @@ export default function GroupPage() {
 
       {thresholds && (
         <Container>
-          <Disclosure text="Thresholds" showOpen className="text-lg font-semibold">
+          <Disclosure text={t('common:thresholds')} showOpen className="text-lg font-semibold">
             <ThresholdList
               me={me as User}
               group={group as Group}
               thresholds={thresholds as Threshold[]}
+              t={t}
             />
-            <NewThreshold />
+            <NewThreshold t={t} />
           </Disclosure>
         </Container>
       )}
 
       {memberBalances && (
         <Container>
-          <div className="text-lg font-semibold">Member Balances</div>
+          <div className="text-lg font-semibold">{t('memberBalances')}</div>
           <div className="w-full divide-y-2">
             {memberBalances.map((member) => {
               return (
                 <div key={member?.userId} className="grid grid-cols-2 py-1">
-                  <div className="">{member?.name}</div>
+                  <div>{member?.name}</div>
                   <div
                     className={clsx('text-right', {
                       'text-red-600 dark:text-red-500': member?.value < 0,
                     })}
                   >
                     {member?.value + '€'}
-                  </div>{' '}
+                  </div>
                 </div>
               );
             })}
@@ -151,7 +161,7 @@ export default function GroupPage() {
 
       {transactions && transactionCount && (
         <Container>
-          <div className="text-lg font-semibold">Transactions</div>
+          <div className="text-lg font-semibold">{t('common:transactions')}</div>
           {transactions.length > 0 || transactionCount > 0 ? (
             <>
               <div className="divide-y-2">
@@ -187,11 +197,25 @@ export default function GroupPage() {
               <div className="px-4 mt-4 sm:flex sm:items-center sm:justify-between sm:px-6 select-none">
                 <div className="hidden sm:flex">
                   <p className="text-sm text-gray-700 dark:text-gray-200">
-                    Showing <span className="font-medium">{skip + 1}</span> to{' '}
+                    {/* <Trans
+                      defaults={`Showing <span className="font-medium">{{start}}</span> to
+                      <span className="font-medium">
+                        {{end}}
+                      </span>
+                      of <span className="font-medium">{{count}}</span> transactions`}
+                      values={{
+                        start: skip + 1,
+                        end: skip + limit < transactionCount ? skip + limit : transactionCount,
+                        count: transactionCount,
+                      }}
+                      components={{ span: <span /> }}
+                    /> */}
+                    {t('showing')} <span className="font-medium">{skip + 1}</span> {t('to')}{' '}
                     <span className="font-medium">
                       {skip + limit < transactionCount ? skip + limit : transactionCount}
                     </span>{' '}
-                    of <span className="font-medium">{transactionCount}</span> transactions
+                    {t('of')} <span className="font-medium">{transactionCount}</span>{' '}
+                    {t('transactions')}
                   </p>
                 </div>
 
@@ -223,7 +247,7 @@ export default function GroupPage() {
               </div>
             </>
           ) : (
-            <Error title="Could not find any transactions. Create your first one" error="" />
+            <Error title={t('transactionsNotFoundError')} error="" />
           )}
         </Container>
       )}
@@ -235,7 +259,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
   return {
     props: {
-      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await serverSideTranslations(ctx.locale || 'en', ['groupsId', 'common'])),
       ...(await preloadQuery(ctx, {
         query: GROUP_QUERY,
         variables: { id: ctx.params!.groupId, limit },

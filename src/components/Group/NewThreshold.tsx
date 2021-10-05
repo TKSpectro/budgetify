@@ -1,4 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
+import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { ThresholdType } from '~/graphql/__generated__/types';
@@ -26,7 +27,7 @@ const CREATE_THRESHOLD_MUTATION = gql`
   }
 `;
 
-export function NewThreshold() {
+export function NewThreshold({ t }: { t: TFunction }) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
@@ -36,7 +37,7 @@ export function NewThreshold() {
   >(CREATE_THRESHOLD_MUTATION, {
     onCompleted: () => {},
     onError: () => {},
-    refetchQueries: ['GROUP_QUERY'],
+    refetchQueries: ['groupQuery'],
   });
 
   const formCreateThreshold = useForm<CreateThresholdMutationVariables>({
@@ -49,35 +50,34 @@ export function NewThreshold() {
 
   return (
     <div className="mt-4 text-right">
-      <Error title="Could not create threshold" error={createThresholdError} />
+      <Error title={t('createThresholdError')} error={createThresholdError} />
       <ModalForm
-        title="New Threshold"
-        buttonText="New Threshold"
+        title={t('newThreshold')}
+        buttonText={t('newThreshold')}
         form={formCreateThreshold}
-        submitText="Create"
         onSubmit={onCreateThresholdHandler}
+        submitText={t('createThreshold')}
       >
         <Input
-          label="Name"
+          label={t('common:name')}
           type="text"
           {...formCreateThreshold.register('name', {
-            required: { value: true, message: 'Name is required' },
-            minLength: { value: 2, message: 'Name must be at least 2 characters' },
+            required: { value: true, message: t('common:nameMessage') },
           })}
         />
 
         <Input
-          label="Value"
+          label={t('common:value')}
           type="number"
           step="any"
           {...formCreateThreshold.register('value', {
-            required: { value: true, message: 'Value is required' },
+            required: { value: true, message: t('common:valueMessage') },
             valueAsNumber: true,
           })}
         />
 
         <label>
-          Type
+          {t('common:type')}
           <select
             className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
             {...formCreateThreshold.register('type', {

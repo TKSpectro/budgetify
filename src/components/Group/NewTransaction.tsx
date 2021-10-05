@@ -1,6 +1,7 @@
 import { gql, useMutation } from '@apollo/client';
 import { CheckIcon, MinusIcon, PlusIcon, XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
+import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -37,9 +38,10 @@ const CREATE_GROUP_TRANSACTION_MUTATION = gql`
 
 interface Props {
   members: User[];
+  t: TFunction;
 }
 
-export function NewTransaction({ members }: Props) {
+export function NewTransaction({ members, t }: Props) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
@@ -49,7 +51,7 @@ export function NewTransaction({ members }: Props) {
   >(CREATE_GROUP_TRANSACTION_MUTATION, {
     onCompleted: () => {},
     onError: () => {},
-    refetchQueries: ['GROUP_QUERY'],
+    refetchQueries: ['groupQuery'],
   });
 
   const formCreateGroupTransaction = useForm<CreateGroupTransactionMutationVariables>({
@@ -100,17 +102,20 @@ export function NewTransaction({ members }: Props) {
     <>
       <Error title="Could not create transaction." error={createGroupTransactionError} />
       <ModalForm
-        title="New Transaction"
-        buttonText="New Transaction"
+        title={t('newTransaction')}
+        buttonText={t('newTransaction')}
         buttonClassName="md:absolute right-4 top-2 text-base"
         form={formCreateGroupTransaction}
-        submitText="Create"
-        description={`You can switch between topping up your account (account balance) and buying food / taking money out of the group balance`}
+        submitText={t('createTransaction')}
+        description={t('createTransactionDescription')}
         onSubmit={onSubmitHandler}
       >
         <label>
-          <span className={clsx(formStateIsCashout && 'text-gray-400')}>Top Up Balance</span> |
-          <span className={clsx(!formStateIsCashout && 'text-gray-400')}> Buy/Take out money</span>
+          <span className={clsx(formStateIsCashout && 'text-gray-400')}>{t('topUpBalance')}</span> |
+          <span className={clsx(!formStateIsCashout && 'text-gray-400')}>
+            {' '}
+            {t('takeOutMoney')}/{t('boughtFood')}
+          </span>
           <Switch
             isLeft={formStateIsCashout}
             onClick={() => setFormStateIsCashout(!formStateIsCashout)}
@@ -120,19 +125,24 @@ export function NewTransaction({ members }: Props) {
         </label>
 
         <Input
-          label="Name*"
+          label={t('common:name')}
           type="text"
           {...formCreateGroupTransaction.register('name', {
-            required: { value: true, message: 'Name is required' },
-            minLength: { value: 3, message: 'Name must be at least 3 characters' },
+            required: { value: true, message: t('common:nameMessage') },
           })}
         />
 
         {formStateIsCashout && (
           <div className="mt-2">
             <label>
-              <span className={clsx(formStateIsBuyingFood && 'text-gray-400')}>Take out money</span>{' '}
-              |<span className={clsx(!formStateIsBuyingFood && 'text-gray-400')}> Bought food</span>
+              <span className={clsx(formStateIsBuyingFood && 'text-gray-400')}>
+                {t('takeOutMoney')}
+              </span>{' '}
+              |
+              <span className={clsx(!formStateIsBuyingFood && 'text-gray-400')}>
+                {' '}
+                {t('boughtFood')}
+              </span>
               <Switch
                 isLeft={formStateIsBuyingFood}
                 onClick={() => setFormStateIsBuyingFood(!formStateIsBuyingFood)}
@@ -144,18 +154,12 @@ export function NewTransaction({ members }: Props) {
         )}
 
         <Input
-          label={
-            formStateIsCashout
-              ? formStateIsBuyingFood
-                ? 'Bought food*'
-                : 'Take money out*'
-              : 'Top up account balance*'
-          }
+          label={t('common:value')}
           type="number"
           step="any"
           {...formCreateGroupTransaction.register('value', {
-            required: { value: true, message: 'Value is required' },
-            min: { value: 0, message: 'Value must be positive' },
+            required: { value: true, message: t('common:valueMessage') },
+            min: { value: 0, message: t('valueMustBePositive') },
             valueAsNumber: true,
           })}
         />
@@ -163,7 +167,7 @@ export function NewTransaction({ members }: Props) {
         {formStateIsCashout && formStateIsBuyingFood && (
           <div className="mt-2">
             <label>
-              All group members?
+              {t('allGroupMembers')}
               <Switch
                 isLeft={formAllGroupMembers}
                 onClick={() => setFormAllGroupMembers(!formAllGroupMembers)}

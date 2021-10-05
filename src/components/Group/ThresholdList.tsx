@@ -1,6 +1,7 @@
 import { gql, useMutation } from '@apollo/client';
 import { CogIcon, TrashIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
+import { TFunction } from 'next-i18next';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Group, Threshold, ThresholdType, User } from '~/graphql/__generated__/types';
@@ -22,6 +23,7 @@ interface Props {
   me: User;
   thresholds: Threshold[];
   group: Group;
+  t: TFunction;
 }
 
 const UPDATE_THRESHOLD_MUTATION = gql`
@@ -49,7 +51,7 @@ const REMOVE_THRESHOLD_MUTATION = gql`
   }
 `;
 
-export function ThresholdList({ me, thresholds, group }: Props) {
+export function ThresholdList({ me, thresholds, group, t }: Props) {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const setShowUpdateModalWrapper = (value: boolean) => {
     setShowUpdateModal(value);
@@ -67,7 +69,7 @@ export function ThresholdList({ me, thresholds, group }: Props) {
   >(UPDATE_THRESHOLD_MUTATION, {
     onCompleted: () => {},
     onError: () => {},
-    refetchQueries: ['GROUP_QUERY'],
+    refetchQueries: ['groupQuery'],
   });
 
   const [removeThreshold, { error: removeThresholdError }] = useMutation<
@@ -76,7 +78,7 @@ export function ThresholdList({ me, thresholds, group }: Props) {
   >(REMOVE_THRESHOLD_MUTATION, {
     onCompleted: () => {},
     onError: () => {},
-    refetchQueries: ['GROUP_QUERY'],
+    refetchQueries: ['groupQuery'],
   });
 
   const updateThresholdForm = useForm<UpdateThresholdMutationVariables>({
@@ -107,12 +109,12 @@ export function ThresholdList({ me, thresholds, group }: Props) {
 
   return (
     <>
-      <Error title="Could not update threshold." error={updateThresholdError} />
-      <Error title="Could not remove threshold." error={removeThresholdError} />
+      <Error title={t('updateThresholdError')} error={updateThresholdError} />
+      <Error title={t('removeThresholdError')} error={removeThresholdError} />
 
       <ManagedModalForm
-        title="Edit Threshold"
-        submitText="Update Threshold"
+        title={t('updateThreshold')}
+        submitText={t('updateThreshold')}
         form={updateThresholdForm}
         onSubmit={() => {
           onUpdateThresholdHandler();
@@ -121,29 +123,25 @@ export function ThresholdList({ me, thresholds, group }: Props) {
         setShowModal={setShowUpdateModalWrapper}
       >
         <Input
-          label="Name"
+          label={t('common:name')}
           type="text"
           {...updateThresholdForm.register('name', {
-            required: { value: true, message: 'Name is required' },
-            minLength: {
-              value: 2,
-              message: 'Name must be at least 2 characters',
-            },
+            required: { value: true, message: t('common:nameMessage') },
           })}
         />
 
         <Input
-          label="Value"
+          label={t('common:value')}
           type="number"
           step="any"
           {...updateThresholdForm.register('value', {
-            required: { value: true, message: 'Value is required' },
+            required: { value: true, message: t('common:valueMessage') },
             valueAsNumber: true,
           })}
         />
 
         <label>
-          Type
+          {t('common:type')}
           <select
             className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
             {...updateThresholdForm.register('type', {
@@ -164,8 +162,9 @@ export function ThresholdList({ me, thresholds, group }: Props) {
       </ManagedModalForm>
 
       <ManagedModal
-        title="Remove threshold"
-        submitText="Remove Threshold"
+        title={t('removeThreshold')}
+        description={t('removeThresholdDescription')}
+        submitText={t('removeThreshold')}
         onSubmit={() => {
           onRemoveThresholdHandler();
         }}

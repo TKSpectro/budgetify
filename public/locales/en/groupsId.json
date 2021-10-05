@@ -1,0 +1,31 @@
+{
+  "groupBalance": "Group Balance",
+  "memberBalances": "Member Balances",
+  "transactionsNotFoundError": "Could not find any transactions. Create your first one.",
+
+  "showing": "Showing",
+  "to": "to",
+  "of": "of",
+  "transactions": "transactions",
+
+  "newThreshold": "New Threshold",
+  "createThreshold": "Create Threshold",
+  "createThresholdError": "Could not create Threshold.",
+
+  "updateThreshold": "Update Threshold",
+  "updateThresholdError": "Could not update threshold.",
+
+  "removeThreshold": "Remove Threshold",
+  "removeThresholdDescription": "Are you sure that you want to remove this threshold?",
+  "removeThresholdError": "Could not remove threshold.",
+
+  "newTransaction": "New Transaction",
+  "createTransaction": "Create Transaction",
+  "createTransactionDescription": "You can switch between topping up your account (account balance) and buying food / taking money out of the group balance",
+  "createTransactionError": "Could not create transaction.",
+  "topUpBalance": "Top Up Balance",
+  "boughtFood": "Bought Food",
+  "takeOutMoney": "Take out money",
+  "valueMustBePositive": "Value must be positive",
+  "allGroupMembers": "All group members?"
+}
