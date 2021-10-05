@@ -2,6 +2,9 @@
   "name": "budgetify",
   "version": "0.1.0",
   "private": true,
+  "cacheDirectories": [
+    ".next/cache"
+  ],
   "scripts": {
     "dev": "docker-compose up -d && next dev",
     "devi": "NODE_OPTIONS='--inspect' next dev",
