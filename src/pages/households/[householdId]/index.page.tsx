@@ -62,7 +62,7 @@ const HOUSEHOLD_QUERY = gql`
 `;
 
 export default function Household() {
-  const { t } = useTranslation(['households-id', 'common']);
+  const { t } = useTranslation(['householdsId', 'common']);
 
   const router = useRouter();
   const householdId = router.query.householdId as string;
@@ -133,7 +133,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(ctx.locale || 'en', ['households-id', 'common'])),
+      ...(await serverSideTranslations(ctx.locale || 'en', ['householdsId', 'common'])),
       ...(await preloadQuery(ctx, {
         query: HOUSEHOLD_QUERY,
         variables: {
