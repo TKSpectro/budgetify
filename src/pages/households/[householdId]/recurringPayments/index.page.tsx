@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -42,6 +43,8 @@ const QUERY = gql`
 `;
 
 export default function RecurringPayments() {
+  const { t } = useTranslation(['householdsIdRecPayments', 'common']);
+
   const router = useRouter();
   const householdId = router.query.householdId as string;
 
@@ -52,31 +55,29 @@ export default function RecurringPayments() {
   });
 
   const recurringPayments = data?.household?.recurringPayments;
-
-  type Test = Query['household'];
-
   const categories = data?.categories;
 
   return (
     <>
       <Head>
-        <title>Recurring Payments | budgetify</title>
+        <title>{t('common:recurringPayments')} | budgetify</title>
       </Head>
 
       <Container>
-        <Error title="Failed to load recurring payments" error={error} />
+        <Error title={t('common:loadingError')} error={error} />
         <Error
-          title="Could not find any recurring payments. Please create a new one."
+          title={t('recurringPaymentsNotFoundError')}
           error={!loading && !error && recurringPayments?.length === 0 ? '' : undefined}
         />
         <Loader loading={loading} />
 
-        <NewRecurringPayment categories={categories as Category[]} />
+        <NewRecurringPayment categories={categories as Category[]} t={t} />
       </Container>
       {recurringPayments?.length !== 0 && (
         <RecurringPaymentTable
           recurringPayments={recurringPayments as RecurringPayment[]}
           categories={categories as Category[]}
+          t={t}
         />
       )}
     </>
@@ -88,7 +89,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await serverSideTranslations(ctx.locale || 'en', ['householdsIdRecPayments', 'common'])),
       ...(await preloadQuery(ctx, {
         query: QUERY,
         variables: { householdId: ctx.params!.householdId },

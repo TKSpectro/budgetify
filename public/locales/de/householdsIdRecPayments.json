@@ -1,0 +1,12 @@
+{
+  "notBooked": "Nicht gebucht.",
+  "nextBooking": "Nächste: ",
+  "next": "Nächste: ",
+  "starts": "Start: ",
+  "ends": "Ende: ",
+  "createRecurringPayment": "Neue wiederkehrende Zahlung",
+  "createRecurringPaymentError": "Wiederkehrende Zahlung konnte nicht erstellt werden.",
+  "recurringPaymentsNotFoundError": "Keine wiederkehrende Zahlungen gefunden. Erstellen Sie eine neue.",
+  "updateRecurringPayment": "Wiederkehrende Zahlung ändern",
+  "updateRecurringPaymentError": "Beim ändern der wiederkehrenden Zahlung ist ein Fehler aufgetreten."
+}

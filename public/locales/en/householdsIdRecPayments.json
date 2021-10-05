@@ -1,0 +1,12 @@
+{
+  "notBooked": "Not booked.",
+  "nextBooking": "Next booking: ",
+  "next": "Next: ",
+  "starts": "Starts: ",
+  "ends": "Ends: ",
+  "createRecurringPayment": "Create Recurring Payment",
+  "createRecurringPaymentError": "Could not create Recurring Payment.",
+  "recurringPaymentsNotFoundError": "Could not find any recurring payments. Please create a new one.",
+  "updateRecurringPayment": "Update Recurring Payment",
+  "updateRecurringPaymentError": "Failed to update recurring payment."
+}

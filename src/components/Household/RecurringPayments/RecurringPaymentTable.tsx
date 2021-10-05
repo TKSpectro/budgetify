@@ -1,5 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
 import { TagIcon } from '@heroicons/react/outline';
+import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -17,6 +18,7 @@ import {
 interface Props {
   recurringPayments: RecurringPayment[];
   categories: Category[];
+  t: TFunction;
 }
 
 const UPDATE_RECURRING_PAYMENT_MUTATION = gql`
@@ -53,7 +55,7 @@ const UPDATE_RECURRING_PAYMENT_MUTATION = gql`
   }
 `;
 
-export function RecurringPaymentTable({ recurringPayments, categories }: Props) {
+export function RecurringPaymentTable({ recurringPayments, categories, t }: Props) {
   const router = useRouter();
   const householdId = router.query.householdId as string;
 
@@ -93,11 +95,11 @@ export function RecurringPaymentTable({ recurringPayments, categories }: Props) 
 
   return (
     <Container>
-      <Error title="Failed to update recurring payment." error={updateRecPaymentError} />
+      <Error title={t('updateRecurringPaymentError')} error={updateRecPaymentError} />
 
       <ManagedModalForm
-        title="Edit Recurring Payment"
-        submitText="Update Recurring Payment"
+        title={t('updateRecurringPayment')}
+        submitText={t('updateRecurringPayment')}
         form={updateRecPaymentForm}
         onSubmit={() => {
           onUpdateThresholdHandler();
@@ -106,31 +108,31 @@ export function RecurringPaymentTable({ recurringPayments, categories }: Props) 
         setShowModal={setShowUpdateModalWrapper}
       >
         <Input
-          label="Name"
+          label={t('common:name')}
           type="text"
           {...updateRecPaymentForm.register('name', {
-            required: { value: true, message: 'Name is required.' },
+            required: { value: true, message: t('common:nameMessage') },
           })}
         ></Input>
         <Input
-          label="Value"
+          label={t('common:value')}
           type="number"
           {...updateRecPaymentForm.register('value', {
-            required: { value: true, message: 'Value is required.' },
+            required: { value: true, message: t('common:valueMessage') },
             valueAsNumber: true,
           })}
         ></Input>
         <Input
-          label="Description"
+          label={t('common:description')}
           type="text"
           {...updateRecPaymentForm.register('description')}
         ></Input>
         <label>
-          Interval
+          {t('common:interval')}
           <select
             className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
             {...updateRecPaymentForm.register('interval', {
-              required: { value: true, message: 'Interval is required.' },
+              required: { value: true, message: t('common:intervalMessage') },
             })}
           >
             <option value={Interval.Daily}>{Interval.Daily}</option>
@@ -141,27 +143,27 @@ export function RecurringPaymentTable({ recurringPayments, categories }: Props) 
           </select>
         </label>
         <Input
-          label="StartDate"
+          label={t('common:startDate')}
           type="date"
           {...updateRecPaymentForm.register('startDate', {
             required: {
               value: true,
-              message: 'StartDate is required.',
+              message: t('startDateMessage'),
             },
             valueAsDate: true,
           })}
         ></Input>
         <Input
-          label="EndDate"
+          label={t('common:endDate')}
           type="date"
           {...updateRecPaymentForm.register('endDate', { valueAsDate: true })}
         ></Input>
         <label>
-          Category
+          {t('common:category')}
           <select
             className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
             {...updateRecPaymentForm.register('categoryId', {
-              required: { value: true, message: 'Category is required.' },
+              required: { value: true, message: t('common:categoryMessage') },
             })}
           >
             {categories.map((category: Category) => {
@@ -194,20 +196,20 @@ export function RecurringPaymentTable({ recurringPayments, categories }: Props) 
                         <span className="hidden md:inline text-sm text-gray-500 dark:text-gray-400 ml-8">
                           {payment.lastBooking
                             ? new Date(payment.lastBooking).toDateString()
-                            : 'Not booked.'}
+                            : t('notBooked')}
                         </span>
                         <span className="hidden md:inline text-sm text-gray-500 dark:text-gray-400 ml-8">
-                          {'Next booking: ' + new Date(payment.nextBooking).toDateString()}
+                          {t('nextBooking') + new Date(payment.nextBooking).toDateString()}
                         </span>
                       </div>
                       <span className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
-                        {'Next: ' + new Date(payment.nextBooking).toDateString()}
+                        {t('next') + new Date(payment.nextBooking).toDateString()}
                       </span>
                       <div className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
-                        {'Starts: ' + new Date(payment.startDate).toDateString()}
+                        {t('starts') + new Date(payment.startDate).toDateString()}
                       </div>
                       <div className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
-                        {'Ends: ' + new Date(payment.endDate).toDateString()}
+                        {t('ends') + new Date(payment.endDate).toDateString()}
                       </div>
                       <div className="hidden md:table-cell pl-2 text-sm text-gray-500 dark:text-gray-400">
                         {payment.description}

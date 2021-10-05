@@ -1,4 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
+import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -14,6 +15,7 @@ import {
 
 interface Props {
   categories: Category[];
+  t: TFunction;
 }
 
 const NEW_RECURRING_PAYMENT_MUTATION = gql`
@@ -42,7 +44,7 @@ const NEW_RECURRING_PAYMENT_MUTATION = gql`
   }
 `;
 
-export function NewRecurringPayment({ categories }: Props) {
+export function NewRecurringPayment({ categories, t }: Props) {
   const router = useRouter();
   const { householdId } = router.query;
 
@@ -76,35 +78,41 @@ export function NewRecurringPayment({ categories }: Props) {
 
   return (
     <>
-      <Error title="Could not load categories." error={createRecurringPaymentError} />
+      <Error title={t('createRecurringPaymentError')} error={createRecurringPaymentError} />
 
       <ModalForm
         form={form}
         onSubmit={onSubmit}
-        title="New recurring payment"
-        buttonText="Create recurring payment"
+        title={t('createRecurringPayment')}
+        buttonText={t('createRecurringPayment')}
       >
         <Input
-          label="Name"
+          label={t('common:name')}
           type="text"
-          {...form.register('name', { required: { value: true, message: 'Name is required.' } })}
+          {...form.register('name', {
+            required: { value: true, message: t('common:nameMessage') },
+          })}
         ></Input>
         <Input
-          label="Value"
+          label={t('common:value')}
           type="number"
           {...form.register('value', {
-            required: { value: true, message: 'Value is required.' },
+            required: { value: true, message: t('common:valueMessage') },
 
             valueAsNumber: true,
           })}
         ></Input>
-        <Input label="Description" type="text" {...form.register('description')}></Input>
+        <Input
+          label={t('common:description')}
+          type="text"
+          {...form.register('description')}
+        ></Input>
         <label>
-          Interval
+          {t('common:interval')}
           <select
             className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
             {...form.register('interval', {
-              required: { value: true, message: 'Interval is required.' },
+              required: { value: true, message: t('common:intervalMessage') },
             })}
           >
             <option value={Interval.Daily}>{Interval.Daily}</option>
@@ -118,7 +126,7 @@ export function NewRecurringPayment({ categories }: Props) {
           label="StartDate"
           type="date"
           {...form.register('startDate', {
-            required: { value: true, message: 'StartDate is required.' },
+            required: { value: true, message: t('common:startDateMessage') },
             valueAsDate: true,
           })}
         ></Input>
@@ -128,11 +136,11 @@ export function NewRecurringPayment({ categories }: Props) {
           {...form.register('endDate', { valueAsDate: true })}
         ></Input>
         <label>
-          Category
+          {t('common:category')}
           <select
             className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
             {...form.register('categoryId', {
-              required: { value: true, message: 'Category is required.' },
+              required: { value: true, message: t('common:categoryMessage') },
             })}
           >
             {categories.map((category: Category) => {
