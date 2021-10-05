@@ -73,4 +73,6 @@ module.exports = {
       headers: securityHeaders,
     },
   ],
+  poweredByHeader: false,
+  reactStrictMode: true,
 };
