@@ -1,10 +1,12 @@
 import { gql, useQuery } from '@apollo/client';
 import { MenuIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
+import { i18n, useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ComponentProps, useState } from 'react';
+import { ComponentProps, useEffect, useState } from 'react';
+import i18nDE from '../../../public/locales/de/header.json';
+import i18nEN from '../../../public/locales/en/header.json';
 import { ThemeSwitch } from '../ThemeSwitch';
 import { Button } from './Button';
 import { MeQuery, MeQueryVariables } from './__generated__/Header.generated';
@@ -27,11 +29,21 @@ export const ME_QUERY = gql`
 
 export function Header() {
   const router = useRouter();
-  const { locale } = router;
 
-  // useEffect(() => {
-  //   i18n?.addResourceBundle(locale || 'en', 'header', {});
-  // }, [locale]);
+  // TODO: FIgure out if this can be done in an better/easier way
+  // Doesnt even work
+  useEffect(() => {
+    i18n?.init({
+      resources: {
+        en: {
+          header: i18nEN,
+        },
+        de: {
+          header: i18nDE,
+        },
+      },
+    });
+  }, []);
   const { t } = useTranslation('header');
 
   function HeaderLink({ href, className, brand = false, noBorder = false, ...props }: Props) {
@@ -93,35 +105,35 @@ export function Header() {
             {!router.query.householdId && isLoggedIn && (
               <>
                 <HeaderLink href={'/households'} brand>
-                  Households
+                  {t('households')}
                 </HeaderLink>
                 <HeaderLink href={'/groups'} brand>
-                  Groups
+                  {t('groups')}
                 </HeaderLink>
               </>
             )}
             {router.query.householdId && (
               <>
                 <HeaderLink href={'/households/' + router.query.householdId} brand>
-                  Dashboard
+                  {t('dashboard')}
                 </HeaderLink>
                 <HeaderLink
                   href={'/households/' + router.query.householdId + '/payments'}
                   className="hidden xl:block text-gray-600 dark:text-gray-200"
                 >
-                  Payments
+                  {t('payments')}
                 </HeaderLink>
                 <HeaderLink
                   href={'/households/' + router.query.householdId + '/recurringPayments'}
                   className="hidden xl:block text-gray-600 dark:text-gray-200"
                 >
-                  RecurringPayments
+                  {t('recurringPayments')}
                 </HeaderLink>
                 <HeaderLink href={'/households'} className="text-gray-600 dark:text-gray-200">
-                  Households
+                  {t('households')}
                 </HeaderLink>
                 <HeaderLink href={'/groups'} className="text-gray-600 dark:text-gray-200">
-                  Groups
+                  {t('groups')}
                 </HeaderLink>
               </>
             )}
@@ -130,7 +142,7 @@ export function Header() {
             {!isLoggedIn && <HeaderLink href="/auth/signup">Signup</HeaderLink>}
             {isLoggedIn && (
               <HeaderLink href="/profile" className="text-gray-600 dark:text-gray-200">
-                Profile
+                {t('profile')}
               </HeaderLink>
             )}
 
