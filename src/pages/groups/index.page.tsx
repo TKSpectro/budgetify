@@ -1,5 +1,6 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -61,6 +62,8 @@ const CREATE_GROUP_MUTATION = gql`
 `;
 
 export default function Groups() {
+  const { t } = useTranslation(['groups', 'common']);
+
   const { data, loading, error, refetch } = useQuery<GroupsQuery, GroupsQueryVariables>(
     GROUPS_QUERY,
   );
@@ -107,41 +110,39 @@ export default function Groups() {
 
   return (
     <Container>
-      <Error title="Could not load group." error={error} />
-      <Error title="Could not use invite." error={inviteError} />
-      <Error title="Could not create group." error={createGroupError} />
+      <Error title={t('common:loadingError')} error={error} />
+      <Error title={t('useInviteError')} error={inviteError} />
+      <Error title={t('createGroupError')} error={createGroupError} />
 
       <Loader loading={loading} />
       <div className="mb-4 relative">
         <ModalForm
           form={form}
-          buttonText="Use Invite Token"
-          title="Use a Invite Token"
+          buttonText={t('useInvite')}
+          title={t('useInvite')}
           onSubmit={useInviteSubmitHandler}
-          submitText="Use Token"
         >
           <Input
-            label="Token"
+            label={t('common:token')}
             {...form.register('token', {
-              required: { value: true, message: 'Please input a token' },
-              minLength: { value: 30, message: 'Please input a valid token (length)' },
-              pattern: { value: uuidRegex, message: 'Please input a valid token' },
+              required: { value: true, message: t('common:tokenRequiredMessage') },
+              minLength: { value: 30, message: t('common:tokenLengthMessage') },
+              pattern: { value: uuidRegex, message: t('common:tokenPatternMessage') },
             })}
           ></Input>
         </ModalForm>
         <div className="mt-2 md:mt-0 md:absolute md:right-0 md:top-0">
           <ModalForm
             form={createGroupForm}
-            buttonText="Create Group"
-            title="Create a new Group"
+            buttonText={t('createGroup')}
+            title={t('createGroup')}
             onSubmit={createGroupSubmitHandler}
-            submitText="Create Group"
           >
             <Input
-              label="Name"
+              label={t('common:name')}
               {...createGroupForm.register('name', {
-                required: { value: true, message: 'Please input a name' },
-                minLength: { value: 2, message: 'Please input at least 2 characters' },
+                required: { value: true, message: t('createGroupNameRequiredMessage') },
+                minLength: { value: 2, message: t('createGroupNameNameMessage') },
               })}
             ></Input>
           </ModalForm>
@@ -153,7 +154,7 @@ export default function Groups() {
             <Link href={`/groups/${group?.id}`} key={group?.id} noUnderline>
               <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer">
                 <div className="text-xl">{group?.name}</div>
-                <span className="font-light">Current value: {group?.value}€</span>
+                <span className="font-light">{t('currentValue') + group?.value}€</span>
               </div>
             </Link>
           );
@@ -167,7 +168,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await serverSideTranslations(ctx.locale || 'en', ['groups', 'common'])),
       ...(await preloadQuery(ctx, { query: GROUPS_QUERY })),
     },
   };

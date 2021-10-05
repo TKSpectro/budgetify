@@ -1,0 +1,9 @@
+{
+  "currentValue": "Current Value: ",
+  "useInvite": "Use Invite",
+  "useInviteError": "Could not use invite.",
+  "createGroup": "Create Group",
+  "createGroupError": "Could not create group.",
+  "createGroupNameRequiredMessage": "Please input a name.",
+  "createGroupNameLengthMessage": "Please input at least 2 characters."
+}

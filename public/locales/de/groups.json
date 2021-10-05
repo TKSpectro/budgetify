@@ -1,0 +1,9 @@
+{
+  "currentValue": "Aktueller Wert: ",
+  "useInvite": "Einladung nutzen",
+  "useInviteError": "Fehler beim Einlösen der Einladung.",
+  "createGroup": "Gruppe erstellen",
+  "createGroupError": "Fehler beim Erstellen der Gruppe.",
+  "createGroupNameRequiredMessage": "Bitte einen Namen eingeben.",
+  "createGroupNameLengthMessage": "Name muss mindestens 2 Zeichen besitzen."
+}
