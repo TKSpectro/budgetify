@@ -1,12 +1,10 @@
 import { gql, useQuery } from '@apollo/client';
 import { MenuIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
-import { i18n, useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ComponentProps, useEffect, useState } from 'react';
-import i18nDE from '../../../public/locales/de/header.json';
-import i18nEN from '../../../public/locales/en/header.json';
+import { ComponentProps, useState } from 'react';
 import { ThemeSwitch } from '../ThemeSwitch';
 import { Button } from './Button';
 import { MeQuery, MeQueryVariables } from './__generated__/Header.generated';
@@ -30,21 +28,7 @@ export const ME_QUERY = gql`
 export function Header() {
   const router = useRouter();
 
-  // TODO: FIgure out if this can be done in an better/easier way
-  // Doesnt even work
-  useEffect(() => {
-    i18n?.init({
-      resources: {
-        en: {
-          header: i18nEN,
-        },
-        de: {
-          header: i18nDE,
-        },
-      },
-    });
-  }, []);
-  const { t } = useTranslation('header');
+  const { t } = useTranslation('common');
 
   function HeaderLink({ href, className, brand = false, noBorder = false, ...props }: Props) {
     const content = (
@@ -71,6 +55,8 @@ export function Header() {
   const { data } = useQuery<MeQuery, MeQueryVariables>(ME_QUERY);
 
   const isLoggedIn = data?.me?.id;
+
+  console.log(t('households'));
 
   function toggleNavbarHandler() {
     setNavBarCollapsed(!navBarCollapsed);
