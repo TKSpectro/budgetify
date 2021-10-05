@@ -1,4 +1,5 @@
 {
+  "owner": "Owner",
   "createHousehold": "Create Households",
   "useInvite": "Use Invite Token",
   "useInviteError": "Failed to use invite token.",

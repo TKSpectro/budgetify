@@ -1,4 +1,5 @@
 {
+  "owner": "Besitzer",
   "createHousehold": "Haushalt erstellen",
   "useInvite": "Einladung nutzen",
   "useInviteError": "Fehler beim Einlösen der Einladung.",
