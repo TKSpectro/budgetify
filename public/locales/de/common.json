@@ -27,6 +27,8 @@
   "date": "Datum",
   "startDate": "Start Datum",
   "endDate": "End Datum",
+  "actions": "Aktionen",
+  "expires": "Verfallen",
   "enabled": "Aktiviert",
   "disabled": "Deaktiviert",
   "login": "Anmelden",

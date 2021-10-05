@@ -1,5 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
 import { TrashIcon } from '@heroicons/react/outline';
+import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -33,9 +34,10 @@ const DELETE_INVITE_MUTATION = gql`
 interface Props {
   invites: Invite[];
   refetch: () => void;
+  t: TFunction;
 }
 
-export default function InviteManager({ invites, refetch }: Props) {
+export default function InviteManager({ invites, refetch, t }: Props) {
   const router = useRouter();
   const form = useForm<CreateInviteMutationVariables>({
     defaultValues: { householdId: router.query.householdId as string, invitedEmail: '' },
@@ -81,12 +83,12 @@ export default function InviteManager({ invites, refetch }: Props) {
 
   return (
     <>
-      <Error title="Could not create invite." error={createInviteError} />
-      <Error title="Could not delete invite." error={deleteInviteError} />
+      <Error title={t('createInviteError')} error={createInviteError} />
+      <Error title={t('removeInviteError')} error={deleteInviteError} />
 
       <ManagedModal
-        title="Remove invite"
-        description={`Are you sure that you want to remove the invite to ${removeModalInvite?.invitedEmail}?`}
+        title={t('removeInvite')}
+        description={t('removeInviteDescription', { email: removeModalInvite?.invitedEmail })}
         submitText={<TrashIcon className="w-6 h-6" />}
         onSubmit={() => {
           removeHandler();
@@ -96,14 +98,14 @@ export default function InviteManager({ invites, refetch }: Props) {
       />
 
       <ModalForm
-        title="New Invite"
+        title={t('newInvite')}
         onSubmit={onSubmitHandler}
-        submitText="Send invite"
-        buttonText="New Invite"
+        submitText={t('sendInvite')}
+        buttonText={t('newInvite')}
         form={form}
       >
         <Input
-          label="Invited Email"
+          label={t('common:email')}
           type="email"
           {...form.register('invitedEmail', { required: true })}
         />
@@ -112,9 +114,9 @@ export default function InviteManager({ invites, refetch }: Props) {
       <table className="table-fixed w-full break-words mt-4">
         <thead>
           <tr>
-            <th className="w-1/3 hidden sm:table-cell">Email</th>
-            <th className="w-1/3 hidden sm:table-cell">Expires</th>
-            <th className="w-1/3 hidden sm:table-cell">Actions</th>
+            <th className="w-1/3 hidden sm:table-cell">{t('common:email')}</th>
+            <th className="w-1/3 hidden sm:table-cell">{t('common:expires')}</th>
+            <th className="w-1/3 hidden sm:table-cell">{t('common:actions')}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 text-center">

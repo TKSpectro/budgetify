@@ -1,0 +1,19 @@
+{
+  "householdNotFoundError": "Haushalt wurde nicht gefunden.",
+  "invitesError": "Einladungen konnten nicht geladen werden.",
+  "invitesNotFoundError": "Keine Einladungen gefunden.",
+  "leaveHousehold": "Haushalt verlassen",
+  "newInvite": "Neue Einladung",
+  "newOwner": "Neuer Besitzer",
+  "makeOwnerOfHousehold": "Zum Besitzer machen",
+  "makeOwnerDescription": "Sicher, dass {{name}} der neue Besitzer des Haushalts werden soll?",
+  "removeUserFromHousehold": "Enterne Nutzer von Haushalt",
+  "removeUserDescription": "Sicher, dass {{name}} aus dem Haushalt entfernt werden soll?",
+  "updateHouseholdError": "Haushalt konnte nicht geupdated werden.",
+  "removeMemberError": "Mitglied konnte nicht entfernt werden.",
+  "removeInvite": "Einaldung entfernen",
+  "removeInviteDescription": "Sicher, dass die Einladung an {{email}} entfernt werden soll?",
+  "sendInvite": "Einladung senden",
+  "createInviteError": "Einladung konnte nicht erstellt werden.",
+  "removeInviteError": "Einladung konnte nicht entfernt werden."
+}

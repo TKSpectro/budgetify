@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -49,6 +50,8 @@ const HOUSEHOLD_QUERY = gql`
 `;
 
 export default function ManageHousehold() {
+  const { t } = useTranslation(['householdsIdManage', 'common']);
+
   const router = useRouter();
   const householdId = router.query.householdId as string;
   const { data, loading, error, refetch } = useQuery<
@@ -68,27 +71,27 @@ export default function ManageHousehold() {
   return (
     <>
       <Head>
-        <title>{'Manage ' + household?.name + ' | ' + 'budgetify'}</title>
+        <title>{t('common:manage') + ' ' + household?.name + ' | ' + 'budgetify'}</title>
       </Head>
       <Container>
-        <Error title="Failed to load household" error={error} />
+        <Error title={t('common:loadingError')} error={error} />
         <Error
-          title="Could not find this household."
+          title={t('householdNotFoundError')}
           error={!loading && !household ? '' : undefined}
         />
         <Loader loading={loading} />
 
         {!loading && !error && members && (
-          <MemberTable members={members as User[]} owner={owner as User} />
+          <MemberTable members={members as User[]} owner={owner as User} t={t} />
         )}
       </Container>
       <Container>
-        <Error title="Failed to load invites" error={error} />
-        <Error title="Could not find any invites." error={!loading && !invites ? '' : undefined} />
+        <Error title={t('invitesError')} error={error} />
+        <Error title={t('invitesNotFoundError')} error={!loading && !invites ? '' : undefined} />
         <Loader loading={loading} />
 
         {!loading && !error && invites && (
-          <InviteManager invites={invites as Invite[]} refetch={refetch} />
+          <InviteManager invites={invites as Invite[]} refetch={refetch} t={t} />
         )}
       </Container>
     </>
@@ -102,7 +105,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await serverSideTranslations(ctx.locale || 'en', ['householdsIdManage', 'common'])),
       ...(await preloadQuery(ctx, {
         query: HOUSEHOLD_QUERY,
         variables: {

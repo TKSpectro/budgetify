@@ -1,5 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
 import { StarIcon, UserRemoveIcon } from '@heroicons/react/outline';
+import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -19,6 +20,7 @@ import {
 interface Props {
   members: User[];
   owner: User;
+  t: TFunction;
 }
 
 const UPDATE_HOUSEHOLD_MUTATION = gql`
@@ -41,7 +43,7 @@ const REMOVE_HOUSEHOLD_MEMBER_MUTATION = gql`
   }
 `;
 
-export default function MemberTable({ members, owner }: Props) {
+export default function MemberTable({ members, owner, t }: Props) {
   const router = useRouter();
   const groupId = router.query.householdId as string;
 
@@ -96,12 +98,12 @@ export default function MemberTable({ members, owner }: Props) {
 
   return (
     <>
-      <Error title="Could not update household." error={updateHouseholdError} />
-      <Error title="Could not remove member." error={removeMemberError} />
+      <Error title={t('updateHouseholdError')} error={updateHouseholdError} />
+      <Error title={t('removeMemberError')} error={removeMemberError} />
 
       <ManagedModal
-        title="Make owner of household"
-        description={`Are you sure that you want to make ${makeOwnerModalUser?.name} the new owner of this household?`}
+        title={t('makeOwnerOfHousehold')}
+        description={t('makeOwnerDescription', { name: makeOwnerModalUser?.name })}
         onSubmit={() => makeOwner()}
         submitText={<StarIcon className="w-6 h-6" />}
         showModal={showMakeOwnerModal}
@@ -109,8 +111,8 @@ export default function MemberTable({ members, owner }: Props) {
       />
 
       <ManagedModal
-        title="Remove user from household"
-        description={`Are you sure that you want to make ${removeMemberModalUser?.name} the new owner of this household?`}
+        title={t('removeUserFromHousehold')}
+        description={t('removeUserDescription', { name: removeMemberModalUser?.name })}
         submitText={<StarIcon className="w-6 h-6" />}
         showModal={showRemoveMemberModal}
         setShowModal={setShowRemoveMemberModal}
@@ -120,9 +122,9 @@ export default function MemberTable({ members, owner }: Props) {
       <table className="table-fixed w-full break-words">
         <thead>
           <tr>
-            <th className="w-1/3">Name</th>
-            <th className="w-1/3">Email</th>
-            <th className="w-1/3">Actions</th>
+            <th className="w-1/3">{t('common:name')}</th>
+            <th className="w-1/3">{t('common:email')}</th>
+            <th className="w-1/3">{t('common:actions')}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 text-center">
@@ -146,12 +148,12 @@ export default function MemberTable({ members, owner }: Props) {
                     <ModalForm
                       form={leaveHouseholdForm}
                       onSubmit={onLeaveSubmit}
-                      title="Leave household"
+                      title={t('leaveHousehold')}
                       buttonText={<UserRemoveIcon className="w-6 h-6" />}
                       buttonClassName="mr-2"
                     >
                       <label>
-                        New Owner
+                        {t('newOwner')}
                         <select
                           className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
                           {...leaveHouseholdForm.register('ownerId', {

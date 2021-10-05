@@ -27,6 +27,8 @@
   "date": "Date",
   "startDate": "Start Date",
   "endDate": "End Date",
+  "actions": "Actions",
+  "expires": "Expires",
   "enabled": "Enabled",
   "disabled": "Disabled",
   "login": "login",

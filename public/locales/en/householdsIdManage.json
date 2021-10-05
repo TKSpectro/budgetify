@@ -1,0 +1,19 @@
+{
+  "householdNotFoundError": "Could not find this household.",
+  "invitesError": "Failed to load invites.",
+  "invitesNotFoundError": "Could not find any invites.",
+  "leaveHousehold": "Leave Household",
+  "newInvite": "New Invite",
+  "newOwner": "New Owner",
+  "makeOwnerOfHousehold": "Make owner of household",
+  "makeOwnerDescription": "Are you sure that you want to make {{name}} the new owner of this household?",
+  "removeUserFromHousehold": "Remove user from household",
+  "removeUserDescription": "Are you sure that you want to remove {{name}} from this household?",
+  "updateHouseholdError": "Could not update household.",
+  "removeMemberError": "Could not remove member.",
+  "removeInvite": "Remove Invite",
+  "removeInviteDescription": "Are you sure that you want to remove the invite to {{email}}?",
+  "sendInvite": "Send Invite",
+  "createInviteError": "Could not create invite.",
+  "removeInviteError": "Could not delete invite."
+}
