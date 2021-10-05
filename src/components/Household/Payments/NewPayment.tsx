@@ -1,4 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
+import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Error } from '~/components/UI/Error';
@@ -32,9 +33,10 @@ const NEW_PAYMENT_MUTATION = gql`
 
 interface Props {
   categories: Category[];
+  t: TFunction;
 }
 
-export function NewPayment({ categories }: Props) {
+export function NewPayment({ categories, t }: Props) {
   const router = useRouter();
   const { householdId } = router.query;
 
@@ -65,20 +67,36 @@ export function NewPayment({ categories }: Props) {
 
   return (
     <>
-      <Error title="Could not load create payment." error={createPaymentError} />
+      <Error title={t('createPaymentError')} error={createPaymentError} />
 
       <ModalForm
         form={form}
         onSubmit={onNewPaymentSubmit}
-        title="New Payment"
-        buttonText="New Payment"
+        title={t('newPayment')}
+        buttonText={t('newPayment')}
       >
         <div className="grid gap-4">
-          <Input label="Name" type="text" {...form.register('name', { required: true })} />
-          <Input label="Value" type="number" {...form.register('value', { required: true })} />
-          <Input label="Description" type="text" {...form.register('description', {})} />
+          <Input
+            label={t('common:name')}
+            type="text"
+            {...form.register('name', {
+              required: { value: true, message: t('common:nameMessage') },
+            })}
+          />
+          <Input
+            label={t('common:value')}
+            type="number"
+            {...form.register('value', {
+              required: { value: true, message: t('common:valueMessage') },
+            })}
+          />
+          <Input
+            label={t('common:description')}
+            type="text"
+            {...form.register('description', {})}
+          />
           <label>
-            Category
+            {t('common:category')}
             <select
               className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
               {...form.register('categoryId', { required: true })}

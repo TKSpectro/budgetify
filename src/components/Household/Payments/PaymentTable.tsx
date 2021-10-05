@@ -1,21 +1,23 @@
 import { TagIcon } from '@heroicons/react/outline';
+import { TFunction } from 'next-i18next';
 import { Payment } from '~/graphql/__generated__/types';
 
 interface Props {
   payments: Payment[];
+  t: TFunction;
 }
 
-export function PaymentTable({ payments }: Props) {
+export function PaymentTable({ payments, t }: Props) {
   if (payments.length === 0) return null;
 
   return (
     <table className="table-fixed w-full break-words">
       <thead>
         <tr>
-          <th className="w-1/4 hidden md:table-cell">Name</th>
-          <th className="w-1/4 hidden md:table-cell">Date</th>
-          <th className="w-1/4 hidden lg:table-cell">Category</th>
-          <th className="w-1/4 hidden md:table-cell">Value</th>
+          <th className="w-1/4 hidden md:table-cell">{t('common:name')}</th>
+          <th className="w-1/4 hidden md:table-cell">{t('common:date')}</th>
+          <th className="w-1/4 hidden lg:table-cell">{t('common:category')}</th>
+          <th className="w-1/4 hidden md:table-cell">{t('common:value')}</th>
         </tr>
       </thead>
       <tbody className="divide-y divide-gray-200 text-center">

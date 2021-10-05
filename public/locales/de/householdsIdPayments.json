@@ -1,0 +1,5 @@
+{
+  "newPayment": "Neue Zahlung",
+  "noPaymentsFoundError": "Keine bisherigen Zahlungen gefunden.",
+  "createPaymentError": "Fehler beim Erstellen der Zahlung."
+}

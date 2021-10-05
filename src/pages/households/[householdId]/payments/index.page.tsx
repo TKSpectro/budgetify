@@ -3,6 +3,7 @@ import { ChartOptions } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { startOfMonth, subMonths } from 'date-fns';
 import { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -106,6 +107,8 @@ let paymentChartOptions: ChartOptions = {
 };
 
 export default function Payments() {
+  const { t } = useTranslation(['householdsIdPayments', 'common']);
+
   const router = useRouter();
   const householdId = router.query.householdId as string;
 
@@ -156,15 +159,15 @@ export default function Payments() {
   return (
     <>
       <Head>
-        <title>Payments | budgetify</title>
+        <title>{t('common:payments')} | budgetify</title>
       </Head>
 
       <div>
         <>
           <Container>
-            <Error title="Failed to load payments" error={error} />
+            <Error title={t('common:loadingError')} error={error} />
             <Error
-              title="Could not find any payments. Please create a new one."
+              title={t('noPaymentsFoundError')}
               error={!loading && !error && payments.length === 0 ? '' : undefined}
             />
 
@@ -172,18 +175,18 @@ export default function Payments() {
               <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 mb-4">
                 <Input
                   className="lg:col-span-2"
-                  label="StartDate"
+                  label={t('common:startDate')}
                   type="date"
                   {...form.register('startDate', { valueAsDate: true })}
                 />
                 <Input
                   className="lg:col-span-2"
-                  label="EndDate"
+                  label={t('common:endDate')}
                   type="date"
                   {...form.register('endDate', { valueAsDate: true })}
                 />
                 <Button className="lg:mt-8" type="submit">
-                  Refresh
+                  {t('common:refresh')}
                 </Button>
               </div>
             </Form>
@@ -208,12 +211,12 @@ export default function Payments() {
               />
             </div>
             <div className="mt-8 flex flex-row-reverse">
-              <NewPayment categories={categories as Category[]} />
+              <NewPayment categories={categories as Category[]} t={t} />
             </div>
           </Container>
           <Container>
             <Loader loading={loading} />
-            <PaymentTable payments={payments as Payment[]} />
+            <PaymentTable payments={payments as Payment[]} t={t} />
           </Container>
         </>
       </div>
@@ -226,7 +229,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await serverSideTranslations(ctx.locale || 'en', ['householdsIdPayments', 'common'])),
       ...(await preloadQuery(ctx, {
         query: QUERY,
         variables: {

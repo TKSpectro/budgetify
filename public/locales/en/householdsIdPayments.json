@@ -1,0 +1,5 @@
+{
+  "newPayment": "New Payment",
+  "noPaymentsFoundError": "Could not find any payments. Please create a new one.",
+  "createPaymentError": "Could not load create payment."
+}
