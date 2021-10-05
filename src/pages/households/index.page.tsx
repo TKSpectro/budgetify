@@ -1,5 +1,6 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -53,6 +54,8 @@ const CREATE_HOUSEHOLD_MUTATION = gql`
 `;
 
 export default function Households() {
+  const { t } = useTranslation(['households', 'common']);
+
   const { data, loading, error, refetch } = useQuery<
     HouseholdListQuery,
     HouseholdListQueryVariables
@@ -101,11 +104,11 @@ export default function Households() {
         <title>Households | budgetify</title>
       </Head>
       <Container>
-        <Error title="Failed to load households." error={error} />
-        <Error title="Failed to use invite token." error={useInviteError} />
-        <Error title="Failed to create household." error={createHouseholdError} />
+        <Error title={t('common:loadingError')} error={error} />
+        <Error title={t('useInviteError')} error={useInviteError} />
+        <Error title={t('createHouseholdError')} error={createHouseholdError} />
         <Error
-          title="Could not find any households. Please create a new one or join one with a token."
+          title={t('noHouseholdsFoundError')}
           error={!loading && !error && households.length === 0 ? '' : undefined}
         />
         <Loader loading={loading} />
@@ -113,33 +116,33 @@ export default function Households() {
         <div className="mb-4 relative">
           <ModalForm
             form={form}
-            buttonText="Use Invite Token"
-            title="Use a Invite Token"
+            buttonText={t('useInvite')}
+            title={t('useInvite')}
             onSubmit={onSubmitHandler}
-            submitText="Use Token"
+            submitText={t('useInvite')}
           >
             <Input
               label="Token"
               {...form.register('token', {
-                required: { value: true, message: 'Please input a token' },
-                minLength: { value: 30, message: 'Please input a valid token (length)' },
-                pattern: { value: uuidRegex, message: 'Please input a valid token' },
+                required: { value: true, message: t('tokenRequiredMessage') },
+                minLength: { value: 30, message: t('tokenLengthMessage') },
+                pattern: { value: uuidRegex, message: t('tokenPatternMessage') },
               })}
             ></Input>
           </ModalForm>
           <div className="mt-2 md:mt-0 md:absolute md:right-0 md:top-0">
             <ModalForm
               form={createHouseholdForm}
-              buttonText="Create Household"
-              title="Create a new Household"
+              buttonText={t('createHousehold')}
+              title={t('createHousehold')}
               onSubmit={createHouseholdSubmitHandler}
-              submitText="Create Household"
+              submitText={t('createHousehold')}
             >
               <Input
                 label="Name"
                 {...createHouseholdForm.register('name', {
-                  required: { value: true, message: 'Please input a name' },
-                  minLength: { value: 2, message: 'Please input at least 2 characters' },
+                  required: { value: true, message: t('householdRequiredMessage') },
+                  minLength: { value: 2, message: t('householdLengthMessage') },
                 })}
               ></Input>
             </ModalForm>
@@ -172,7 +175,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await serverSideTranslations(ctx.locale || 'en', ['households', 'common'])),
       ...(await preloadQuery(ctx, { query: HOUSEHOLD_LIST_QUERY })),
     },
   };
