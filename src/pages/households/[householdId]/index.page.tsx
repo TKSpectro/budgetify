@@ -1,6 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { endOfMonth, startOfMonth } from 'date-fns';
 import { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -61,6 +62,8 @@ const HOUSEHOLD_QUERY = gql`
 `;
 
 export default function Household() {
+  const { t } = useTranslation(['households-id', 'common']);
+
   const router = useRouter();
   const householdId = router.query.householdId as string;
 
@@ -86,11 +89,8 @@ export default function Household() {
       <Head>
         <title>{household?.name + ' | ' + 'budgetify'}</title>
       </Head>
-      <Error title="Failed to load household" error={error} />
-      <Error
-        title="Could not find this household."
-        error={!loading && !household ? '' : undefined}
-      />
+      <Error title={t('common:loadingError')} error={error} />
+      <Error title={t('householdNotFoundError')} error={!loading && !household ? '' : undefined} />
       <Loader loading={loading} />
 
       {!error && household && (
@@ -101,25 +101,26 @@ export default function Household() {
               {isOwner && (
                 <span className="hidden md:block absolute right-4 top-6 text-base">
                   <Link href={router.asPath + '/manage'} asButton>
-                    Manage
+                    {t('common:manage')}
                   </Link>
                 </span>
               )}
             </div>
 
             <div className="mt-4 text-4xl">
-              Total balance{' ' + roundOn2(sumOfAllPayments) + '€'}
+              {t('totalBalance') + ' ' + roundOn2(sumOfAllPayments) + '€'}
             </div>
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-3 lg:gap-x-16 overflow-auto">
-            <PaymentOverview payments={payments as Payment[]} />
+            <PaymentOverview payments={payments as Payment[]} t={t} />
 
             <RecurringPaymentOverview
               recurringPayments={household?.recurringPayments as RecurringPayment[]}
+              t={t}
             />
 
-            <MonthOverview monthPayments={household?.thisMonthsPayments as Payment[]} />
+            <MonthOverview monthPayments={household?.thisMonthsPayments as Payment[]} t={t} />
           </div>
         </>
       )}
@@ -132,7 +133,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await serverSideTranslations(ctx.locale || 'en', ['households-id', 'common'])),
       ...(await preloadQuery(ctx, {
         query: HOUSEHOLD_QUERY,
         variables: {

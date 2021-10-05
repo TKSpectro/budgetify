@@ -1,0 +1,14 @@
+{
+  "totalBalance": "Gesamt Balance",
+  "householdNotFoundError": "Aufgerufener Haushalt wurde nicht gefunden.",
+  "paymentsNotFoundError": "Keine Zahlungen gefunden.",
+  "allPayments": "Alle Zahlungen",
+  "nextPayments": "Anstehende Zahlungen",
+  "allPlannedPayments": "Alle wiederkehrende Zahlungen",
+  "recurringPaymentsNotFoundError": "Keine wiederkehrenden Zahlungen gefunden.",
+  "thisMonth": "Diesen Monat",
+  "overall": "Gesamt",
+  "income": "Einnahmen",
+  "expenses": "Ausgaben",
+  "noPaymentsFoundThisMonthError": "Keine Zahlungen für diesen Monat gefunden."
+}

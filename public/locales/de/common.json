@@ -5,6 +5,7 @@
   "dashboard": "Dashboard",
   "payments": "Zahlungen",
   "recurringPayments": "Wiederkehrende Zahlung",
+  "manage": "Verwalten",
   "name": "Name",
   "email": "Email",
   "emailMessage": "Bitte ihre Email eingeben.",

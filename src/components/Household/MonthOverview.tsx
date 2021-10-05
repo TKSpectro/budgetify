@@ -1,4 +1,5 @@
 import { TagIcon } from '@heroicons/react/outline';
+import { TFunction } from 'next-i18next';
 import { Doughnut } from 'react-chartjs-2';
 import { Payment } from '~/graphql/__generated__/types';
 import { roundOn2 } from '~/utils/helper';
@@ -7,9 +8,10 @@ import { Error } from '../UI/Error';
 
 interface Props {
   monthPayments: Payment[];
+  t: TFunction;
 }
 
-export default function MonthOverview({ monthPayments: payments }: Props) {
+export default function MonthOverview({ monthPayments: payments, t }: Props) {
   // The data array contains a map with payments of this month mapped by their category name and
   // the added up values spend in that category
   let data: { name: string; value: number }[] = [];
@@ -65,11 +67,11 @@ export default function MonthOverview({ monthPayments: payments }: Props) {
   return (
     <Container>
       <div className="text-2xl text-brand-500">
-        <TagIcon className="h-8 w-8 inline-block" /> This Month
+        <TagIcon className="h-8 w-8 inline-block" /> {t('thisMonth')}
       </div>
 
       <Error
-        title="Could not find any payments this month."
+        title={t('noPaymentsFoundThisMonthError')}
         error={payments?.length === 0 ? '' : undefined}
         className="sm:mt-4"
       />
@@ -95,11 +97,11 @@ export default function MonthOverview({ monthPayments: payments }: Props) {
             }}
           />
           <div className="font-bold mt-8 max-w-md grid grid-cols-2 gap-4">
-            <div>Overall</div>
+            <div>{t('overall')}</div>
             <div className="text-right">{roundOn2(monthOverall)}€</div>
-            <div>Income</div>
+            <div>{t('income')}</div>
             <div className="text-right">{roundOn2(monthIncome)}€</div>
-            <div>Expenses</div>
+            <div>{t('expenses')}</div>
             <div className="text-right">{roundOn2(monthExpenses)}€</div>
           </div>
         </>

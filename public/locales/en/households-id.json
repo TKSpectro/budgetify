@@ -1,0 +1,14 @@
+{
+  "totalBalance": "Gesamt Balance",
+  "householdNotFoundError": "Could not find the requested household.",
+  "paymentsNotFoundError": "Could not find any payments.",
+  "allPayments": "All Payments",
+  "nextPayments": "Next Payments",
+  "allPlannedPayments": "All planned Payments",
+  "recurringPaymentsNotFoundError": "Could not find any recurring payments.",
+  "thisMonth": "This Month",
+  "overall": "Overall",
+  "income": "Income",
+  "expenses": "Expenses",
+  "noPaymentsFoundThisMonthError": "Could not find any payments this month."
+}

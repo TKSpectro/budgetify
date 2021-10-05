@@ -1,4 +1,5 @@
 import { CurrencyDollarIcon } from '@heroicons/react/outline';
+import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { RecurringPayment } from '~/graphql/__generated__/types';
 import RecurringPaymentItem from '../Household/RecurringPaymentItem';
@@ -7,19 +8,20 @@ import { Error } from '../UI/Error';
 import { Link } from '../UI/Link';
 interface Props {
   recurringPayments: RecurringPayment[];
+  t: TFunction;
 }
 
-export default function RecurringPaymentOverview({ recurringPayments }: Props) {
+export default function RecurringPaymentOverview({ recurringPayments, t }: Props) {
   const router = useRouter();
 
   return (
     <Container>
       <div className="text-2xl text-brand-500">
-        <CurrencyDollarIcon className="h-8 w-8 inline-block" /> Next payments
+        <CurrencyDollarIcon className="h-8 w-8 inline-block" /> {t('nextPayments')}
       </div>
 
       <Error
-        title="Could not find any recurring payments."
+        title={t('recurringPaymentsNotFoundError')}
         error={recurringPayments?.length === 0 ? '' : undefined}
         className="mt-4"
       />
@@ -37,7 +39,7 @@ export default function RecurringPaymentOverview({ recurringPayments }: Props) {
       <div className="absolute bottom-4 text-xl">
         <Link href={router.asPath + '/recurringPayments'}>
           <CurrencyDollarIcon className="w-6 h-6 mb-1 inline-block" />
-          All planned Payments
+          {t('allPlannedPayments')}
         </Link>
       </div>
     </Container>

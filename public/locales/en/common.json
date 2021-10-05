@@ -5,6 +5,7 @@
   "dashboard": "Dashboard",
   "payments": "Payments",
   "recurringPayments": "Recurring Payments",
+  "manage": "Manage",
   "name": "Name",
   "email": "Email",
   "emailMessage": "Please input your email.",

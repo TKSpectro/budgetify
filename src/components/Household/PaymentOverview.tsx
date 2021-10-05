@@ -1,4 +1,5 @@
 import { CurrencyDollarIcon } from '@heroicons/react/outline';
+import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { Payment } from '~/graphql/__generated__/types';
 import { Container } from '../UI/Container';
@@ -8,19 +9,20 @@ import PaymentItem from './PaymentItem';
 
 interface Props {
   payments: Payment[];
+  t: TFunction;
 }
 
-export default function PaymentOverview({ payments }: Props) {
+export default function PaymentOverview({ payments, t }: Props) {
   const router = useRouter();
 
   return (
     <Container>
       <div className="text-2xl text-brand-500">
-        <CurrencyDollarIcon className="h-8 w-8 inline-block" /> Payments
+        <CurrencyDollarIcon className="h-8 w-8 inline-block" /> {t('common:payments')}
       </div>
 
       <Error
-        title="Could not find any payments."
+        title={t('paymentsNotFoundError')}
         error={payments?.length === 0 ? '' : undefined}
         className="mt-4"
       />
@@ -33,7 +35,7 @@ export default function PaymentOverview({ payments }: Props) {
       <div className="absolute bottom-4 text-xl">
         <Link href={router.asPath + '/payments'}>
           <CurrencyDollarIcon className="w-6 h-6 mb-1 inline-block" />
-          All Payments
+          {t('allPayments')}
         </Link>
       </div>
     </Container>
