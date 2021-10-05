@@ -38,10 +38,11 @@ const CREATE_GROUP_TRANSACTION_MUTATION = gql`
 
 interface Props {
   members: User[];
+  refetch: () => void;
   t: TFunction;
 }
 
-export function NewTransaction({ members, t }: Props) {
+export function NewTransaction({ members, refetch, t }: Props) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
@@ -49,9 +50,10 @@ export function NewTransaction({ members, t }: Props) {
     CreateGroupTransactionMutation,
     CreateGroupTransactionMutationVariables
   >(CREATE_GROUP_TRANSACTION_MUTATION, {
-    onCompleted: () => {},
+    onCompleted: () => {
+      refetch();
+    },
     onError: () => {},
-    refetchQueries: ['groupQuery'],
   });
 
   const formCreateGroupTransaction = useForm<CreateGroupTransactionMutationVariables>({

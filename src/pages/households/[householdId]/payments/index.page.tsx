@@ -211,7 +211,7 @@ export default function Payments() {
               />
             </div>
             <div className="mt-8 flex flex-row-reverse">
-              <NewPayment categories={categories as Category[]} t={t} />
+              <NewPayment categories={categories as Category[]} refetch={refetch} t={t} />
             </div>
           </Container>
           <Container>

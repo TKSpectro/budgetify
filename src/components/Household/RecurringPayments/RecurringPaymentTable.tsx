@@ -18,6 +18,7 @@ import {
 interface Props {
   recurringPayments: RecurringPayment[];
   categories: Category[];
+  refetch: () => void;
   t: TFunction;
 }
 
@@ -55,7 +56,7 @@ const UPDATE_RECURRING_PAYMENT_MUTATION = gql`
   }
 `;
 
-export function RecurringPaymentTable({ recurringPayments, categories, t }: Props) {
+export function RecurringPaymentTable({ recurringPayments, categories, refetch, t }: Props) {
   const router = useRouter();
   const householdId = router.query.householdId as string;
 
@@ -68,9 +69,10 @@ export function RecurringPaymentTable({ recurringPayments, categories, t }: Prop
     UpdateRecurringPaymentMutation,
     UpdateRecurringPaymentMutationVariables
   >(UPDATE_RECURRING_PAYMENT_MUTATION, {
-    onCompleted: () => {},
+    onCompleted: () => {
+      refetch();
+    },
     onError: () => {},
-    refetchQueries: ['QUERY'],
   });
 
   const updateRecPaymentForm = useForm<UpdateRecurringPaymentMutationVariables>();

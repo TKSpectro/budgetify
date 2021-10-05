@@ -23,6 +23,7 @@ interface Props {
   me: User;
   thresholds: Threshold[];
   group: Group;
+  refetch: () => void;
   t: TFunction;
 }
 
@@ -51,7 +52,7 @@ const REMOVE_THRESHOLD_MUTATION = gql`
   }
 `;
 
-export function ThresholdList({ me, thresholds, group, t }: Props) {
+export function ThresholdList({ me, thresholds, group, refetch, t }: Props) {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const setShowUpdateModalWrapper = (value: boolean) => {
     setShowUpdateModal(value);
@@ -67,18 +68,20 @@ export function ThresholdList({ me, thresholds, group, t }: Props) {
     UpdateThresholdMutation,
     UpdateThresholdMutationVariables
   >(UPDATE_THRESHOLD_MUTATION, {
-    onCompleted: () => {},
+    onCompleted: () => {
+      refetch();
+    },
     onError: () => {},
-    refetchQueries: ['groupQuery'],
   });
 
   const [removeThreshold, { error: removeThresholdError }] = useMutation<
     RemoveThresholdMutation,
     RemoveThresholdMutationVariables
   >(REMOVE_THRESHOLD_MUTATION, {
-    onCompleted: () => {},
+    onCompleted: () => {
+      refetch();
+    },
     onError: () => {},
-    refetchQueries: ['groupQuery'],
   });
 
   const updateThresholdForm = useForm<UpdateThresholdMutationVariables>({

@@ -33,10 +33,11 @@ const NEW_PAYMENT_MUTATION = gql`
 
 interface Props {
   categories: Category[];
+  refetch: () => void;
   t: TFunction;
 }
 
-export function NewPayment({ categories, t }: Props) {
+export function NewPayment({ categories, refetch, t }: Props) {
   const router = useRouter();
   const { householdId } = router.query;
 
@@ -48,9 +49,10 @@ export function NewPayment({ categories, t }: Props) {
     NewPaymentMutation,
     NewPaymentMutationVariables
   >(NEW_PAYMENT_MUTATION, {
-    onCompleted: () => {},
+    onCompleted: () => {
+      refetch();
+    },
     onError: () => {},
-    refetchQueries: ['HOUSEHOLD_PAYMENTS_QUERY'],
   });
 
   const onNewPaymentSubmit = () => {

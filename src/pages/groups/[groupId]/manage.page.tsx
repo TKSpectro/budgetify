@@ -63,9 +63,12 @@ export default function ManageGroup() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
-  const { data, loading, error } = useQuery<GroupManageQuery, GroupManageQueryVariables>(QUERY, {
-    variables: { id: groupId },
-  });
+  const { data, loading, error, refetch } = useQuery<GroupManageQuery, GroupManageQueryVariables>(
+    QUERY,
+    {
+      variables: { id: groupId },
+    },
+  );
 
   const [deleteGroup, { error: deleteGroupError }] = useMutation<
     DeleteGroupMutation,
@@ -118,7 +121,7 @@ export default function ManageGroup() {
 
       <Container>
         <Loader loading={loading} />
-        <InviteManager invites={invites as Invite[]} t={t} />
+        <InviteManager invites={invites as Invite[]} refetch={refetch} t={t} />
         <Error title={t('noPendingInvites')} error={invites.length === 0 ? '' : undefined} />
       </Container>
     </>

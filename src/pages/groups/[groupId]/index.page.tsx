@@ -73,7 +73,7 @@ export default function GroupPage() {
 
   const [skip, setSkip] = useState(0);
 
-  const { data, loading, error, fetchMore } = useQuery<GroupQuery, GroupQueryVariables>(
+  const { data, loading, error, fetchMore, refetch } = useQuery<GroupQuery, GroupQueryVariables>(
     GROUP_QUERY,
     {
       variables: { id: groupId, skip, limit },
@@ -109,7 +109,7 @@ export default function GroupPage() {
             </div>
 
             <span className="text-right">
-              <NewTransaction members={members as User[]} t={t} />
+              <NewTransaction members={members as User[]} refetch={refetch} t={t} />
             </span>
 
             {data && !!group?.owners?.find((x) => x?.id === data?.me?.id) && (
@@ -130,9 +130,10 @@ export default function GroupPage() {
               me={me as User}
               group={group as Group}
               thresholds={thresholds as Threshold[]}
+              refetch={refetch}
               t={t}
             />
-            <NewThreshold t={t} />
+            <NewThreshold refetch={refetch} t={t} />
           </Disclosure>
         </Container>
       )}

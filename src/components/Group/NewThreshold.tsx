@@ -27,7 +27,12 @@ const CREATE_THRESHOLD_MUTATION = gql`
   }
 `;
 
-export function NewThreshold({ t }: { t: TFunction }) {
+interface Props {
+  refetch: () => void;
+  t: TFunction;
+}
+
+export function NewThreshold({ refetch, t }: Props) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
@@ -35,9 +40,10 @@ export function NewThreshold({ t }: { t: TFunction }) {
     CreateThresholdMutation,
     CreateThresholdMutationVariables
   >(CREATE_THRESHOLD_MUTATION, {
-    onCompleted: () => {},
+    onCompleted: () => {
+      refetch();
+    },
     onError: () => {},
-    refetchQueries: ['groupQuery'],
   });
 
   const formCreateThreshold = useForm<CreateThresholdMutationVariables>({

@@ -15,6 +15,7 @@ import {
 
 interface Props {
   categories: Category[];
+  refetch: () => void;
   t: TFunction;
 }
 
@@ -44,7 +45,7 @@ const NEW_RECURRING_PAYMENT_MUTATION = gql`
   }
 `;
 
-export function NewRecurringPayment({ categories, t }: Props) {
+export function NewRecurringPayment({ categories, refetch, t }: Props) {
   const router = useRouter();
   const { householdId } = router.query;
 
@@ -55,9 +56,10 @@ export function NewRecurringPayment({ categories, t }: Props) {
     NewRecurringPaymentMutation,
     NewRecurringPaymentMutationVariables
   >(NEW_RECURRING_PAYMENT_MUTATION, {
-    onCompleted: () => {},
+    onCompleted: () => {
+      refetch();
+    },
     onError: () => {},
-    refetchQueries: ['QUERY'],
   });
 
   useEffect(() => {

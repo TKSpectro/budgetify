@@ -71,12 +71,13 @@ export default function RecurringPayments() {
         />
         <Loader loading={loading} />
 
-        <NewRecurringPayment categories={categories as Category[]} t={t} />
+        <NewRecurringPayment categories={categories as Category[]} refetch={refetch} t={t} />
       </Container>
       {recurringPayments?.length !== 0 && (
         <RecurringPaymentTable
           recurringPayments={recurringPayments as RecurringPayment[]}
           categories={categories as Category[]}
+          refetch={refetch}
           t={t}
         />
       )}

@@ -17,6 +17,7 @@ import {
 
 interface Props {
   invites: Invite[];
+  refetch: () => void;
   t: TFunction;
 }
 
@@ -34,7 +35,7 @@ const DELETE_INVITE_MUTATION = gql`
   }
 `;
 
-export function InviteManager({ invites, t }: Props) {
+export function InviteManager({ invites, refetch, t }: Props) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
@@ -46,18 +47,20 @@ export function InviteManager({ invites, t }: Props) {
     DeleteGroupInviteMutation,
     DeleteGroupInviteMutationVariables
   >(DELETE_INVITE_MUTATION, {
-    onCompleted: () => {},
+    onCompleted: () => {
+      refetch();
+    },
     onError: () => {},
-    refetchQueries: ['groupManageQuery'],
   });
 
   const [createInvite, { error: createInviteError }] = useMutation<
     CreateGroupInviteMutation,
     CreateGroupInviteMutationVariables
   >(CREATE_INVITE_MUTATION, {
-    onCompleted: () => {},
+    onCompleted: () => {
+      refetch();
+    },
     onError: () => {},
-    refetchQueries: ['groupManageQuery'],
   });
 
   const removeHandler = (invite: Invite) => {
