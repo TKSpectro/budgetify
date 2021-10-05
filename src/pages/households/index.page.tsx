@@ -122,11 +122,11 @@ export default function Households() {
             submitText={t('useInvite')}
           >
             <Input
-              label="Token"
+              label={t('common:token')}
               {...form.register('token', {
-                required: { value: true, message: t('tokenRequiredMessage') },
-                minLength: { value: 30, message: t('tokenLengthMessage') },
-                pattern: { value: uuidRegex, message: t('tokenPatternMessage') },
+                required: { value: true, message: t('common:tokenRequiredMessage') },
+                minLength: { value: 30, message: t('common:tokenLengthMessage') },
+                pattern: { value: uuidRegex, message: t('common:tokenPatternMessage') },
               })}
             ></Input>
           </ModalForm>
