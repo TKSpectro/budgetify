@@ -56,8 +56,6 @@ export function Header() {
 
   const isLoggedIn = data?.me?.id;
 
-  console.log(t('households'));
-
   function toggleNavbarHandler() {
     setNavBarCollapsed(!navBarCollapsed);
   }
