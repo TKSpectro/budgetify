@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Head from 'next/dist/shared/lib/head';
 import { useRouter } from 'next/router';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
@@ -70,20 +71,25 @@ export default function UseInvite() {
   const useTokenHandler = () => useTokenMutation({ variables: { token: token } });
 
   return (
-    <Container>
-      <Error title={t('invite:inviteError')} error={queryError} />
-      <Error title={t('invite:useInviteError')} error={useTokenError} />
-      <Loader loading={queryLoading} />
+    <>
+      <Head>
+        <title>{t('invite:useToken')} | budgetify</title>
+      </Head>
+      <Container>
+        <Error title={t('invite:inviteError')} error={queryError} />
+        <Error title={t('invite:useInviteError')} error={useTokenError} />
+        <Loader loading={queryLoading} />
 
-      {invite && (
-        <div className="text-center">
-          <div>{invite.token}</div>
-          <div className="mx-auto mt-2 block">
-            <Button onClick={useTokenHandler}>{t('invite:useToken')}</Button>
+        {invite && (
+          <div className="text-center">
+            <div>{invite.token}</div>
+            <div className="mx-auto mt-2 block">
+              <Button onClick={useTokenHandler}>{t('invite:useToken')}</Button>
+            </div>
           </div>
-        </div>
-      )}
-    </Container>
+        )}
+      </Container>
+    </>
   );
 }
 

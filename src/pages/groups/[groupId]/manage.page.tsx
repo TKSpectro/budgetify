@@ -3,6 +3,7 @@ import { TrashIcon } from '@heroicons/react/outline';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Head from 'next/dist/shared/lib/head';
 import { useRouter } from 'next/router';
 import { InviteManager } from '~/components/Group/Manage/InviteManager';
 import MemberTable from '~/components/Group/Manage/MemberTable';
@@ -89,6 +90,9 @@ export default function ManageGroup() {
 
   return (
     <>
+      <Head>
+        <title>{t('common:groups') + ' ' + t('common:manage')} | budgetify</title>
+      </Head>
       <Container big>
         <Error title={t('common:loadingError')} error={error} />
         <Error title={t('deleteGroupError')} error={deleteGroupError} />

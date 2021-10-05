@@ -101,7 +101,7 @@ export default function Households() {
   return (
     <>
       <Head>
-        <title>Households | budgetify</title>
+        <title>{t('common:households')} | budgetify</title>
       </Head>
       <Container>
         <Error title={t('common:loadingError')} error={error} />
