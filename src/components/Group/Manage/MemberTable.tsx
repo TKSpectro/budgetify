@@ -1,6 +1,7 @@
 import { gql, useMutation } from '@apollo/client';
 import { StarIcon, UserRemoveIcon } from '@heroicons/react/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/solid';
+import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { Error } from '~/components/UI/Error';
 import { Modal } from '~/components/UI/Modal';
@@ -20,6 +21,7 @@ interface Props {
   members: User[];
   owners: User[];
   currentUserId: String;
+  t: TFunction;
 }
 
 const ADD_GROUP_OWNER_MUTATION = gql`
@@ -58,7 +60,7 @@ const REMOVE_GROUP_MEMBER_MUTATION = gql`
   }
 `;
 
-export default function MemberTable({ members, owners, currentUserId }: Props) {
+export default function MemberTable({ members, owners, currentUserId, t }: Props) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
@@ -109,16 +111,16 @@ export default function MemberTable({ members, owners, currentUserId }: Props) {
 
   return (
     <>
-      <Error title="Could not remove owner." error={removeOwnerError} />
-      <Error title="Could not remove member from group." error={removeMemberError} />
-      <Error title="Could not leave group." error={leaveGroupError} />
+      <Error title={t('removeOwnerError')} error={removeOwnerError} />
+      <Error title={t('removeMemberError')} error={removeMemberError} />
+      <Error title={t('leaveGroupError')} error={leaveGroupError} />
 
       <table className="table-fixed w-full break-words">
         <thead>
           <tr>
-            <th className="w-3/12">Name</th>
-            <th className="w-3/12">Email</th>
-            <th className="w-6/12">Actions</th>
+            <th className="w-3/12">{t('common:name')}</th>
+            <th className="w-3/12">{t('common:email')}</th>
+            <th className="w-6/12">{t('common:actions')}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 text-center">
@@ -134,16 +136,16 @@ export default function MemberTable({ members, owners, currentUserId }: Props) {
                 <td>
                   {member.id !== currentUserId ? (
                     <Modal
-                      title="Remove user from group"
-                      description={`Are you sure that you want to remove ${member.name} from this group?`}
+                      title={t('removeMember')}
+                      description={t('removeMemberDescription', { name: member.name })}
                       onSubmit={() => removeMemberHandler(member.id)}
                       buttonText={<UserRemoveIcon className="w-6 h-6" />}
                       buttonClassName="mr-2"
                     />
                   ) : (
                     <Modal
-                      title="Leave group."
-                      description={`Are you sure that you want to remove ${member.name} from this group?`}
+                      title={t('leaveGroup')}
+                      description={t('leaveGroupDescription')}
                       onSubmit={() => leaveGroupHandler(member.id)}
                       buttonText={<UserRemoveIcon className="w-6 h-6" />}
                       buttonClassName="mr-2"
@@ -151,15 +153,15 @@ export default function MemberTable({ members, owners, currentUserId }: Props) {
                   )}
                   {!owners.find((x) => x.id === member.id) ? (
                     <Modal
-                      title="Give owner role"
-                      description={`Are you sure that you want to make ${member.name} a owner of this group?`}
+                      title={t('giveOwnerRole')}
+                      description={t('giveOwnerRoleDescription', { name: member.name })}
                       onSubmit={() => makeOwnerHandler(member.id)}
                       buttonText={<StarIcon className="w-6 h-6" />}
                     />
                   ) : (
                     <Modal
-                      title="Remove owner role"
-                      description={`Are you sure that you want to remove ${member.name} from the owners?`}
+                      title={t('removeOwnerRole')}
+                      description={t('removeOwnerRoleDescription', { name: member.name })}
                       onSubmit={() => removeOwnerHandler(member.id)}
                       buttonText={<StarIconSolid className="w-6 h-6" />}
                     />

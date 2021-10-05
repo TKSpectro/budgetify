@@ -1,0 +1,30 @@
+{
+  "deleteGroup": "Gruppe löschen",
+  "deleteGroupDescription": "Sicher, dass die Gruppe gelöscht werden soll?",
+  "deleteGroupError": "Gruppe konnte nicht gelöscht werden.",
+
+  "removeMember": "Mitglied aus Gruppe entfernen",
+  "removeMemberDescription": "Sicher, dass {{name}} aus der Gruppe entfernt werden soll?",
+  "removeMemberError": "Konnte Mitglied nicht aus der Gruppe entfernen.",
+
+  "leaveGroup": "Gruppe verlassen",
+  "leaveGroupDescription": "Sicher, dass Sie die Gruppe verlassen wollen?",
+  "leaveGroupError": "Konnte Gruppe nicht verlassen.",
+
+  "giveOwnerRole": "Besitzer hinzufügen",
+  "giveOwnerRoleDescription": "Sicher, dass {{name}} als Besitzer hinzugefügt werden soll?",
+  "removeOwnerRole": "Besitzer entfernen",
+  "removeOwnerRoleDescription": "Sicher, dass {{name}} als Besitzer entfernt werden soll?",
+  "removeOwnerError": "Konnte Besitzer nicht ändern.",
+
+  "removeInvite": "Einladung entfernen",
+  "removeInviteDescription": "Sicher, dass die Einladung an {{email}} entfernt werden soll?",
+  "removeInviteError": "Konnte Einladung nicht entfernen.",
+
+  "createInvite": "Neue Einladung",
+  "createInviteError": "Konnte Einladung nicht erstellen.",
+  "createInviteEmailMessage": "Bitte Email der eingeladenen Person eingeben.",
+  "noPendingInvites": "Keine aktiven Einladungen.",
+  "invitesNotFoundError": "Keine Einladungen gefunden.",
+  "sendInvite": "Einladung senden"
+}

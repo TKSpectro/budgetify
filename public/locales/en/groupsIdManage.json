@@ -1,0 +1,30 @@
+{
+  "deleteGroup": "Delete Group",
+  "deleteGroupDescription": "Are you sure that you want to delete this group",
+  "deleteGroupError": "Could not remove group.",
+
+  "removeMember": "Remove member from group",
+  "removeMemberDescription": "Are you sure that you want to remove {{name}} from this group?",
+  "removeMemberError": "Could not remove member from group.",
+
+  "leaveGroup": "Leave Group",
+  "leaveGroupDescription": "Are you sure that you want to remove yourself from this group?",
+  "leaveGroupError": "Could not leave group.",
+
+  "giveOwnerRole": "Give owner role",
+  "giveOwnerRoleDescription": "Are you sure that you want to make {{name}} a owner of this group?",
+  "removeOwnerRole": "Remove owner role",
+  "removeOwnerRoleDescription": "Are you sure that you want to remove {{name}} from the owners?",
+  "removeOwnerError": "Could not remove owner.",
+
+  "removeInvite": "Remove Invite",
+  "removeInviteDescription": "Are you sure that you want to remove the invite to {{email}}?",
+  "removeInviteError": "Could not remove invite.",
+
+  "createInvite": "New Invite",
+  "createInviteError": "Could not create invite.",
+  "createInviteEmailMessage": "Please input the email of the invited person.",
+  "noPendingInvites": "No pending invites.",
+  "invitesNotFoundError": "Could not find any invites.",
+  "sendInvite": "Send Invite"
+}

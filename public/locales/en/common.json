@@ -6,6 +6,8 @@
   "payments": "Payments",
   "recurringPayments": "Recurring Payments",
   "category": "Category",
+  "thresholds": "Thresholds",
+  "transactions": "Transactions",
   "manage": "Manage",
   "name": "Name",
   "nameMessage": "Please input a name.",

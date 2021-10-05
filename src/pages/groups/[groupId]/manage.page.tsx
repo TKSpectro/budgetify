@@ -1,6 +1,7 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { TrashIcon } from '@heroicons/react/outline';
 import { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { InviteManager } from '~/components/Group/Manage/InviteManager';
@@ -56,6 +57,8 @@ const DELETE_GROUP_MUTATION = gql`
 `;
 
 export default function ManageGroup() {
+  const { t } = useTranslation(['groupsIdManage', 'common']);
+
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
@@ -87,8 +90,8 @@ export default function ManageGroup() {
   return (
     <>
       <Container big>
-        <Error title="Could not load group." error={error} />
-        <Error title="Could not delete group." error={deleteGroupError} />
+        <Error title={t('common:loadingError')} error={error} />
+        <Error title={t('deleteGroupError')} error={deleteGroupError} />
         <Loader loading={loading} />
 
         {data && (
@@ -96,22 +99,23 @@ export default function ManageGroup() {
             members={members as User[]}
             owners={owners as User[]}
             currentUserId={currentUserId as string}
+            t={t}
           />
         )}
         <Modal
-          buttonText="Delete Group"
+          buttonText={t('deleteGroup')}
           buttonClassName="bg-red-500 mt-4"
-          description="Are you sure that you want to delete this group"
+          description={t('deleteGroupDescription')}
           onSubmit={deleteGroupHandler}
-          title="Delete Group"
+          title={t('deleteGroup')}
           submitText={<TrashIcon className="w-6 h-6" />}
         />
       </Container>
 
       <Container>
         <Loader loading={loading} />
-        <InviteManager invites={invites as Invite[]} />
-        <Error title="No pending invites." error={invites.length === 0 ? '' : undefined} />
+        <InviteManager invites={invites as Invite[]} t={t} />
+        <Error title={t('noPendingInvites')} error={invites.length === 0 ? '' : undefined} />
       </Container>
     </>
   );
@@ -124,7 +128,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(ctx.locale || 'en', ['common'])),
+      ...(await serverSideTranslations(ctx.locale || 'en', ['groupsIdManage', 'common'])),
       ...(await preloadQuery(ctx, { query: QUERY, variables: { id: ctx.params!.groupId } })),
     },
   };

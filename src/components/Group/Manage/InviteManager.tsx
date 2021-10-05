@@ -1,4 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
+import { TrashIcon } from '@heroicons/react/outline';
+import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Error } from '~/components/UI/Error';
@@ -15,6 +17,7 @@ import {
 
 interface Props {
   invites: Invite[];
+  t: TFunction;
 }
 
 const CREATE_INVITE_MUTATION = gql`
@@ -31,7 +34,7 @@ const DELETE_INVITE_MUTATION = gql`
   }
 `;
 
-export function InviteManager({ invites }: Props) {
+export function InviteManager({ invites, t }: Props) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
@@ -45,7 +48,7 @@ export function InviteManager({ invites }: Props) {
   >(DELETE_INVITE_MUTATION, {
     onCompleted: () => {},
     onError: () => {},
-    refetchQueries: ['GROUP_MANAGE_QUERY'],
+    refetchQueries: ['groupManageQuery'],
   });
 
   const [createInvite, { error: createInviteError }] = useMutation<
@@ -54,7 +57,7 @@ export function InviteManager({ invites }: Props) {
   >(CREATE_INVITE_MUTATION, {
     onCompleted: () => {},
     onError: () => {},
-    refetchQueries: ['GROUP_MANAGE_QUERY'],
+    refetchQueries: ['groupManageQuery'],
   });
 
   const removeHandler = (invite: Invite) => {
@@ -67,20 +70,21 @@ export function InviteManager({ invites }: Props) {
 
   return (
     <>
-      <Error title="Could not remove invite." error={deleteInviteError} />
-      <Error title="Could not create invite." error={createInviteError} />
+      <Error title={t('removeInviteError')} error={deleteInviteError} />
+      <Error title={t('createInviteError')} error={createInviteError} />
+
       <ModalForm
-        title="New Invite"
+        title={t('createInvite')}
         onSubmit={onSubmitHandler}
-        submitText="Send invite"
-        buttonText="New Invite"
+        submitText={t('sendInvite')}
+        buttonText={t('createInvite')}
         form={form}
       >
         <Input
-          label="Invited Email"
+          label={t('common:email')}
           type="email"
           {...form.register('invitedEmail', {
-            required: { value: true, message: 'Invited Email is required.' },
+            required: { value: true, message: t('createInviteEmailMessage') },
           })}
         />
       </ModalForm>
@@ -110,11 +114,11 @@ export function InviteManager({ invites }: Props) {
                   </td>
                   <td className="py-4 mr-4 float-right">
                     <Modal
-                      title="Remove user from household"
-                      description={`Are you sure that you want to remove the invite to ${invite.invitedEmail}?`}
+                      title={t('removeInvite')}
+                      description={t('removeInviteDescription', { email: invite.invitedEmail })}
                       onSubmit={() => removeHandler(invite)}
-                      buttonText="Remove"
-                      submitText="Remove Invite"
+                      buttonText={<TrashIcon className="w-6 h-6" />}
+                      submitText={t('removeInvite')}
                     />
                   </td>
                 </tr>

@@ -6,6 +6,8 @@
   "payments": "Zahlungen",
   "recurringPayments": "Wiederkehrende Zahlung",
   "category": "Kategorie",
+  "thresholds": "Grenze",
+  "transactions": "Transaktionen",
   "manage": "Verwalten",
   "name": "Name",
   "nameMessage": "Bitten einen Namen eingeben.",
