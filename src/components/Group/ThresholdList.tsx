@@ -179,7 +179,12 @@ export function ThresholdList({ me, thresholds, group, refetch, t }: Props) {
         {thresholds.map((threshold: Threshold) => {
           return (
             <div key={threshold.id} className="pt-2 pb-1">
-              <div className="md:inline-block md:w-2/3">
+              <div
+                className={clsx(
+                  'md:inline-block md:w-2/3',
+                  threshold.type === ThresholdType.Min ? 'my-3' : 'my-2',
+                )}
+              >
                 {(threshold.type === ThresholdType.Goal ||
                   threshold.type === ThresholdType.Max) && (
                   <Progressbar

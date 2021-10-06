@@ -21,7 +21,7 @@ export function Progressbar({
 }: Props) {
   return (
     <>
-      <div className="flex mb-2 items-center justify-between">
+      <div className={clsx('flex items-center justify-between', !barHidden && 'mb-2')}>
         <div className="text-xs font-semibold uppercase text-brand-600 dark:text-brand-200">
           <span className="inline-block py-1 px-2 rounded-full bg-brand-200 dark:bg-brand-700">
             {text}
