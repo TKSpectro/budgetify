@@ -137,11 +137,21 @@ export function RecurringPaymentTable({ recurringPayments, categories, refetch, 
             required: { value: true, message: t('common:intervalMessage') },
           })}
         >
-          <option value={Interval.Daily}>{Interval.Daily}</option>
-          <option value={Interval.Weekly}>{Interval.Weekly}</option>
-          <option value={Interval.Monthly}>{Interval.Monthly}</option>
-          <option value={Interval.Quarterly}>{Interval.Quarterly}</option>
-          <option value={Interval.Yearly}>{Interval.Yearly}</option>
+          <option value={Interval.Daily} key={Interval.Daily}>
+            {Interval.Daily}
+          </option>
+          <option value={Interval.Weekly} key={Interval.Weekly}>
+            {Interval.Weekly}
+          </option>
+          <option value={Interval.Monthly} key={Interval.Monthly}>
+            {Interval.Monthly}
+          </option>
+          <option value={Interval.Quarterly} key={Interval.Quarterly}>
+            {Interval.Quarterly}
+          </option>
+          <option value={Interval.Yearly} key={Interval.Yearly}>
+            {Interval.Yearly}
+          </option>
         </Select>
 
         <Input
