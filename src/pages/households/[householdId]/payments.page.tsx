@@ -158,10 +158,6 @@ export default function Payments() {
     refetch();
   };
 
-  //console.log(new Date(new Date().toISOString()).toISOString());
-  console.log(startOfMonth(subMonths(new Date(), 3)));
-  console.log(new Date(startOfMonth(subMonths(new Date(), 3))).toISOString());
-
   return (
     <>
       <Head>
@@ -232,10 +228,6 @@ export default function Payments() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
-  //console.log(new Date(new Date().toISOString()));
-  //console.log(startOfMonth(subMonths(new Date(new Date().toISOString()), 3)).toISOString());
-  console.log(new Date(startOfMonth(subMonths(new Date(), 3))).toISOString());
-  console.log(startOfMonth(subMonths(new Date(), 3)));
 
   return {
     props: {
