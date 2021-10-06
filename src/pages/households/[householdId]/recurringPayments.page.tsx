@@ -70,10 +70,11 @@ export default function RecurringPayments() {
           error={!loading && !error && recurringPayments?.length === 0 ? '' : undefined}
         />
         <Loader loading={loading} />
-
-        <NewRecurringPayment categories={categories as Category[]} refetch={refetch} t={t} />
+        {categories?.length !== 0 && (
+          <NewRecurringPayment categories={categories as Category[]} refetch={refetch} t={t} />
+        )}
       </Container>
-      {recurringPayments?.length !== 0 && (
+      {recurringPayments?.length !== 0 && categories?.length !== 0 && (
         <RecurringPaymentTable
           recurringPayments={recurringPayments as RecurringPayment[]}
           categories={categories as Category[]}
