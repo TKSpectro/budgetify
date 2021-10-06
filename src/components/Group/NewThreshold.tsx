@@ -6,6 +6,7 @@ import { ThresholdType } from '~/graphql/__generated__/types';
 import { Error } from '../UI/Error';
 import { Input } from '../UI/Input';
 import { ModalForm } from '../UI/ModalForm';
+import { Select } from '../UI/Select';
 import {
   CreateThresholdMutation,
   CreateThresholdMutationVariables,
@@ -82,25 +83,22 @@ export function NewThreshold({ refetch, t }: Props) {
           })}
         />
 
-        <label>
-          {t('common:type')}
-          <select
-            className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
-            {...formCreateThreshold.register('type', {
-              required: { value: true, message: 'Please choose a type' },
-            })}
-          >
-            <option key={ThresholdType.Goal} value={ThresholdType.Goal}>
-              {ThresholdType.Goal}
-            </option>
-            <option key={ThresholdType.Max} value={ThresholdType.Max}>
-              {ThresholdType.Max}
-            </option>
-            <option key={ThresholdType.Min} value={ThresholdType.Min}>
-              {ThresholdType.Min}
-            </option>
-          </select>
-        </label>
+        <Select
+          label={t('common:type')}
+          {...formCreateThreshold.register('type', {
+            required: { value: true, message: 'Please choose a type' },
+          })}
+        >
+          <option key={ThresholdType.Goal} value={ThresholdType.Goal}>
+            {ThresholdType.Goal}
+          </option>
+          <option key={ThresholdType.Max} value={ThresholdType.Max}>
+            {ThresholdType.Max}
+          </option>
+          <option key={ThresholdType.Min} value={ThresholdType.Min}>
+            {ThresholdType.Min}
+          </option>
+        </Select>
       </ModalForm>
     </div>
   );

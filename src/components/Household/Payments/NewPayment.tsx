@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { ModalForm } from '~/components/UI/ModalForm';
+import { Select } from '~/components/UI/Select';
 import { Category } from '~/graphql/__generated__/types';
 import {
   NewPaymentMutation,
@@ -97,21 +98,16 @@ export function NewPayment({ categories, refetch, t }: Props) {
             type="text"
             {...form.register('description', {})}
           />
-          <label>
-            {t('common:category')}
-            <select
-              className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
-              {...form.register('categoryId', { required: true })}
-            >
-              {categories.map((category: Category) => {
-                return (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
+
+          <Select label={t('common:category')} {...form.register('categoryId', { required: true })}>
+            {categories.map((category: Category) => {
+              return (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              );
+            })}
+          </Select>
         </div>
       </ModalForm>
     </>

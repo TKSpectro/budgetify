@@ -8,6 +8,7 @@ import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { ManagedModalForm } from '~/components/UI/ManagedModalForm';
+import { Select } from '~/components/UI/Select';
 import { Category, Interval, RecurringPayment } from '~/graphql/__generated__/types';
 import { dateToFormInput } from '~/utils/helper';
 import {
@@ -129,21 +130,21 @@ export function RecurringPaymentTable({ recurringPayments, categories, refetch, 
           type="text"
           {...updateRecPaymentForm.register('description')}
         ></Input>
-        <label>
-          {t('common:interval')}
-          <select
-            className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
-            {...updateRecPaymentForm.register('interval', {
-              required: { value: true, message: t('common:intervalMessage') },
-            })}
-          >
-            <option value={Interval.Daily}>{Interval.Daily}</option>
-            <option value={Interval.Weekly}>{Interval.Weekly}</option>
-            <option value={Interval.Monthly}>{Interval.Monthly}</option>
-            <option value={Interval.Quarterly}>{Interval.Quarterly}</option>
-            <option value={Interval.Yearly}>{Interval.Yearly}</option>
-          </select>
-        </label>
+
+        <Select
+          label={t('common:interval')}
+          {...updateRecPaymentForm.register('interval', {
+            required: { value: true, message: t('common:intervalMessage') },
+          })}
+        >
+          {' '}
+          <option value={Interval.Daily}>{Interval.Daily}</option>
+          <option value={Interval.Weekly}>{Interval.Weekly}</option>
+          <option value={Interval.Monthly}>{Interval.Monthly}</option>
+          <option value={Interval.Quarterly}>{Interval.Quarterly}</option>
+          <option value={Interval.Yearly}>{Interval.Yearly}</option>
+        </Select>
+
         <Input
           label={t('common:startDate')}
           type="date"
@@ -160,23 +161,21 @@ export function RecurringPaymentTable({ recurringPayments, categories, refetch, 
           type="date"
           {...updateRecPaymentForm.register('endDate', { valueAsDate: true })}
         ></Input>
-        <label>
-          {t('common:category')}
-          <select
-            className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
-            {...updateRecPaymentForm.register('categoryId', {
-              required: { value: true, message: t('common:categoryMessage') },
-            })}
-          >
-            {categories.map((category: Category) => {
-              return (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              );
-            })}
-          </select>
-        </label>
+
+        <Select
+          label={t('common:category')}
+          {...updateRecPaymentForm.register('categoryId', {
+            required: { value: true, message: t('common:categoryMessage') },
+          })}
+        >
+          {categories.map((category: Category) => {
+            return (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            );
+          })}
+        </Select>
       </ManagedModalForm>
 
       <table className="w-full">

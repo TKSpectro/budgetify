@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { ModalForm } from '~/components/UI/ModalForm';
+import { Select } from '~/components/UI/Select';
 import { Category, Interval } from '~/graphql/__generated__/types';
 import { dateToFormInput } from '~/utils/helper';
 import {
@@ -109,21 +110,20 @@ export function NewRecurringPayment({ categories, refetch, t }: Props) {
           type="text"
           {...form.register('description')}
         ></Input>
-        <label>
-          {t('common:interval')}
-          <select
-            className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
-            {...form.register('interval', {
-              required: { value: true, message: t('common:intervalMessage') },
-            })}
-          >
-            <option value={Interval.Daily}>{Interval.Daily}</option>
-            <option value={Interval.Weekly}>{Interval.Weekly}</option>
-            <option value={Interval.Monthly}>{Interval.Monthly}</option>
-            <option value={Interval.Quarterly}>{Interval.Quarterly}</option>
-            <option value={Interval.Yearly}>{Interval.Yearly}</option>
-          </select>
-        </label>
+
+        <Select
+          label={t('common:interval')}
+          {...form.register('interval', {
+            required: { value: true, message: t('common:intervalMessage') },
+          })}
+        >
+          <option value={Interval.Daily}>{Interval.Daily}</option>
+          <option value={Interval.Weekly}>{Interval.Weekly}</option>
+          <option value={Interval.Monthly}>{Interval.Monthly}</option>
+          <option value={Interval.Quarterly}>{Interval.Quarterly}</option>
+          <option value={Interval.Yearly}>{Interval.Yearly}</option>
+        </Select>
+
         <Input
           label="StartDate"
           type="date"
@@ -132,28 +132,27 @@ export function NewRecurringPayment({ categories, refetch, t }: Props) {
             valueAsDate: true,
           })}
         ></Input>
+
         <Input
           label="EndDate"
           type="date"
           {...form.register('endDate', { valueAsDate: true })}
         ></Input>
-        <label>
-          {t('common:category')}
-          <select
-            className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
-            {...form.register('categoryId', {
-              required: { value: true, message: t('common:categoryMessage') },
-            })}
-          >
-            {categories.map((category: Category) => {
-              return (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              );
-            })}
-          </select>
-        </label>
+
+        <Select
+          label={t('common:category')}
+          {...form.register('categoryId', {
+            required: { value: true, message: t('common:categoryMessage') },
+          })}
+        >
+          {categories.map((category: Category) => {
+            return (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            );
+          })}
+        </Select>
       </ModalForm>
     </>
   );

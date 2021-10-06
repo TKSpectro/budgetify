@@ -8,6 +8,7 @@ import { Button } from '~/components/UI/Button';
 import { Error } from '~/components/UI/Error';
 import { ManagedModal } from '~/components/UI/ManagedModal';
 import { ModalForm } from '~/components/UI/ModalForm';
+import { Select } from '~/components/UI/Select';
 import { User } from '~/graphql/__generated__/types';
 import { urlOneUp } from '~/utils/helper';
 import {
@@ -152,27 +153,24 @@ export default function MemberTable({ members, owner, t }: Props) {
                       buttonText={<UserRemoveIcon className="w-6 h-6" />}
                       buttonClassName="mr-2"
                     >
-                      <label>
-                        {t('newOwner')}
-                        <select
-                          className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md px-4 py-2 border focus:border-brand-500 focus:ring-brand-500"
-                          {...leaveHouseholdForm.register('ownerId', {
-                            required: { value: true, message: 'Please select the new owner.' },
-                          })}
-                        >
-                          {members.map((member) => {
-                            if (member.id !== owner.id) {
-                              return (
-                                <option key={member.id} value={member.id}>
-                                  {member.name}
-                                </option>
-                              );
-                            } else {
-                              return null;
-                            }
-                          })}
-                        </select>
-                      </label>
+                      <Select
+                        label={t('newOwner')}
+                        {...leaveHouseholdForm.register('ownerId', {
+                          required: { value: true, message: 'Please select the new owner.' },
+                        })}
+                      >
+                        {members.map((member) => {
+                          if (member.id !== owner.id) {
+                            return (
+                              <option key={member.id} value={member.id}>
+                                {member.name}
+                              </option>
+                            );
+                          } else {
+                            return null;
+                          }
+                        })}
+                      </Select>
                     </ModalForm>
                   )}
                   {owner.id !== member.id && (
