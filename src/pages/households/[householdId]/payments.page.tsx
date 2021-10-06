@@ -124,7 +124,9 @@ export default function Payments() {
   >(QUERY, {
     variables: {
       householdId,
-      startDate: form.getValues('startDate') || startOfMonth(subMonths(new Date(), 3)),
+      startDate:
+        form.getValues('startDate') ||
+        new Date(startOfMonth(subMonths(new Date(), 3))).toISOString(),
       endDate: form.getValues('endDate') || undefined,
       calcBeforeStartDate: true,
     },
@@ -155,6 +157,10 @@ export default function Payments() {
     setStartDateSave(dateToFormInput(form.getValues('startDate')));
     refetch();
   };
+
+  //console.log(new Date(new Date().toISOString()).toISOString());
+  console.log(startOfMonth(subMonths(new Date(), 3)));
+  console.log(new Date(startOfMonth(subMonths(new Date(), 3))).toISOString());
 
   return (
     <>
@@ -226,6 +232,10 @@ export default function Payments() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx);
+  //console.log(new Date(new Date().toISOString()));
+  //console.log(startOfMonth(subMonths(new Date(new Date().toISOString()), 3)).toISOString());
+  console.log(new Date(startOfMonth(subMonths(new Date(), 3))).toISOString());
+  console.log(startOfMonth(subMonths(new Date(), 3)));
 
   return {
     props: {
