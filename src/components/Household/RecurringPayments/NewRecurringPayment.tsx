@@ -155,10 +155,10 @@ export function NewRecurringPayment({ categories, refetch, t }: Props) {
             required: { value: true, message: t('common:categoryMessage') },
           })}
         >
-          {categories.map((category: Category) => {
+          {categories?.map((category: Category) => {
             return (
-              <option key={category.id} value={category.id}>
-                {category.name}
+              <option key={category?.id} value={category?.id}>
+                {category?.name}
               </option>
             );
           })}
