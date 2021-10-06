@@ -19,7 +19,10 @@ export function initializeApollo({ initialState, headers }: ApolloClientParamete
       ssrMode: typeof window === 'undefined',
       credentials: 'same-origin',
       link: new HttpLink({
-        uri: typeof window === 'undefined' ? 'http://localhost:3000/api/graphql' : '/api/graphql',
+        uri:
+          typeof window === 'undefined'
+            ? 'http://localhost:' + (process.env.PORT || 3000) + '/api/graphql'
+            : '/api/graphql',
         headers: headers,
       }),
       cache: new InMemoryCache({
