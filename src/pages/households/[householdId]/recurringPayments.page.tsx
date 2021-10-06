@@ -12,7 +12,7 @@ import { Loader } from '~/components/UI/Loader';
 import { Category, RecurringPayment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
-import { Query, QueryVariables } from './__generated__/index.page.generated';
+import { Query, QueryVariables } from './__generated__/recurringPayments.page.generated';
 
 const QUERY = gql`
   query QUERY($householdId: String) {

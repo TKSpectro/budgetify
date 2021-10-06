@@ -1,4 +1,4 @@
-import * as Types from '../../../../../graphql/__generated__/types';
+import * as Types from '../../../../graphql/__generated__/types';
 
 export type HouseholdPaymentsQueryVariables = Types.Exact<{
   householdId?: Types.Maybe<Types.Scalars['String']>;
