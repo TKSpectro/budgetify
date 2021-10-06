@@ -137,7 +137,6 @@ export function RecurringPaymentTable({ recurringPayments, categories, refetch, 
             required: { value: true, message: t('common:intervalMessage') },
           })}
         >
-          {' '}
           <option value={Interval.Daily}>{Interval.Daily}</option>
           <option value={Interval.Weekly}>{Interval.Weekly}</option>
           <option value={Interval.Monthly}>{Interval.Monthly}</option>
@@ -168,7 +167,7 @@ export function RecurringPaymentTable({ recurringPayments, categories, refetch, 
             required: { value: true, message: t('common:categoryMessage') },
           })}
         >
-          {categories.map((category: Category) => {
+          {categories?.map((category: Category) => {
             return (
               <option key={category.id} value={category.id}>
                 {category.name}
@@ -180,10 +179,10 @@ export function RecurringPaymentTable({ recurringPayments, categories, refetch, 
 
       <table className="w-full">
         <tbody className="divide-y divide-gray-200 ">
-          {recurringPayments.map((payment) => {
+          {recurringPayments?.map((payment) => {
             return (
               <tr
-                key={payment.id}
+                key={payment?.id}
                 onClick={() => recurringPaymentClickHandler(payment)}
                 className="hover:cursor-pointer"
               >
@@ -193,49 +192,49 @@ export function RecurringPaymentTable({ recurringPayments, categories, refetch, 
 
                     <div className="max-w-xl">
                       <div className="ml-2 font-bold text-gray-800 dark:text-gray-100">
-                        {payment.name}
+                        {payment?.name}
                         <span className="hidden md:inline text-sm text-gray-500 dark:text-gray-400 ml-8">
-                          {payment.lastBooking
-                            ? new Date(payment.lastBooking).toDateString()
+                          {payment?.lastBooking
+                            ? new Date(payment?.lastBooking).toDateString()
                             : t('notBooked')}
                         </span>
                         <span className="hidden md:inline text-sm text-gray-500 dark:text-gray-400 ml-8">
-                          {t('nextBooking') + new Date(payment.nextBooking).toDateString()}
+                          {t('nextBooking') + new Date(payment?.nextBooking).toDateString()}
                         </span>
                       </div>
                       <span className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
-                        {t('next') + new Date(payment.nextBooking).toDateString()}
+                        {t('next') + new Date(payment?.nextBooking).toDateString()}
                       </span>
                       <div className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
-                        {t('starts') + new Date(payment.startDate).toDateString()}
+                        {t('starts') + new Date(payment?.startDate).toDateString()}
                       </div>
                       <div className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
-                        {t('ends') + new Date(payment.endDate).toDateString()}
+                        {t('ends') + new Date(payment?.endDate).toDateString()}
                       </div>
                       <div className="hidden md:table-cell pl-2 text-sm text-gray-500 dark:text-gray-400">
-                        {payment.description}
+                        {payment?.description}
                       </div>
                     </div>
                   </div>
                 </td>
                 <td className="py-4 hidden sm:table-cell">
                   <div className="font-light text-gray-500 dark:text-gray-400">
-                    {payment.startDate ? new Date(payment.startDate).toDateString() : ''}
+                    {payment?.startDate ? new Date(payment?.startDate).toDateString() : ''}
                   </div>
                 </td>
                 <td className="py-4 hidden md:table-cell">
                   <div className="font-light text-gray-500 dark:text-gray-400">
-                    {payment.endDate ? new Date(payment.endDate).toDateString() : ''}
+                    {payment?.endDate ? new Date(payment?.endDate).toDateString() : ''}
                   </div>
                 </td>
                 <td className="py-4 hidden md:table-cell">
                   <div className="font-light text-gray-500 dark:text-gray-400">
-                    {payment.interval}
+                    {payment?.interval}
                   </div>
                 </td>
                 <td className="pl-4 py-4 text-right">
                   <div className="font-bold text-gray-800 dark:text-gray-100">
-                    {payment.value + '€'}
+                    {payment?.value + '€'}
                   </div>
                 </td>
               </tr>
