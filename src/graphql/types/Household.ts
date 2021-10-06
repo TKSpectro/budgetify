@@ -81,7 +81,7 @@ export const Household = objectType({
           );
 
           payments.unshift({
-            id: '',
+            id: '-1',
             name: `Start Value at ${new Date(args.startDate).toDateString()}`,
             value: beforeSum,
             description: '',
