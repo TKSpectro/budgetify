@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { ChartOptions } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import { startOfMonth, subMonths } from 'date-fns';
+import { addMinutes, startOfMonth, subMonths } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -126,7 +126,9 @@ export default function Payments() {
       householdId,
       startDate:
         form.getValues('startDate') ||
-        new Date(startOfMonth(subMonths(new Date(), 3))).toISOString(),
+        new Date(
+          startOfMonth(subMonths(addMinutes(new Date(), new Date().getTimezoneOffset()), 3)),
+        ).toISOString(),
       endDate: form.getValues('endDate') || undefined,
       calcBeforeStartDate: true,
     },
