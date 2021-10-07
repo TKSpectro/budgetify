@@ -72,8 +72,8 @@ export default function Household() {
     {
       variables: {
         householdId,
-        startDate: new Date(startOfMonth((new Date(), 3))).toISOString(),
-        endDate: new Date(endOfMonth((new Date(), 3))).toISOString(),
+        startDate: new Date(startOfMonth(new Date())).toISOString(),
+        endDate: new Date(endOfMonth(new Date())).toISOString(),
       },
     },
   );
