@@ -87,6 +87,8 @@ export default function ManageGroup() {
   const owners = group?.owners || [];
   const invites = group?.invites || [];
 
+  const isOwner = !!owners.find((x) => x?.id === currentUserId);
+
   const deleteGroupHandler = () => {
     deleteGroup({ variables: { id: groupId } });
   };
@@ -106,22 +108,25 @@ export default function ManageGroup() {
             members={members as User[]}
             owners={owners as User[]}
             currentUserId={currentUserId as string}
+            refetch={refetch}
             t={t}
           />
         )}
-        <Modal
-          buttonText={t('deleteGroup')}
-          buttonClassName="bg-red-500 mt-4"
-          description={t('deleteGroupDescription')}
-          onSubmit={deleteGroupHandler}
-          title={t('deleteGroup')}
-          submitText={<TrashIcon className="w-6 h-6" />}
-        />
+        {isOwner && (
+          <Modal
+            buttonText={t('deleteGroup')}
+            buttonClassName="bg-red-500 mt-4"
+            description={t('deleteGroupDescription')}
+            onSubmit={deleteGroupHandler}
+            title={t('deleteGroup')}
+            submitText={<TrashIcon className="w-6 h-6" />}
+          />
+        )}
       </Container>
 
       <Container>
         <Loader loading={loading} />
-        <InviteManager invites={invites as Invite[]} refetch={refetch} t={t} />
+        <InviteManager invites={invites as Invite[]} isOwner={isOwner} refetch={refetch} t={t} />
         <Error title={t('noPendingInvites')} error={invites.length === 0 ? '' : undefined} />
       </Container>
     </>
@@ -129,9 +134,7 @@ export default function ManageGroup() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  authenticatedRoute(ctx, undefined, {
-    CHECK_GROUP_OWNER: ctx.query.groupId as string,
-  });
+  authenticatedRoute(ctx);
 
   return {
     props: {

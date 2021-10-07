@@ -27,6 +27,19 @@ export const authIsGroupOwner = async (_: any, args: any, ctx: Context) => {
   return groupOwner.length > 0;
 };
 
+export const authIsGroupOwnerOrMemberIdCurrentUser = async (_: any, args: any, ctx: Context) => {
+  if (ctx.user.id === args.memberId) return true;
+
+  // Find the group and in that just the owner with the current user id
+  const groupOwner = await prisma.group
+    .findUnique({
+      where: { id: args.groupId },
+    })
+    .owners({ where: { id: ctx.user.id } });
+
+  return groupOwner.length > 0;
+};
+
 export const authIsHouseholdMember = async (_: any, args: any, ctx: Context) => {
   // Find the household and in that just the memeber with the current user id
   const householdMember = await prisma.household

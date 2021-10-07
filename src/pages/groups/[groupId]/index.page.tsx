@@ -112,13 +112,11 @@ export default function GroupPage() {
               <NewTransaction members={members as User[]} refetch={refetch} t={t} />
             </span>
 
-            {data && !!group?.owners?.find((x) => x?.id === data?.me?.id) && (
-              <div className="hidden md:block absolute right-48 top-2 text-base">
-                <Link href={`${router.asPath}/manage`} asButton>
-                  {t('common:manage')}
-                </Link>
-              </div>
-            )}
+            <div className="hidden md:block absolute right-48 top-2 text-base">
+              <Link href={`${router.asPath}/manage`} asButton>
+                {t('common:manage')}
+              </Link>
+            </div>
           </div>
         )}
       </Container>

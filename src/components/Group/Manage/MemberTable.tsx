@@ -21,6 +21,7 @@ interface Props {
   members: User[];
   owners: User[];
   currentUserId: String;
+  refetch: () => void;
   t: TFunction;
 }
 
@@ -60,12 +61,14 @@ const REMOVE_GROUP_MEMBER_MUTATION = gql`
   }
 `;
 
-export default function MemberTable({ members, owners, currentUserId, t }: Props) {
+export default function MemberTable({ members, owners, currentUserId, refetch, t }: Props) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
   const [addGroupOwnerMutation] = useMutation<MutationAddGroupOwnerArgs>(ADD_GROUP_OWNER_MUTATION, {
-    onCompleted: () => {},
+    onCompleted: () => {
+      refetch();
+    },
     onError: () => {},
   });
 
@@ -73,7 +76,9 @@ export default function MemberTable({ members, owners, currentUserId, t }: Props
     RemoveGroupOwnerMutation,
     RemoveGroupOwnerMutationVariables
   >(REMOVE_GROUP_OWNER_MUTATION, {
-    onCompleted: () => {},
+    onCompleted: () => {
+      refetch();
+    },
     onError: () => {},
   });
 
@@ -81,7 +86,9 @@ export default function MemberTable({ members, owners, currentUserId, t }: Props
     RemoveGroupMemberMutation,
     RemoveGroupMemberMutationVariables
   >(REMOVE_GROUP_MEMBER_MUTATION, {
-    onCompleted: () => {},
+    onCompleted: () => {
+      refetch();
+    },
     onError: () => {},
   });
 
@@ -109,6 +116,8 @@ export default function MemberTable({ members, owners, currentUserId, t }: Props
     leaveGroupMutation({ variables: { id: groupId, memberId: id } });
   };
 
+  const isOwner = !!owners.find((x) => x.id === currentUserId);
+
   return (
     <>
       <Error title={t('removeOwnerError')} error={removeOwnerError} />
@@ -128,43 +137,59 @@ export default function MemberTable({ members, owners, currentUserId, t }: Props
             return (
               <tr key={member.id}>
                 <td>
-                  <div className="font-bold text-gray-800 dark:text-gray-100">{member.name}</div>
+                  <div className="font-bold text-gray-800 dark:text-gray-100 my-4">
+                    {member.name}
+                  </div>
                 </td>
                 <td>
                   <div className="font-bold text-gray-800 dark:text-gray-100">{member.email}</div>
                 </td>
                 <td>
-                  {member.id !== currentUserId ? (
-                    <Modal
-                      title={t('removeMember')}
-                      description={t('removeMemberDescription', { name: member.name })}
-                      onSubmit={() => removeMemberHandler(member.id)}
-                      buttonText={<UserRemoveIcon className="w-6 h-6" />}
-                      buttonClassName="mr-2"
-                    />
+                  {isOwner ? (
+                    <>
+                      {member.id !== currentUserId ? (
+                        <Modal
+                          title={t('removeMember')}
+                          description={t('removeMemberDescription', { name: member.name })}
+                          onSubmit={() => removeMemberHandler(member.id)}
+                          buttonText={<UserRemoveIcon className="w-6 h-6" />}
+                          buttonClassName="mr-2"
+                        />
+                      ) : (
+                        <Modal
+                          title={t('leaveGroup')}
+                          description={t('leaveGroupDescription')}
+                          onSubmit={() => leaveGroupHandler(member.id)}
+                          buttonText={<UserRemoveIcon className="w-6 h-6" />}
+                          buttonClassName="mr-2"
+                        />
+                      )}
+                      {!owners.find((x) => x.id === member.id) ? (
+                        <Modal
+                          title={t('giveOwnerRole')}
+                          description={t('giveOwnerRoleDescription', { name: member.name })}
+                          onSubmit={() => makeOwnerHandler(member.id)}
+                          buttonText={<StarIcon className="w-6 h-6" />}
+                        />
+                      ) : (
+                        <Modal
+                          title={t('removeOwnerRole')}
+                          description={t('removeOwnerRoleDescription', { name: member.name })}
+                          onSubmit={() => removeOwnerHandler(member.id)}
+                          buttonText={<StarIconSolid className="w-6 h-6" />}
+                        />
+                      )}
+                    </>
                   ) : (
-                    <Modal
-                      title={t('leaveGroup')}
-                      description={t('leaveGroupDescription')}
-                      onSubmit={() => leaveGroupHandler(member.id)}
-                      buttonText={<UserRemoveIcon className="w-6 h-6" />}
-                      buttonClassName="mr-2"
-                    />
-                  )}
-                  {!owners.find((x) => x.id === member.id) ? (
-                    <Modal
-                      title={t('giveOwnerRole')}
-                      description={t('giveOwnerRoleDescription', { name: member.name })}
-                      onSubmit={() => makeOwnerHandler(member.id)}
-                      buttonText={<StarIcon className="w-6 h-6" />}
-                    />
-                  ) : (
-                    <Modal
-                      title={t('removeOwnerRole')}
-                      description={t('removeOwnerRoleDescription', { name: member.name })}
-                      onSubmit={() => removeOwnerHandler(member.id)}
-                      buttonText={<StarIconSolid className="w-6 h-6" />}
-                    />
+                    currentUserId === member.id && (
+                      <Modal
+                        title={t('leaveGroup')}
+                        description={t('leaveGroupDescription')}
+                        onSubmit={() => leaveGroupHandler(member.id)}
+                        buttonText={<UserRemoveIcon className="w-6 h-6" />}
+                        buttonClassName="mr-2"
+                      />
+                    )
                   )}
                 </td>
               </tr>

@@ -17,6 +17,7 @@ import {
 
 interface Props {
   invites: Invite[];
+  isOwner: boolean;
   refetch: () => void;
   t: TFunction;
 }
@@ -35,7 +36,7 @@ const DELETE_INVITE_MUTATION = gql`
   }
 `;
 
-export function InviteManager({ invites, refetch, t }: Props) {
+export function InviteManager({ invites, isOwner, refetch, t }: Props) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
@@ -76,21 +77,23 @@ export function InviteManager({ invites, refetch, t }: Props) {
       <Error title={t('removeInviteError')} error={deleteInviteError} />
       <Error title={t('createInviteError')} error={createInviteError} />
 
-      <ModalForm
-        title={t('createInvite')}
-        onSubmit={onSubmitHandler}
-        submitText={t('sendInvite')}
-        buttonText={t('createInvite')}
-        form={form}
-      >
-        <Input
-          label={t('common:email')}
-          type="email"
-          {...form.register('invitedEmail', {
-            required: { value: true, message: t('createInviteEmailMessage') },
-          })}
-        />
-      </ModalForm>
+      {isOwner && (
+        <ModalForm
+          title={t('createInvite')}
+          onSubmit={onSubmitHandler}
+          submitText={t('sendInvite')}
+          buttonText={t('createInvite')}
+          form={form}
+        >
+          <Input
+            label={t('common:email')}
+            type="email"
+            {...form.register('invitedEmail', {
+              required: { value: true, message: t('createInviteEmailMessage') },
+            })}
+          />
+        </ModalForm>
+      )}
 
       {invites.length !== 0 ? (
         <table className="w-full">
@@ -116,13 +119,15 @@ export function InviteManager({ invites, refetch, t }: Props) {
                     </div>
                   </td>
                   <td className="py-4 mr-4 float-right">
-                    <Modal
-                      title={t('removeInvite')}
-                      description={t('removeInviteDescription', { email: invite.invitedEmail })}
-                      onSubmit={() => removeHandler(invite)}
-                      buttonText={<TrashIcon className="w-6 h-6" />}
-                      submitText={t('removeInvite')}
-                    />
+                    {isOwner && (
+                      <Modal
+                        title={t('removeInvite')}
+                        description={t('removeInviteDescription', { email: invite.invitedEmail })}
+                        onSubmit={() => removeHandler(invite)}
+                        buttonText={<TrashIcon className="w-6 h-6" />}
+                        submitText={t('removeInvite')}
+                      />
+                    )}
                   </td>
                 </tr>
               );

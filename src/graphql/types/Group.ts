@@ -1,7 +1,12 @@
 import { ApolloError } from 'apollo-server-errors';
 import { arg, extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
-import { authIsGroupMember, authIsGroupOwner, authIsLoggedIn } from '../authRules';
+import {
+  authIsGroupMember,
+  authIsGroupOwner,
+  authIsGroupOwnerOrMemberIdCurrentUser,
+  authIsLoggedIn,
+} from '../authRules';
 import { Participant as ParticipantType } from '../__generated__/types';
 
 export const Group = objectType({
@@ -339,7 +344,7 @@ export const GroupMutation = extendType({
       type: Group,
       description:
         'Remove a member from the specified group. Need to be logged in and own the group.',
-      authorize: authIsGroupOwner,
+      authorize: authIsGroupOwnerOrMemberIdCurrentUser,
       args: {
         groupId: nonNull(stringArg()),
         memberId: nonNull(stringArg()),
@@ -350,7 +355,7 @@ export const GroupMutation = extendType({
           include: { owners: true },
         });
 
-        if (ctx.user.id === args.memberId && group!.owners.length <= 1) {
+        if (!!group?.owners.find((x) => x.id === ctx.user.id) && group!.owners.length <= 1) {
           throw new ApolloError(
             'You cant leave the household as you are the last owner. Please make someone else owner of the group.',
           );
