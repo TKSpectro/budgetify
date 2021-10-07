@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-import { endOfMonth, startOfMonth } from 'date-fns';
+import { endOfMonth, startOfDay, startOfMonth } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -72,8 +72,8 @@ export default function Household() {
     {
       variables: {
         householdId,
-        startDate: new Date(startOfMonth(new Date())).toISOString(),
-        endDate: new Date(endOfMonth(new Date())).toISOString(),
+        startDate: new Date(startOfDay(startOfMonth(new Date()))).toISOString(),
+        endDate: new Date(startOfDay(endOfMonth(new Date()))).toISOString(),
       },
     },
   );
@@ -136,8 +136,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         query: HOUSEHOLD_QUERY,
         variables: {
           householdId: ctx.params!.householdId,
-          startDate: startOfMonth(new Date()),
-          endDate: endOfMonth(new Date()),
+          startDate: startOfDay(startOfMonth(new Date())),
+          endDate: startOfDay(endOfMonth(new Date())),
         },
       })),
     },
