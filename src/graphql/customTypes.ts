@@ -5,18 +5,17 @@ export const DateTime = scalarType({
   name: 'DateTime',
   asNexusMethod: 'date',
   description: 'Date custom scalar type',
-  parseValue(value) {
-    const date = new Date(value);
-    return date.toISOString();
-  },
   serialize(value) {
-    return new Date(value);
+    return value.getTime(); // Convert outgoing Date to integer for JSON
+  },
+  parseValue(value) {
+    return new Date(value); // Convert incoming integer to Date
   },
   parseLiteral(ast) {
     if (ast.kind === Kind.INT) {
-      return new Date(ast.value);
+      return new Date(parseInt(ast.value, 10)); // Convert hard-coded AST string to integer and then to Date
     }
-    return null;
+    return null; // Invalid hard-coded value (not an integer)
   },
 });
 
