@@ -48,3 +48,21 @@ export const authIsHouseholdOwner = async (_: any, args: any, ctx: Context) => {
 
   return householdOwner?.id === ctx.user.id;
 };
+
+export const authIsHouseholdOwnerOrMemberIdCurrentUser = async (
+  _: any,
+  args: any,
+  ctx: Context,
+) => {
+  // User requested something for himself so we can authorize it
+  if (ctx.user.id === args.memberId) return true;
+
+  // Find the household and in that just the owner with the current user id
+  const householdOwner = await prisma.household
+    .findUnique({
+      where: { id: args.householdId },
+    })
+    .owner();
+
+  return householdOwner?.id === ctx.user.id;
+};

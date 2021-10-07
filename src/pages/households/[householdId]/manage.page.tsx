@@ -19,6 +19,9 @@ import {
 
 const HOUSEHOLD_QUERY = gql`
   query householdManageQuery($householdId: String!) {
+    me {
+      id
+    }
     household(id: $householdId) {
       id
       name
@@ -63,6 +66,8 @@ export default function ManageHousehold() {
     },
   });
 
+  const currentUserId = data?.me?.id || '';
+
   const household = data?.household;
   const owner = household?.owner;
   const members = household?.members;
@@ -82,7 +87,13 @@ export default function ManageHousehold() {
         <Loader loading={loading} />
 
         {!loading && !error && members && (
-          <MemberTable members={members as User[]} owner={owner as User} t={t} />
+          <MemberTable
+            members={members as User[]}
+            owner={owner as User}
+            currentUserId={currentUserId}
+            refetch={refetch}
+            t={t}
+          />
         )}
       </Container>
       <Container>
@@ -91,7 +102,13 @@ export default function ManageHousehold() {
         <Loader loading={loading} />
 
         {!loading && !error && invites && (
-          <InviteManager invites={invites as Invite[]} refetch={refetch} t={t} />
+          <InviteManager
+            invites={invites as Invite[]}
+            owner={owner as User}
+            currentUserId={currentUserId}
+            refetch={refetch}
+            t={t}
+          />
         )}
       </Container>
     </>
@@ -100,7 +117,7 @@ export default function ManageHousehold() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   authenticatedRoute(ctx, undefined, {
-    CHECK_HOUSEHOLD_OWNER: ctx.query.householdId as string,
+    //CHECK_HOUSEHOLD_OWNER: ctx.query.householdId as string,
   });
 
   return {

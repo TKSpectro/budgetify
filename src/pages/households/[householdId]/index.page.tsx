@@ -98,13 +98,11 @@ export default function Household() {
           <div className="mx-4 my-4">
             <div className="relative text-6xl text-brand-500">
               {household.name}
-              {isOwner && (
-                <span className="hidden md:block absolute right-4 top-6 text-base">
-                  <Link href={router.asPath + '/manage'} asButton>
-                    {t('common:manage')}
-                  </Link>
-                </span>
-              )}
+              <span className="hidden md:block absolute right-4 top-6 text-base">
+                <Link href={router.asPath + '/manage'} asButton>
+                  {t('common:manage')}
+                </Link>
+              </span>
             </div>
 
             <div className="mt-4 text-4xl">

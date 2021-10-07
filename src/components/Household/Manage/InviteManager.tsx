@@ -9,7 +9,7 @@ import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { ManagedModal } from '~/components/UI/ManagedModal';
 import { ModalForm } from '~/components/UI/ModalForm';
-import { Invite } from '~/graphql/__generated__/types';
+import { Invite, User } from '~/graphql/__generated__/types';
 import {
   CreateInviteMutation,
   CreateInviteMutationVariables,
@@ -33,11 +33,13 @@ const DELETE_INVITE_MUTATION = gql`
 
 interface Props {
   invites: Invite[];
+  owner: User;
+  currentUserId: string;
   refetch: () => void;
   t: TFunction;
 }
 
-export default function InviteManager({ invites, refetch, t }: Props) {
+export default function InviteManager({ invites, owner, currentUserId, refetch, t }: Props) {
   const router = useRouter();
   const form = useForm<CreateInviteMutationVariables>({
     defaultValues: { householdId: router.query.householdId as string, invitedEmail: '' },
@@ -53,7 +55,7 @@ export default function InviteManager({ invites, refetch, t }: Props) {
     onCompleted: () => {
       refetch();
     },
-    onError: (error) => {},
+    onError: () => {},
   });
 
   const [deleteInviteMutation, { error: deleteInviteError }] = useMutation<
@@ -63,7 +65,7 @@ export default function InviteManager({ invites, refetch, t }: Props) {
     onCompleted: () => {
       refetch();
     },
-    onError: (error) => {},
+    onError: () => {},
   });
 
   const onSubmitHandler = () => {
@@ -97,19 +99,21 @@ export default function InviteManager({ invites, refetch, t }: Props) {
         setShowModal={setShowRemoveModal}
       />
 
-      <ModalForm
-        title={t('newInvite')}
-        onSubmit={onSubmitHandler}
-        submitText={t('sendInvite')}
-        buttonText={t('newInvite')}
-        form={form}
-      >
-        <Input
-          label={t('common:email')}
-          type="email"
-          {...form.register('invitedEmail', { required: true })}
-        />
-      </ModalForm>
+      {currentUserId === owner.id && (
+        <ModalForm
+          title={t('newInvite')}
+          onSubmit={onSubmitHandler}
+          submitText={t('sendInvite')}
+          buttonText={t('newInvite')}
+          form={form}
+        >
+          <Input
+            label={t('common:email')}
+            type="email"
+            {...form.register('invitedEmail', { required: true })}
+          />
+        </ModalForm>
+      )}
 
       <table className="table-fixed w-full break-words mt-4">
         <thead>
@@ -131,9 +135,11 @@ export default function InviteManager({ invites, refetch, t }: Props) {
                     {new Date(invite.validUntil).toDateString()}
                   </div>
                   <div className="block sm:hidden font-bold text-gray-800 dark:text-gray-100">
-                    <Button onClick={() => onRemoveClickHandler(invite)}>
-                      <TrashIcon className="w-6 h-6" />
-                    </Button>
+                    {currentUserId === owner.id && (
+                      <Button onClick={() => onRemoveClickHandler(invite)}>
+                        <TrashIcon className="w-6 h-6" />
+                      </Button>
+                    )}
                   </div>
                 </td>
                 <td className="py-4 hidden sm:table-cell">
@@ -142,9 +148,11 @@ export default function InviteManager({ invites, refetch, t }: Props) {
                   </div>
                 </td>
                 <td className="py-4 hidden sm:table-cell">
-                  <Button onClick={() => onRemoveClickHandler(invite)}>
-                    <TrashIcon className="w-6 h-6" />
-                  </Button>
+                  {currentUserId === owner.id && (
+                    <Button onClick={() => onRemoveClickHandler(invite)}>
+                      <TrashIcon className="w-6 h-6" />
+                    </Button>
+                  )}
                 </td>
               </tr>
             );

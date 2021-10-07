@@ -7,10 +7,10 @@ import { useForm } from 'react-hook-form';
 import { Button } from '~/components/UI/Button';
 import { Error } from '~/components/UI/Error';
 import { ManagedModal } from '~/components/UI/ManagedModal';
+import { Modal } from '~/components/UI/Modal';
 import { ModalForm } from '~/components/UI/ModalForm';
 import { Select } from '~/components/UI/Select';
 import { User } from '~/graphql/__generated__/types';
-import { urlOneUp } from '~/utils/helper';
 import {
   RemoveHouseholdMemberMutation,
   RemoveHouseholdMemberMutationVariables,
@@ -21,6 +21,8 @@ import {
 interface Props {
   members: User[];
   owner: User;
+  currentUserId: string;
+  refetch: () => void;
   t: TFunction;
 }
 
@@ -44,7 +46,7 @@ const REMOVE_HOUSEHOLD_MEMBER_MUTATION = gql`
   }
 `;
 
-export default function MemberTable({ members, owner, t }: Props) {
+export default function MemberTable({ members, owner, currentUserId, refetch, t }: Props) {
   const router = useRouter();
   const groupId = router.query.householdId as string;
 
@@ -55,7 +57,7 @@ export default function MemberTable({ members, owner, t }: Props) {
     UpdateHouseholdOwnerMutationVariables
   >(UPDATE_HOUSEHOLD_MUTATION, {
     onCompleted: () => {
-      router.push(urlOneUp(router.asPath));
+      refetch();
     },
     onError: () => {},
   });
@@ -89,6 +91,14 @@ export default function MemberTable({ members, owner, t }: Props) {
   };
 
   const onLeaveSubmit = async () => {
+    const { errors } = await removeMemberMutation({
+      variables: { id: groupId, memberId: currentUserId },
+    });
+
+    if (!errors) router.push('/households');
+  };
+
+  const onOwnerLeaveSubmit = async () => {
     await removeMemberMutation({ variables: { id: groupId, memberId: owner.id } });
     const { errors } = await updateHouseholdMutation({
       variables: { id: groupId, ownerId: leaveHouseholdForm.getValues('ownerId') },
@@ -133,22 +143,42 @@ export default function MemberTable({ members, owner, t }: Props) {
             return (
               <tr key={member.id}>
                 <td>
-                  <div className="font-bold text-gray-800 dark:text-gray-100">{member.name}</div>
+                  <div className="font-bold text-gray-800 dark:text-gray-100 my-4">
+                    {member.name}
+                  </div>
                 </td>
                 <td>
                   <div className="font-bold text-gray-800 dark:text-gray-100">{member.email}</div>
                 </td>
                 <td className="py-4">
-                  {owner.id !== member.id ? (
-                    <Button onClick={() => onRemoveMemberClickHandler(member)} className="mr-2">
-                      <UserRemoveIcon className="w-6 h-6" />
-                    </Button>
+                  {currentUserId !== owner.id ? (
+                    // If the currentUser is not the owner, show the leave button only for this member
+                    currentUserId === member.id && (
+                      <Modal
+                        title={t('leaveHousehold')}
+                        description={t('leaveHouseholdDescription')}
+                        buttonText={<UserRemoveIcon className="w-6 h-6" />}
+                        onSubmit={onLeaveSubmit}
+                      />
+                    )
+                  ) : // Current user is the owner so show all removal, own leave and role buttons
+                  owner.id !== member.id ? (
+                    // For all members except himself, show removal and role buttons
+                    <>
+                      <Button onClick={() => onRemoveMemberClickHandler(member)} className="mr-2">
+                        <UserRemoveIcon className="w-6 h-6" />
+                      </Button>
+                      <Button onClick={() => onMakeOwnerClickHandler(member)}>
+                        <StarIcon className="w-6 h-6" />
+                      </Button>
+                    </>
                   ) : (
+                    // For the owner himself show the leave button with a new owner picker
                     // No need to do this one as managed because it is always just spawned once as
                     // there is always just one household owner
                     <ModalForm
                       form={leaveHouseholdForm}
-                      onSubmit={onLeaveSubmit}
+                      onSubmit={onOwnerLeaveSubmit}
                       title={t('leaveHousehold')}
                       buttonText={<UserRemoveIcon className="w-6 h-6" />}
                       buttonClassName="mr-2"
@@ -172,11 +202,6 @@ export default function MemberTable({ members, owner, t }: Props) {
                         })}
                       </Select>
                     </ModalForm>
-                  )}
-                  {owner.id !== member.id && (
-                    <Button onClick={() => onMakeOwnerClickHandler(member)}>
-                      <StarIcon className="w-6 h-6" />
-                    </Button>
                   )}
                 </td>
               </tr>

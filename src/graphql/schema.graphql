@@ -209,7 +209,7 @@ type Mutation {
   removeGroupOwner(groupId: String!, ownerId: String): Group!
 
   """
-  Remove a member from the specified household. Need to be logged in and own the household.
+  Remove a member from the specified household. Need to be logged in and own the household OR Request the removal for your own account.
   """
   removeHouseholdMember(householdId: String!, memberId: String!): Household!
 

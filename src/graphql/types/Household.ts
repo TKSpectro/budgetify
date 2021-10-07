@@ -1,6 +1,11 @@
 import { arg, booleanArg, extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 import prisma from '~/utils/prisma';
-import { authIsAdmin, authIsHouseholdOwner, authIsLoggedIn } from '../authRules';
+import {
+  authIsAdmin,
+  authIsHouseholdOwner,
+  authIsHouseholdOwnerOrMemberIdCurrentUser,
+  authIsLoggedIn,
+} from '../authRules';
 import { Payment } from '../__generated__/types';
 
 export const Household = objectType({
@@ -201,8 +206,8 @@ export const HouseholdMutation = extendType({
     t.nonNull.field('removeHouseholdMember', {
       type: Household,
       description:
-        'Remove a member from the specified household. Need to be logged in and own the household.',
-      authorize: authIsHouseholdOwner,
+        'Remove a member from the specified household. Need to be logged in and own the household OR Request the removal for your own account.',
+      authorize: authIsHouseholdOwnerOrMemberIdCurrentUser,
       args: {
         householdId: nonNull(stringArg()),
         memberId: nonNull(stringArg()),

@@ -7,6 +7,7 @@
   "newOwner": "Neuer Besitzer",
   "makeOwnerOfHousehold": "Zum Besitzer machen",
   "makeOwnerDescription": "Sicher, dass {{name}} der neue Besitzer des Haushalts werden soll?",
+  "leaveHouseholdDescription": "Sicher, dass Sie diesen Haushalt verlassen wollen?",
   "removeUserFromHousehold": "Enterne Nutzer von Haushalt",
   "removeUserDescription": "Sicher, dass {{name}} aus dem Haushalt entfernt werden soll?",
   "updateHouseholdError": "Haushalt konnte nicht geupdated werden.",

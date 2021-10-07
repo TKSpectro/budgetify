@@ -194,7 +194,7 @@ export type Mutation = {
   removeGroupMember: Group;
   /** Remove a owner of a group. Need to be logged in and be owner of the group. */
   removeGroupOwner: Group;
-  /** Remove a member from the specified household. Need to be logged in and own the household. */
+  /** Remove a member from the specified household. Need to be logged in and own the household OR Request the removal for your own account. */
   removeHouseholdMember: Household;
   /** Remove a threshold. Need to be logged in and own group. */
   removeThreshold: Threshold;

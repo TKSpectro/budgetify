@@ -8,6 +8,7 @@
   "makeOwnerOfHousehold": "Make owner of household",
   "makeOwnerDescription": "Are you sure that you want to make {{name}} the new owner of this household?",
   "removeUserFromHousehold": "Remove user from household",
+  "leaveHouseholdDescription": "Are you sure that you want to leave from this household?",
   "removeUserDescription": "Are you sure that you want to remove {{name}} from this household?",
   "updateHouseholdError": "Could not update household.",
   "removeMemberError": "Could not remove member.",
