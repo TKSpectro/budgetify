@@ -48,5 +48,7 @@
   "logout": "Logout",
   "signup": "Signup",
   "refresh": "Refresh",
+  "privacy": "Privacy",
+  "imprint": "Imprint",
   "loadingError": "Failed to load data."
 }
