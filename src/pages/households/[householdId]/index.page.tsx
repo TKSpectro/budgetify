@@ -72,8 +72,8 @@ export default function Household() {
     {
       variables: {
         householdId,
-        startDate: startOfMonth(new Date()).toISOString(),
-        endDate: endOfMonth(new Date()).toISOString(),
+        startDate: new Date(startOfMonth((new Date(), 3))).toISOString(),
+        endDate: new Date(endOfMonth((new Date(), 3))).toISOString(),
       },
     },
   );
@@ -136,8 +136,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         query: HOUSEHOLD_QUERY,
         variables: {
           householdId: ctx.params!.householdId,
-          startDate: startOfMonth(new Date()).toISOString(),
-          endDate: endOfMonth(new Date()).toISOString(),
+          startDate: startOfMonth(new Date()),
+          endDate: endOfMonth(new Date()),
         },
       })),
     },
