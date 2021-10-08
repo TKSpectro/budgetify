@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { ChartOptions } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import { addMinutes, startOfMonth, subMonths } from 'date-fns';
+import { endOfDay, startOfMonth, subMonths } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -21,7 +21,7 @@ import { Loader } from '~/components/UI/Loader';
 import { Category, Payment, Scalars } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
-import { dateToFormInput, roundOn2 } from '~/utils/helper';
+import { dateToFormInput, removeDateOffset, roundOn2 } from '~/utils/helper';
 import {
   HouseholdPaymentsQuery,
   HouseholdPaymentsQueryVariables,
@@ -118,24 +118,24 @@ export default function Payments() {
     dateToFormInput(startOfMonth(subMonths(new Date(), 3))),
   );
 
+  useEffect(() => {
+    form.setValue('startDate', startDateSave);
+  });
+
   const { data, loading, error, refetch } = useQuery<
     HouseholdPaymentsQuery,
     HouseholdPaymentsQueryVariables
   >(QUERY, {
     variables: {
       householdId,
-      startDate:
-        form.getValues('startDate') ||
-        new Date(
-          startOfMonth(subMonths(addMinutes(new Date(), new Date().getTimezoneOffset()), 3)),
-        ).toISOString(),
-      endDate: form.getValues('endDate') || undefined,
+      startDate: form.getValues('startDate')
+        ? form.getValues('startDate')
+        : removeDateOffset(startOfMonth(subMonths(new Date(), 3))),
+      endDate: form.getValues('endDate')
+        ? removeDateOffset(endOfDay(form.getValues('endDate')))
+        : null,
       calcBeforeStartDate: true,
     },
-  });
-
-  useEffect(() => {
-    form.setValue('startDate', startDateSave);
   });
 
   let payments = data?.household?.payments || [];
@@ -238,8 +238,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         query: QUERY,
         variables: {
           householdId: ctx.params!.householdId,
-          startDate: startOfMonth(subMonths(new Date(), 3)),
-          endDate: undefined,
+          startDate: removeDateOffset(startOfMonth(subMonths(new Date(), 3))),
+          endDate: null,
           calcBeforeStartDate: true,
         },
       })),

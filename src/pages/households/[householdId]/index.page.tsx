@@ -15,7 +15,7 @@ import { Loader } from '~/components/UI/Loader';
 import { Payment, RecurringPayment } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
-import { roundOn2 } from '~/utils/helper';
+import { removeDateOffset, roundOn2 } from '~/utils/helper';
 import { HouseholdQuery, HouseholdQueryVariables } from './__generated__/index.page.generated';
 
 const HOUSEHOLD_QUERY = gql`
@@ -72,8 +72,8 @@ export default function Household() {
     {
       variables: {
         householdId,
-        startDate: new Date(startOfDay(startOfMonth(new Date()))).toISOString(),
-        endDate: new Date(startOfDay(endOfMonth(new Date()))).toISOString(),
+        startDate: removeDateOffset(startOfDay(startOfMonth(new Date()))),
+        endDate: removeDateOffset(startOfDay(endOfMonth(new Date()))),
       },
     },
   );
@@ -136,8 +136,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         query: HOUSEHOLD_QUERY,
         variables: {
           householdId: ctx.params!.householdId,
-          startDate: startOfDay(startOfMonth(new Date())),
-          endDate: startOfDay(endOfMonth(new Date())),
+          startDate: removeDateOffset(startOfDay(startOfMonth(new Date()))),
+          endDate: removeDateOffset(startOfDay(endOfMonth(new Date()))),
         },
       })),
     },

@@ -1,3 +1,5 @@
+import { subMinutes } from 'date-fns';
+
 export const roundOn2 = (number: number) => {
   return Math.round((number + Number.EPSILON) * 100) / 100;
 };
@@ -7,7 +9,15 @@ export const uuidRegex =
 
 // This function takes a js date object and converts it to a date string a html date input can use
 export const dateToFormInput = (date: Date) => {
-  return date.toISOString().split('T')[0];
+  var day = ('0' + date.getDate()).slice(-2);
+  var month = ('0' + (date.getMonth() + 1)).slice(-2);
+
+  return date.getFullYear() + '-' + month + '-' + day;
+};
+
+// This function takes a js date object and calculates the time which it would be for UTC +0
+export const removeDateOffset = (date: Date) => {
+  return subMinutes(date, new Date().getTimezoneOffset());
 };
 
 // Returns the base url of the website. Either the specified base url or https://DOMAIN
