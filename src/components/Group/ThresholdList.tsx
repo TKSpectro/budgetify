@@ -150,15 +150,13 @@ export function ThresholdList({ me, thresholds, group, refetch, t }: Props) {
             required: { value: true, message: 'Please choose a type' },
           })}
         >
-          <option key={ThresholdType.Goal} value={ThresholdType.Goal}>
-            {ThresholdType.Goal}
-          </option>
-          <option key={ThresholdType.Max} value={ThresholdType.Max}>
-            {ThresholdType.Max}
-          </option>
-          <option key={ThresholdType.Min} value={ThresholdType.Min}>
-            {ThresholdType.Min}
-          </option>
+          {Object.values(ThresholdType).map((value) => {
+            return (
+              <option key={value} value={value}>
+                {value}
+              </option>
+            );
+          })}
         </Select>
       </ManagedModalForm>
 

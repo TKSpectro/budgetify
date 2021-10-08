@@ -117,21 +117,13 @@ export function NewRecurringPayment({ categories, refetch, t }: Props) {
             required: { value: true, message: t('common:intervalMessage') },
           })}
         >
-          <option key={Interval.Daily} value={Interval.Daily}>
-            {Interval.Daily}
-          </option>
-          <option key={Interval.Weekly} value={Interval.Weekly}>
-            {Interval.Weekly}
-          </option>
-          <option key={Interval.Monthly} value={Interval.Monthly}>
-            {Interval.Monthly}
-          </option>
-          <option key={Interval.Quarterly} value={Interval.Quarterly}>
-            {Interval.Quarterly}
-          </option>
-          <option key={Interval.Yearly} value={Interval.Yearly}>
-            {Interval.Yearly}
-          </option>
+          {Object.values(Interval).map((value) => {
+            return (
+              <option key={value} value={value}>
+                {value}
+              </option>
+            );
+          })}
         </Select>
 
         <Input
