@@ -7,7 +7,7 @@ export function Footer() {
   const router = useRouter();
 
   return (
-    <footer id="footer" className="relative z-50 dark:bg-gray-900 pt-24">
+    <footer id="footer" className="relative z-10 dark:bg-gray-900 pt-24">
       <div className="py-8 flex justify-around items-center w-full">
         <div className="flex items-center">
           <div className="text-lg lg:text-2xl font-bold text-brand-500 dark:text-gray-50 mx-16">
