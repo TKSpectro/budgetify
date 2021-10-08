@@ -1,8 +1,10 @@
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { Link } from './Link';
 
 export function Footer() {
   const { t } = useTranslation('common');
+  const router = useRouter();
 
   return (
     <footer id="footer" className="relative z-50 dark:bg-gray-900 pt-24">
@@ -33,6 +35,25 @@ export function Footer() {
           <Link href="/privacy" className="mx-16">
             {t('common:privacy')}
           </Link>
+
+          {/* // Language Switcher */}
+          <div className="mx-16">
+            <select
+              onChange={(locale) => {
+                router.push(router.asPath, undefined, { locale: locale.target.value });
+              }}
+              value={router.locale}
+              className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full rounded-md pl-4 pr-8 py-2 border focus:border-brand-500 focus:ring-brand-500"
+            >
+              {router.locales?.map((locale) => {
+                return (
+                  <option key={locale} value={locale}>
+                    {locale.toUpperCase()}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
         </div>
       </div>
     </footer>
