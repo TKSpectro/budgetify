@@ -175,7 +175,7 @@ export default function Profile() {
               </div>
             </div>
 
-            <div className="">
+            <div>
               <Modal
                 title={t('profile:deleteAccount')}
                 description={t('profile:deleteAccountDescription')}

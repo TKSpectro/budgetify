@@ -159,7 +159,7 @@ export default function Households() {
                     Balance: {household?.sumOfAllPayments}€
                   </span>
                 </div>
-                <div className="">
+                <div>
                   {t('owner')}: {household?.owner?.name}
                 </div>
                 <span className="sm:hidden">Balance: {household?.sumOfAllPayments}€</span>

@@ -64,7 +64,7 @@ export function ModalForm<T>({
                 {/*body*/}
                 {description && (
                   <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                    <h3 className="">{description}</h3>
+                    <h3>{description}</h3>
                   </div>
                 )}
                 <Form form={form} onSubmit={onSubmitHandler}>

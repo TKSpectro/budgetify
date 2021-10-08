@@ -100,7 +100,7 @@ export function InviteManager({ invites, isOwner, refetch, t }: Props) {
           <tbody className="divide-y divide-gray-200 ">
             {invites.map((invite: Invite) => {
               return (
-                <tr key={invite.id} className="">
+                <tr key={invite.id}>
                   <td className="py-4">
                     <div className="max-w-xl ml-2 overflow-auto">
                       <div className="font-bold text-gray-800 dark:text-gray-100">
