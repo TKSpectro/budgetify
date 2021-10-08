@@ -7,7 +7,7 @@ import { useApollo } from '~/utils/apollo';
 import '../styles.css';
 
 function App({ Component, pageProps }: AppProps) {
-  // create the apolloClient when opening the page
+  // Create the apolloClient when opening the page
   const client = useApollo(pageProps.initialClientState);
 
   return (
@@ -21,4 +21,5 @@ function App({ Component, pageProps }: AppProps) {
   );
 }
 
+// Run the app within the next-18next HOC
 export default appWithTranslation(App);

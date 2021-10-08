@@ -9,6 +9,7 @@ import React from 'react';
 import MonthOverview from '~/components/Household/MonthOverview';
 import PaymentOverview from '~/components/Household/PaymentOverview';
 import RecurringPaymentOverview from '~/components/Household/RecurringPaymentOverview';
+import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
@@ -95,7 +96,7 @@ export default function Household() {
 
       {!error && household && (
         <>
-          <div className="mx-4 my-4">
+          <Container big>
             <div className="relative text-6xl text-brand-500">
               {household.name}
               <span className="hidden md:block absolute right-4 top-6 text-base">
@@ -108,7 +109,7 @@ export default function Household() {
             <div className="mt-4 text-4xl">
               {t('totalBalance') + ' ' + roundOn2(sumOfAllPayments) + '€'}
             </div>
-          </div>
+          </Container>
 
           <div className="grid grid-cols-1 xl:grid-cols-3 lg:gap-x-16 overflow-auto">
             <PaymentOverview payments={payments as Payment[]} t={t} />
