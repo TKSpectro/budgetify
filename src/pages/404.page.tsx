@@ -10,7 +10,7 @@ export default function Custom404() {
   return (
     <div>
       <Head>
-        <title>404 - Not found | budgetify</title>
+        <title>404 - {t('title')} | budgetify</title>
       </Head>
       <div className="bg-gradient-to-b from-gray-200 to-brand-500 dark:from-gray-800 dark:to-brand-600">
         <div className="w-9/12 m-auto py-16 min-h-screen flex items-center justify-center">
