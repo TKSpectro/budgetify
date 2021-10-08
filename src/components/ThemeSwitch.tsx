@@ -6,10 +6,6 @@ import { Switch } from './UI/Switch';
 export function ThemeSwitch() {
   const { theme, setTheme } = useTheme();
 
-  function handleChange() {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  }
-
   // Clean and good looking implementation of a switch (link is for vue -> small changes)
   // https://medium.com/front-end-weekly/build-a-html-toggle-switch-in-just-7-lines-of-code-using-vue-tailwindcss-ed215394fcd
   // Also add icons depending on the state
