@@ -86,7 +86,7 @@ export default function Household() {
   const isOwner = household?.owner?.id === data?.me?.id;
 
   return (
-    <div className="sm:mx-24">
+    <>
       <Head>
         <title>{household?.name + ' | ' + 'budgetify'}</title>
       </Head>
@@ -111,7 +111,7 @@ export default function Household() {
             </div>
           </Container>
 
-          <div className="grid grid-cols-1 xl:grid-cols-3 lg:gap-x-8 overflow-auto">
+          <div className="grid grid-cols-1 xl:grid-cols-3 lg:gap-x-8 overflow-auto md:mx-16 md:px-4">
             <PaymentOverview payments={payments as Payment[]} t={t} />
 
             <RecurringPaymentOverview
@@ -123,7 +123,7 @@ export default function Household() {
           </div>
         </>
       )}
-    </div>
+    </>
   );
 }
 
