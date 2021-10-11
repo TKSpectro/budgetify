@@ -108,11 +108,7 @@ export default function GroupPage() {
               {t('groupBalance')}: {group.value}€
             </div>
 
-            <span className="text-right">
-              <NewTransaction members={members as User[]} refetch={refetch} t={t} />
-            </span>
-
-            <div className="hidden md:block absolute right-48 top-2 text-base">
+            <div className="block mt-2 md:absolute md:right-0 md:top-2">
               <Link href={`${router.asPath}/manage`} asButton>
                 {t('common:manage')}
               </Link>
@@ -160,7 +156,13 @@ export default function GroupPage() {
 
       {transactions && transactionCount && (
         <Container>
-          <div className="text-lg font-semibold">{t('common:transactions')}</div>
+          <div className="text-lg font-semibold mb-4">
+            {t('common:transactions')}
+            <span className="text-base font-normal float-right mr-4">
+              <NewTransaction members={members as User[]} refetch={refetch} t={t} />
+            </span>
+          </div>
+
           {transactions.length > 0 || transactionCount > 0 ? (
             <>
               <div className="divide-y-2">

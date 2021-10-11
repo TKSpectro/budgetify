@@ -105,8 +105,7 @@ export function NewTransaction({ members, refetch, t }: Props) {
       <Error title="Could not create transaction." error={createGroupTransactionError} />
       <ModalForm
         title={t('newTransaction')}
-        buttonText={t('newTransaction')}
-        buttonClassName="md:absolute right-4 top-2 text-base"
+        buttonText={<PlusIcon className="w-5 h-5" />}
         form={formCreateGroupTransaction}
         submitText={t('createTransaction')}
         description={t('createTransactionDescription')}
