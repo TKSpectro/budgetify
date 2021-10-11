@@ -118,6 +118,55 @@ export default function MemberTable({ members, owners, currentUserId, refetch, t
 
   const isOwner = !!owners.find((x) => x.id === currentUserId);
 
+  const actionButtons = (member: User) => {
+    return isOwner ? (
+      <>
+        {member.id !== currentUserId ? (
+          <Modal
+            title={t('removeMember')}
+            description={t('removeMemberDescription', { name: member.name })}
+            onSubmit={() => removeMemberHandler(member.id)}
+            buttonText={<UserRemoveIcon className="w-4 h-4 sm:w-6 sm:h-6" />}
+            buttonClassName="mr-2"
+          />
+        ) : (
+          <Modal
+            title={t('leaveGroup')}
+            description={t('leaveGroupDescription')}
+            onSubmit={() => leaveGroupHandler(member.id)}
+            buttonText={<UserRemoveIcon className="w-4 h-4 sm:w-6 sm:h-6" />}
+            buttonClassName="mr-2"
+          />
+        )}
+        {!owners.find((x) => x.id === member.id) ? (
+          <Modal
+            title={t('giveOwnerRole')}
+            description={t('giveOwnerRoleDescription', { name: member.name })}
+            onSubmit={() => makeOwnerHandler(member.id)}
+            buttonText={<StarIcon className="w-4 h-4 sm:w-6 sm:h-6" />}
+          />
+        ) : (
+          <Modal
+            title={t('removeOwnerRole')}
+            description={t('removeOwnerRoleDescription', { name: member.name })}
+            onSubmit={() => removeOwnerHandler(member.id)}
+            buttonText={<StarIconSolid className="w-4 h-4 sm:w-6 sm:h-6" />}
+          />
+        )}
+      </>
+    ) : (
+      currentUserId === member.id && (
+        <Modal
+          title={t('leaveGroup')}
+          description={t('leaveGroupDescription')}
+          onSubmit={() => leaveGroupHandler(member.id)}
+          buttonText={<UserRemoveIcon className="w-4 h-4 sm:w-6 sm:h-6" />}
+          buttonClassName="mr-2"
+        />
+      )
+    );
+  };
+
   return (
     <>
       <Error title={t('removeOwnerError')} error={removeOwnerError} />
@@ -127,69 +176,36 @@ export default function MemberTable({ members, owners, currentUserId, refetch, t
       <table className="table-fixed w-full break-words">
         <thead>
           <tr>
-            <th className="w-3/12">{t('common:name')}</th>
-            <th className="w-3/12">{t('common:email')}</th>
-            <th className="w-6/12">{t('common:actions')}</th>
+            <th className="w-3/12 hidden sm:table-cell">{t('common:name')}</th>
+            <th className="w-3/12 hidden sm:table-cell">{t('common:email')}</th>
+            <th className="w-6/12 hidden sm:table-cell">{t('common:actions')}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 text-center">
           {members.map((member: User) => {
             return (
               <tr key={member.id}>
-                <td>
-                  <div className=" text-gray-800 dark:text-gray-100 my-4">{member.name}</div>
+                <td className="py-2 sm:py-4">
+                  <div className=" text-gray-800 dark:text-gray-100 my-4 hidden sm:block">
+                    {member.name}
+                  </div>
+                  <div className="sm:hidden text-left font-medium text-gray-800 dark:text-gray-100">
+                    {t('common:name')}
+                    <span className="float-right font-normal">{member.name}</span>
+                  </div>
+                  <div className="sm:hidden text-left font-medium text-gray-800 dark:text-gray-100">
+                    {t('common:email')}
+                    <span className="float-right font-normal">{member.email}</span>
+                  </div>
+                  <div className="sm:hidden text-left font-medium text-gray-800 dark:text-gray-100">
+                    {t('common:actions')}
+                    <span className="float-right font-normal">{actionButtons(member)}</span>
+                  </div>
                 </td>
-                <td>
+                <td className="hidden sm:table-cell">
                   <div className=" text-gray-800 dark:text-gray-100">{member.email}</div>
                 </td>
-                <td>
-                  {isOwner ? (
-                    <>
-                      {member.id !== currentUserId ? (
-                        <Modal
-                          title={t('removeMember')}
-                          description={t('removeMemberDescription', { name: member.name })}
-                          onSubmit={() => removeMemberHandler(member.id)}
-                          buttonText={<UserRemoveIcon className="w-6 h-6" />}
-                          buttonClassName="mr-2"
-                        />
-                      ) : (
-                        <Modal
-                          title={t('leaveGroup')}
-                          description={t('leaveGroupDescription')}
-                          onSubmit={() => leaveGroupHandler(member.id)}
-                          buttonText={<UserRemoveIcon className="w-6 h-6" />}
-                          buttonClassName="mr-2"
-                        />
-                      )}
-                      {!owners.find((x) => x.id === member.id) ? (
-                        <Modal
-                          title={t('giveOwnerRole')}
-                          description={t('giveOwnerRoleDescription', { name: member.name })}
-                          onSubmit={() => makeOwnerHandler(member.id)}
-                          buttonText={<StarIcon className="w-6 h-6" />}
-                        />
-                      ) : (
-                        <Modal
-                          title={t('removeOwnerRole')}
-                          description={t('removeOwnerRoleDescription', { name: member.name })}
-                          onSubmit={() => removeOwnerHandler(member.id)}
-                          buttonText={<StarIconSolid className="w-6 h-6" />}
-                        />
-                      )}
-                    </>
-                  ) : (
-                    currentUserId === member.id && (
-                      <Modal
-                        title={t('leaveGroup')}
-                        description={t('leaveGroupDescription')}
-                        onSubmit={() => leaveGroupHandler(member.id)}
-                        buttonText={<UserRemoveIcon className="w-6 h-6" />}
-                        buttonClassName="mr-2"
-                      />
-                    )
-                  )}
-                </td>
+                <td className="hidden sm:table-cell">{actionButtons(member)}</td>
               </tr>
             );
           })}

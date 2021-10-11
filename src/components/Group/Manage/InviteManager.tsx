@@ -96,7 +96,7 @@ export function InviteManager({ invites, isOwner, refetch, t }: Props) {
       )}
 
       {invites.length !== 0 ? (
-        <table className="w-full mt-4">
+        <table className="table-fixed w-full break-words mt-4 text-center">
           <thead>
             <tr>
               <th className="w-1/3 hidden sm:table-cell">{t('common:email')}</th>
@@ -108,28 +108,51 @@ export function InviteManager({ invites, isOwner, refetch, t }: Props) {
             {invites.map((invite: Invite) => {
               return (
                 <tr key={invite.id}>
-                  <td className="py-4">
-                    <div className="max-w-xl ml-2 overflow-auto">
-                      <div className=" text-gray-800 dark:text-gray-100">{invite.invitedEmail}</div>
-                      <div className="table-cell sm:hidden   text-gray-800 dark:text-gray-100">
+                  <td className="py-2 sm:py-4">
+                    <div className=" text-gray-800 dark:text-gray-100 hidden sm:block">
+                      {invite.invitedEmail}
+                    </div>
+                    <div className="sm:hidden text-left font-medium text-gray-800 dark:text-gray-100">
+                      {t('common:email')}
+                      <span className="float-right font-normal">{invite.invitedEmail}</span>
+                    </div>
+                    <div className="sm:hidden text-left font-medium text-gray-800 dark:text-gray-100">
+                      {t('common:expires')}
+                      <span className="float-right font-normal">
                         {new Date(invite.validUntil).toDateString()}
-                      </div>
+                      </span>
+                    </div>
+                    <div className="sm:hidden text-left font-medium text-gray-800 dark:text-gray-100">
+                      {t('common:actions')}
+                      <span className="float-right font-normal">
+                        {isOwner && (
+                          <Modal
+                            title={t('removeInvite')}
+                            description={t('removeInviteDescription', {
+                              email: invite.invitedEmail,
+                            })}
+                            onSubmit={() => removeHandler(invite)}
+                            buttonText={<TrashIcon className="w-4 h-4 sm:w-6 sm:h-6" />}
+                            submitText={t('removeInvite')}
+                          />
+                        )}
+                      </span>
                     </div>
                   </td>
-                  <td className="py-4 hidden sm:table-cell">
+                  <td className="hidden sm:table-cell">
                     <div className="max-w-xl overflow-auto">
                       <div className="ml-2  text-gray-800 dark:text-gray-100">
                         {new Date(invite.validUntil).toDateString()}
                       </div>
                     </div>
                   </td>
-                  <td className="py-4 mr-4 float-right">
+                  <td className="hidden sm:table-cell">
                     {isOwner && (
                       <Modal
                         title={t('removeInvite')}
                         description={t('removeInviteDescription', { email: invite.invitedEmail })}
                         onSubmit={() => removeHandler(invite)}
-                        buttonText={<TrashIcon className="w-6 h-6" />}
+                        buttonText={<TrashIcon className="w-4 h-4 sm:w-6 sm:h-6" />}
                         submitText={t('removeInvite')}
                       />
                     )}
