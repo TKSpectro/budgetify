@@ -12,6 +12,7 @@ import { MeQuery, MeQueryVariables } from './__generated__/Header.generated';
 interface Props extends ComponentProps<'a'> {
   noBorder?: boolean;
   brand?: boolean;
+  logo?: boolean;
 }
 
 export const ME_QUERY = gql`
@@ -30,16 +31,26 @@ export function Header() {
 
   const { t } = useTranslation('common');
 
-  function HeaderLink({ href, className, brand = false, noBorder = false, ...props }: Props) {
+  function HeaderLink({
+    href,
+    className,
+    brand = false,
+    noBorder = false,
+    logo = false,
+    ...props
+  }: Props) {
     const content = (
       <a
         className={clsx(
-          'p-2 md:px-4 my-1 md:my-0 md:mx-2 text-center rounded transition-colors duration-300',
+          'p-2 md:px-4 my-1 md:my-0 md:mx-2 text-center rounded transition-colors duration-300 ',
           className,
-          !noBorder && 'border md:border-0 border-brand-500',
-          brand && 'text-white  bg-brand-500 hover:bg-opacity-70 dark:hover:bg-opacity-80',
+          !noBorder && ' border md:border-0 border-brand-500',
+          brand && ' text-white  bg-brand-500 hover:bg-opacity-70 dark:hover:bg-opacity-80',
           !brand &&
-            'text-gray-600 hover:bg-gray-300 hover:bg-opacity-100 dark:hover:bg-gray-700 dark:hover:bg-opacity-100',
+            !logo &&
+            ' text-gray-600 hover:bg-gray-300 hover:bg-opacity-100 dark:hover:bg-gray-700 dark:hover:bg-opacity-100 ',
+          logo &&
+            'text-2xl text-brand-500 dark:text-brand-500 font-bold hover:bg-gray-300 hover:bg-opacity-100 dark:hover:bg-gray-700 dark:hover:bg-opacity-100',
         )}
         onClick={() => {
           if (window.screen.width < 768) toggleNavbarHandler();
@@ -65,11 +76,7 @@ export function Header() {
       <nav className="py-2 md:py-4">
         <div className="container px-4 mx-auto md:flex md:items-center">
           <div className="flex justify-between items-center">
-            <HeaderLink
-              className="text-2xl text-brand-500 dark:text-brand-500 font-medium"
-              href="/"
-              noBorder
-            >
+            <HeaderLink href="/" logo noBorder>
               budgetify
             </HeaderLink>
 
