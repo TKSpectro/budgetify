@@ -143,12 +143,10 @@ export default function MemberTable({ members, owner, currentUserId, refetch, t 
             return (
               <tr key={member.id}>
                 <td>
-                  <div className="font-bold text-gray-800 dark:text-gray-100 my-4">
-                    {member.name}
-                  </div>
+                  <div className=" text-gray-800 dark:text-gray-100 my-4">{member.name}</div>
                 </td>
                 <td>
-                  <div className="font-bold text-gray-800 dark:text-gray-100">{member.email}</div>
+                  <div className=" text-gray-800 dark:text-gray-100">{member.email}</div>
                 </td>
                 <td className="py-4">
                   {currentUserId !== owner.id ? (

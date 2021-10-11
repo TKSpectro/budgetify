@@ -128,13 +128,11 @@ export default function InviteManager({ invites, owner, currentUserId, refetch, 
             return (
               <tr key={invite.id}>
                 <td className="py-2">
-                  <div className="font-bold text-gray-800 dark:text-gray-100">
-                    {invite.invitedEmail}
-                  </div>
-                  <div className="block sm:hidden font-bold text-gray-800 dark:text-gray-100">
+                  <div className="text-gray-800 dark:text-gray-100">{invite.invitedEmail}</div>
+                  <div className="block sm:hidden text-gray-800 dark:text-gray-100">
                     {new Date(invite.validUntil).toDateString()}
                   </div>
-                  <div className="block sm:hidden font-bold text-gray-800 dark:text-gray-100">
+                  <div className="block sm:hidden text-gray-800 dark:text-gray-100">
                     {currentUserId === owner.id && (
                       <Button onClick={() => onRemoveClickHandler(invite)}>
                         <TrashIcon className="w-6 h-6" />
@@ -143,7 +141,7 @@ export default function InviteManager({ invites, owner, currentUserId, refetch, 
                   </div>
                 </td>
                 <td className="py-4 hidden sm:table-cell">
-                  <div className="font-bold text-gray-800 dark:text-gray-100">
+                  <div className="text-gray-800 dark:text-gray-100">
                     {new Date(invite.validUntil).toDateString()}
                   </div>
                 </td>

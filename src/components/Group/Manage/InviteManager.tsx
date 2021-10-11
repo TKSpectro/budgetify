@@ -96,24 +96,29 @@ export function InviteManager({ invites, isOwner, refetch, t }: Props) {
       )}
 
       {invites.length !== 0 ? (
-        <table className="w-full">
+        <table className="w-full mt-4">
+          <thead>
+            <tr>
+              <th className="w-1/3 hidden sm:table-cell">{t('common:email')}</th>
+              <th className="w-1/3 hidden sm:table-cell">{t('common:expires')}</th>
+              <th className="w-1/3 hidden sm:table-cell">{t('common:actions')}</th>
+            </tr>
+          </thead>
           <tbody className="divide-y divide-gray-200 ">
             {invites.map((invite: Invite) => {
               return (
                 <tr key={invite.id}>
                   <td className="py-4">
                     <div className="max-w-xl ml-2 overflow-auto">
-                      <div className="font-bold text-gray-800 dark:text-gray-100">
-                        {invite.invitedEmail}
-                      </div>
-                      <div className="table-cell sm:hidden  font-bold text-gray-800 dark:text-gray-100">
+                      <div className=" text-gray-800 dark:text-gray-100">{invite.invitedEmail}</div>
+                      <div className="table-cell sm:hidden   text-gray-800 dark:text-gray-100">
                         {new Date(invite.validUntil).toDateString()}
                       </div>
                     </div>
                   </td>
                   <td className="py-4 hidden sm:table-cell">
                     <div className="max-w-xl overflow-auto">
-                      <div className="ml-2 font-bold text-gray-800 dark:text-gray-100">
+                      <div className="ml-2  text-gray-800 dark:text-gray-100">
                         {new Date(invite.validUntil).toDateString()}
                       </div>
                     </div>
