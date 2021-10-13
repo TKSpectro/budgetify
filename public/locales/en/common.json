@@ -54,6 +54,6 @@
 
   "//": "API ERRORS",
   "100": "Email or password is wrong.",
-  "450": "You are the owner of {{householdCount}} households. Please go to each household and give another user the owner role. Those are {{households}}",
-  "451": "You are the owner of {{groupCount}} groups. Please go to each group and give another user the owner role. Those are {{groups}}"
+  "400": "You are the owner of {{householdCount}} households. Please go to each household and give another user the owner role. Those are {{households}}",
+  "450": "You are the owner of {{groupCount}} groups. Please go to each group and give another user the owner role. Those are {{groups}}"
 }
