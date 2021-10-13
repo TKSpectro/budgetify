@@ -1,4 +1,4 @@
-import { ApolloError, AuthenticationError } from 'apollo-server-micro';
+import { AuthenticationError } from 'apollo-server-micro';
 import { compareSync, hashSync } from 'bcrypt';
 import { randomUUID } from 'crypto';
 import jwt from 'jsonwebtoken';
@@ -118,8 +118,9 @@ export const AuthMutation = extendType({
             email: args.email,
           },
         });
+        console.log(ctx.locale);
         if (!user) {
-          throw new ApolloError('Authorization Error');
+          throw new AuthenticationError('Email or password is wrong.');
         }
         const { id, hashedPassword, otp } = user;
 
@@ -130,11 +131,11 @@ export const AuthMutation = extendType({
           if (args.password === otp) {
             await prisma.user.update({ where: { id: user.id }, data: { otp: null } });
           } else {
-            throw new Error('Authorization Error');
+            throw new AuthenticationError('Email or password is wrong.');
           }
         } else {
           if (!compareSync(args.password, hashedPassword)) {
-            throw new Error('Authorization Error');
+            throw new AuthenticationError('Email or password is wrong.');
           }
         }
 
@@ -180,7 +181,7 @@ export const AuthMutation = extendType({
       authorize: authIsLoggedIn,
       async resolve(_, args, ctx) {
         if (args.password !== args.passwordRepeat) {
-          throw new ApolloError('Passwords did not match! Try again.');
+          throw new AuthenticationError('Passwords did not match! Please try again.');
         }
 
         args.password = hashSync(args.password, 10);
@@ -192,7 +193,7 @@ export const AuthMutation = extendType({
         });
 
         if (!foundUser) {
-          throw new ApolloError('No account found for the given email.');
+          throw new AuthenticationError('Logged in user is not valid.');
         }
 
         const user = await prisma.user.update({
