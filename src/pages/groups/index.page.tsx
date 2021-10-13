@@ -3,12 +3,12 @@ import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/dist/shared/lib/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
-import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
 import { ModalForm } from '~/components/UI/ModalForm';
 import { MutationUseInviteArgs } from '~/graphql/__generated__/types';
@@ -153,17 +153,17 @@ export default function Groups() {
             </ModalForm>
           </div>
         </div>
-        {groups &&
-          groups.map((group) => {
-            return (
-              <Link href={`/groups/${group?.id}`} key={group?.id} noUnderline>
-                <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer">
-                  <div className="text-xl">{group?.name}</div>
-                  <span className="font-light">{t('currentValue') + group?.value}€</span>
-                </div>
-              </Link>
-            );
-          })}
+
+        {groups?.map((group) => {
+          return (
+            <Link href={`/groups/${group?.id}`} passHref key={group?.id}>
+              <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer">
+                <div className="text-xl">{group?.name}</div>
+                <span className="font-light">{t('currentValue') + group?.value}€</span>
+              </div>
+            </Link>
+          );
+        })}
       </Container>
     </>
   );
