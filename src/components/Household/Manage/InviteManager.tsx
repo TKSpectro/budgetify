@@ -99,7 +99,7 @@ export default function InviteManager({ invites, owner, currentUserId, refetch, 
         setShowModal={setShowRemoveModal}
       />
 
-      {currentUserId === owner.id && (
+      {currentUserId === owner?.id && (
         <ModalForm
           title={t('newInvite')}
           onSubmit={onSubmitHandler}
@@ -114,61 +114,62 @@ export default function InviteManager({ invites, owner, currentUserId, refetch, 
           />
         </ModalForm>
       )}
-
-      <table className="table-fixed w-full break-words mt-4">
-        <thead>
-          <tr>
-            <th className="w-1/3 hidden sm:table-cell">{t('common:email')}</th>
-            <th className="w-1/3 hidden sm:table-cell">{t('common:expires')}</th>
-            <th className="w-1/3 hidden sm:table-cell">{t('common:actions')}</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200 text-center">
-          {invites.map((invite: Invite) => {
-            return (
-              <tr key={invite.id}>
-                <td className="py-2">
-                  <div className="text-gray-800 dark:text-gray-100 hidden sm:block">
-                    {invite.invitedEmail}
-                  </div>
-                  <div className="sm:hidden text-left font-medium text-gray-800 dark:text-gray-100">
-                    {t('common:email')}
-                    <span className="float-right font-normal">{invite.invitedEmail}</span>
-                  </div>
-                  <div className="sm:hidden text-left font-medium text-gray-800 dark:text-gray-100">
-                    {t('common:expires')}
-                    <span className="float-right font-normal">
+      {invites.length !== 0 ? (
+        <table className="table-fixed w-full break-words mt-4">
+          <thead>
+            <tr>
+              <th className="w-1/3 hidden sm:table-cell">{t('common:email')}</th>
+              <th className="w-1/3 hidden sm:table-cell">{t('common:expires')}</th>
+              <th className="w-1/3 hidden sm:table-cell">{t('common:actions')}</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 text-center">
+            {invites.map((invite: Invite) => {
+              return (
+                <tr key={invite.id}>
+                  <td className="py-2">
+                    <div className="text-gray-800 dark:text-gray-100 hidden sm:block">
+                      {invite.invitedEmail}
+                    </div>
+                    <div className="sm:hidden text-left font-medium text-gray-800 dark:text-gray-100">
+                      {t('common:email')}
+                      <span className="float-right font-normal">{invite.invitedEmail}</span>
+                    </div>
+                    <div className="sm:hidden text-left font-medium text-gray-800 dark:text-gray-100">
+                      {t('common:expires')}
+                      <span className="float-right font-normal">
+                        {new Date(invite.validUntil).toDateString()}
+                      </span>
+                    </div>
+                    <div className="sm:hidden text-left font-medium text-gray-800 dark:text-gray-100">
+                      {t('common:actions')}
+                      <span className="float-right font-normal">
+                        {currentUserId === owner?.id && (
+                          <Button onClick={() => onRemoveClickHandler(invite)}>
+                            <TrashIcon className="w-4 h-4 sm:w-6 sm:h-6" />
+                          </Button>
+                        )}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="py-4 hidden sm:table-cell">
+                    <div className="text-gray-800 dark:text-gray-100">
                       {new Date(invite.validUntil).toDateString()}
-                    </span>
-                  </div>
-                  <div className="sm:hidden text-left font-medium text-gray-800 dark:text-gray-100">
-                    {t('common:actions')}
-                    <span className="float-right font-normal">
-                      {currentUserId === owner.id && (
-                        <Button onClick={() => onRemoveClickHandler(invite)}>
-                          <TrashIcon className="w-4 h-4 sm:w-6 sm:h-6" />
-                        </Button>
-                      )}
-                    </span>
-                  </div>
-                </td>
-                <td className="py-4 hidden sm:table-cell">
-                  <div className="text-gray-800 dark:text-gray-100">
-                    {new Date(invite.validUntil).toDateString()}
-                  </div>
-                </td>
-                <td className="py-4 hidden sm:table-cell">
-                  {currentUserId === owner.id && (
-                    <Button onClick={() => onRemoveClickHandler(invite)}>
-                      <TrashIcon className="w-6 h-6" />
-                    </Button>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                    </div>
+                  </td>
+                  <td className="py-4 hidden sm:table-cell">
+                    {currentUserId === owner?.id && (
+                      <Button onClick={() => onRemoveClickHandler(invite)}>
+                        <TrashIcon className="w-6 h-6" />
+                      </Button>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      ) : null}
     </>
   );
 }

@@ -16,5 +16,6 @@
   "removeInviteDescription": "Sicher, dass die Einladung an {{email}} entfernt werden soll?",
   "sendInvite": "Einladung senden",
   "createInviteError": "Einladung konnte nicht erstellt werden.",
-  "removeInviteError": "Einladung konnte nicht entfernt werden."
+  "removeInviteError": "Einladung konnte nicht entfernt werden.",
+  "noPendingInvites": "Keine aktiven Einladungen."
 }
