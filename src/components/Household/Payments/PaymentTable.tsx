@@ -14,10 +14,10 @@ export function PaymentTable({ payments, t }: Props) {
     <table className="table-fixed w-full break-words">
       <thead>
         <tr>
-          <th className="w-1/4 hidden md:table-cell">{t('common:name')}</th>
-          <th className="w-1/4 hidden md:table-cell">{t('common:date')}</th>
-          <th className="w-1/4 hidden lg:table-cell">{t('common:category')}</th>
-          <th className="w-1/4 hidden md:table-cell">{t('common:value')}</th>
+          <th className="w-5/12 hidden md:table-cell">{t('common:name')}</th>
+          <th className="w-2/12 hidden md:table-cell">{t('common:date')}</th>
+          <th className="w-3/12 hidden lg:table-cell">{t('common:category')}</th>
+          <th className="w-2/12 hidden md:table-cell text-right pr-10">{t('common:value')}</th>
         </tr>
       </thead>
       <tbody className="divide-y divide-gray-200 text-center">
