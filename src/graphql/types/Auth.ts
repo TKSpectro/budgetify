@@ -118,7 +118,7 @@ export const AuthMutation = extendType({
             email: args.email,
           },
         });
-        console.log(ctx.locale);
+
         if (!user) {
           throw new AuthenticationError('Email or password is wrong.');
         }
