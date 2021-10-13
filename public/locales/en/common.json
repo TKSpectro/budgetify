@@ -54,7 +54,11 @@
 
   "//": "API ERRORS",
   "90": "Token is not valid. Please login again.",
+
   "100": "Email or password is wrong.",
+  "101": "There already exists an account with this email.",
+  "102": "Passwords did not match! Please try again.",
+
   "400": "You are the owner of {{householdCount}} households. Please go to each household and give another user the owner role. Those are {{households}}",
   "450": "You are the owner of {{groupCount}} groups. Please go to each group and give another user the owner role. Those are {{groups}}"
 }

@@ -97,9 +97,7 @@ export const AuthMutation = extendType({
             token,
           };
         } catch (error) {
-          throw new AuthenticationError(
-            'Error while signing up. Probably a user exists with the send email',
-          );
+          throw new AuthenticationError('101');
         }
       },
     });
@@ -181,7 +179,7 @@ export const AuthMutation = extendType({
       authorize: authIsLoggedIn,
       async resolve(_, args, ctx) {
         if (args.password !== args.passwordRepeat) {
-          throw new AuthenticationError('Passwords did not match! Please try again.');
+          throw new AuthenticationError('102');
         }
 
         args.password = hashSync(args.password, 10);
@@ -193,7 +191,7 @@ export const AuthMutation = extendType({
         });
 
         if (!foundUser) {
-          throw new AuthenticationError('Logged in user is not valid.');
+          throw new AuthenticationError('90');
         }
 
         const user = await prisma.user.update({

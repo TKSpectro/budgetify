@@ -54,7 +54,11 @@
 
   "//": "API ERRORS",
   "90": "Token ist nicht gültig. Bitte loggen Sie sich erneut ein.",
+
   "100": "Email oder Passwort falsch.",
+  "101": "Es existiert bereits ein Konto mit dieser Email-Adresse.",
+  "102": "Passwörter stimmen nicht überein! Bitte erneut versuchen.",
+
   "400": "Ihnen gehören {{householdCount}} Haushalte. Bitte gehen Sie zu diesen und geben Sie einem anderen Nutzer die Besitzer Rolle. Die betroffenen Haushalte sind {{households}}",
   "450": "Ihnen gehören {{groupCount}} Gruppen. Bitte gehen Sie zu diesen und geben Sie einem anderen Nutzer die Besitzer Rolle. Die betroffenen Gruppen sind {{groups}}"
 }
