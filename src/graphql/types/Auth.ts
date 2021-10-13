@@ -120,7 +120,7 @@ export const AuthMutation = extendType({
         });
 
         if (!user) {
-          throw new AuthenticationError('Email or password is wrong.');
+          throw new AuthenticationError('100');
         }
         const { id, hashedPassword, otp } = user;
 
@@ -131,11 +131,11 @@ export const AuthMutation = extendType({
           if (args.password === otp) {
             await prisma.user.update({ where: { id: user.id }, data: { otp: null } });
           } else {
-            throw new AuthenticationError('Email or password is wrong.');
+            throw new AuthenticationError('100');
           }
         } else {
           if (!compareSync(args.password, hashedPassword)) {
-            throw new AuthenticationError('Email or password is wrong.');
+            throw new AuthenticationError('100');
           }
         }
 

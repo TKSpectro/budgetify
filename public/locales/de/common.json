@@ -50,5 +50,10 @@
   "refresh": "Aktualisieren",
   "privacy": "Datenschutz",
   "imprint": "Impressum",
-  "loadingError": "Fehler beim Laden der Daten."
+  "loadingError": "Fehler beim Laden der Daten.",
+
+  "//": "API ERRORS",
+  "100": "Email oder Passwort falsch.",
+  "450": "Ihnen gehören {{householdCount}} Haushalte. Bitte gehen Sie zu diesen und geben Sie einem anderen Nutzer die Besitzer Rolle. Die betroffenen Haushalte sind {{households}}",
+  "451": "Ihnen gehören {{groupCount}} Gruppen. Bitte gehen Sie zu diesen und geben Sie einem anderen Nutzer die Besitzer Rolle. Die betroffenen Gruppen sind {{groups}}"
 }
