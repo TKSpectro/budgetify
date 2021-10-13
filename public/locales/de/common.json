@@ -53,6 +53,7 @@
   "loadingError": "Fehler beim Laden der Daten.",
 
   "//": "API ERRORS",
+  "90": "Token ist nicht gültig. Bitte loggen Sie sich erneut ein.",
   "100": "Email oder Passwort falsch.",
   "400": "Ihnen gehören {{householdCount}} Haushalte. Bitte gehen Sie zu diesen und geben Sie einem anderen Nutzer die Besitzer Rolle. Die betroffenen Haushalte sind {{households}}",
   "450": "Ihnen gehören {{groupCount}} Gruppen. Bitte gehen Sie zu diesen und geben Sie einem anderen Nutzer die Besitzer Rolle. Die betroffenen Gruppen sind {{groups}}"

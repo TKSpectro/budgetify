@@ -47,7 +47,7 @@ export async function context({ req, res }: ContextInput): Promise<Context> {
             path: '/',
           });
 
-          throw new AuthenticationError('Token is not valid. Please login again.');
+          throw new AuthenticationError('90');
         }
 
         user.id = foundUser.id;
@@ -63,7 +63,7 @@ export async function context({ req, res }: ContextInput): Promise<Context> {
       path: '/',
     });
 
-    throw new AuthenticationError('Token is not valid. Please login again.');
+    throw new AuthenticationError('90');
   }
 
   const locale = determineUserLang(req.headers['accept-language']?.split(',') || []);
