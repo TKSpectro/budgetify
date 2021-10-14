@@ -54,6 +54,8 @@ export async function context({ req, res }: ContextInput): Promise<Context> {
         user.email = foundUser.email;
         user.isAdmin = foundUser.isAdmin;
       }
+    } else {
+      throw new AuthenticationError('90');
     }
   } catch (error) {
     destroyCookie({ res }, 'authToken', {
