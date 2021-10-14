@@ -2,6 +2,7 @@
   "groupBalance": "Group Balance",
   "memberBalances": "Member Balances",
   "transactionsNotFoundError": "Could not find any transactions. Create your first one.",
+  "thresholdsNotFoundError": "Could not find any thresholds. Create your first one.",
 
   "showing": "Showing",
   "to": "to",

@@ -1,4 +1,4 @@
-import { ApolloError, AuthenticationError } from 'apollo-server-micro';
+import { AuthenticationError } from 'apollo-server-micro';
 import { compareSync, hashSync } from 'bcrypt';
 import { randomUUID } from 'crypto';
 import jwt from 'jsonwebtoken';
@@ -97,9 +97,7 @@ export const AuthMutation = extendType({
             token,
           };
         } catch (error) {
-          throw new AuthenticationError(
-            'Error while signing up. Probably a user exists with the send email',
-          );
+          throw new AuthenticationError('101');
         }
       },
     });
@@ -118,8 +116,9 @@ export const AuthMutation = extendType({
             email: args.email,
           },
         });
+
         if (!user) {
-          throw new ApolloError('Authorization Error');
+          throw new AuthenticationError('100');
         }
         const { id, hashedPassword, otp } = user;
 
@@ -130,11 +129,11 @@ export const AuthMutation = extendType({
           if (args.password === otp) {
             await prisma.user.update({ where: { id: user.id }, data: { otp: null } });
           } else {
-            throw new Error('Authorization Error');
+            throw new AuthenticationError('100');
           }
         } else {
           if (!compareSync(args.password, hashedPassword)) {
-            throw new Error('Authorization Error');
+            throw new AuthenticationError('100');
           }
         }
 
@@ -180,7 +179,7 @@ export const AuthMutation = extendType({
       authorize: authIsLoggedIn,
       async resolve(_, args, ctx) {
         if (args.password !== args.passwordRepeat) {
-          throw new ApolloError('Passwords did not match! Try again.');
+          throw new AuthenticationError('102');
         }
 
         args.password = hashSync(args.password, 10);
@@ -192,7 +191,7 @@ export const AuthMutation = extendType({
         });
 
         if (!foundUser) {
-          throw new ApolloError('No account found for the given email.');
+          throw new AuthenticationError('90');
         }
 
         const user = await prisma.user.update({

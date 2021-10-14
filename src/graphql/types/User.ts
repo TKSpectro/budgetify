@@ -139,13 +139,12 @@ export const UserMutation = extendType({
         // Prisma always returns an array. So we can just check for then length of it,
         // if the length is 0 the user does not own any households or groups
         if (ownedHouseholds.length > 0) {
-          throw new ApolloError(
-            `You are the owner of ${
-              ownedHouseholds.length
-            } household(s). Please go to each household and give another user the owner role. Households: ${ownedHouseholds
-              .map((household) => household.name)
-              .join(', ')}`,
-          );
+          throw new ApolloError('400', undefined, {
+            variables: {
+              householdCount: ownedHouseholds.length,
+              households: ownedHouseholds.map((household) => household.name).join(', '),
+            },
+          });
         }
 
         if (ownedGroups.length > 0) {
@@ -157,13 +156,9 @@ export const UserMutation = extendType({
             }
           });
 
-          throw new ApolloError(
-            `You are the single owner of ${
-              ownedGroups.length
-            } groups. Please go to each group and give another user the owner role. Households: ${names.join(
-              ', ',
-            )}`,
-          );
+          throw new ApolloError('450', undefined, {
+            variables: { groupCount: ownedGroups.length, groups: names.join(', ') },
+          });
         }
 
         return prisma.user.update({

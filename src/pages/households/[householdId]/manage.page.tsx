@@ -69,9 +69,9 @@ export default function ManageHousehold() {
   const currentUserId = data?.me?.id || '';
 
   const household = data?.household;
-  const owner = household?.owner;
-  const members = household?.members;
-  const invites = household?.invites;
+  const owner = household?.owner || {};
+  const members = household?.members || [];
+  const invites = household?.invites || [];
 
   return (
     <>
@@ -84,41 +84,40 @@ export default function ManageHousehold() {
           title={t('householdNotFoundError')}
           error={!loading && !household ? '' : undefined}
         />
-        <Loader loading={loading} />
 
-        {!loading && !error && members && (
-          <MemberTable
-            members={members as User[]}
-            owner={owner as User}
-            currentUserId={currentUserId}
-            refetch={refetch}
-            t={t}
-          />
-        )}
+        <MemberTable
+          members={members as User[]}
+          owner={owner as User}
+          currentUserId={currentUserId}
+          refetch={refetch}
+          t={t}
+        />
+
+        <Loader loading={loading} />
       </Container>
+
       <Container>
-        <Error title={t('invitesError')} error={error} />
-        <Error title={t('invitesNotFoundError')} error={!loading && !invites ? '' : undefined} />
         <Loader loading={loading} />
 
-        {!loading && !error && invites && (
-          <InviteManager
-            invites={invites as Invite[]}
-            owner={owner as User}
-            currentUserId={currentUserId}
-            refetch={refetch}
-            t={t}
-          />
-        )}
+        <InviteManager
+          invites={invites as Invite[]}
+          owner={owner as User}
+          currentUserId={currentUserId}
+          refetch={refetch}
+          t={t}
+        />
+
+        <Error
+          title={t('noPendingInvites')}
+          error={!loading && invites.length === 0 ? '' : undefined}
+        />
       </Container>
     </>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  authenticatedRoute(ctx, undefined, {
-    //CHECK_HOUSEHOLD_OWNER: ctx.query.householdId as string,
-  });
+  authenticatedRoute(ctx);
 
   return {
     props: {

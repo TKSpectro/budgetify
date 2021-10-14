@@ -2,6 +2,7 @@
   "groupBalance": "Gruppen Balance",
   "memberBalances": "Mitglieder Balancen",
   "transactionsNotFoundError": "Keine Transaktionen gefunden.",
+  "thresholdsNotFoundError": "Keine Schwellenwerte gefunden.",
 
   "showing": "Zeige",
   "to": "bis",

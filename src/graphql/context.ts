@@ -1,5 +1,7 @@
+import { AuthenticationError } from 'apollo-server-micro';
 import jwt from 'jsonwebtoken';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import i18n from 'next-i18next.config';
 import { destroyCookie } from 'nookies';
 import { prisma } from '~/utils/prisma';
 
@@ -18,6 +20,7 @@ export interface Context {
   req: NextApiRequest;
   res: NextApiResponse;
   user: ContextUser;
+  locale: string;
 }
 
 export async function context({ req, res }: ContextInput): Promise<Context> {
@@ -44,7 +47,7 @@ export async function context({ req, res }: ContextInput): Promise<Context> {
             path: '/',
           });
 
-          throw new Error('Context: Token was not valid');
+          throw new AuthenticationError('90');
         }
 
         user.id = foundUser.id;
@@ -53,8 +56,31 @@ export async function context({ req, res }: ContextInput): Promise<Context> {
       }
     }
   } catch (error) {
-    throw new Error('Context: Token was not valid');
+    destroyCookie({ res }, 'authToken', {
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 72576000,
+      httpOnly: true,
+      path: '/',
+    });
+
+    throw new AuthenticationError('90');
   }
 
-  return { req, res, user } as Context;
+  const locale = determineUserLang(req.headers['accept-language']?.split(',') || []);
+
+  return { req, res, user, locale } as Context;
+}
+
+export function determineUserLang(acceptedLangs: string[]) {
+  const supportedLangs = i18n.i18n.locales;
+  const defaultLang = i18n.i18n.defaultLocale;
+
+  const acceptedLangCodes = acceptedLangs.map(stripCountry);
+  const supportedLangCodes = Object.values(supportedLangs);
+  const matchingLangCode = acceptedLangCodes.find((code) => supportedLangCodes.includes(code));
+
+  return matchingLangCode || defaultLang;
+}
+function stripCountry(lang: string) {
+  return lang.trim().replace('_', '-').split('-')[0];
 }

@@ -1,13 +1,34 @@
+import { ApolloError } from '@apollo/client';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 
 interface Props {
   title: string;
-  error?: Error | string;
+  error?: Error | string | ApolloError;
   className?: string;
 }
 
 export function Error({ title, error, className }: Props) {
+  const { t } = useTranslation('common');
   if (typeof error === 'undefined') return null;
+
+  let printableError = '';
+
+  if (typeof error === 'string') {
+    printableError = error;
+  } else if ('graphQLErrors' in error) {
+    // If the error is an ApolloError we can localize the given message, even with given variables
+    // which need to be given in the extensions of the error
+
+    error.graphQLErrors.forEach((error, index, array) => {
+      // look up message in i18n (should be a number code) and
+      // if given use the variables for interpolation in i18n
+      printableError += t(error.message, { ...error.extensions?.variables });
+      array.length > 1 && index !== array.length - 1 ? (printableError += ' --- ') : '';
+    });
+  } else {
+    printableError = error.message;
+  }
 
   return (
     <div
@@ -16,10 +37,8 @@ export function Error({ title, error, className }: Props) {
         className,
       )}
     >
-      {title && <h3 className="text-sm font-medium text-red-700 dark:text-red-500">{title}</h3>}
-      <div className="text-sm text-red-500 dark:text-red-400">
-        {typeof error == 'string' ? error : error.message}
-      </div>
+      <h3 className="text-sm font-medium text-red-700 dark:text-red-500">{title}</h3>
+      <div className="text-sm text-red-500 dark:text-red-400">{printableError}</div>
     </div>
   );
 }

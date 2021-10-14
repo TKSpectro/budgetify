@@ -89,7 +89,7 @@ export default function GroupPage() {
   const thresholds = group?.thresholds || [];
 
   const transactions = group?.transactions || [];
-  const transactionCount = group?.transactionCount;
+  const transactionCount = group?.transactionCount || 0;
 
   return (
     <>
@@ -127,6 +127,10 @@ export default function GroupPage() {
               refetch={refetch}
               t={t}
             />
+            <Error
+              title={t('thresholdsNotFoundError')}
+              error={thresholds.length === 0 ? '' : undefined}
+            />
             <NewThreshold refetch={refetch} t={t} />
           </Disclosure>
         </Container>
@@ -154,7 +158,7 @@ export default function GroupPage() {
         </Container>
       )}
 
-      {transactions && transactionCount && (
+      {transactions && (
         <Container>
           <div className="text-lg font-semibold mb-4">
             {t('common:transactions')}

@@ -16,5 +16,6 @@
   "removeInviteDescription": "Are you sure that you want to remove the invite to {{email}}?",
   "sendInvite": "Send Invite",
   "createInviteError": "Could not create invite.",
-  "removeInviteError": "Could not delete invite."
+  "removeInviteError": "Could not delete invite.",
+  "noPendingInvites": "No pending invites."
 }

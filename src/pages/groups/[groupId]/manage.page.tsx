@@ -80,7 +80,7 @@ export default function ManageGroup() {
     onError: () => {},
   });
 
-  const currentUserId = data?.me?.id;
+  const currentUserId = data?.me?.id || '';
   const group = data?.group;
 
   const members = group?.members || [];
@@ -101,17 +101,17 @@ export default function ManageGroup() {
       <Container big>
         <Error title={t('common:loadingError')} error={error} />
         <Error title={t('deleteGroupError')} error={deleteGroupError} />
+
+        <MemberTable
+          members={members as User[]}
+          owners={owners as User[]}
+          currentUserId={currentUserId as string}
+          refetch={refetch}
+          t={t}
+        />
+
         <Loader loading={loading} />
 
-        {data && (
-          <MemberTable
-            members={members as User[]}
-            owners={owners as User[]}
-            currentUserId={currentUserId as string}
-            refetch={refetch}
-            t={t}
-          />
-        )}
         {isOwner && (
           <Modal
             buttonText={t('deleteGroup')}
@@ -126,8 +126,13 @@ export default function ManageGroup() {
 
       <Container>
         <Loader loading={loading} />
+
         <InviteManager invites={invites as Invite[]} isOwner={isOwner} refetch={refetch} t={t} />
-        <Error title={t('noPendingInvites')} error={invites.length === 0 ? '' : undefined} />
+
+        <Error
+          title={t('noPendingInvites')}
+          error={!loading && invites.length === 0 ? '' : undefined}
+        />
       </Container>
     </>
   );

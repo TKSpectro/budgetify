@@ -179,7 +179,16 @@ export function RecurringPaymentTable({ recurringPayments, categories, refetch, 
         </Select>
       </ManagedModalForm>
 
-      <table className="w-full">
+      <table className="table-auto w-full break-words">
+        <thead>
+          <tr>
+            <th className="max-w-xs hidden md:table-cell">{t('common:name')}</th>
+            <th className="hidden md:table-cell">{t('common:startDate')}</th>
+            <th className="hidden lg:table-cell">{t('common:endDate')}</th>
+            <th className="hidden md:table-cell">{t('common:interval')}</th>
+            <th className="hidden md:table-cell">{t('common:value')}</th>
+          </tr>
+        </thead>
         <tbody className="divide-y divide-gray-200 ">
           {recurringPayments?.map((payment) => {
             return (
@@ -188,34 +197,21 @@ export function RecurringPaymentTable({ recurringPayments, categories, refetch, 
                 onClick={() => recurringPaymentClickHandler(payment)}
                 className="hover:cursor-pointer"
               >
-                <td className=" py-4">
-                  <div className="flex items-center">
-                    <TagIcon className="flex-shrink-0 h-6 w-6 text-brand-500" />
+                <td className="py-2">
+                  <div className="max-w-xs items-center">
+                    <TagIcon className="inline-block h-6 w-6 text-brand-500" />
 
-                    <div className="max-w-xl">
-                      <div className="ml-2 font-bold text-gray-800 dark:text-gray-100">
-                        {payment?.name}
-                        <span className="hidden md:inline text-sm text-gray-500 dark:text-gray-400 ml-8">
-                          {payment?.lastBooking
-                            ? new Date(payment?.lastBooking).toDateString()
-                            : t('notBooked')}
-                        </span>
-                        <span className="hidden md:inline text-sm text-gray-500 dark:text-gray-400 ml-8">
-                          {t('nextBooking') + new Date(payment?.nextBooking).toDateString()}
-                        </span>
-                      </div>
-                      <span className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
-                        {t('next') + new Date(payment?.nextBooking).toDateString()}
-                      </span>
-                      <div className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
-                        {t('starts') + new Date(payment?.startDate).toDateString()}
-                      </div>
-                      <div className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
-                        {t('ends') + new Date(payment?.endDate).toDateString()}
-                      </div>
-                      <div className="hidden md:table-cell pl-2 text-sm text-gray-500 dark:text-gray-400">
-                        {payment?.description}
-                      </div>
+                    <span className="ml-2 font-bold text-gray-800 dark:text-gray-100 text-center">
+                      {payment?.name}
+                    </span>
+                    <div className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
+                      {t('common:startDate') + ': ' + new Date(payment?.startDate).toDateString()}
+                    </div>
+                    <div className="md:hidden ml-2 text-sm text-gray-500 dark:text-gray-400">
+                      {t('common:endDate') + ': ' + new Date(payment?.endDate).toDateString()}
+                    </div>
+                    <div className="hidden md:table-cell pl-2 text-sm text-gray-500 dark:text-gray-400">
+                      {payment?.description}
                     </div>
                   </div>
                 </td>
