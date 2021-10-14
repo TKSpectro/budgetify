@@ -59,6 +59,23 @@
   "101": "There already exists an account with this email.",
   "102": "Passwords did not match! Please try again.",
 
-  "400": "You are the owner of {{householdCount}} households. Please go to each household and give another user the owner role. Those are {{households}}",
-  "450": "You are the owner of {{groupCount}} groups. Please go to each group and give another user the owner role. Those are {{groups}}"
+  "450": "You are the owner of {{householdCount}} households. Please go to each household and give another user the owner role. Those are {{households}}.",
+  "460": "You are not allowed to create a payment in this household.",
+  "470": "You are not allowed to create a recurring payment in this household.",
+  "475": "You are not allowed to change a recurring payment in this household.",
+
+  "510": "Group could not be found.",
+  "530": "Cant leave this group as you are the last owner. Please make sure someone else is a owner of the group.",
+  "540": "Cant remove the owner role, because the group would then be without any owner.",
+  "550": "You are the owner of {{groupCount}} groups. Please go to each group and give another user the owner role. Those are {{groups}}.",
+
+  "605": "You are not allowed to create a new invite in this household.",
+  "606": "You are not allowed to create a new invite in this group.",
+  "610": "No invite found with this token.",
+  "611": "Invite token was not valid.",
+  "612": "Invite was already used.",
+  "613": "Invite is not valid anymore.",
+  "614": "Invite token was not created for your email address.",
+  "615": "Invite token could not be used.",
+  "616": "Could not delete invite."
 }

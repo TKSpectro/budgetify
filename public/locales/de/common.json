@@ -59,6 +59,23 @@
   "101": "Es existiert bereits ein Konto mit dieser Email-Adresse.",
   "102": "Passwörter stimmen nicht überein! Bitte erneut versuchen.",
 
-  "400": "Ihnen gehören {{householdCount}} Haushalte. Bitte gehen Sie zu diesen und geben Sie einem anderen Nutzer die Besitzer Rolle. Die betroffenen Haushalte sind {{households}}",
-  "450": "Ihnen gehören {{groupCount}} Gruppen. Bitte gehen Sie zu diesen und geben Sie einem anderen Nutzer die Besitzer Rolle. Die betroffenen Gruppen sind {{groups}}"
+  "450": "Ihnen gehören {{householdCount}} Haushalte. Bitte gehen Sie zu diesen und geben Sie einem anderen Nutzer die Besitzer Rolle. Die betroffenen Haushalte sind {{households}}",
+  "460": "Ihnen ist es nicht erlaubt Zahlungen in diesem Haushalt zu erstellen.",
+  "470": "Ihnen ist es nicht erlaubt wiederkehrende Zahlungen in diesem Haushalt zu erstellen.",
+  "475": "Ihnen ist es nicht erlaubt wiederkehrende Zahlungen in diesem Haushalt zu verändern.",
+
+  "510": "Gruppe konnte nicht gefunden werden.",
+  "530": "Sie können diese Gruppe nicht verlassen, da Sie der letzte Besitzer sind. Bitte geben sie einem anderen Nutzer die Besitzer Rolle.",
+  "540": "Sie können die Besitzer Rolle nicht entfernen, da die Gruppe ansonsten keine Besizer mehr hätte.",
+  "550": "Ihnen gehören {{groupCount}} Gruppen. Bitte gehen Sie zu diesen und geben Sie einem anderen Nutzer die Besitzer Rolle. Die betroffenen Gruppen sind {{groups}}",
+
+  "605": "Ihnen ist es nicht erlaubt eine Einladung für diesen Haushalt zu erstellen.",
+  "606": "Ihnen ist es nicht erlaubt eine Einladung für diese Gruppe zu erstellen.",
+  "610": "Keine Einladung zu den gesendeten Token gefunden.",
+  "611": "Einladung ist nicht gültig.",
+  "612": "Einladung wurde bereits genutzt.",
+  "613": "Einladung ist abgelaufen.",
+  "614": "Einladung wurde nicht für ihre Email Adresse erstellt.",
+  "615": "Einladung konnte nicht genutzt werden.",
+  "616": "Einladung konnt nicht gelöscht werden."
 }

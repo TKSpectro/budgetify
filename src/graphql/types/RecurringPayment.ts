@@ -213,7 +213,7 @@ export const RecurringPaymentMutation = extendType({
 
         // User is not a member of this household -> Not allowed to book payments into it.
         if (foundHousehold.length === 0) {
-          throw new ApolloError('You are not allowed to create a payment in this household.');
+          throw new ApolloError('470');
         }
 
         return prisma.recurringPayment.create({
@@ -258,7 +258,7 @@ export const RecurringPaymentMutation = extendType({
 
         // User is not a member of this household -> Not allowed to book payments into it.
         if (foundHousehold.length === 0) {
-          throw new ApolloError('You are not allowed to create a payment in this household.');
+          throw new ApolloError('475');
         }
 
         return prisma.recurringPayment.update({
