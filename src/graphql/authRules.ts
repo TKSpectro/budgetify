@@ -1,8 +1,7 @@
 import { prisma } from '~/utils/prisma';
 import { Context } from './context';
 
-export const authIsLoggedIn = (_: any, __: any, ctx: Context) => (ctx.user ? true : false);
-
+export const authIsLoggedIn = (_: any, __: any, ctx: Context) => !!ctx.user;
 export const authIsAdmin = (_: any, __: any, ctx: Context) => ctx.user.isAdmin;
 
 export const authIsGroupMember = async (_: any, args: any, ctx: Context) => {
