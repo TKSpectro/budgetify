@@ -17,10 +17,10 @@ const server = new ApolloServer({
   context,
   formatError: (err) => {
     if (err.extensions?.code === 'UNAUTHENTICATED') {
-      return new ApolloError('Not Authenticated.', err.message);
+      return new ApolloError(err.message);
     }
     if (err.extensions?.code === 'INTERNAL_SERVER_ERROR' && err.message === 'Not authorized') {
-      return new ApolloError('Not authorized.', '80');
+      return new ApolloError('80');
     }
     return err;
   },

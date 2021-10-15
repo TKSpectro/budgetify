@@ -23,7 +23,7 @@ export function Error({ title, error, className }: Props) {
     error.graphQLErrors.forEach((error, index, array) => {
       // look up message in i18n (should be a number code) and
       // if given use the variables for interpolation in i18n
-      printableError += t(error.extensions?.code, error.message, {
+      printableError += t(error.message, {
         ...error.extensions?.variables,
       });
 

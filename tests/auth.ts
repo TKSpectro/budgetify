@@ -48,7 +48,7 @@ describe('Authentication Tests', () => {
         if (err) return done(err);
 
         res.body.errors.forEach((error: GraphQLError) => {
-          expect(error.extensions?.code).to.equal('80');
+          expect(error.message).to.equal('80');
         });
 
         done();
@@ -73,7 +73,7 @@ describe('Authentication Tests', () => {
         if (err) return done(err);
 
         res.body.errors.forEach((error: GraphQLError) => {
-          expect(error.extensions?.code).to.equal('80');
+          expect(error.message).to.equal('80');
         });
 
         done();
@@ -122,7 +122,7 @@ describe('Authentication Tests', () => {
         if (err) return done(err);
 
         res.body.errors.forEach((error: GraphQLError) => {
-          expect(error.extensions?.code).to.equal('100');
+          expect(error.message).to.equal('100');
         });
 
         done();
