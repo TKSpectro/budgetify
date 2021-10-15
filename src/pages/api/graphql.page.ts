@@ -1,4 +1,5 @@
 import {
+  ApolloError,
   ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginLandingPageProductionDefault,
 } from 'apollo-server-core';
@@ -14,6 +15,15 @@ if (!process.env.JWT_SECRET) {
 const server = new ApolloServer({
   schema,
   context,
+  formatError: (err) => {
+    if (err.extensions?.code === 'UNAUTHENTICATED') {
+      return new ApolloError('Not Authenticated.', err.message);
+    }
+    if (err.extensions?.code === 'INTERNAL_SERVER_ERROR' && err.message === 'Not authorized') {
+      return new ApolloError('Not authorized.', '80');
+    }
+    return err;
+  },
   // As of apollo-server-micro@3.0 we need to manually activate the old GraphqlQLPlayground
   // instead of the new LandingPage
   // The new landing page uses apollo studio explorer which needs quite some more setup

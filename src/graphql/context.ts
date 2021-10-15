@@ -1,4 +1,3 @@
-import { AuthenticationError } from 'apollo-server-micro';
 import jwt from 'jsonwebtoken';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import i18n from 'next-i18next.config';
@@ -39,23 +38,19 @@ export async function context({ req, res }: ContextInput): Promise<Context> {
 
         // If we dont find a user with the user id in the token,
         // we remove the authToken on the client side
-        if (!foundUser) {
+        if (foundUser) {
+          user.id = foundUser.id;
+          user.email = foundUser.email;
+          user.isAdmin = foundUser.isAdmin;
+        } else {
           destroyCookie({ res }, 'authToken', {
             secure: process.env.NODE_ENV === 'production',
             maxAge: 72576000,
             httpOnly: true,
             path: '/',
           });
-
-          throw new AuthenticationError('90');
         }
-
-        user.id = foundUser.id;
-        user.email = foundUser.email;
-        user.isAdmin = foundUser.isAdmin;
       }
-    } else {
-      throw new AuthenticationError('90');
     }
   } catch (error) {
     destroyCookie({ res }, 'authToken', {
@@ -64,8 +59,6 @@ export async function context({ req, res }: ContextInput): Promise<Context> {
       httpOnly: true,
       path: '/',
     });
-
-    throw new AuthenticationError('90');
   }
 
   const locale = determineUserLang(req.headers['accept-language']?.split(',') || []);

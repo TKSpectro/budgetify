@@ -24,14 +24,9 @@ export const AuthQuery = extendType({
   definition(t) {
     t.field('me', {
       type: 'User' || null,
-      description:
-        'Returns the data of the currently logged in user. Returns null if no user is logged in',
+      description: 'Returns the data of the currently logged in user. Need to be logged in',
+      authorize: authIsLoggedIn,
       async resolve(_, __, ctx) {
-        // User is not logged in.
-        if (!ctx.user?.id) {
-          return null;
-        }
-
         // Find the user by the id saved in the context
         const user = await prisma.user.findUnique({
           where: {

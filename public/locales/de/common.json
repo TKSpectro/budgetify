@@ -53,6 +53,8 @@
   "loadingError": "Fehler beim Laden der Daten.",
 
   "//": "API ERRORS",
+  "10": "Sie sind nicht eingeloggt.",
+  "80": "Sie sind nicht authorisiert.",
   "90": "Token ist nicht gültig. Bitte loggen Sie sich erneut ein.",
 
   "100": "Email oder Passwort falsch.",

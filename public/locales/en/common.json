@@ -54,6 +54,7 @@
 
   "//": "API ERRORS",
   "10": "Not logged in.",
+  "80": "Not authorized.",
   "90": "Token is not valid. Please login again.",
 
   "100": "Email or password is wrong.",
