@@ -304,7 +304,9 @@ type Query {
   household(id: String): Household
   households: [Household]
 
-  """Returns the data of the currently logged in user. Need to be logged in"""
+  """
+  Returns the data of the currently logged in user. If not logged in return null
+  """
   me: User
 }
 

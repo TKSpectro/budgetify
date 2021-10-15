@@ -31,7 +31,7 @@ describe('Authentication Tests', () => {
       });
   });
 
-  it('Returns UNAUTHENTICATED if not logged in', (done) => {
+  it('Returns null if not logged in', (done) => {
     request
       .post('')
       .send({
@@ -46,16 +46,13 @@ describe('Authentication Tests', () => {
       .expect(200)
       .end((err, res) => {
         if (err) return done(err);
-
-        res.body.errors.forEach((error: GraphQLError) => {
-          expect(error.message).to.equal('80');
-        });
-
+        const data = res.body.data;
+        expect(data.me).equal(null);
         done();
       });
   });
 
-  it('Returns UNAUTHENTICATED if logged in with wrong authToken', (done) => {
+  it('Returns null if logged in with wrong authToken', (done) => {
     request
       .post('')
       .set('Cookie', ['authToken=wrongAuthToken'])
@@ -70,12 +67,10 @@ describe('Authentication Tests', () => {
       })
       .expect(200)
       .end((err, res) => {
+        console.log(res.body);
         if (err) return done(err);
-
-        res.body.errors.forEach((error: GraphQLError) => {
-          expect(error.message).to.equal('80');
-        });
-
+        const data = res.body.data;
+        expect(data.me).equal(null);
         done();
       });
   });

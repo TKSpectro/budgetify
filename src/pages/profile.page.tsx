@@ -5,7 +5,6 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
@@ -87,7 +86,13 @@ export default function Profile() {
 
   const { data, loading, error, refetch } = useQuery<ProfileMeQuery, ProfileMeQueryVariables>(
     PROFILE_ME_QUERY,
+    {
+      onError: (err) => {
+        console.log('lul');
+      },
+    },
   );
+  const me = data?.me;
 
   const [updateUser, { error: updateUserError }] = useMutation<
     UpdateUserMutation,
@@ -122,16 +127,13 @@ export default function Profile() {
     onError: () => {},
   });
 
-  // Need to reset the updateUser form data with the data from the ME_QUERY
-  const me = data?.me;
-  useEffect(() => {
-    // Set state for switch as its not getting handled automatically
-    reset({ ...me });
-  }, [me, reset]);
-
   function logoutHandler() {
     logoutMutation();
   }
+
+  const updateUserClickHandler = () => {
+    reset({ ...me });
+  };
 
   const updateUserHandler = () => {
     updateUser({
@@ -194,6 +196,7 @@ export default function Profile() {
                 title={t('profile:updateAccount')}
                 onSubmit={updateUserHandler}
                 buttonClassName="mr-4"
+                onClick={updateUserClickHandler}
               >
                 <Input
                   label={t('firstname')}
