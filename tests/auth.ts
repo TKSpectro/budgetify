@@ -43,12 +43,12 @@ describe('Authentication Tests', () => {
           }
         `,
       })
-      .expect(400)
+      .expect(200)
       .end((err, res) => {
         if (err) return done(err);
 
         res.body.errors.forEach((error: GraphQLError) => {
-          expect(error.extensions?.code).to.equal('UNAUTHENTICATED');
+          expect(error.extensions?.code).to.equal('80');
         });
 
         done();
@@ -68,25 +68,75 @@ describe('Authentication Tests', () => {
           }
         `,
       })
-      .expect(400)
+      .expect(200)
       .end((err, res) => {
         if (err) return done(err);
 
         res.body.errors.forEach((error: GraphQLError) => {
-          expect(error.extensions?.code).to.equal('UNAUTHENTICATED');
+          expect(error.extensions?.code).to.equal('80');
         });
 
         done();
       });
   });
-  it('Returns UNAUTHENTICATED if not logged in', (done) => {
+
+  it('Login', (done) => {
     request
       .post('')
       .send({
         query: `
-          query me {
-            me {
-              id
+          mutation {
+            login(email: "tom@budgetify.xyz", password: "12345678") {
+              token
+            }
+          }
+        `,
+      })
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+
+        expect(res.body.data.login, 'Response does not contain token').to.have.property('token');
+        expect(res.headers, 'Response does not contain set-cookie header').to.have.property(
+          'set-cookie',
+        );
+
+        done();
+      });
+  });
+
+  it('Login with wrong data', (done) => {
+    request
+      .post('')
+      .send({
+        query: `
+          mutation {
+            login(email: "tom@budgetify.xyz", password: "1234") {
+              token
+            }
+          }
+        `,
+      })
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+
+        res.body.errors.forEach((error: GraphQLError) => {
+          expect(error.extensions?.code).to.equal('100');
+        });
+
+        done();
+      });
+  });
+
+  it('Login with missing data', (done) => {
+    request
+      .post('')
+      .send({
+        query: `
+          mutation {
+            login {
+              token
             }
           }
         `,
@@ -96,7 +146,7 @@ describe('Authentication Tests', () => {
         if (err) return done(err);
 
         res.body.errors.forEach((error: GraphQLError) => {
-          expect(error.extensions?.code).to.equal('UNAUTHENTICATED');
+          expect(error.extensions?.code).to.equal('GRAPHQL_VALIDATION_FAILED');
         });
 
         done();
