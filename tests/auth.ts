@@ -1,10 +1,12 @@
-const chai = require('chai');
-const should = chai.should();
+import chai from 'chai';
+import { GraphQLError } from 'graphql';
+import supertest from 'supertest';
+const expect = chai.expect;
 
 const url = `http://localhost:3000/api/graphql`;
-const request = require('supertest')(url);
+const request = supertest(url);
 
-describe('GraphQL', () => {
+describe('Authentication Tests', () => {
   it('Returns me object with the users id', (done) => {
     request
       .post('')
@@ -24,8 +26,7 @@ describe('GraphQL', () => {
       .end((err, res) => {
         if (err) return done(err);
         const data = res.body.data;
-
-        data.me.should.have.property('id');
+        expect(data.me).to.have.property('id');
         done();
       });
   });
@@ -46,8 +47,8 @@ describe('GraphQL', () => {
       .end((err, res) => {
         if (err) return done(err);
 
-        res.body.errors.forEach((error) => {
-          error.extensions.code.should.equal('UNAUTHENTICATED');
+        res.body.errors.forEach((error: GraphQLError) => {
+          expect(error.extensions?.code).to.equal('UNAUTHENTICATED');
         });
 
         done();
@@ -71,8 +72,8 @@ describe('GraphQL', () => {
       .end((err, res) => {
         if (err) return done(err);
 
-        res.body.errors.forEach((error) => {
-          error.extensions.code.should.equal('UNAUTHENTICATED');
+        res.body.errors.forEach((error: GraphQLError) => {
+          expect(error.extensions?.code).to.equal('UNAUTHENTICATED');
         });
 
         done();
@@ -94,8 +95,8 @@ describe('GraphQL', () => {
       .end((err, res) => {
         if (err) return done(err);
 
-        res.body.errors.forEach((error) => {
-          error.extensions.code.should.equal('UNAUTHENTICATED');
+        res.body.errors.forEach((error: GraphQLError) => {
+          expect(error.extensions?.code).to.equal('UNAUTHENTICATED');
         });
 
         done();
