@@ -152,4 +152,53 @@ describe('Authentication Tests', () => {
         done();
       });
   });
+
+  let token: string;
+  it('Signup', (done) => {
+    request
+      .post('')
+      .send({
+        query: `
+          mutation {
+            signup(
+              email: "test@budgetify.xyz"
+              password: "12345678"
+              firstname: "test"
+              lastname: "budgetify"
+            ) {
+              token
+            }
+          }`,
+      })
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+
+        expect(res.body.data.signup).to.have.property('token');
+        token = res.body.data.signup.token;
+
+        done();
+      });
+  });
+
+  after('Cleanup', function (done) {
+    request
+      .post('')
+      .set('Cookie', [`authToken=${token}`])
+      .send({
+        query: `
+          mutation {
+            deleteUser {
+              id
+            }
+          }
+        `,
+      })
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+
+        done();
+      });
+  });
 });
