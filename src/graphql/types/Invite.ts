@@ -74,7 +74,7 @@ export const InviteQuery = extendType({
         const invite = await prisma.invite.findFirst({ where: { token: args.token } });
 
         if (!invite) {
-          throw new ApolloError('610');
+          throw new ApolloError('errorNoInviteFound');
         }
 
         return invite;
@@ -104,7 +104,7 @@ export const InviteMutation = extendType({
 
         // User is not a member of this household -> Not allowed to book payments into it.
         if (foundHousehold.length === 0) {
-          throw new ApolloError('605');
+          throw new ApolloError('errorCreateInviteNotAllowedHousehold');
         }
 
         const invite = await prisma.invite.create({
@@ -156,20 +156,20 @@ export const InviteMutation = extendType({
         });
 
         if (!invite) {
-          throw new ApolloError('611');
+          throw new ApolloError('errorInviteNotValid');
         }
         if (invite.wasUsed) {
-          throw new ApolloError('612');
+          throw new ApolloError('errorInviteAlreadyUsed');
         }
         if (compareAsc(invite.validUntil, new Date()) !== 1) {
-          throw new ApolloError('613');
+          throw new ApolloError('errorInviteNotValidAnymore');
         }
         if (ctx.user.email !== invite.invitedEmail) {
-          throw new ApolloError('614');
+          throw new ApolloError('errorInviteNotForEmail');
         }
 
         if (!invite.groupId && !invite.householdId) {
-          throw new ApolloError('611');
+          throw new ApolloError('errorInviteNotValid');
         }
 
         // Depending on which id is set we connect the user to the corresponding group or household
@@ -187,7 +187,7 @@ export const InviteMutation = extendType({
         });
 
         if (!user) {
-          throw new ApolloError('615');
+          throw new ApolloError('errorInviteCouldNotBeUsed');
         }
 
         const updatedInvite = await prisma.invite.update({
@@ -214,7 +214,7 @@ export const InviteMutation = extendType({
             },
           });
         } catch (error) {
-          throw new ApolloError('616');
+          throw new ApolloError('errorInviteCouldNotBeDeleted');
         }
 
         return true;
@@ -241,7 +241,7 @@ export const InviteGroupMutation = extendType({
 
         // User is not a member of this group.
         if (foundGroup.length === 0) {
-          throw new ApolloError('606');
+          throw new ApolloError('errorCreateInviteNotAllowedGroup');
         }
 
         const invite = await prisma.invite.create({

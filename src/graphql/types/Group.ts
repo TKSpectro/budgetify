@@ -122,7 +122,7 @@ export const GroupQuery = extendType({
             },
           },
         });
-        if (!group) throw new ApolloError('510');
+        if (!group) throw new ApolloError('errorGroupNotFound');
 
         // Run through all participants in all transactions and add the participant
         // to the result participant. Can not just use members as there could be
@@ -328,7 +328,7 @@ export const GroupMutation = extendType({
 
         // Cant remove the last owner of a group because then nobody could manage the group.
         if (owners.length <= 1) {
-          throw new ApolloError('540');
+          throw new ApolloError('errorRemoveOwnerRoleNotAllowed');
         }
 
         return prisma.group.update({
@@ -354,7 +354,7 @@ export const GroupMutation = extendType({
         });
 
         if (!!group?.owners.find((x) => x.id === ctx.user.id) && group!.owners.length <= 1) {
-          throw new ApolloError('530');
+          throw new ApolloError('errorLeaveGroupSoleOwner');
         }
 
         return prisma.group.update({
