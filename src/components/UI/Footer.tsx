@@ -9,11 +9,11 @@ export function Footer() {
   return (
     <footer
       id="footer"
-      className="relative z-10 md:py-4 mt-8 border-t-2  bg-gray-200 dark:bg-gray-800 border-gray-400 dark:border-gray-700"
+      className="relative z-10 md:py-4 mt-8 border-t-2 bg-gray-200 dark:bg-gray-800 border-gray-400 dark:border-gray-700"
     >
       <div className="flex justify-around items-center w-full">
         <div className="flex items-center flex-col md:flex-row">
-          <div className="text-lg lg:text-2xl font-bold text-brand-500 dark:text-gray-50 mx-8 mt-2 md:mt-0">
+          <div className="text-lg lg:text-2xl font-bold text-brand-500 mx-8 mt-2 md:mt-0">
             budgetify
           </div>
           <Link href="https://github.com/TKSpectro/budgetify" className="mx-8 mt-2 md:mt-0">
