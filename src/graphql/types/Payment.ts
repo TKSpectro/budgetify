@@ -77,7 +77,7 @@ export const PaymentMutation = extendType({
 
         // User is not a member of this household -> Not allowed to book payments into it.
         if (foundHousehold.length === 0) {
-          throw new ApolloError('460');
+          throw new ApolloError('errorNotAllowedPaymentCreation');
         }
 
         return prisma.payment.create({

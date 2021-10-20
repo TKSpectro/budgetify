@@ -20,7 +20,7 @@ const server = new ApolloServer({
       return new ApolloError(err.message);
     }
     if (err.extensions?.code === 'INTERNAL_SERVER_ERROR' && err.message === 'Not authorized') {
-      return new ApolloError('80');
+      return new ApolloError('errorNotAuthorized');
     }
     return err;
   },

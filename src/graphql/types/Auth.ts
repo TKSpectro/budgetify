@@ -91,7 +91,7 @@ export const AuthMutation = extendType({
             token,
           };
         } catch (error) {
-          throw new AuthenticationError('101');
+          throw new AuthenticationError('errorEmailAlreadyExists');
         }
       },
     });
@@ -112,7 +112,7 @@ export const AuthMutation = extendType({
         });
 
         if (!user) {
-          throw new AuthenticationError('100');
+          throw new AuthenticationError('errorEmailOrPasswordWrong');
         }
         const { id, hashedPassword, otp } = user;
 
@@ -123,11 +123,11 @@ export const AuthMutation = extendType({
           if (args.password === otp) {
             await prisma.user.update({ where: { id: user.id }, data: { otp: null } });
           } else {
-            throw new AuthenticationError('100');
+            throw new AuthenticationError('errorEmailOrPasswordWrong');
           }
         } else {
           if (!compareSync(args.password, hashedPassword)) {
-            throw new AuthenticationError('100');
+            throw new AuthenticationError('errorEmailOrPasswordWrong');
           }
         }
 
@@ -173,7 +173,7 @@ export const AuthMutation = extendType({
       authorize: authIsLoggedIn,
       async resolve(_, args, ctx) {
         if (args.password !== args.passwordRepeat) {
-          throw new AuthenticationError('102');
+          throw new AuthenticationError('errorPasswordsNotMatching');
         }
 
         args.password = hashSync(args.password, 10);
@@ -185,7 +185,7 @@ export const AuthMutation = extendType({
         });
 
         if (!foundUser) {
-          throw new AuthenticationError('90');
+          throw new AuthenticationError('errorTokenNotValid');
         }
 
         const user = await prisma.user.update({

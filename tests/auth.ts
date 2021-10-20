@@ -7,29 +7,8 @@ const url = `http://localhost:3000/api/graphql`;
 const request = supertest(url);
 
 describe('Authentication Tests', () => {
-  it('Returns me object with the users id', (done) => {
-    request
-      .post('')
-      .set('Cookie', [
-        'authToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImUzZjgwZGU4LWRmYjctNDliMi05ZmRiLTc0NjU4M2MyZThkMCIsImlhdCI6MTYzNDEzMzU2MywiZXhwIjoxNjM2NzI1NTYzfQ.xlv5x4O4e4Z2iInnxNSXSbNCizZhyCpTLnlgwTNDJeI',
-      ])
-      .send({
-        query: `
-          query me {
-            me {
-              id
-            }
-          }
-        `,
-      })
-      .expect(200)
-      .end((err, res) => {
-        if (err) return done(err);
-        const data = res.body.data;
-        expect(data.me).to.have.property('id');
-        done();
-      });
-  });
+  // Helper variable for storing the authToken from login/signup
+  let token: string;
 
   it('Returns null if not logged in', (done) => {
     request
@@ -46,8 +25,10 @@ describe('Authentication Tests', () => {
       .expect(200)
       .end((err, res) => {
         if (err) return done(err);
+
         const data = res.body.data;
         expect(data.me).equal(null);
+
         done();
       });
   });
@@ -67,10 +48,11 @@ describe('Authentication Tests', () => {
       })
       .expect(200)
       .end((err, res) => {
-        console.log(res.body);
         if (err) return done(err);
+
         const data = res.body.data;
         expect(data.me).equal(null);
+
         done();
       });
   });
@@ -95,6 +77,32 @@ describe('Authentication Tests', () => {
         expect(res.headers, 'Response does not contain set-cookie header').to.have.property(
           'set-cookie',
         );
+
+        token = res.body.data.login.token;
+
+        done();
+      });
+  });
+
+  it('Returns me object with the users id if logged in', (done) => {
+    request
+      .post('')
+      .set('Cookie', [`authToken=${token}`])
+      .send({
+        query: `
+          query me {
+            me {
+              id
+            }
+          }
+        `,
+      })
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+
+        const data = res.body.data;
+        expect(data.me).to.have.property('id');
 
         done();
       });
@@ -148,7 +156,6 @@ describe('Authentication Tests', () => {
       });
   });
 
-  let token: string;
   it('Signup', (done) => {
     request
       .post('')
@@ -170,6 +177,7 @@ describe('Authentication Tests', () => {
         if (err) return done(err);
 
         expect(res.body.data.signup).to.have.property('token');
+
         token = res.body.data.signup.token;
 
         done();
