@@ -11,14 +11,27 @@ function sleep(ms: number) {
 }
 
 export async function mochaGlobalSetup() {
-  console.log('Running Mocha Global Setup');
+  console.info('Running Mocha Global Setup');
+
+  // Overwrite Database URL to point at the test database (see @docker-compose.yml)
+  process.env.DATABASE_URL =
+    'postgresql://postgres:budgetify@localhost:5433/budgetifytest?schema=public';
 
   try {
     console.info('Building Project');
-
     const { stdout, stderr } = await execPromise('npm run build');
-    stderr && console.log(stderr);
-    stdout && console.log('Build succeeded');
+    stderr && console.error(stderr);
+    stdout && console.info('Build succeeded');
+
+    console.info('Run docker-compose up');
+    const { stderr: dockerUpErr } = await execPromise('docker-compose up -d dbtest');
+    dockerUpErr && console.error(dockerUpErr);
+
+    console.info('Run prisma reset');
+    const { stderr: prismaResetErr } = await execPromise(
+      'npx prisma migrate reset --force --skip-seed',
+    );
+    prismaResetErr && console.error(prismaResetErr);
 
     console.info('Starting Server');
     nextProcess = spawn('npm', ['run', 'start']);
@@ -51,5 +64,9 @@ export async function mochaGlobalTeardown() {
     });
   }
 
-  return 0;
+  console.info('docker-compose down');
+  const { stderr: dockerDownErr } = await execPromise('docker-compose down');
+  dockerDownErr && console.error(dockerDownErr);
+
+  console.info('Finished Mocha Global Teardown');
 }

@@ -87,9 +87,7 @@ export default function Profile() {
   const { data, loading, error, refetch } = useQuery<ProfileMeQuery, ProfileMeQueryVariables>(
     PROFILE_ME_QUERY,
     {
-      onError: (err) => {
-        console.log('lul');
-      },
+      onError: (err) => {},
     },
   );
   const me = data?.me;

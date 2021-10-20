@@ -13,3 +13,11 @@ services:
       - db_vol:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+
+  dbtest:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=budgetifytest
+      - POSTGRES_PASSWORD=budgetify
+    ports:
+      - '5433:5432'

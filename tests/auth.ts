@@ -7,9 +7,6 @@ const url = `http://localhost:3000/api/graphql`;
 const request = supertest(url);
 
 describe('Authentication Tests', () => {
-  // Helper variable for storing the authToken from login/signup
-  let token: string;
-
   it('Returns null if not logged in', (done) => {
     request
       .post('')
@@ -78,13 +75,30 @@ describe('Authentication Tests', () => {
           'set-cookie',
         );
 
-        token = res.body.data.login.token;
-
         done();
       });
   });
 
   it('Returns me object with the users id if logged in', (done) => {
+    let token = '';
+
+    request
+      .post('')
+      .send({
+        query: `
+          mutation {
+            login(email: "tom@budgetify.xyz", password: "12345678") {
+              token
+            }
+          }
+        `,
+      })
+      .end((err, res) => {
+        if (err) return done(err);
+
+        token = res.body.data.login.token;
+      });
+
     request
       .post('')
       .set('Cookie', [`authToken=${token}`])
@@ -125,7 +139,7 @@ describe('Authentication Tests', () => {
         if (err) return done(err);
 
         res.body.errors.forEach((error: GraphQLError) => {
-          expect(error.message).to.equal('100');
+          expect(error.message).to.equal('errorEmailOrPasswordWrong');
         });
 
         done();
@@ -178,30 +192,12 @@ describe('Authentication Tests', () => {
 
         expect(res.body.data.signup).to.have.property('token');
 
-        token = res.body.data.signup.token;
-
         done();
       });
   });
 
   after('Cleanup', function (done) {
-    request
-      .post('')
-      .set('Cookie', [`authToken=${token}`])
-      .send({
-        query: `
-          mutation {
-            deleteUser {
-              id
-            }
-          }
-        `,
-      })
-      .expect(200)
-      .end((err, res) => {
-        if (err) return done(err);
-
-        done();
-      });
+    // TODO: Cleanup all data from this test run
+    done();
   });
 });

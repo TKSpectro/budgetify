@@ -14,5 +14,18 @@
     "semibold",
     "signup",
     "tailwindcss"
-  ]
+  ],
+
+  "mocha.requires": ["../node_modules/ts-node/register", "../tests/helper.ts"],
+  "mocha.options": {
+    "timeout": 10000,
+    //"require": "../tests/helper.ts",
+    "parallel": 1
+  },
+  "mocha.files.glob": "./**/*.ts",
+  "mocha.subdirectory": "tests/",
+  "mocha.parallelTests": 1,
+  "mocha.sideBarOptions": {
+    "decoration": false
+  }
 }
