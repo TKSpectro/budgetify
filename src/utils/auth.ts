@@ -37,16 +37,16 @@ export async function authenticatedRoute(
     // jwt.iat and jwt.exp are in EPOCH Seconds, but we need EPOCH Milliseconds for JS Date -> * 1000
     // Token issuedAt date has to be before current date
     if (compareDesc(new Date(data.iat * 1000), new Date()) !== 1) {
-      throw new AuthenticationError('90');
+      throw new AuthenticationError('errorNotAuthorized');
     }
     // Token expiresAt date hast to be after current date
     if (compareAsc(new Date(data.exp * 1000), new Date()) !== 1) {
-      throw new AuthenticationError('90');
+      throw new AuthenticationError('errorNotAuthorized');
     }
 
     // Check if there is an actual user with the sent userId.
     const user = await prisma.user.findFirst({ where: { id: data.id } });
-    if (!user) throw new AuthenticationError('90');
+    if (!user) throw new AuthenticationError('errorNotAuthorized');
 
     let redirectCheckLocation = '';
     // If any checks were given, look for specific one and if they were found check them
