@@ -1,13 +1,28 @@
+import { expect } from 'chai';
 import { ChildProcess, exec, spawn } from 'child_process';
 import psTree from 'ps-tree';
+import { Response } from 'supertest';
 const util = require('util');
 const execPromise = util.promisify(exec);
 let nextProcess: ChildProcess;
 
-function sleep(ms: number) {
+export function sleep(ms: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
+}
+
+export function getData(res: Response) {
+  expect(res?.body, 'Response object does not contain any data.').to.have.property('data');
+
+  return res.body.data;
+}
+
+export function cleanDatabase() {
+  console.info('Database clean');
+  const { stderr: prismaResetErr } = exec('npx prisma migrate reset --force --skip-seed');
+  prismaResetErr && console.error(prismaResetErr);
+  !prismaResetErr && console.info('Database cleaned');
 }
 
 export async function mochaGlobalSetup() {

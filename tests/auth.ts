@@ -1,6 +1,7 @@
 import chai from 'chai';
 import { GraphQLError } from 'graphql';
 import supertest from 'supertest';
+import { cleanDatabase, getData, sleep } from './helper';
 const expect = chai.expect;
 
 const url = `http://localhost:3000/api/graphql`;
@@ -23,7 +24,7 @@ describe('Authentication Tests', () => {
       .end((err, res) => {
         if (err) return done(err);
 
-        const data = res.body.data;
+        const data = getData(res);
         expect(data.me).equal(null);
 
         done();
@@ -47,7 +48,7 @@ describe('Authentication Tests', () => {
       .end((err, res) => {
         if (err) return done(err);
 
-        const data = res.body.data;
+        const data = getData(res);
         expect(data.me).equal(null);
 
         done();
@@ -122,7 +123,8 @@ describe('Authentication Tests', () => {
       .end((err, res) => {
         if (err) return done(err);
 
-        expect(res.body.data.signup).to.have.property('token');
+        const data = getData(res);
+        expect(data.signup).to.have.property('token');
 
         done();
       });
@@ -144,7 +146,8 @@ describe('Authentication Tests', () => {
       .end((err, res) => {
         if (err) return done(err);
 
-        expect(res.body.data.login, 'Response does not contain token').to.have.property('token');
+        const data = getData(res);
+        expect(data.login, 'Response does not contain token').to.have.property('token');
         expect(res.headers, 'Response does not contain set-cookie header').to.have.property(
           'set-cookie',
         );
@@ -186,7 +189,7 @@ describe('Authentication Tests', () => {
           .end((err, res) => {
             if (err) return done(err);
 
-            const data = res.body.data;
+            const data = getData(res);
             expect(data.me).to.have.property('id');
 
             done();
@@ -194,8 +197,9 @@ describe('Authentication Tests', () => {
       });
   });
 
-  // after('Cleanup', function (done) {
-  //   // TODO: Cleanup all data from this test run
-  //   done();
-  // });
+  before('Cleanup', function (done) {
+    cleanDatabase();
+    sleep(10000);
+    done();
+  });
 });
