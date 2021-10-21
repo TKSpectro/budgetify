@@ -16,4 +16,11 @@ jobs:
           node-version: '16'
           cache: 'npm'
       - run: npm i
+
+      - name: create env file
+        run: |
+          touch .env
+          echo JWT_SECRET=testServerSecret >> .env
+          echo EMAIL_ENABLE=false >> .env
+
       - run: npm run test
