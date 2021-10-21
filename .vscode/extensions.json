@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "aaron-bond.better-comments",
+    "graphql.vscode-graphql",
+    "hbenl.vscode-mocha-test-adapter",
+    "esbenp.prettier-vscode",
+    "prisma.prisma"
+  ]
+}
