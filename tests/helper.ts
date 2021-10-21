@@ -18,14 +18,15 @@ export async function mochaGlobalSetup() {
     'postgresql://postgres:budgetify@localhost:5433/budgetifytest?schema=public';
 
   try {
-    console.info('Building Project');
-    const { stdout, stderr } = await execPromise('npm run build');
-    stderr && console.error(stderr);
-    stdout && console.info('Build succeeded');
+    console.info('Build Project');
+    const { stderr: buildErr } = await execPromise('npm run build');
+    buildErr && console.error(buildErr);
+    !buildErr && console.info('Build succeeded');
 
     console.info('Start database');
     const { stderr: dockerUpErr } = await execPromise('docker-compose up -d dbtest');
     dockerUpErr && console.error(dockerUpErr);
+    !dockerUpErr && console.info('Database started');
 
     // Wait so that the db is safely up
     await sleep(4000);
@@ -35,8 +36,9 @@ export async function mochaGlobalSetup() {
       'npx prisma migrate reset --force --skip-seed',
     );
     prismaResetErr && console.error(prismaResetErr);
+    !prismaResetErr && console.info('Database reseted');
 
-    console.info('Starting Server');
+    console.info('Start Server');
     nextProcess = spawn('npm', ['run', 'start']);
 
     nextProcess.stdout?.on('data', (data) => {
@@ -60,6 +62,7 @@ export async function mochaGlobalTeardown() {
 
   // Kill all child processes because npm run spawns another child process
   if (nextProcess.pid) {
+    console.info('Stopping server');
     psTree(nextProcess.pid, function (err, children) {
       spawn(
         'kill',
@@ -70,11 +73,13 @@ export async function mochaGlobalTeardown() {
         ),
       );
     });
+    console.info('Stopped server');
   }
 
   console.info('Stop database');
   const { stderr: dockerDownErr } = await execPromise('docker-compose down');
   dockerDownErr && console.error(dockerDownErr);
+  !dockerDownErr && console.info('Stopped database');
 
   console.info('Finished Mocha Global Teardown');
 }
