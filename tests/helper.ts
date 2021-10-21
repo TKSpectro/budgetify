@@ -23,14 +23,14 @@ export async function mochaGlobalSetup() {
     stderr && console.error(stderr);
     stdout && console.info('Build succeeded');
 
-    console.info('Run docker-compose up');
+    console.info('Start database');
     const { stderr: dockerUpErr } = await execPromise('docker-compose up -d dbtest');
     dockerUpErr && console.error(dockerUpErr);
 
     // Wait so that the db is safely up
     await sleep(4000);
 
-    console.info('Run prisma reset');
+    console.info('Reset database');
     const { stderr: prismaResetErr } = await execPromise(
       'npx prisma migrate reset --force --skip-seed',
     );
@@ -58,6 +58,7 @@ export async function mochaGlobalSetup() {
 export async function mochaGlobalTeardown() {
   console.info('Running Mocha Global Teardown');
 
+  // Kill all child processes because npm run spawns another child process
   if (nextProcess.pid) {
     psTree(nextProcess.pid, function (err, children) {
       spawn(
@@ -71,7 +72,7 @@ export async function mochaGlobalTeardown() {
     });
   }
 
-  console.info('docker-compose down');
+  console.info('Stop database');
   const { stderr: dockerDownErr } = await execPromise('docker-compose down');
   dockerDownErr && console.error(dockerDownErr);
 
