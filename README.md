@@ -1,5 +1,7 @@
 # budgetify
 
+[![Tests](https://github.com/TKSpectro/budgetify/actions/workflows/test.yml/badge.svg)](https://github.com/TKSpectro/budgetify/actions/workflows/test.yml)
+
 budgetify is a project that can be used to manage you're income/outcome in your households.
 
 The Stack is Typescript, NextJS(ReactJS), GraphQL, Nexus and Prisma.
