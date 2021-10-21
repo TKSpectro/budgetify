@@ -54,74 +54,6 @@ describe('Authentication Tests', () => {
       });
   });
 
-  it('Login', (done) => {
-    request
-      .post('')
-      .send({
-        query: `
-          mutation {
-            login(email: "tom@budgetify.xyz", password: "12345678") {
-              token
-            }
-          }
-        `,
-      })
-      .expect(200)
-      .end((err, res) => {
-        if (err) return done(err);
-
-        expect(res.body.data.login, 'Response does not contain token').to.have.property('token');
-        expect(res.headers, 'Response does not contain set-cookie header').to.have.property(
-          'set-cookie',
-        );
-
-        done();
-      });
-  });
-
-  it('Returns me object with the users id if logged in', (done) => {
-    let token = '';
-
-    request
-      .post('')
-      .send({
-        query: `
-          mutation {
-            login(email: "tom@budgetify.xyz", password: "12345678") {
-              token
-            }
-          }
-        `,
-      })
-      .end((err, res) => {
-        if (err) return done(err);
-
-        token = res.body.data.login.token;
-      });
-
-    request
-      .post('')
-      .set('Cookie', [`authToken=${token}`])
-      .send({
-        query: `
-          query me {
-            me {
-              id
-            }
-          }
-        `,
-      })
-      .expect(200)
-      .end((err, res) => {
-        if (err) return done(err);
-
-        const data = res.body.data;
-        expect(data.me).to.have.property('id');
-
-        done();
-      });
-  });
-
   it('Login with wrong data', (done) => {
     request
       .post('')
@@ -177,7 +109,7 @@ describe('Authentication Tests', () => {
         query: `
           mutation {
             signup(
-              email: "test@budgetify.xyz"
+              email: "tom@budgetify.xyz"
               password: "12345678"
               firstname: "test"
               lastname: "budgetify"
@@ -196,8 +128,74 @@ describe('Authentication Tests', () => {
       });
   });
 
-  after('Cleanup', function (done) {
-    // TODO: Cleanup all data from this test run
-    done();
+  it('Login', (done) => {
+    request
+      .post('')
+      .send({
+        query: `
+          mutation {
+            login(email: "tom@budgetify.xyz", password: "12345678") {
+              token
+            }
+          }
+        `,
+      })
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+
+        expect(res.body.data.login, 'Response does not contain token').to.have.property('token');
+        expect(res.headers, 'Response does not contain set-cookie header').to.have.property(
+          'set-cookie',
+        );
+
+        done();
+      });
   });
+
+  it('Returns me object with the users id if logged in', (done) => {
+    request
+      .post('')
+      .send({
+        query: `
+          mutation {
+            login(email: "tom@budgetify.xyz", password: "12345678") {
+              token
+            }
+          }
+        `,
+      })
+      .end((err, res) => {
+        if (err) return done(err);
+
+        const token = res.body.data.login.token;
+
+        request
+          .post('')
+          .set('Cookie', [`authToken=${token}`])
+          .send({
+            query: `
+          query me {
+            me {
+              id
+            }
+          }
+        `,
+          })
+          .expect(200)
+          .end((err, res) => {
+            if (err) return done(err);
+
+            const data = res.body.data;
+            expect(data.me).to.have.property('id');
+
+            done();
+          });
+      });
+  });
+
+  // after('Cleanup', function (done) {
+  //   // TODO: Cleanup all data from this test run
+  //   done();
+  // });
 });

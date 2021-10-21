@@ -27,6 +27,9 @@ export async function mochaGlobalSetup() {
     const { stderr: dockerUpErr } = await execPromise('docker-compose up -d dbtest');
     dockerUpErr && console.error(dockerUpErr);
 
+    // Wait so that the db is safely up
+    await sleep(4000);
+
     console.info('Run prisma reset');
     const { stderr: prismaResetErr } = await execPromise(
       'npx prisma migrate reset --force --skip-seed',
@@ -42,7 +45,11 @@ export async function mochaGlobalSetup() {
       }
     });
 
-    await sleep(1000);
+    nextProcess.stderr?.on('data', (data) => {
+      console.error(data.toString());
+    });
+
+    await sleep(4000);
   } catch (error) {
     console.error(error);
   }
