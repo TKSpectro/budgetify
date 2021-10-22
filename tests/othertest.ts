@@ -1,6 +1,6 @@
 import chai from 'chai';
 import supertest from 'supertest';
-import { cleanDatabase, getData } from './helper';
+import { getData } from './helper';
 const expect = chai.expect;
 
 const url = `http://localhost:3000/api/graphql`;
@@ -26,17 +26,11 @@ describe('Other Tests', () => {
       .expect(200)
       .end((err, res) => {
         if (err) return done(err);
-        console.log(res.body);
 
         const data = getData(res);
         expect(data.signup).to.have.property('token');
 
         done();
       });
-  });
-
-  before('Cleanup', function (done) {
-    cleanDatabase();
-    done();
   });
 });

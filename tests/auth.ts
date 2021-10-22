@@ -1,7 +1,7 @@
 import chai from 'chai';
 import { GraphQLError } from 'graphql';
 import supertest from 'supertest';
-import { cleanDatabase, getData, sleep } from './helper';
+import { getData } from './helper';
 const expect = chai.expect;
 
 const url = `http://localhost:3000/api/graphql`;
@@ -136,51 +136,27 @@ describe('Authentication Tests', () => {
       .send({
         query: `
           mutation {
-            login(email: "tom@budgetify.xyz", password: "12345678") {
+            signup(
+              email: "tom@budgetify.xyz"
+              password: "12345678"
+              firstname: "test"
+              lastname: "budgetify"
+            ) {
               token
             }
-          }
-        `,
+          }`,
       })
       .expect(200)
       .end((err, res) => {
         if (err) return done(err);
 
-        const data = getData(res);
-        expect(data.login, 'Response does not contain token').to.have.property('token');
-        expect(res.headers, 'Response does not contain set-cookie header').to.have.property(
-          'set-cookie',
-        );
-
-        done();
-      });
-  });
-
-  it('Returns me object with the users id if logged in', (done) => {
-    request
-      .post('')
-      .send({
-        query: `
+        request
+          .post('')
+          .send({
+            query: `
           mutation {
             login(email: "tom@budgetify.xyz", password: "12345678") {
               token
-            }
-          }
-        `,
-      })
-      .end((err, res) => {
-        if (err) return done(err);
-
-        const token = res.body.data.login.token;
-
-        request
-          .post('')
-          .set('Cookie', [`authToken=${token}`])
-          .send({
-            query: `
-          query me {
-            me {
-              id
             }
           }
         `,
@@ -190,16 +166,73 @@ describe('Authentication Tests', () => {
             if (err) return done(err);
 
             const data = getData(res);
-            expect(data.me).to.have.property('id');
+            expect(data.login, 'Response does not contain token').to.have.property('token');
+            expect(res.headers, 'Response does not contain set-cookie header').to.have.property(
+              'set-cookie',
+            );
 
             done();
           });
       });
   });
 
-  before('Cleanup', function (done) {
-    cleanDatabase();
-    sleep(10000);
-    done();
+  it('Returns me object with the users id if logged in', (done) => {
+    request
+      .post('')
+      .send({
+        query: `
+          mutation {
+            signup(
+              email: "tom@budgetify.xyz"
+              password: "12345678"
+              firstname: "test"
+              lastname: "budgetify"
+            ) {
+              token
+            }
+          }`,
+      })
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        request
+          .post('')
+          .send({
+            query: `
+          mutation {
+            login(email: "tom@budgetify.xyz", password: "12345678") {
+              token
+            }
+          }
+        `,
+          })
+          .end((err, res) => {
+            if (err) return done(err);
+
+            const token = res.body.data.login.token;
+
+            request
+              .post('')
+              .set('Cookie', [`authToken=${token}`])
+              .send({
+                query: `
+          query me {
+            me {
+              id
+            }
+          }
+        `,
+              })
+              .expect(200)
+              .end((err, res) => {
+                if (err) return done(err);
+
+                const data = getData(res);
+                expect(data.me).to.have.property('id');
+
+                done();
+              });
+          });
+      });
   });
 });

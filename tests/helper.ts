@@ -1,3 +1,4 @@
+import { PrismaClient } from '@prisma/client';
 import { expect } from 'chai';
 import { ChildProcess, exec, spawn } from 'child_process';
 import psTree from 'ps-tree';
@@ -15,18 +16,40 @@ export function sleep(ms: number) {
 export function getData(res: Response) {
   expect(res?.body, 'Response object does not contain any data.').to.have.property('data');
 
+  if (res.error) {
+    console.error(res.error);
+  }
+  if (res.body.errors) {
+    console.error(res.body.errors);
+  }
+
   return res.body.data;
 }
 
-export function cleanDatabase() {
-  console.info('Database clean');
-  const { stderr: prismaResetErr } = exec('npx prisma migrate reset --force --skip-seed');
-  prismaResetErr && console.error(prismaResetErr);
-  !prismaResetErr && console.info('Database cleaned');
-}
+const prisma = new PrismaClient({
+  log: ['warn', 'error'],
+});
+
+export const mochaHooks = {
+  async beforeEach() {
+    await prisma.invite.deleteMany();
+
+    await prisma.groupTransaction.deleteMany();
+    await prisma.threshold.deleteMany();
+    await prisma.group.deleteMany();
+
+    await prisma.recurringPayment.deleteMany();
+    await prisma.payment.deleteMany();
+    await prisma.category.deleteMany;
+
+    await prisma.household.deleteMany();
+
+    await prisma.user.deleteMany();
+  },
+};
 
 export async function mochaGlobalSetup() {
-  console.info('Running Mocha Global Setup');
+  console.info('Running Mocha Global Setup \n\n');
 
   // Overwrite Database URL to point at the test database (see @docker-compose.yml)
   process.env.DATABASE_URL =
@@ -38,10 +61,10 @@ export async function mochaGlobalSetup() {
     buildErr && console.error(buildErr);
     !buildErr && console.info('Build succeeded');
 
-    console.info('Start database');
-    const { stderr: dockerUpErr } = await execPromise('docker-compose up -d dbtest');
+    const { stderr: dockerUpErr } = await execPromise(
+      'docker-compose up -d --force-recreate -V dbtest',
+    );
     dockerUpErr && console.error(dockerUpErr);
-    !dockerUpErr && console.info('Database started');
 
     // Wait so that the db is safely up
     await sleep(4000);
@@ -51,14 +74,14 @@ export async function mochaGlobalSetup() {
       'npx prisma migrate reset --force --skip-seed',
     );
     prismaResetErr && console.error(prismaResetErr);
-    !prismaResetErr && console.info('Database reseted');
+    !prismaResetErr && console.info('Database reset \n');
 
     console.info('Start Server');
     nextProcess = spawn('npm', ['run', 'start']);
 
     nextProcess.stdout?.on('data', (data) => {
       if (data.toString().indexOf('ready') != -1) {
-        console.info('Server started');
+        console.info('Server started \n');
       }
     });
 
@@ -70,10 +93,11 @@ export async function mochaGlobalSetup() {
   } catch (error) {
     console.error(error);
   }
+  console.info('Finished Mocha Global Setup');
 }
 
 export async function mochaGlobalTeardown() {
-  console.info('Running Mocha Global Teardown');
+  console.info('Running Mocha Global Teardown \n');
 
   // Kill all child processes because npm run spawns another child process
   if (nextProcess.pid) {
@@ -88,13 +112,11 @@ export async function mochaGlobalTeardown() {
         ),
       );
     });
-    console.info('Stopped server');
+    console.info('Stopped server \n');
   }
 
-  console.info('Stop database');
-  const { stderr: dockerDownErr } = await execPromise('docker-compose down');
+  const { stderr: dockerDownErr } = await execPromise('docker-compose rm -s -v -f dbtest');
   dockerDownErr && console.error(dockerDownErr);
-  !dockerDownErr && console.info('Stopped database');
 
   console.info('Finished Mocha Global Teardown');
 }
