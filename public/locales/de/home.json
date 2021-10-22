@@ -1,0 +1,6 @@
+{
+  "owner": "Besitzer",
+  "transactions": "Transaktionen",
+  "groupsNotFoundError": "Keine Gruppen gefunden",
+  "householdsNotFoundError": "Keine Haushalte gefunden"
+}
