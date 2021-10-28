@@ -179,6 +179,8 @@ export const GroupQuery = extendType({
           }
         });
 
+        let restMap: any = {};
+
         // Now we have a hashmap of all transactions which we can use to calculate
         // the virtual balances of the members
         for (let hash in moneypools) {
@@ -213,6 +215,25 @@ export const GroupQuery = extendType({
               }
             }
           });
+
+          // If the transaction value cant be split between the participant directly
+          // We now look for the "richest" participant and then add the missing part
+          // of the division onto his account.
+          if (rest !== 0 && rest !== -0) {
+            if (!restMap[hash]) {
+              restMap[hash] = rest;
+            } else {
+              restMap[hash] += rest;
+            }
+          }
+        }
+
+        for (let hash in restMap) {
+          // Revert the concatenation of the ids by splitting them up again
+          const ids = hash.split(',');
+          // Calculate the rest for this transaction group, as we need that for the
+          // value splitting between the participants
+          const rest = restMap[hash];
 
           // If the transaction value cant be split between the participant directly
           // We now look for the "richest" participant and then add the missing part

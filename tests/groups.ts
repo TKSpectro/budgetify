@@ -12,23 +12,23 @@ describe('Group Tests', () => {
   beforeEach(async function () {
     const hashedPassword = hashSync('12345678', 10);
     const userA = await prisma.user.create({
-      data: { firstname: 'A', lastname: '', email: 'a@budgetify.xyz', hashedPassword },
+      data: { firstname: 'A', lastname: 'A', email: 'a@budgetify.xyz', hashedPassword },
     });
 
     const userB = await prisma.user.create({
-      data: { firstname: 'B', lastname: '', email: 'b@budgetify.xyz', hashedPassword },
+      data: { firstname: 'B', lastname: 'B', email: 'b@budgetify.xyz', hashedPassword },
     });
 
     const userC = await prisma.user.create({
-      data: { firstname: 'C', lastname: '', email: 'c@budgetify.xyz', hashedPassword },
+      data: { firstname: 'C', lastname: 'C', email: 'c@budgetify.xyz', hashedPassword },
     });
 
     const userD = await prisma.user.create({
-      data: { firstname: 'D', lastname: '', email: 'd@budgetify.xyz', hashedPassword },
+      data: { firstname: 'D', lastname: 'D', email: 'd@budgetify.xyz', hashedPassword },
     });
 
     const userE = await prisma.user.create({
-      data: { firstname: 'E', lastname: '', email: 'e@budgetify.xyz', hashedPassword },
+      data: { firstname: 'E', lastname: 'E', email: 'e@budgetify.xyz', hashedPassword },
     });
 
     const allUserIds = [
@@ -42,7 +42,7 @@ describe('Group Tests', () => {
     await prisma.group.create({
       data: {
         name: 'group1',
-        value: 4000,
+        value: 40,
         members: {
           connect: allUserIds,
         },
@@ -51,35 +51,35 @@ describe('Group Tests', () => {
           create: [
             {
               name: 'transaction1',
-              value: -1000,
+              value: -10,
               type: 'BUY',
               user: { connect: { id: userA.id } },
               participants: { connect: allUserIds },
             },
             {
               name: 'transaction2',
-              value: 2000,
+              value: 30,
               type: 'TOP_UP',
               user: { connect: { id: userA.id } },
               participants: { connect: { id: userA.id } },
             },
             {
               name: 'transaction3',
-              value: 2000,
+              value: 20,
               type: 'TOP_UP',
               user: { connect: { id: userC.id } },
               participants: { connect: { id: userC.id } },
             },
             {
               name: 'transaction4',
-              value: 2000,
+              value: 10,
               type: 'TOP_UP',
               user: { connect: { id: userD.id } },
               participants: { connect: { id: userD.id } },
             },
             {
               name: 'transaction5',
-              value: -1000,
+              value: -10,
               type: 'BUY',
               user: { connect: { id: userA.id } },
               participants: { connect: [{ id: userA.id }, { id: userB.id }, { id: userC.id }] },
@@ -140,6 +140,22 @@ describe('Group Tests', () => {
             const data = getData(res);
             expect(data).to.have.property('calculateMemberBalances');
             const balances = data?.calculateMemberBalances;
+
+            expect(balances.find((x: any) => x.name == 'A A').value, 'Balance 0 is wrong').to.equal(
+              0.24,
+            );
+            expect(balances.find((x: any) => x.name == 'B B').value, 'Balance 1 is wrong').to.equal(
+              -0.05,
+            );
+            expect(balances.find((x: any) => x.name == 'C C').value, 'Balance 2 is wrong').to.equal(
+              0.15,
+            );
+            expect(balances.find((x: any) => x.name == 'D D').value, 'Balance 3 is wrong').to.equal(
+              0.08,
+            );
+            expect(balances.find((x: any) => x.name == 'E E').value, 'Balance 4 is wrong').to.equal(
+              -0.02,
+            );
 
             done();
           });
