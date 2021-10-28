@@ -11,6 +11,8 @@ describe('Group Tests', () => {
 
   beforeEach(async function () {
     const hashedPassword = hashSync('12345678', 10);
+
+    // Create some test users
     const userA = await prisma.user.create({
       data: { firstname: 'A', lastname: 'A', email: 'a@budgetify.xyz', hashedPassword },
     });
@@ -31,6 +33,7 @@ describe('Group Tests', () => {
       data: { firstname: 'E', lastname: 'E', email: 'e@budgetify.xyz', hashedPassword },
     });
 
+    // This array contains all Users and can be used for the prisma -> connect attribute
     const allUserIds = [
       { id: userA.id },
       { id: userB.id },
@@ -39,6 +42,7 @@ describe('Group Tests', () => {
       { id: userE.id },
     ];
 
+    // Create the group with the specified transactions and connections the specific users
     await prisma.group.create({
       data: {
         name: 'group1',
@@ -91,7 +95,7 @@ describe('Group Tests', () => {
   });
 
   it('Money Calculation', (done) => {
-    // Login for authorization
+    // Login for authorization purposes
     request
       .post('')
       .send({
@@ -115,10 +119,12 @@ describe('Group Tests', () => {
 
         token = data.login.token;
 
+        // Get the predefined group from the database
         const group = await prisma.group.findFirst({ include: { transactions: true } });
-
         expect(group, 'Group was not found in the database').to.have.property('id');
 
+        // Request the memberBalances calculation against the just found group
+        // and authenticated by the before happened login
         request
           .post('')
           .set('Cookie', [`authToken=${token}`])
@@ -141,6 +147,8 @@ describe('Group Tests', () => {
             expect(data).to.have.property('calculateMemberBalances');
             const balances = data?.calculateMemberBalances;
 
+            // These expected values are precalculated to the data written to the database
+            // in the beforeEach for this testSuite.
             expect(balances.find((x: any) => x.name == 'A A').value, 'Balance 0 is wrong').to.equal(
               0.24,
             );
