@@ -33,7 +33,7 @@ jobs:
       - name: Install Dependencies
         run: npm i
 
-      - name: Creave .env file
+      - name: Create .env file
         run: |
           touch .env
           echo JWT_SECRET=testServerSecret >> .env
