@@ -26,7 +26,7 @@ export function getData(res: Response) {
   return res.body.data;
 }
 
-const prisma = new PrismaClient({
+export const prisma = new PrismaClient({
   log: ['warn', 'error'],
 });
 
