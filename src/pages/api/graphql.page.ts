@@ -4,6 +4,8 @@ import {
   ApolloServerPluginLandingPageProductionDefault,
 } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-micro';
+import { MicroRequest } from 'apollo-server-micro/dist/types';
+import { ServerResponse } from 'http';
 import { context } from '~/graphql/context';
 import { schema } from '~/graphql/schema';
 
@@ -38,15 +40,17 @@ const server = new ApolloServer({
   // Enable performance tracing for development -> This is deprecated with apollo-server-micro@3.0
   //tracing: process.env.NODE_ENV === 'development',
 });
-// As of apollo-server-micro@3... we need to await the start of the server
-await server.start();
 
-const handler = server.createHandler({ path: '/api/graphql' });
+const startServer = server.start();
+
+export default async function handler(req: MicroRequest, res: ServerResponse) {
+  // As of apollo-server-micro@3... we need to await the start of the server
+  await startServer;
+  await server.createHandler({ path: '/api/graphql' })(req, res);
+}
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
-
-export default handler;

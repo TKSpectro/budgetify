@@ -61,11 +61,6 @@ const { i18n } = require('./next-i18next.config');
 module.exports = {
   pageExtensions: ['page.tsx', 'page.ts', 'page.jsx', 'page.js'],
   i18n,
-  webpack: (config) => {
-    config.experiments = { topLevelAwait: true };
-    //config.optimization.minimize = false;
-    return config;
-  },
   headers: () => [
     {
       // Apply these headers to all routes in your application.
