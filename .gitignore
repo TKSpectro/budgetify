@@ -36,3 +36,6 @@ yarn-error.log*
 .vercel
 
 .nyc_output
+
+# With Typescript 3.4 we can use --incremental flag for faster compilation
+tsconfig.tsbuildinfo
