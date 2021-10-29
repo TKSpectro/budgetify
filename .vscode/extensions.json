@@ -2,7 +2,7 @@
   "recommendations": [
     "aaron-bond.better-comments",
     "graphql.vscode-graphql",
-    "hbenl.vscode-mocha-test-adapter",
+    "bradlc.vscode-tailwindcss",
     "esbenp.prettier-vscode",
     "prisma.prisma"
   ]
