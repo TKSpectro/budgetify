@@ -182,10 +182,10 @@ export default function Home() {
                 <h2 className="text-base text-brand-500 font-semibold tracking-wide uppercase">
                   Households
                 </h2>
-                <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
                   Managing money made easy
                 </p>
-                <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                <p className="mt-4 max-w-2xl text-xl text-gray-500 dark:text-gray-400 lg:mx-auto">
                   Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam voluptatum
                   cupiditate veritatis in accusamus quisquam.
                 </p>
@@ -199,11 +199,13 @@ export default function Home() {
                         <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-brand-500 text-white">
                           <feature.icon className="h-6 w-6" aria-hidden="true" />
                         </div>
-                        <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
+                        <p className="ml-16 text-lg leading-6 font-medium text-gray-900 dark:text-white">
                           {feature.name}
                         </p>
                       </dt>
-                      <dd className="mt-2 ml-16 text-base text-gray-500">{feature.description}</dd>
+                      <dd className="mt-2 ml-16 text-base text-gray-500 dark:text-gray-400">
+                        {feature.description}
+                      </dd>
                     </div>
                   ))}
                 </dl>
@@ -217,10 +219,10 @@ export default function Home() {
                 <h2 className="text-base text-brand-500 font-semibold tracking-wide uppercase">
                   Groups
                 </h2>
-                <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
                   Moneypools for all your vacations and group activities
                 </p>
-                <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                <p className="mt-4 max-w-2xl text-xl text-gray-500 dark:text-gray-400 lg:mx-auto">
                   Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam voluptatum
                   cupiditate veritatis in accusamus quisquam.
                 </p>
@@ -234,11 +236,13 @@ export default function Home() {
                         <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-brand-500 text-white">
                           <feature.icon className="h-6 w-6" aria-hidden="true" />
                         </div>
-                        <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
+                        <p className="ml-16 text-lg leading-6 font-medium text-gray-900 dark:text-white">
                           {feature.name}
                         </p>
                       </dt>
-                      <dd className="mt-2 ml-16 text-base text-gray-500">{feature.description}</dd>
+                      <dd className="mt-2 ml-16 text-base text-gray-500 dark:text-gray-400">
+                        {feature.description}
+                      </dd>
                     </div>
                   ))}
                 </dl>
