@@ -3,6 +3,7 @@ import { CheckIcon } from '@heroicons/react/outline';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Head from 'next/head';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '~/components/UI/Button';
@@ -43,34 +44,39 @@ export default function ForgotPassword() {
   }
 
   return (
-    <Container>
-      <Error title="Failed to request one-time-password." error={error} />
+    <>
+      <Head>
+        <title>{t('auth:forgotPassword')} | budgetify</title>
+      </Head>
+      <Container>
+        <Error title="Failed to request one-time-password." error={error} />
 
-      <div className="font-semibold text-lg mb-2">{t('auth:recoverPassword')}</div>
-      <div className="font-medium text-md mb-2">{t('auth:recoverPasswordText')}</div>
+        <div className="font-semibold text-lg mb-2">{t('auth:recoverPassword')}</div>
+        <div className="font-medium text-md mb-2">{t('auth:recoverPasswordText')}</div>
 
-      {!data ? (
-        <Form form={requestOTPForm} onSubmit={onSubmit}>
-          <Input
-            label={t('email')}
-            type="email"
-            autoComplete="email"
-            {...requestOTPForm.register('email', {
-              required: { value: true, message: t('emailMessage') },
-            })}
-          />
+        {!data ? (
+          <Form form={requestOTPForm} onSubmit={onSubmit}>
+            <Input
+              label={t('email')}
+              type="email"
+              autoComplete="email"
+              {...requestOTPForm.register('email', {
+                required: { value: true, message: t('emailMessage') },
+              })}
+            />
 
-          <Button type="submit">{t('auth:recoverPasswordSubmit')}</Button>
-        </Form>
-      ) : (
-        <>
-          <CheckIcon className="w-2/5 sm:w-1/5 sm:h-1/5 mx-auto mt-4 text-brand-500 border-4 border-brand-500 rounded-full" />
-          <div className="text-center text-lg font-medium mt-2">
-            {t('auth:recoverPasswordSubmitText')}
-          </div>
-        </>
-      )}
-    </Container>
+            <Button type="submit">{t('auth:recoverPasswordSubmit')}</Button>
+          </Form>
+        ) : (
+          <>
+            <CheckIcon className="w-2/5 sm:w-1/5 sm:h-1/5 mx-auto mt-4 text-brand-500 border-4 border-brand-500 rounded-full" />
+            <div className="text-center text-lg font-medium mt-2">
+              {t('auth:recoverPasswordSubmitText')}
+            </div>
+          </>
+        )}
+      </Container>
+    </>
   );
 }
 

@@ -2,6 +2,7 @@ import { gql, useMutation } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -49,40 +50,45 @@ export default function ChangePassword() {
   }
 
   return (
-    <Container>
-      <Error title={t('auth:changePasswordError')} error={error} />
+    <>
+      <Head>
+        <title>{t('auth:changePassword')} | budgetify</title>
+      </Head>
+      <Container>
+        <Error title={t('auth:changePasswordError')} error={error} />
 
-      {router?.query?.isOTP && (
-        <div className="font-semibold text-lg mb-2">{t('auth:changePasswordOTP')}</div>
-      )}
+        {router?.query?.isOTP && (
+          <div className="font-semibold text-lg mb-2">{t('auth:changePasswordOTP')}</div>
+        )}
 
-      <Form form={changePasswordForm} onSubmit={onSubmit}>
-        <Input
-          label={t('password')}
-          type="password"
-          autoComplete="new-password"
-          {...changePasswordForm.register('password', {
-            required: { value: true, message: t('passwordMessage') },
-            minLength: { value: 6, message: t('passwordLengthMessage') },
-          })}
-        />
+        <Form form={changePasswordForm} onSubmit={onSubmit}>
+          <Input
+            label={t('password')}
+            type="password"
+            autoComplete="new-password"
+            {...changePasswordForm.register('password', {
+              required: { value: true, message: t('passwordMessage') },
+              minLength: { value: 6, message: t('passwordLengthMessage') },
+            })}
+          />
 
-        <Input
-          label={t('auth:repeatPassword')}
-          type="password"
-          autoComplete="new-password"
-          {...changePasswordForm.register('passwordRepeat', {
-            required: { value: true, message: t('passwordMessage') },
-            minLength: { value: 6, message: t('passwordLengthMessage') },
-            validate: (value) =>
-              value === changePasswordForm.getValues('password') ||
-              t('auth:repeatPasswordNoMatch') + '',
-          })}
-        />
+          <Input
+            label={t('auth:repeatPassword')}
+            type="password"
+            autoComplete="new-password"
+            {...changePasswordForm.register('passwordRepeat', {
+              required: { value: true, message: t('passwordMessage') },
+              minLength: { value: 6, message: t('passwordLengthMessage') },
+              validate: (value) =>
+                value === changePasswordForm.getValues('password') ||
+                t('auth:repeatPasswordNoMatch') + '',
+            })}
+          />
 
-        <Button type="submit">{t('auth:changePassword')}</Button>
-      </Form>
-    </Container>
+          <Button type="submit">{t('auth:changePassword')}</Button>
+        </Form>
+      </Container>
+    </>
   );
 }
 

@@ -2,6 +2,7 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -53,33 +54,38 @@ export default function OTPLogin() {
   }
 
   return (
-    <Container>
-      <div className="mb-2">
-        <Error title={t('auth:loginError')} error={error} />
-      </div>
+    <>
+      <Head>
+        <title>{t('login')} | budgetify</title>
+      </Head>
+      <Container>
+        <div className="mb-2">
+          <Error title={t('auth:loginError')} error={error} />
+        </div>
 
-      <Form form={loginForm} onSubmit={onSubmit}>
-        <Input
-          label={t('email')}
-          type="email"
-          autoComplete="email"
-          {...loginForm.register('email', {
-            required: { value: true, message: t('emailMessage') },
-          })}
-        />
+        <Form form={loginForm} onSubmit={onSubmit}>
+          <Input
+            label={t('email')}
+            type="email"
+            autoComplete="email"
+            {...loginForm.register('email', {
+              required: { value: true, message: t('emailMessage') },
+            })}
+          />
 
-        <Input
-          label={t('auth:otp')}
-          type="password"
-          autoComplete="one-time-code"
-          {...loginForm.register('password', {
-            required: { value: true, message: t('auth:otpMessage') },
-          })}
-        />
+          <Input
+            label={t('auth:otp')}
+            type="password"
+            autoComplete="one-time-code"
+            {...loginForm.register('password', {
+              required: { value: true, message: t('auth:otpMessage') },
+            })}
+          />
 
-        <Button type="submit">{t('login')}</Button>
-      </Form>
-    </Container>
+          <Button type="submit">{t('login')}</Button>
+        </Form>
+      </Container>
+    </>
   );
 }
 
