@@ -24,7 +24,7 @@ function App({ Component, pageProps }: AppProps) {
             />
             <meta
               property="og:image"
-              content="https://logovtor.com/wp-content/uploads/2020/10/vercel-inc-logo-vector.png"
+              content="https://budgetify.xyz/images/budgetify-logo.png"
               key="ogImage"
             />
           </Head>
