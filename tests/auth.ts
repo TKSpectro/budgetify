@@ -1,3 +1,4 @@
+import { hashSync } from 'bcrypt';
 import chai from 'chai';
 import { GraphQLError } from 'graphql';
 import supertest from 'supertest';
@@ -275,5 +276,57 @@ describe('Authentication Tests', function () {
     });
 
     expect(getData(loginWithOtpRes).login.token).to.be.string;
+  });
+
+  it('Change password', async function () {
+    const hashedPassword = hashSync('123123123', 10);
+
+    const user = await prisma.user.create({
+      data: {
+        email: 'test@budgetify.xyz',
+        firstname: 'test',
+        lastname: 'test',
+        hashedPassword: hashedPassword,
+      },
+    });
+
+    const loginRes = await request.post('').send({
+      query: `
+          mutation {
+            login(email: "${user.email}", password: "123123123") {
+              token
+            }
+          }
+        `,
+    });
+
+    const token = getData(loginRes).login.token;
+
+    const requestResetRes = await request
+      .post('')
+      .set('Cookie', [`authToken=${token}`])
+      .send({
+        query: `
+          mutation {
+            changePassword(
+              password: "12345678"
+              passwordRepeat: "12345678"
+            ){id}
+          }`,
+      });
+
+    const loginWithNewPasswordRes = await request.post('').send({
+      query: `
+          mutation {
+            login(
+              email: "${user.email}"
+              password: "12345678"
+            ){
+              token
+            }
+          }`,
+    });
+
+    expect(getData(loginWithNewPasswordRes).login.token).to.be.string;
   });
 });
