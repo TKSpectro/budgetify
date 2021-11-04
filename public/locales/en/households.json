@@ -1,8 +1,8 @@
 {
   "owner": "Owner",
   "createHousehold": "Create Households",
-  "useInvite": "Use Invite Token",
-  "useInviteError": "Failed to use invite token.",
+  "useInvite": "Use Invite",
+  "useInviteError": "Failed to use invite.",
   "createHouseholdError": "Failed to create household.",
   "noHouseholdsFoundError": "Could not find any households. Please create a new one or join one with a token.",
   "householdRequiredMessage": "Please input a name.",
