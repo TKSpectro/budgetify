@@ -13,24 +13,28 @@ describe('Group Tests', () => {
     const hashedPassword = hashSync('12345678', 10);
 
     // Create some test users
+    // We need to statically define the ids here so we get a predictable result if two
+    // users are equally rich while calculating their balances. In production this wont
+    // be a problem as it then will be basically -1cent randomly placed onto one of the richest
+    // persons
     const userA = await prisma.user.create({
-      data: { firstname: 'A', lastname: 'A', email: 'a@budgetify.xyz', hashedPassword },
+      data: { id: '0', firstname: 'A', lastname: 'A', email: 'a@budgetify.xyz', hashedPassword },
     });
 
     const userB = await prisma.user.create({
-      data: { firstname: 'B', lastname: 'B', email: 'b@budgetify.xyz', hashedPassword },
+      data: { id: '1', firstname: 'B', lastname: 'B', email: 'b@budgetify.xyz', hashedPassword },
     });
 
     const userC = await prisma.user.create({
-      data: { firstname: 'C', lastname: 'C', email: 'c@budgetify.xyz', hashedPassword },
+      data: { id: '2', firstname: 'C', lastname: 'C', email: 'c@budgetify.xyz', hashedPassword },
     });
 
     const userD = await prisma.user.create({
-      data: { firstname: 'D', lastname: 'D', email: 'd@budgetify.xyz', hashedPassword },
+      data: { id: '3', firstname: 'D', lastname: 'D', email: 'd@budgetify.xyz', hashedPassword },
     });
 
     const userE = await prisma.user.create({
-      data: { firstname: 'E', lastname: 'E', email: 'e@budgetify.xyz', hashedPassword },
+      data: { id: '4', firstname: 'E', lastname: 'E', email: 'e@budgetify.xyz', hashedPassword },
     });
 
     // This array contains all Users and can be used for the prisma -> connect attribute
@@ -62,7 +66,7 @@ describe('Group Tests', () => {
             },
             {
               name: 'transaction2',
-              value: 30,
+              value: 20,
               type: 'TOP_UP',
               user: { connect: { id: userA.id } },
               participants: { connect: { id: userA.id } },
@@ -150,7 +154,7 @@ describe('Group Tests', () => {
             // These expected values are precalculated to the data written to the database
             // in the beforeEach for this testSuite.
             expect(balances.find((x: any) => x.name == 'A A').value, 'Balance 0 is wrong').to.equal(
-              0.24,
+              0.14,
             );
             expect(balances.find((x: any) => x.name == 'B B').value, 'Balance 1 is wrong').to.equal(
               -0.05,
