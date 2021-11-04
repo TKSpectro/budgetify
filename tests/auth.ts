@@ -1,13 +1,13 @@
 import chai from 'chai';
 import { GraphQLError } from 'graphql';
 import supertest from 'supertest';
-import { getData } from './helper';
+import { getData, prisma } from './helper';
 const expect = chai.expect;
 
 const url = `http://localhost:3000/api/graphql`;
 const request = supertest(url);
 
-describe('Authentication Tests', () => {
+describe('Authentication Tests', function () {
   it('Returns null if not logged in', (done) => {
     request
       .post('')
@@ -234,5 +234,46 @@ describe('Authentication Tests', () => {
               });
           });
       });
+  });
+
+  it('OTP requesting', async function () {
+    const user = await prisma.user.create({
+      data: {
+        email: 'test@budgetify.xyz',
+        firstname: 'test',
+        lastname: 'test',
+        hashedPassword: 'test',
+      },
+    });
+
+    const requestResetRes = await request.post('').send({
+      query: `
+          mutation {
+            requestPasswordReset(
+              email: "${user.email}"
+            )
+          }`,
+    });
+
+    expect(getData(requestResetRes)).to.have.property('requestPasswordReset');
+
+    const resetUser = await prisma.user.findFirst({ where: { email: user.email } });
+
+    expect(resetUser?.otp).to.be.string;
+
+    const loginWithOtpRes = await request.post('').send({
+      query: `
+          mutation {
+            login(
+              email: "${user.email}"
+              password: "${resetUser?.otp}"
+              isOTP: true
+            ){
+              token
+            }
+          }`,
+    });
+
+    expect(getData(loginWithOtpRes).login.token).to.be.string;
   });
 });
