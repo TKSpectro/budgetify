@@ -1,4 +1,5 @@
 import React from 'react';
+import { Meta } from './Meta';
 import { Footer } from './UI/Footer';
 import { Header } from './UI/Header';
 
@@ -8,10 +9,13 @@ interface Props {
 
 export function Layout({ children }: Props) {
   return (
-    <div className="flex flex-col h-screen">
-      <Header />
-      <div className="flex-grow">{children}</div>
-      <Footer />
-    </div>
+    <>
+      <Meta />
+      <div className="flex flex-col h-screen">
+        <Header />
+        <div className="flex-grow">{children}</div>
+        <Footer />
+      </div>
+    </>
   );
 }
