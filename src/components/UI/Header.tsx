@@ -49,8 +49,7 @@ export function Header() {
           !brand &&
             !logo &&
             ' text-gray-600 hover:bg-gray-300 hover:bg-opacity-100 dark:hover:bg-gray-700 dark:hover:bg-opacity-100 ',
-          logo &&
-            'text-2xl text-brand-500 dark:text-brand-500 font-bold hover:bg-gray-300 hover:bg-opacity-100 dark:hover:bg-gray-700 dark:hover:bg-opacity-100',
+          logo && 'text-2xl text-brand-500 dark:text-brand-500 font-bold',
         )}
         onClick={() => {
           if (window.screen.width < 768) toggleNavbarHandler();
