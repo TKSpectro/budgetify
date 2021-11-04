@@ -74,8 +74,8 @@ export function InviteManager({ invites, isOwner, refetch, t }: Props) {
 
   return (
     <>
-      <Error title={t('removeInviteError')} error={deleteInviteError} />
-      <Error title={t('createInviteError')} error={createInviteError} />
+      <Error title={t('removeInviteError')} error={deleteInviteError} className="mt-4" />
+      <Error title={t('createInviteError')} error={createInviteError} className="mt-4" />
 
       {isOwner && (
         <ModalForm

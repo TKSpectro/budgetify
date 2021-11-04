@@ -85,8 +85,8 @@ export default function InviteManager({ invites, owner, currentUserId, refetch, 
 
   return (
     <>
-      <Error title={t('createInviteError')} error={createInviteError} />
-      <Error title={t('removeInviteError')} error={deleteInviteError} />
+      <Error title={t('createInviteError')} error={createInviteError} className="mt-4" />
+      <Error title={t('removeInviteError')} error={deleteInviteError} className="mt-4" />
 
       <ManagedModal
         title={t('removeInvite')}

@@ -132,6 +132,7 @@ export default function ManageGroup() {
         <Error
           title={t('noPendingInvites')}
           error={!loading && invites.length === 0 ? '' : undefined}
+          className="mt-4"
         />
       </Container>
     </>
