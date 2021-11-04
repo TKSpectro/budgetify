@@ -174,3 +174,84 @@ describe('Group Tests', () => {
       });
   });
 });
+
+describe('Group Transaction Tests', () => {
+  beforeEach(async function () {
+    const hashedPassword = hashSync('12345678', 10);
+
+    // Create some test users
+    const userA = await prisma.user.create({
+      data: { id: 'a', firstname: 'A', lastname: 'A', email: 'a@budgetify.xyz', hashedPassword },
+    });
+
+    const userB = await prisma.user.create({
+      data: { id: 'b', firstname: 'B', lastname: 'B', email: 'b@budgetify.xyz', hashedPassword },
+    });
+
+    // This array contains all Users and can be used for the prisma -> connect attribute
+    const allUserIds = [{ id: userA.id }, { id: userB.id }];
+
+    // Create the group with the specified transactions and connections the specific users
+    await prisma.group.create({
+      data: {
+        id: '0',
+        name: 'group1',
+        value: 0,
+        owners: { connect: { id: userA.id } },
+        members: {
+          connect: allUserIds,
+        },
+      },
+    });
+  });
+
+  it('Create Transaction', async function () {
+    const loginRes = await request
+      .post('')
+      .send({
+        query: `
+          mutation {
+            login(email: "a@budgetify.xyz", password: "12345678") {
+              token
+            }
+          }
+        `,
+      })
+      .expect(200);
+
+    const token = getData(loginRes).login.token;
+
+    // Create a transaction
+    const createRes = await request
+      .post('')
+      .set('Cookie', [`authToken=${token}`])
+      .send({
+        query: `
+          mutation {
+            createGroupTransaction(
+              groupId: "0"
+              name: "TestTransaction"
+              type: TOP_UP
+              value: 400
+              participantIds: ["a"]
+            ) {
+              id
+              group {
+                value
+              }
+            }
+          }`,
+      })
+      .expect(200);
+
+    const data = getData(createRes);
+
+    expect(data).to.have.property('createGroupTransaction');
+
+    const transaction = data.createGroupTransaction;
+    expect(transaction).to.be.not.null;
+
+    const group = await prisma.group.findFirst();
+    expect(group?.value).to.equal(400);
+  });
+});
