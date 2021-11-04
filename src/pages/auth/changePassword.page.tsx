@@ -63,7 +63,7 @@ export default function ChangePassword() {
 
         <Form form={changePasswordForm} onSubmit={onSubmit}>
           <Input
-            label={t('password')}
+            label={t('auth:newPassword')}
             type="password"
             autoComplete="new-password"
             {...changePasswordForm.register('password', {
