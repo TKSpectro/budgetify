@@ -128,8 +128,16 @@ export function Header() {
               </>
             )}
 
-            {!isLoggedIn && <HeaderLink href="/auth/login">Login</HeaderLink>}
-            {!isLoggedIn && <HeaderLink href="/auth/signup">Signup</HeaderLink>}
+            {!isLoggedIn && (
+              <HeaderLink href="/auth/login" className="text-gray-600 dark:text-gray-200">
+                Login
+              </HeaderLink>
+            )}
+            {!isLoggedIn && (
+              <HeaderLink href="/auth/signup" className="text-gray-600 dark:text-gray-200">
+                Signup
+              </HeaderLink>
+            )}
             {isLoggedIn && (
               <HeaderLink href="/profile" className="text-gray-600 dark:text-gray-200">
                 {t('profile')}
