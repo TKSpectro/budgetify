@@ -37,8 +37,6 @@ const server = new ApolloServer({
           settings: { 'request.credentials': 'include' },
         }),
   ],
-  // Enable performance tracing for development -> This is deprecated with apollo-server-micro@3.0
-  //tracing: process.env.NODE_ENV === 'development',
 });
 
 const startServer = server.start();
