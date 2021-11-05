@@ -60,7 +60,7 @@ export default function Signup() {
       <Head>
         <title>{t('signup')} | budgetify</title>
       </Head>
-      <Container>
+      <Container title={t('signup')}>
         <div className="mb-2">
           <Error title={t('auth:signupError')} error={error} />
         </div>

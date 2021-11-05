@@ -114,7 +114,7 @@ export default function Groups() {
       <Head>
         <title>{t('common:groups')} | budgetify</title>
       </Head>
-      <Container>
+      <Container title={t('common:groups')}>
         <Error title={t('common:loadingError')} error={error} />
         <Error title={t('useInviteError')} error={inviteError} />
         <Error title={t('createGroupError')} error={createGroupError} />

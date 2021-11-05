@@ -117,7 +117,7 @@ export default function Home() {
 
       {loggedIn ? (
         <div className="grid grid-cols-1 xl:grid-cols-2 lg:gap-x-8 overflow-auto md:mx-16 md:px-4">
-          <Container>
+          <Container title={t('households')}>
             <Error
               title={t('home:householdsNotFoundError')}
               error={households.length === 0 ? '' : undefined}
@@ -144,7 +144,7 @@ export default function Home() {
               );
             })}
           </Container>
-          <Container>
+          <Container title={t('groups')}>
             <Error
               title={t('home:groupsNotFoundError')}
               error={groups.length === 0 ? '' : undefined}

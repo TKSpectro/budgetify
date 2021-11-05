@@ -40,6 +40,8 @@
   "tokenRequiredMessage": "Bitte einen Einladungs Token eingeben.",
   "tokenLengthMessage": "Bitte einen gültigen Einladungs Token eingeben. (Länge).",
   "tokenPatternMessage": "Bitte einen gültigen Einladungs Token eingeben.",
+  "invite": "Einladung",
+  "invites": "Einladungen",
   "actions": "Aktionen",
   "expires": "Verfallen",
   "enabled": "Aktiviert",

@@ -58,7 +58,7 @@ export default function OTPLogin() {
       <Head>
         <title>{t('login')} | budgetify</title>
       </Head>
-      <Container>
+      <Container title={t('login')}>
         <div className="mb-2">
           <Error title={t('auth:loginError')} error={error} />
         </div>

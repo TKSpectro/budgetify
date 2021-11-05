@@ -98,7 +98,7 @@ export default function ManageGroup() {
       <Head>
         <title>{t('common:groups') + ' ' + t('common:manage')} | budgetify</title>
       </Head>
-      <Container big>
+      <Container big title={group?.name + ' ' + t('common:manage')}>
         <Error title={t('common:loadingError')} error={error} />
         <Error title={t('deleteGroupError')} error={deleteGroupError} />
 
@@ -124,7 +124,7 @@ export default function ManageGroup() {
         )}
       </Container>
 
-      <Container>
+      <Container title={t('common:invites') + ' ' + t('common:manage')}>
         <Loader loading={loading} />
 
         <InviteManager invites={invites as Invite[]} isOwner={isOwner} refetch={refetch} t={t} />

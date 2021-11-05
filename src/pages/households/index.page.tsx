@@ -103,7 +103,7 @@ export default function Households() {
       <Head>
         <title>{t('common:households')} | budgetify</title>
       </Head>
-      <Container>
+      <Container title={t('common:households')}>
         <Error title={t('common:loadingError')} error={error} />
         <Error title={t('useInviteError')} error={useInviteError} />
         <Error title={t('createHouseholdError')} error={createHouseholdError} />
