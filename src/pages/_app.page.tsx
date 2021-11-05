@@ -12,7 +12,7 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <ApolloProvider client={client}>
-      <ThemeProvider defaultTheme="system" storageKey="theme" attribute="class">
+      <ThemeProvider defaultTheme="light" storageKey="theme" attribute="class">
         <Layout>
           <Component {...pageProps} />
         </Layout>
