@@ -250,8 +250,38 @@ describe('Group Transaction Tests', () => {
 
     const transaction = data.createGroupTransaction;
     expect(transaction).to.be.not.null;
+    expect(transaction.group?.value).to.equal(4);
 
-    const group = await prisma.group.findFirst();
-    expect(group?.value).to.equal(400);
+    // Create a transaction
+    const create2Res = await request
+      .post('')
+      .set('Cookie', [`authToken=${token}`])
+      .send({
+        query: `
+          mutation {
+            createGroupTransaction(
+              groupId: "0"
+              name: "TestTransaction2"
+              type: TOP_UP
+              value: 50
+              participantIds: ["a"]
+            ) {
+              id
+              group {
+                value
+              }
+            }
+          }`,
+      })
+      .expect(200);
+
+    const data2 = getData(create2Res);
+
+    expect(data2).to.have.property('createGroupTransaction');
+
+    const transaction2 = data2.createGroupTransaction;
+    expect(transaction2).to.be.not.null;
+
+    expect(transaction2.group?.value).to.equal(4.5);
   });
 });
