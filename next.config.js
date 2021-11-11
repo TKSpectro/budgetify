@@ -70,5 +70,5 @@ module.exports = {
   ],
   // Currently opt-in to replace Terser with new SWC compiler -> way faster
   // https://nextjs.org/docs/upgrading#swc-replacing-terser-for-minification
-  swcMinify: true,
+  // swcMinify: true,
 };

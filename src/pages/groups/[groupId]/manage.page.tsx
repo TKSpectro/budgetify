@@ -98,7 +98,7 @@ export default function ManageGroup() {
       <Head>
         <title>{t('common:groups') + ' ' + t('common:manage')} | budgetify</title>
       </Head>
-      <Container big title={group?.name + ' ' + t('common:manage')}>
+      <Container title={group?.name + ' ' + t('common:manage')}>
         <Error title={t('common:loadingError')} error={error} />
         <Error title={t('deleteGroupError')} error={deleteGroupError} />
 

@@ -96,7 +96,7 @@ export default function Household() {
 
       {!error && household && (
         <>
-          <Container big>
+          <Container>
             <div className="relative text-6xl text-brand-500">
               {household.name}
               <span className="hidden md:block absolute right-4 top-6 text-base">
