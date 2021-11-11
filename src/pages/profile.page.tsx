@@ -176,6 +176,64 @@ export default function Profile() {
             </div>
 
             <div>
+              <Button onClick={logoutHandler} className="mr-4 mt-2 w-full sm:w-auto">
+                {t('logout')}
+              </Button>
+              <div className="flex sm:block">
+                <Button
+                  className="mt-2 mr-4 flex-grow sm:w-auto"
+                  onClick={() => router.push('/auth/changePassword')}
+                >
+                  {t('profile:changePassword')}
+                </Button>
+                <ModalForm
+                  form={updateUserForm}
+                  buttonText={t('profile:updateAccount')}
+                  title={t('profile:updateAccount')}
+                  onSubmit={updateUserHandler}
+                  buttonClassName="mt-2 sm:mr-4 flex-grow sm:w-auto"
+                  onClick={updateUserClickHandler}
+                >
+                  <Input
+                    label={t('firstname')}
+                    autoComplete="given-name"
+                    {...updateUserForm.register('firstname', {
+                      required: { value: true, message: t('firstnameMessage') },
+                    })}
+                  ></Input>
+                  <Input
+                    label={t('lastname')}
+                    autoComplete="family-name"
+                    {...updateUserForm.register('lastname', {
+                      required: { value: true, message: t('lastnameMessage') },
+                    })}
+                  ></Input>
+                  <Input
+                    label={t('email')}
+                    type="email"
+                    autoComplete="email"
+                    {...updateUserForm.register('email', {
+                      required: { value: true, message: t('emailMessage') },
+                    })}
+                  ></Input>
+
+                  <label>
+                    {t('profile:receiveNotifications')}
+                    <Switch
+                      isLeft={!!updateUserForm.watch('receiveNotifications')}
+                      onClick={() =>
+                        updateUserForm.setValue(
+                          'receiveNotifications',
+                          !updateUserForm.getValues('receiveNotifications'),
+                        )
+                      }
+                      leftIcon={<XIcon className="w-4 h-4 " />}
+                      rightIcon={<CheckIcon className="w-4 h-4 text-brand-400" />}
+                    />
+                  </label>
+                </ModalForm>
+              </div>
+
               <Modal
                 title={t('profile:deleteAccount')}
                 description={t('profile:deleteAccountDescription')}
@@ -183,58 +241,8 @@ export default function Profile() {
                 onSubmit={deleteUser}
                 buttonText={t('profile:deleteAccount')}
                 variant="danger"
-                buttonClassName="mr-4"
+                buttonClassName="mr-4 mt-8 w-full sm:w-auto"
               />
-              <Button className="mr-4" onClick={() => router.push('/auth/changePassword')}>
-                {t('profile:changePassword')}
-              </Button>
-              <ModalForm
-                form={updateUserForm}
-                buttonText={t('profile:updateAccount')}
-                title={t('profile:updateAccount')}
-                onSubmit={updateUserHandler}
-                buttonClassName="mr-4"
-                onClick={updateUserClickHandler}
-              >
-                <Input
-                  label={t('firstname')}
-                  autoComplete="given-name"
-                  {...updateUserForm.register('firstname', {
-                    required: { value: true, message: t('firstnameMessage') },
-                  })}
-                ></Input>
-                <Input
-                  label={t('lastname')}
-                  autoComplete="family-name"
-                  {...updateUserForm.register('lastname', {
-                    required: { value: true, message: t('lastnameMessage') },
-                  })}
-                ></Input>
-                <Input
-                  label={t('email')}
-                  type="email"
-                  autoComplete="email"
-                  {...updateUserForm.register('email', {
-                    required: { value: true, message: t('emailMessage') },
-                  })}
-                ></Input>
-
-                <label>
-                  {t('profile:receiveNotifications')}
-                  <Switch
-                    isLeft={!!updateUserForm.watch('receiveNotifications')}
-                    onClick={() =>
-                      updateUserForm.setValue(
-                        'receiveNotifications',
-                        !updateUserForm.getValues('receiveNotifications'),
-                      )
-                    }
-                    leftIcon={<XIcon className="w-4 h-4 " />}
-                    rightIcon={<CheckIcon className="w-4 h-4 text-brand-400" />}
-                  />
-                </label>
-              </ModalForm>
-              <Button onClick={logoutHandler}>{t('logout')}</Button>
             </div>
           </>
         )}
