@@ -161,17 +161,19 @@ export default function Profile() {
               <div className="overflow-auto ml-2">{me?.email}</div>
               <div className="text-lg font-medium">{t('profile:receiveNotifications')}</div>
               <div className="overflow-auto ml-2">
-                {me?.receiveNotifications ? (
-                  <span className="flex">
-                    {t('enabled')}
-                    <CheckIcon className="w-6 h-6 ml-1 border-2 border-brand-500 rounded-lg text-brand-500" />
-                  </span>
-                ) : (
-                  <span className="flex">
-                    {t('disabled')}
-                    <XIcon className="w-6 h-6 ml-1 border-2 border-red-500 rounded-lg text-red-500" />
-                  </span>
-                )}
+                <span className="flex items-center">
+                  {me?.receiveNotifications ? (
+                    <>
+                      {t('enabled')}
+                      <CheckIcon className="w-5 h-5 ml-1 border-2 border-brand-500 rounded-lg text-brand-500" />
+                    </>
+                  ) : (
+                    <>
+                      {t('disabled')}
+                      <XIcon className="w-5 h-5 ml-1 border-2 border-red-500 rounded-lg text-red-500" />
+                    </>
+                  )}
+                </span>
               </div>
             </div>
 
@@ -179,6 +181,7 @@ export default function Profile() {
               <Button onClick={logoutHandler} className="mr-4 mt-2 w-full sm:w-auto">
                 {t('logout')}
               </Button>
+
               <div className="flex sm:block">
                 <Button
                   className="mt-2 mr-4 flex-grow sm:w-auto"
@@ -186,6 +189,7 @@ export default function Profile() {
                 >
                   {t('profile:changePassword')}
                 </Button>
+
                 <ModalForm
                   form={updateUserForm}
                   buttonText={t('profile:updateAccount')}
@@ -199,6 +203,7 @@ export default function Profile() {
                     autoComplete="given-name"
                     {...updateUserForm.register('firstname', {
                       required: { value: true, message: t('firstnameMessage') },
+                      maxLength: { value: 60, message: t('firstnameLengthMessage') },
                     })}
                   ></Input>
                   <Input
@@ -206,6 +211,7 @@ export default function Profile() {
                     autoComplete="family-name"
                     {...updateUserForm.register('lastname', {
                       required: { value: true, message: t('lastnameMessage') },
+                      maxLength: { value: 60, message: t('lastnameLengthMessage') },
                     })}
                   ></Input>
                   <Input
