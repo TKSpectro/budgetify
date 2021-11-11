@@ -9,7 +9,7 @@ export function Footer() {
   return (
     <footer
       id="footer"
-      className="relative z-10 md:py-4 mt-8 border-t-2 bg-gray-200 dark:bg-gray-800 border-gray-400 dark:border-gray-700"
+      className="relative z-10 md:py-4 sm:mt-8 border-t-2 bg-gray-200 dark:bg-gray-800 border-gray-400 dark:border-gray-700"
     >
       <div className="flex justify-around items-center w-full">
         <div className="flex items-center flex-col md:flex-row">
