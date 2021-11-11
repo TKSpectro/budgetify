@@ -14,6 +14,7 @@ if (!process.env.JWT_SECRET) {
   throw new Error('Server is not setup correctly');
 }
 
+// Create a apollo server instance with custom error handling and plugins
 const server = new ApolloServer({
   schema,
   context,
@@ -41,6 +42,8 @@ const server = new ApolloServer({
 
 const startServer = server.start();
 
+// As of apollo-server-micro@3.0 we need to call the start method on the server instance and
+// await it before returning the handler
 export default async function handler(req: MicroRequest, res: ServerResponse) {
   // As of apollo-server-micro@3... we need to await the start of the server
   await startServer;

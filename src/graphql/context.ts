@@ -22,6 +22,9 @@ export interface Context {
   locale: string;
 }
 
+/**
+ * Context function for nexus. The returned object will be available in every graphql-resolver
+ */
 export async function context({ req, res }: ContextInput): Promise<Context> {
   // Get the token from authToken cookie. This is a secure http-only cookie
   // and contains the JWT
