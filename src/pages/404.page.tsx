@@ -23,7 +23,7 @@ export default function Custom404() {
                 href="/"
                 className="bg-brand-500 text-white font-semibold px-6 py-3 rounded-md mr-6"
               >
-                HOME
+                {t('common:home')}
               </Link>
             </div>
           </div>

@@ -53,6 +53,7 @@
   "privacy": "Datenschutz",
   "imprint": "Impressum",
   "loadingError": "Fehler beim Laden der Daten.",
+  "home": "Startseite",
 
   "//": "API ERRORS",
   "errorNotLoggedIn": "Sie sind nicht eingeloggt.",

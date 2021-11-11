@@ -53,6 +53,7 @@
   "privacy": "Privacy",
   "imprint": "Imprint",
   "loadingError": "Failed to load data.",
+  "home": "Home",
 
   "//": "API ERRORS",
   "errorNotLoggedIn": "Not logged in.",
