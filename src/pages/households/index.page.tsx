@@ -113,10 +113,11 @@ export default function Households() {
         />
         <Loader loading={loading} />
 
-        <div className="mb-4 relative">
+        <div className="flex justify-between mb-4">
           <ModalForm
             form={form}
             buttonText={t('useInvite')}
+            buttonClassName="mr-2"
             title={t('useInvite')}
             onSubmit={onSubmitHandler}
             submitText={t('useInvite')}
@@ -130,23 +131,22 @@ export default function Households() {
               })}
             ></Input>
           </ModalForm>
-          <div className="mt-2 md:mt-0 md:absolute md:right-0 md:top-0">
-            <ModalForm
-              form={createHouseholdForm}
-              buttonText={t('createHousehold')}
-              title={t('createHousehold')}
-              onSubmit={createHouseholdSubmitHandler}
-              submitText={t('createHousehold')}
-            >
-              <Input
-                label="Name"
-                {...createHouseholdForm.register('name', {
-                  required: { value: true, message: t('householdRequiredMessage') },
-                  minLength: { value: 2, message: t('householdLengthMessage') },
-                })}
-              ></Input>
-            </ModalForm>
-          </div>
+
+          <ModalForm
+            form={createHouseholdForm}
+            buttonText={t('createHousehold')}
+            title={t('createHousehold')}
+            onSubmit={createHouseholdSubmitHandler}
+            submitText={t('createHousehold')}
+          >
+            <Input
+              label="Name"
+              {...createHouseholdForm.register('name', {
+                required: { value: true, message: t('householdRequiredMessage') },
+                minLength: { value: 2, message: t('householdLengthMessage') },
+              })}
+            ></Input>
+          </ModalForm>
         </div>
 
         {households?.map((household) => {

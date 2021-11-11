@@ -120,10 +120,11 @@ export default function Groups() {
         <Error title={t('createGroupError')} error={createGroupError} />
 
         <Loader loading={loading} />
-        <div className="mb-4 relative">
+        <div className="flex justify-between mb-4">
           <ModalForm
             form={form}
             buttonText={t('useInvite')}
+            buttonClassName="mr-2"
             title={t('useInvite')}
             onSubmit={useInviteSubmitHandler}
           >
@@ -136,22 +137,21 @@ export default function Groups() {
               })}
             ></Input>
           </ModalForm>
-          <div className="mt-2 md:mt-0 md:absolute md:right-0 md:top-0">
-            <ModalForm
-              form={createGroupForm}
-              buttonText={t('createGroup')}
-              title={t('createGroup')}
-              onSubmit={createGroupSubmitHandler}
-            >
-              <Input
-                label={t('common:name')}
-                {...createGroupForm.register('name', {
-                  required: { value: true, message: t('createGroupNameRequiredMessage') },
-                  minLength: { value: 2, message: t('createGroupNameNameMessage') },
-                })}
-              ></Input>
-            </ModalForm>
-          </div>
+
+          <ModalForm
+            form={createGroupForm}
+            buttonText={t('createGroup')}
+            title={t('createGroup')}
+            onSubmit={createGroupSubmitHandler}
+          >
+            <Input
+              label={t('common:name')}
+              {...createGroupForm.register('name', {
+                required: { value: true, message: t('createGroupNameRequiredMessage') },
+                minLength: { value: 2, message: t('createGroupNameNameMessage') },
+              })}
+            ></Input>
+          </ModalForm>
         </div>
 
         {groups?.map((group) => {
