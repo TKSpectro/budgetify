@@ -10,11 +10,14 @@ type EncodedToken = {
   exp: number;
 };
 
-// Checks which can be used to check for authorization to specific things e.g. groups
+/**
+ * Checks which can be used to check for authorization to specific things e.g. groups
+ */
 export enum AuthRouteChecks {
   CHECK_HOUSEHOLD_OWNER = 'CHECK_HOUSEHOLD_OWNER',
   CHECK_GROUP_OWNER = 'CHECK_GROUP_OWNER',
 }
+
 /**
  * This function can be called in the getServerSideProps function of a component
  * to enforce that the user is logged in, else we will redirect him to either
@@ -24,7 +27,6 @@ export enum AuthRouteChecks {
  * @param redirect The route to redirect if not authenticated (default: /api/login)
  * @param checks Specific checks for authentication
  */
-
 export async function authenticatedRoute(
   context: GetServerSidePropsContext,
   redirect = '/auth/login',

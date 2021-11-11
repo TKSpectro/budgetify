@@ -9,8 +9,11 @@ interface ApolloClientParameters {
   initialState?: Record<string, any>;
 }
 
-// Call this function to get access to a apollo client for queries to graphql
-// Technically not needed because we cant just use preloadQuery for this
+/**
+ * This function is used for the wrapper component in _app.
+ * It returns a apollo client with all the configuration needed for the client to be able
+ * to consume our graphql api.
+ */
 export function initializeApollo({ initialState, headers }: ApolloClientParameters) {
   let nextClient = apolloClient;
 
@@ -78,16 +81,20 @@ export function initializeApollo({ initialState, headers }: ApolloClientParamete
   return nextClient;
 }
 
-// This function should only be used for creating the ApolloProvider -
-// Wrapper component in _app
+/**
+ * This function should only be used for creating the ApolloProvider -
+ * Wrapper component in _app
+ */
 export function useApollo(initialState?: Record<string, any>) {
   const client = useMemo(() => initializeApollo({ initialState }), [initialState]);
 
   return client;
 }
 
-// This function can be used in getServerSideProps to preload queries for SSR
-// You have to give the request context and also all queries you want to be loaded
+/**
+ * This function can be used in getServerSideProps to preload queries for SSR
+ * You have to give the request context and also all queries you want to be loaded
+ */
 export async function preloadQuery(context: GetServerSidePropsContext, ...queries: QueryOptions[]) {
   const client = initializeApollo({
     headers: context.req.headers as Record<string, string>,
@@ -100,7 +107,7 @@ export async function preloadQuery(context: GetServerSidePropsContext, ...querie
       initialClientState: client.cache.extract(),
     };
   } catch (e) {
-    // Even if an error occurs return empty props so the client just can request the data again
+    // Even if an error occurs return empty props so the client can request the data again
     return {};
   }
 }
