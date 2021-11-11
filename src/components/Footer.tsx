@@ -1,6 +1,6 @@
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { Link } from './Link';
+import { Link } from './UI/Link';
 
 export function Footer() {
   const { t } = useTranslation('common');

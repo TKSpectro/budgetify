@@ -6,14 +6,14 @@ import { useRouter } from 'next/dist/client/router';
 import Head from 'next/head';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { ME_QUERY } from '~/components/Header';
 import { Button } from '~/components/UI/Button';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Form } from '~/components/UI/Form';
-import { ME_QUERY } from '~/components/UI/Header';
 import { Input } from '~/components/UI/Input';
 import { Link } from '~/components/UI/Link';
-import { MeQuery, MeQueryVariables } from '~/components/UI/__generated__/Header.generated';
+import { MeQuery, MeQueryVariables } from '~/components/__generated__/Header.generated';
 import { SignupMutation, SignupMutationVariables } from './__generated__/signup.page.generated';
 
 const SIGNUP_MUTATION = gql`

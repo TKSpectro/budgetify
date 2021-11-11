@@ -5,8 +5,8 @@ import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ComponentProps, useState } from 'react';
-import { ThemeSwitch } from '../ThemeSwitch';
-import { Button } from './Button';
+import { ThemeSwitch } from './ThemeSwitch';
+import { Button } from './UI/Button';
 import { MeQuery, MeQueryVariables } from './__generated__/Header.generated';
 
 interface Props extends ComponentProps<'a'> {
