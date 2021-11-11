@@ -96,7 +96,14 @@ export default function GroupPage() {
       <Head>
         <title>{group?.name} | budgetify</title>
       </Head>
-      <Container>
+      <Container
+        title={group?.name}
+        action={
+          <Link href={`${router.asPath}/manage`} asButton>
+            {t('common:manage')}
+          </Link>
+        }
+      >
         <Error title={t('common:loadingError')} error={error} />
 
         <Loader loading={loading} />
@@ -106,12 +113,6 @@ export default function GroupPage() {
             <div className="text-xl font-bold ">{group.name}</div>
             <div className="text-lg font-medium">
               {t('groupBalance')}: {group.value}€
-            </div>
-
-            <div className="block mt-2 md:absolute md:right-0 md:top-2">
-              <Link href={`${router.asPath}/manage`} asButton>
-                {t('common:manage')}
-              </Link>
             </div>
           </div>
         )}
