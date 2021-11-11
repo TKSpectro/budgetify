@@ -4,7 +4,6 @@ import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { ManagedModalForm } from '~/components/UI/ManagedModalForm';
@@ -96,8 +95,13 @@ export function RecurringPaymentTable({ recurringPayments, categories, refetch, 
     setShowUpdateModal(true);
   };
 
+  // if no recurringPayment or categories were given we return null
+  if (recurringPayments?.length <= 0 || categories?.length <= 0) {
+    return null;
+  }
+
   return (
-    <Container>
+    <>
       <Error title={t('updateRecurringPaymentError')} error={updateRecPaymentError} />
 
       <ManagedModalForm
@@ -240,6 +244,6 @@ export function RecurringPaymentTable({ recurringPayments, categories, refetch, 
           })}
         </tbody>
       </table>
-    </Container>
+    </>
   );
 }

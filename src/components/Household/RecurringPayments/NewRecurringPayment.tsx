@@ -79,6 +79,10 @@ export function NewRecurringPayment({ categories, refetch, t }: Props) {
     });
   };
 
+  if (categories?.length <= 0) {
+    return null;
+  }
+
   return (
     <>
       <Error title={t('createRecurringPaymentError')} error={createRecurringPaymentError} />

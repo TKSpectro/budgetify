@@ -54,8 +54,8 @@ export default function RecurringPayments() {
     },
   });
 
-  const recurringPayments = data?.household?.recurringPayments;
-  const categories = data?.categories;
+  const recurringPayments = data?.household?.recurringPayments || [];
+  const categories = data?.categories || [];
 
   return (
     <>
@@ -63,25 +63,27 @@ export default function RecurringPayments() {
         <title>{t('common:recurringPayments')} | budgetify</title>
       </Head>
 
-      <Container>
+      <Container
+        title={t('common:recurringPayments')}
+        action={
+          <NewRecurringPayment categories={categories as Category[]} refetch={refetch} t={t} />
+        }
+      >
         <Error title={t('common:loadingError')} error={error} />
         <Error
           title={t('recurringPaymentsNotFoundError')}
           error={!loading && !error && recurringPayments?.length === 0 ? '' : undefined}
         />
         <Loader loading={loading} />
-        {categories?.length !== 0 && (
-          <NewRecurringPayment categories={categories as Category[]} refetch={refetch} t={t} />
-        )}
+        <div className="sm:mt-8">
+          <RecurringPaymentTable
+            recurringPayments={recurringPayments as RecurringPayment[]}
+            categories={categories as Category[]}
+            refetch={refetch}
+            t={t}
+          />
+        </div>
       </Container>
-      {recurringPayments?.length !== 0 && categories?.length !== 0 && (
-        <RecurringPaymentTable
-          recurringPayments={recurringPayments as RecurringPayment[]}
-          categories={categories as Category[]}
-          refetch={refetch}
-          t={t}
-        />
-      )}
     </>
   );
 }
