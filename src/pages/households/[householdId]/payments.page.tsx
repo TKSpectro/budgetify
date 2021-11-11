@@ -168,12 +168,16 @@ export default function Payments() {
 
       <div>
         <>
-          <Container>
+          <Container
+            title={t('common:payments')}
+            action={<NewPayment categories={categories as Category[]} refetch={refetch} t={t} />}
+          >
             <Error title={t('common:loadingError')} error={error} />
             <Error
               title={t('noPaymentsFoundError')}
               error={!loading && !error && payments.length === 0 ? '' : undefined}
             />
+            <Loader loading={loading} />
 
             <Form form={form} onSubmit={onDateFilterSubmit}>
               <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 mb-4">
@@ -214,13 +218,9 @@ export default function Payments() {
                 options={paymentChartOptions}
               />
             </div>
-            <div className="mt-8 flex flex-row-reverse">
-              <NewPayment categories={categories as Category[]} refetch={refetch} t={t} />
+            <div className="mt-4">
+              <PaymentTable payments={payments as Payment[]} t={t} />
             </div>
-          </Container>
-          <Container>
-            <Loader loading={loading} />
-            <PaymentTable payments={payments as Payment[]} t={t} />
           </Container>
         </>
       </div>

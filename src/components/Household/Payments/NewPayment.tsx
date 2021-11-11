@@ -68,6 +68,10 @@ export function NewPayment({ categories, refetch, t }: Props) {
     });
   };
 
+  if (categories.length <= 0) {
+    return null;
+  }
+
   return (
     <>
       <Error title={t('createPaymentError')} error={createPaymentError} />
