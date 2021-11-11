@@ -1,6 +1,8 @@
 import Head from 'next/head';
 
-// Component which contains all base meta tags like open-graph etc.
+/**
+ *  Component which contains all base meta tags like open-graph etc.
+ */
 export function Meta() {
   return (
     <Head>

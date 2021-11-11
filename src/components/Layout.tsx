@@ -7,6 +7,9 @@ interface Props {
   children: React.ReactNode;
 }
 
+/**
+ * Wrapper component for the base layout of the page (Base Meta Tags, Header, Footer)
+ */
 export function Layout({ children }: Props) {
   return (
     <>

@@ -10,6 +10,13 @@ interface Props {
   children: React.ReactNode;
 }
 
+/**
+ * Custom Disclosure component. Shows a text and if clicked opens up and show the children underneath
+ * @param text the base text which always gets shown
+ * @param overflowText base text which gets shown at the right side of the disclosure
+ * @param showOpen if true shows a arrow which indicates that it can be opened, else this gets hidden and you cant open it
+ * @param children ReactNode which contains the elements which can be opened
+ */
 export function Disclosure({ text, overflowText, showOpen, className, children }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 

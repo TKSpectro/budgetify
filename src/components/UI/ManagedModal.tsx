@@ -10,6 +10,16 @@ export interface Props extends ButtonProps {
   setShowModal: (value: boolean) => void;
 }
 
+/**
+ * Custom ManagedModal component. Containing texts, a cancel button and a submit button
+ * This component does NOT contain its state itself (unlike the normal Modal component)
+ * It can be used for tables where all rows for example should open the same modal.
+ * @param title bigger text at the top
+ * @param description main content show in the middle
+ * @param submitText the text shown on the submit button inside the modal
+ * @param showModal the state (boolean) if the modal should be shown
+ * @param setShowModal a function changing the state of showing the modal
+ */
 export function ManagedModal({
   title,
   description,

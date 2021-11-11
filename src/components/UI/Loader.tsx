@@ -2,6 +2,10 @@ interface Props {
   loading: boolean;
 }
 
+/**
+ * A simple bar animation which pulsates.
+ * Can be used i.e. while loading data.
+ */
 export function Loader({ loading }: Props) {
   if (!loading) return null;
 

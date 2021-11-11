@@ -8,6 +8,13 @@ interface Props extends ComponentProps<'a'> {
   href: string;
 }
 
+/**
+ * Custom Link component which wraps a next/link
+ * @param noUnderline will remove the underline styling from the text
+ * @param asButton will style the link like a button
+ * @param href the location where the link should redirect to
+ * @returns
+ */
 export function Link({ noUnderline = false, asButton = false, href, ...props }: Props) {
   const content = (
     <a

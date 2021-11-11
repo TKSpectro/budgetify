@@ -6,6 +6,9 @@ interface Props extends ComponentProps<'input'> {
   className?: string;
 }
 
+/**
+ * Custom Input component. Should be used inside the custom Form component
+ */
 export const Input = forwardRef<HTMLInputElement, Props>(function Input(
   { label, type = 'text', className, ...props },
   ref,

@@ -7,6 +7,10 @@ interface Props extends ComponentProps<'select'> {
   className?: string;
 }
 
+/**
+ * Custom select component
+ * @param children should contain the options of the select
+ */
 export const Select = forwardRef<HTMLSelectElement, Props>(function Input(
   { label, children, className, ...props },
   ref,

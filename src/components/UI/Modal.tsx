@@ -12,6 +12,15 @@ export interface Props extends ButtonProps {
   children?: ReactNode;
 }
 
+/**
+ * Custom Modal component. Containing texts, a cancel button and a submit button
+ * This Modal component contains its state itself (unlike the ManagedModal)
+ * @param title bigger text at the top
+ * @param description main content show in the middle
+ * @param buttonText the text of the button which will be show if the modal is hidden
+ * @param submitText the text shown on the submit button inside the modal
+ * @param children can contain any ReactNodes which get placed below the description
+ */
 export function Modal({
   title,
   description,

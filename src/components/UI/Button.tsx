@@ -6,6 +6,11 @@ export interface Props extends ComponentProps<'button'> {
   className?: string;
 }
 
+/**
+ * Custom Button component which wraps a button element
+ * @param variant changes the look of the button (primary, secondary, danger, transparent)
+ * @param className extends the styling of the component
+ */
 export function Button({ variant = 'primary', className, ...props }: Props) {
   return (
     <button

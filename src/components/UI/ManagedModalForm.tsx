@@ -16,6 +16,20 @@ export interface Props<T> {
   setShowModal: (value: boolean) => void;
 }
 
+/**
+ * Custom ManagedModalForm component. Containing texts, a form, a cancel button and a submit button
+ * This component does NOT contain its state itself (unlike the normal ModalForm component)
+ * It can be used for tables where all rows for example should open the same modal but with slight
+ * differences in the values. This improves performance a lot as the form instance does not need be
+ * created for every row of a table. Which would be a huge memory/performance overhead for NEXT
+ * @param title bigger text at the top
+ * @param description main content show in the middle
+ * @param submitText the text shown on the submit button inside the modal
+ * @param children should contain all the custom Input components inside the form
+ * @param form an instance of a react-hook-form which will contain the state of the whole form
+ * @param showModal the state (boolean) if the modal should be shown
+ * @param setShowModal a function changing the state of showing the modal
+ */
 export function ManagedModalForm<T>({
   title,
   description,

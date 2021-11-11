@@ -8,6 +8,11 @@ interface Props {
   className?: string;
 }
 
+/**
+ * Custom Error component for handling string errors, Apollo Error thrown by the backend.
+ * This automatically tries to i18n the given error, if no translation is found it will just show
+ * the given string
+ */
 export function Error({ title, error, className }: Props) {
   const { t } = useTranslation('common');
   if (typeof error === 'undefined') return null;

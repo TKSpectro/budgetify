@@ -28,6 +28,12 @@ interface Props<T extends FieldValues = any> extends Omit<ComponentProps<'form'>
   onSubmit: SubmitHandler<T>;
 }
 
+/**
+ * Custom form component wrapping a react-hook-form for easier form handling
+ * @param form form state instanced by react-hook-form
+ * @param onSubmit function which gets called when submit was pressed
+ * @param children can contain html inputs but better use the custom Input components
+ */
 export function Form({ form, onSubmit, children, ...props }: Props) {
   return (
     <FormProvider {...form}>

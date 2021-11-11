@@ -8,6 +8,14 @@ interface Props {
   big?: boolean;
 }
 
+/**
+ * Custom switch component
+ * @param isLeft the current state of the switch
+ * @param onClick a function which gets called when the switch was clicked
+ * @param leftIcon a ReactNode which contains the icon which gets shown on the left side
+ * @param rightIcon a ReactNode which contains the icon which gets shown on the right side
+ * @param big if true will scale the switch up by 14px/1.5rem
+ */
 export function Switch({ isLeft, onClick, leftIcon, rightIcon, big }: Props) {
   return (
     <div className="items-center" onClick={() => onClick()}>

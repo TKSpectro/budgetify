@@ -16,6 +16,16 @@ export interface Props<T> {
   form: UseFormReturn<T>;
 }
 
+/**
+ * Custom ModalForm component. Containing a custom Form component, a cancel button and a submit button
+ * This Modal component contains its state itself (unlike the ManagedModal)
+ * @param title bigger text at the top
+ * @param onClick a function which gets called when the modal open button gets clicked
+ * @param buttonText the text of the button which will be show if the modal is hidden
+ * @param submitText the text shown on the submit button inside the modal
+ * @param children should contain all the custom Input components inside the form
+ * @param form an instance of a react-hook-form which will contain the state of the whole form
+ */
 export function ModalForm<T>({
   title,
   onSubmit,
