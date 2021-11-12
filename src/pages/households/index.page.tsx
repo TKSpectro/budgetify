@@ -3,13 +3,14 @@ import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useForm } from 'react-hook-form';
+import { HouseholdList } from '~/components/Household/HouseholdList';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Input } from '~/components/UI/Input';
 import { Loader } from '~/components/UI/Loader';
 import { ModalForm } from '~/components/UI/ModalForm';
+import { Household } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { uuidRegex } from '~/utils/helper';
@@ -149,24 +150,7 @@ export default function Households() {
           </ModalForm>
         </div>
 
-        {households?.map((household) => {
-          return (
-            <Link href={`/households/${household?.id}`} passHref key={household?.id}>
-              <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 mb-4 last:mb-0 rounded-lg hover:cursor-pointer">
-                <div className="text-xl">
-                  {household?.name}
-                  <span className="float-right hidden sm:block">
-                    Balance: {household?.sumOfAllPayments}€
-                  </span>
-                </div>
-                <div className="font-light">
-                  {t('owner')}: {household?.owner?.name}
-                </div>
-                <span className="sm:hidden">Balance: {household?.sumOfAllPayments}€</span>
-              </div>
-            </Link>
-          );
-        })}
+        <HouseholdList households={households as Household[]} t={t} />
       </Container>
     </>
   );
