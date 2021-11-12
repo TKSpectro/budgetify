@@ -177,7 +177,7 @@ export function ThresholdList({ me, thresholds, group, refetch, t }: Props) {
             <div key={threshold.id} className="pt-2 pb-1">
               <div
                 className={clsx(
-                  'md:inline-block md:w-2/3',
+                  'lg:inline-block lg:w-2/3',
                   threshold.type === ThresholdType.Min ? 'my-3' : 'my-2',
                 )}
               >
@@ -205,7 +205,7 @@ export function ThresholdList({ me, thresholds, group, refetch, t }: Props) {
               {!!group.owners?.find((x) => x?.id === me?.id)?.id && (
                 <div
                   className={clsx(
-                    'md:w-1/3 flex justify-end md:justify-center md:float-right ',
+                    'lg:w-1/3 flex justify-end lg:justify-center lg:float-right',
                     threshold.type !== ThresholdType.Min && ' mt-1',
                   )}
                 >
