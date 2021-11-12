@@ -3,6 +3,7 @@
   "memberBalances": "Member Balances",
   "transactionsNotFoundError": "Could not find any transactions. Create your first one.",
   "thresholdsNotFoundError": "Could not find any thresholds. Create your first one.",
+  "memberBalancesNotFoundError": "Could not find any balances of the members.",
 
   "showing": "Showing",
   "to": "to",

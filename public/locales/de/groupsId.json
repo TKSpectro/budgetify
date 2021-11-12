@@ -3,6 +3,7 @@
   "memberBalances": "Mitglieder Balancen",
   "transactionsNotFoundError": "Keine Transaktionen gefunden.",
   "thresholdsNotFoundError": "Keine Schwellenwerte gefunden.",
+  "memberBalancesNotFoundError": "Keine Balancen von Mitgliedern gefunden.",
 
   "showing": "Zeige",
   "to": "bis",

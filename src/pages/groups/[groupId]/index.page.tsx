@@ -1,22 +1,27 @@
 import { gql, useQuery } from '@apollo/client';
-import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline';
-import clsx from 'clsx';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/dist/shared/lib/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { MemberBalancesList } from '~/components/Group/MemberBalancesList';
 import { NewThreshold } from '~/components/Group/NewThreshold';
 import { NewTransaction } from '~/components/Group/NewTransaction';
 import { ThresholdList } from '~/components/Group/ThresholdList';
-import { Button } from '~/components/UI/Button';
+import { TransactionList } from '~/components/Group/TransactionList';
 import { Container } from '~/components/UI/Container';
 import { Disclosure } from '~/components/UI/Disclosure';
 import { Error } from '~/components/UI/Error';
 import { Link } from '~/components/UI/Link';
 import { Loader } from '~/components/UI/Loader';
-import { Group, Threshold, User } from '~/graphql/__generated__/types';
+import {
+  Group,
+  GroupTransaction,
+  Participant,
+  Threshold,
+  User,
+} from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
 import { GroupQuery, GroupQueryVariables } from './__generated__/index.page.generated';
@@ -84,7 +89,7 @@ export default function GroupPage() {
   const me = data?.me;
 
   const members = group?.members || [];
-  const memberBalances = data?.calculateMemberBalances;
+  const memberBalances = data?.calculateMemberBalances || [];
 
   const thresholds = group?.thresholds || [];
 
@@ -104,159 +109,52 @@ export default function GroupPage() {
           </Link>
         }
       >
+        <Loader loading={loading} />
         <Error title={t('common:loadingError')} error={error} />
 
-        <Loader loading={loading} />
-
-        {group && (
-          <div className="relative text-center md:text-left">
-            <div className="text-xl font-bold ">{group.name}</div>
-            <div className="text-lg font-medium">
-              {t('groupBalance')}: {group.value}€
-            </div>
+        <div className="relative text-center md:text-left">
+          <div className="text-lg font-semibold">
+            {t('groupBalance')}: {group?.value}€
           </div>
-        )}
+        </div>
+
+        {/* // Threshold list */}
+        <Disclosure text={t('common:thresholds')} showOpen className="text-lg font-medium mt-4">
+          <ThresholdList
+            me={me as User}
+            group={group as Group}
+            thresholds={thresholds as Threshold[]}
+            refetch={refetch}
+            t={t}
+          />
+          <Error
+            title={t('thresholdsNotFoundError')}
+            error={thresholds.length === 0 ? '' : undefined}
+          />
+          <NewThreshold refetch={refetch} t={t} />
+        </Disclosure>
       </Container>
 
-      {thresholds && (
-        <Container>
-          <Disclosure text={t('common:thresholds')} showOpen className="text-lg font-semibold">
-            <ThresholdList
-              me={me as User}
-              group={group as Group}
-              thresholds={thresholds as Threshold[]}
-              refetch={refetch}
-              t={t}
-            />
-            <Error
-              title={t('thresholdsNotFoundError')}
-              error={thresholds.length === 0 ? '' : undefined}
-            />
-            <NewThreshold refetch={refetch} t={t} />
-          </Disclosure>
-        </Container>
-      )}
+      {/* // Member Balances List */}
+      <Container title={t('memberBalances')}>
+        <MemberBalancesList memberBalances={memberBalances as Participant[]} t={t} />
+      </Container>
 
-      {memberBalances && (
-        <Container>
-          <div className="text-lg font-semibold">{t('memberBalances')}</div>
-          <div className="w-full divide-y-2">
-            {memberBalances.map((member) => {
-              return (
-                <div key={member?.userId} className="grid grid-cols-2 py-1">
-                  <div>{member?.name}</div>
-                  <div
-                    className={clsx('text-right', {
-                      'text-red-600 dark:text-red-500': member?.value < 0,
-                    })}
-                  >
-                    {member?.value + '€'}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </Container>
-      )}
-
-      {transactions && (
-        <Container>
-          <div className="text-lg font-semibold mb-4">
-            {t('common:transactions')}
-            <span className="text-base font-normal float-right mr-4">
-              <NewTransaction members={members as User[]} refetch={refetch} t={t} />
-            </span>
-          </div>
-
-          {transactions.length > 0 || transactionCount > 0 ? (
-            <>
-              <div className="divide-y-2">
-                {transactions.map((transaction) => {
-                  return (
-                    <div key={transaction?.id} className="py-1 sm:px-2">
-                      <Disclosure
-                        text={transaction?.name + ' : ' + transaction?.value + '€'}
-                        overflowText={
-                          transaction?.participants?.length === 1
-                            ? transaction?.participants[0]?.name
-                            : ''
-                        }
-                        showOpen={
-                          !!transaction?.participants && transaction?.participants?.length > 1
-                        }
-                      >
-                        <div>
-                          {transaction?.participants?.map((user, id, array) => {
-                            return (
-                              <span key={user?.id || id}>
-                                {user?.name + (id !== array.length - 1 ? ' | ' : '')}
-                              </span>
-                            );
-                          })}
-                        </div>
-                      </Disclosure>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="px-4 mt-4 sm:flex sm:items-center sm:justify-between sm:px-6 select-none">
-                <div className="hidden sm:flex">
-                  <p className="text-sm text-gray-700 dark:text-gray-200">
-                    {/* <Trans
-                      defaults={`Showing <span className="font-medium">{{start}}</span> to
-                      <span className="font-medium">
-                        {{end}}
-                      </span>
-                      of <span className="font-medium">{{count}}</span> transactions`}
-                      values={{
-                        start: skip + 1,
-                        end: skip + limit < transactionCount ? skip + limit : transactionCount,
-                        count: transactionCount,
-                      }}
-                      components={{ span: <span /> }}
-                    /> */}
-                    {t('showing')} <span className="font-medium">{skip + 1}</span> {t('to')}{' '}
-                    <span className="font-medium">
-                      {skip + limit < transactionCount ? skip + limit : transactionCount}
-                    </span>{' '}
-                    {t('of')} <span className="font-medium">{transactionCount}</span>{' '}
-                    {t('transactions')}
-                  </p>
-                </div>
-
-                <div className="flex justify-between">
-                  <Button
-                    disabled={skip - limit < 0}
-                    onClick={() => {
-                      fetchMore({ variables: { skip: skip - limit < 0 ? 0 : skip - limit } });
-                      setSkip(skip - limit < 0 ? 0 : skip - limit);
-                    }}
-                    className="flex"
-                    variant="transparent"
-                  >
-                    <ArrowLeftIcon className="w-6 h-6" />
-                  </Button>
-
-                  <Button
-                    disabled={skip + limit >= transactionCount}
-                    onClick={() => {
-                      fetchMore({ variables: { skip: skip + limit } });
-                      setSkip(skip + limit);
-                    }}
-                    className="ml-4 flex"
-                    variant="transparent"
-                  >
-                    <ArrowRightIcon className="w-6 h-6" />
-                  </Button>
-                </div>
-              </div>
-            </>
-          ) : (
-            <Error title={t('transactionsNotFoundError')} error="" />
-          )}
-        </Container>
-      )}
+      {/* // Transaction List */}
+      <Container
+        title={t('common:transactions')}
+        action={<NewTransaction members={members as User[]} refetch={refetch} t={t} />}
+      >
+        <TransactionList
+          transactions={transactions as GroupTransaction[]}
+          transactionCount={transactionCount}
+          skip={skip}
+          limit={limit}
+          fetchMore={fetchMore}
+          setSkip={setSkip}
+          t={t}
+        />
+      </Container>
     </>
   );
 }
