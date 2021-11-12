@@ -25,7 +25,7 @@ interface Props {
   t: TFunction;
 }
 
-export default function InviteList({ invites, isOwner, currentUserId, refetch, t }: Props) {
+export function InviteList({ invites, isOwner, currentUserId, refetch, t }: Props) {
   const [deleteInviteMutation, { error: deleteInviteError }] = useMutation<
     DeleteInviteMutation,
     DeleteInviteMutationVariables

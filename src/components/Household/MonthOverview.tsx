@@ -11,7 +11,7 @@ interface Props {
   t: TFunction;
 }
 
-export default function MonthOverview({ monthPayments: payments, t }: Props) {
+export function MonthOverview({ monthPayments: payments, t }: Props) {
   // The data array contains a map with payments of this month mapped by their category name and
   // the added up values spend in that category
   let data: { name: string; value: number }[] = [];

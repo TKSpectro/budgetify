@@ -6,7 +6,7 @@ import Head from 'next/dist/shared/lib/head';
 import { useRouter } from 'next/router';
 import { DeleteGroupModal } from '~/components/Group/Manage/DeleteGroupModal';
 import { InviteTable } from '~/components/Group/Manage/InviteTable';
-import MemberTable from '~/components/Group/Manage/MemberTable';
+import { MemberTable } from '~/components/Group/Manage/MemberTable';
 import { NewInviteButton } from '~/components/Group/Manage/NewInviteButton';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';

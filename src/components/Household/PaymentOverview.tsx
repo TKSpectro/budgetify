@@ -5,14 +5,14 @@ import { Payment } from '~/graphql/__generated__/types';
 import { Container } from '../UI/Container';
 import { Error } from '../UI/Error';
 import { Link } from '../UI/Link';
-import PaymentItem from './PaymentItem';
+import { PaymentItem } from './PaymentItem';
 
 interface Props {
   payments: Payment[];
   t: TFunction;
 }
 
-export default function PaymentOverview({ payments, t }: Props) {
+export function PaymentOverview({ payments, t }: Props) {
   const router = useRouter();
 
   return (

@@ -2,7 +2,7 @@ import { CurrencyDollarIcon } from '@heroicons/react/outline';
 import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { RecurringPayment } from '~/graphql/__generated__/types';
-import RecurringPaymentItem from '../Household/RecurringPaymentItem';
+import { RecurringPaymentItem } from '../Household/RecurringPaymentItem';
 import { Container } from '../UI/Container';
 import { Error } from '../UI/Error';
 import { Link } from '../UI/Link';
@@ -11,7 +11,7 @@ interface Props {
   t: TFunction;
 }
 
-export default function RecurringPaymentOverview({ recurringPayments, t }: Props) {
+export function RecurringPaymentOverview({ recurringPayments, t }: Props) {
   const router = useRouter();
 
   return (

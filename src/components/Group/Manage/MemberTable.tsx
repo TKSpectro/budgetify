@@ -61,7 +61,7 @@ const REMOVE_GROUP_MEMBER_MUTATION = gql`
   }
 `;
 
-export default function MemberTable({ members, owners, currentUserId, refetch, t }: Props) {
+export function MemberTable({ members, owners, currentUserId, refetch, t }: Props) {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
