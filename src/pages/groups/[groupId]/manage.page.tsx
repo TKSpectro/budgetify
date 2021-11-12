@@ -1,26 +1,20 @@
-import { gql, useMutation, useQuery } from '@apollo/client';
-import { TrashIcon } from '@heroicons/react/outline';
+import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/dist/shared/lib/head';
 import { useRouter } from 'next/router';
-import { InviteManager } from '~/components/Group/Manage/InviteManager';
+import { DeleteGroupModal } from '~/components/Group/Manage/DeleteGroupModal';
+import { InviteTable } from '~/components/Group/Manage/InviteTable';
 import MemberTable from '~/components/Group/Manage/MemberTable';
+import { NewInviteButton } from '~/components/Group/Manage/NewInviteButton';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Loader } from '~/components/UI/Loader';
-import { Modal } from '~/components/UI/Modal';
 import { Invite, User } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
-import { urlOneUp } from '~/utils/helper';
-import {
-  DeleteGroupMutation,
-  DeleteGroupMutationVariables,
-  GroupManageQuery,
-  GroupManageQueryVariables,
-} from './__generated__/manage.page.generated';
+import { GroupManageQuery, GroupManageQueryVariables } from './__generated__/manage.page.generated';
 
 const QUERY = gql`
   query groupManageQuery($id: String!) {
@@ -49,14 +43,6 @@ const QUERY = gql`
   }
 `;
 
-const DELETE_GROUP_MUTATION = gql`
-  mutation deleteGroupMutation($id: String!) {
-    deleteGroup(groupId: $id) {
-      id
-    }
-  }
-`;
-
 export default function ManageGroup() {
   const { t } = useTranslation(['groupsIdManage', 'common']);
 
@@ -70,16 +56,6 @@ export default function ManageGroup() {
     },
   );
 
-  const [deleteGroup, { error: deleteGroupError }] = useMutation<
-    DeleteGroupMutation,
-    DeleteGroupMutationVariables
-  >(DELETE_GROUP_MUTATION, {
-    onCompleted: () => {
-      router.push(urlOneUp(urlOneUp(router.asPath)));
-    },
-    onError: () => {},
-  });
-
   const currentUserId = data?.me?.id || '';
   const group = data?.group;
 
@@ -89,18 +65,13 @@ export default function ManageGroup() {
 
   const isOwner = !!owners.find((x) => x?.id === currentUserId);
 
-  const deleteGroupHandler = () => {
-    deleteGroup({ variables: { id: groupId } });
-  };
-
   return (
     <>
       <Head>
-        <title>{t('common:groups') + ' ' + t('common:manage')} | budgetify</title>
+        <title>{t('manageGroupName', { groupName: group?.name })} | budgetify</title>
       </Head>
-      <Container title={group?.name + ' ' + t('common:manage')}>
+      <Container title={t('manageGroupName', { groupName: group?.name })}>
         <Error title={t('common:loadingError')} error={error} />
-        <Error title={t('deleteGroupError')} error={deleteGroupError} />
 
         <MemberTable
           members={members as User[]}
@@ -112,28 +83,23 @@ export default function ManageGroup() {
 
         <Loader loading={loading} />
 
-        {isOwner && (
-          <Modal
-            buttonText={t('deleteGroup')}
-            buttonClassName="bg-red-500 mt-4"
-            description={t('deleteGroupDescription')}
-            onSubmit={deleteGroupHandler}
-            title={t('deleteGroup')}
-            submitText={<TrashIcon className="w-6 h-6" />}
-          />
-        )}
+        {/* // If the user is an owner of the group show a delete modal for the group */}
+        {isOwner && <DeleteGroupModal groupId={groupId} t={t} />}
       </Container>
 
-      <Container title={t('common:invites') + ' ' + t('common:manage')}>
+      <Container
+        title={t('manageInvites')}
+        action={isOwner ? <NewInviteButton groupId={groupId} t={t} refetch={refetch} /> : null}
+      >
         <Loader loading={loading} />
-
-        <InviteManager invites={invites as Invite[]} isOwner={isOwner} refetch={refetch} t={t} />
 
         <Error
           title={t('noPendingInvites')}
           error={!loading && invites.length === 0 ? '' : undefined}
           className="mt-4"
         />
+
+        <InviteTable invites={invites as Invite[]} isOwner={isOwner} refetch={refetch} t={t} />
       </Container>
     </>
   );

@@ -17,6 +17,9 @@
   "removeOwnerRoleDescription": "Are you sure that you want to remove {{name}} from the owners?",
   "removeOwnerError": "Could not remove owner.",
 
+  "manageInvites": "Manage Invites",
+  "manageGroupName": "Manage {{groupName}}",
+
   "removeInvite": "Remove Invite",
   "removeInviteDescription": "Are you sure that you want to remove the invite to {{email}}?",
   "removeInviteError": "Could not remove invite.",

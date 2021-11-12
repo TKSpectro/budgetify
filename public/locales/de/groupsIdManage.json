@@ -17,6 +17,9 @@
   "removeOwnerRoleDescription": "Sicher, dass {{name}} als Besitzer entfernt werden soll?",
   "removeOwnerError": "Konnte Besitzer nicht ändern.",
 
+  "manageInvites": "Einladungen verwalten",
+  "manageGroupName": "{{groupName}} verwalten",
+
   "removeInvite": "Einladung entfernen",
   "removeInviteDescription": "Sicher, dass die Einladung an {{email}} entfernt werden soll?",
   "removeInviteError": "Konnte Einladung nicht entfernen.",
