@@ -83,8 +83,6 @@ export default function Household() {
   const payments = household?.payments || [];
   const sumOfAllPayments = household?.sumOfAllPayments || 0;
 
-  const isOwner = household?.owner?.id === data?.me?.id;
-
   return (
     <>
       <Head>
@@ -97,16 +95,18 @@ export default function Household() {
       {!error && household && (
         <>
           <Container>
-            <div className="relative text-6xl text-brand-500">
-              {household.name}
-              <span className="hidden md:block absolute right-4 top-6 text-base">
+            <div className="md:flex items-center justify-between">
+              <div className="text-4xl lg:text-5xl text-brand-500 mb-4 md:mb-0">
+                {household.name}
+              </div>
+              <div className="">
                 <Link href={router.asPath + '/manage'} asButton>
                   {t('common:manage')}
                 </Link>
-              </span>
+              </div>
             </div>
 
-            <div className="mt-4 text-4xl">
+            <div className="mt-4 md:mt-2 text-2xl lg:text-3xl">
               {t('totalBalance') + ' ' + roundOn2(sumOfAllPayments) + '€'}
             </div>
           </Container>
