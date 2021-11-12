@@ -4,8 +4,9 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import InviteManager from '~/components/Household/Manage/InviteManager';
+import InviteList from '~/components/Household/Manage/InviteList';
 import MemberTable from '~/components/Household/Manage/MemberTable';
+import { NewInviteModal } from '~/components/Household/Manage/NewInviteModal';
 import { Container } from '~/components/UI/Container';
 import { Error } from '~/components/UI/Error';
 import { Loader } from '~/components/UI/Loader';
@@ -69,16 +70,18 @@ export default function ManageHousehold() {
   const currentUserId = data?.me?.id || '';
 
   const household = data?.household;
-  const owner = household?.owner || {};
+  const owner = household?.owner;
   const members = household?.members || [];
   const invites = household?.invites || [];
+
+  const isOwner = currentUserId === owner?.id;
 
   return (
     <>
       <Head>
         <title>{t('common:manage') + ' ' + household?.name + ' | ' + 'budgetify'}</title>
       </Head>
-      <Container>
+      <Container title={t('manageHouseholdName', { householdName: household?.name })}>
         <Error title={t('common:loadingError')} error={error} />
         <Error
           title={t('householdNotFoundError')}
@@ -96,21 +99,23 @@ export default function ManageHousehold() {
         <Loader loading={loading} />
       </Container>
 
-      <Container>
+      <Container
+        title={t('manageInvites')}
+        action={isOwner ? <NewInviteModal t={t} refetch={refetch} /> : null}
+      >
         <Loader loading={loading} />
-
-        <InviteManager
-          invites={invites as Invite[]}
-          owner={owner as User}
-          currentUserId={currentUserId}
-          refetch={refetch}
-          t={t}
-        />
-
         <Error
           title={t('noPendingInvites')}
           error={!loading && invites.length === 0 ? '' : undefined}
           className="mt-4"
+        />
+
+        <InviteList
+          invites={invites as Invite[]}
+          isOwner={isOwner}
+          currentUserId={currentUserId}
+          refetch={refetch}
+          t={t}
         />
       </Container>
     </>

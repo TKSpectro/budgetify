@@ -1,29 +1,15 @@
 import { gql, useMutation } from '@apollo/client';
 import { TrashIcon } from '@heroicons/react/outline';
 import { TFunction } from 'next-i18next';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { Button } from '~/components/UI/Button';
 import { Error } from '~/components/UI/Error';
-import { Input } from '~/components/UI/Input';
 import { ManagedModal } from '~/components/UI/ManagedModal';
-import { ModalForm } from '~/components/UI/ModalForm';
-import { Invite, User } from '~/graphql/__generated__/types';
+import { Invite } from '~/graphql/__generated__/types';
 import {
-  CreateInviteMutation,
-  CreateInviteMutationVariables,
   DeleteInviteMutation,
   DeleteInviteMutationVariables,
-} from './__generated__/InviteManager.generated';
-
-const CREATE_INVITE_MUTATION = gql`
-  mutation createInviteMutation($invitedEmail: String!, $householdId: String!) {
-    createInvite(invitedEmail: $invitedEmail, householdId: $householdId) {
-      id
-    }
-  }
-`;
+} from './__generated__/InviteList.generated';
 
 const DELETE_INVITE_MUTATION = gql`
   mutation deleteInviteMutation($id: String!) {
@@ -33,31 +19,13 @@ const DELETE_INVITE_MUTATION = gql`
 
 interface Props {
   invites: Invite[];
-  owner: User;
+  isOwner: boolean;
   currentUserId: string;
   refetch: () => void;
   t: TFunction;
 }
 
-export default function InviteManager({ invites, owner, currentUserId, refetch, t }: Props) {
-  const router = useRouter();
-  const form = useForm<CreateInviteMutationVariables>({
-    defaultValues: { householdId: router.query.householdId as string, invitedEmail: '' },
-  });
-
-  const [createInviteMutation, { error: createInviteError }] = useMutation<
-    CreateInviteMutation,
-    CreateInviteMutationVariables
-  >(CREATE_INVITE_MUTATION, {
-    variables: {
-      ...form.getValues(),
-    },
-    onCompleted: () => {
-      refetch();
-    },
-    onError: () => {},
-  });
-
+export default function InviteList({ invites, isOwner, currentUserId, refetch, t }: Props) {
   const [deleteInviteMutation, { error: deleteInviteError }] = useMutation<
     DeleteInviteMutation,
     DeleteInviteMutationVariables
@@ -67,10 +35,6 @@ export default function InviteManager({ invites, owner, currentUserId, refetch, 
     },
     onError: () => {},
   });
-
-  const onSubmitHandler = () => {
-    createInviteMutation();
-  };
 
   const [removeModalInvite, setRemoveModalInvite] = useState<Invite>();
   const [showRemoveModal, setShowRemoveModal] = useState(false);
@@ -85,7 +49,6 @@ export default function InviteManager({ invites, owner, currentUserId, refetch, 
 
   return (
     <>
-      <Error title={t('createInviteError')} error={createInviteError} className="mt-4" />
       <Error title={t('removeInviteError')} error={deleteInviteError} className="mt-4" />
 
       <ManagedModal
@@ -99,21 +62,6 @@ export default function InviteManager({ invites, owner, currentUserId, refetch, 
         setShowModal={setShowRemoveModal}
       />
 
-      {currentUserId === owner?.id && (
-        <ModalForm
-          title={t('newInvite')}
-          onSubmit={onSubmitHandler}
-          submitText={t('sendInvite')}
-          buttonText={t('newInvite')}
-          form={form}
-        >
-          <Input
-            label={t('common:email')}
-            type="email"
-            {...form.register('invitedEmail', { required: true })}
-          />
-        </ModalForm>
-      )}
       {invites.length !== 0 ? (
         <table className="table-fixed w-full break-words mt-4">
           <thead>
@@ -144,7 +92,7 @@ export default function InviteManager({ invites, owner, currentUserId, refetch, 
                     <div className="sm:hidden text-left font-medium text-gray-800 dark:text-gray-100">
                       {t('common:actions')}
                       <span className="float-right font-normal">
-                        {currentUserId === owner?.id && (
+                        {isOwner && (
                           <Button onClick={() => onRemoveClickHandler(invite)}>
                             <TrashIcon className="w-4 h-4 sm:w-6 sm:h-6" />
                           </Button>
@@ -158,7 +106,7 @@ export default function InviteManager({ invites, owner, currentUserId, refetch, 
                     </div>
                   </td>
                   <td className="py-4 hidden sm:table-cell">
-                    {currentUserId === owner?.id && (
+                    {isOwner && (
                       <Button onClick={() => onRemoveClickHandler(invite)}>
                         <TrashIcon className="w-6 h-6" />
                       </Button>

@@ -1,4 +1,6 @@
 {
+  "manageHouseholdName": "Manage {{householdName}}",
+  "manageInvites": "Manage Invites",
   "householdNotFoundError": "Could not find this household.",
   "invitesError": "Failed to load invites.",
   "invitesNotFoundError": "Could not find any invites.",

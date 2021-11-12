@@ -1,4 +1,6 @@
 {
+  "manageHouseholdName": "{{householdName}} verwalten",
+  "manageInvites": "Einladungen verwalten",
   "householdNotFoundError": "Haushalt wurde nicht gefunden.",
   "invitesError": "Einladungen konnten nicht geladen werden.",
   "invitesNotFoundError": "Keine Einladungen gefunden.",

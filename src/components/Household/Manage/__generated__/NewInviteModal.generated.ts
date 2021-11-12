@@ -7,10 +7,3 @@ export type CreateInviteMutationVariables = Types.Exact<{
 
 
 export type CreateInviteMutation = { __typename?: 'Mutation', createInvite: { __typename?: 'Invite', id: string } };
-
-export type DeleteInviteMutationVariables = Types.Exact<{
-  id: Types.Scalars['String'];
-}>;
-
-
-export type DeleteInviteMutation = { __typename?: 'Mutation', deleteInvite?: boolean | null | undefined };
