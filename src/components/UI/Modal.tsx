@@ -71,7 +71,7 @@ export function Modal({
               </div>
             </div>
             <div
-              className="opacity-50 fixed inset-0 z-30 bg-black"
+              className="opacity-80 fixed inset-0 z-30 bg-black"
               onClick={() => setShowModal(false)}
             ></div>
           </div>
