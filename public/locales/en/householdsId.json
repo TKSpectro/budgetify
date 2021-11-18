@@ -1,5 +1,5 @@
 {
-  "totalBalance": "Gesamt Balance",
+  "totalBalance": "Total Balance",
   "householdNotFoundError": "Could not find the requested household.",
   "paymentsNotFoundError": "Could not find any payments.",
   "allPayments": "All Payments",

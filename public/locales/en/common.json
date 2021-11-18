@@ -13,7 +13,7 @@
   "manage": "Manage",
   "name": "Name",
   "nameMessage": "Please input a name.",
-  "email": "Email",
+  "email": "E-Mail",
   "emailMessage": "Please input your email.",
   "password": "Password",
   "passwordMessage": "Please input your password.",
@@ -54,26 +54,21 @@
   "imprint": "Imprint",
   "loadingError": "Failed to load data.",
   "home": "Home",
-
   "//": "API ERRORS",
   "errorNotLoggedIn": "Not logged in.",
   "errorNotAuthorized": "Not authorized.",
   "errorTokenNotValid": "Token is not valid. Please login again.",
-
   "errorEmailOrPasswordWrong": "Email or password is wrong.",
   "errorEmailAlreadyExists": "There already exists an account with this email.",
   "errorPasswordsNotMatching": "Passwords did not match! Please try again.",
-
   "errorSoleOwnerOfHousehold": "You are the owner of {{householdCount}} households. Please go to each household and give another user the owner role. Those are {{households}}.",
   "errorNotAllowedPaymentCreation": "You are not allowed to create a payment in this household.",
   "errorNotAllowedRecurringPaymentCreation": "You are not allowed to create a recurring payment in this household.",
   "errorNotAllowedRecurringPaymentUpdating": "You are not allowed to change a recurring payment in this household.",
-
   "errorGroupNotFound": "Group could not be found.",
   "errorLeaveGroupSoleOwner": "Cant leave this group as you are the last owner. Please make sure someone else is a owner of the group.",
   "errorRemoveOwnerRoleNotAllowed": "Cant remove the owner role, because the group would then be without any owner.",
   "errorSoleOwnerOfGroup": "You are the owner of {{groupCount}} groups. Please go to each group and give another user the owner role. Those are {{groups}}.",
-
   "errorCreateInviteNotAllowedHousehold": "You are not allowed to create a new invite in this household.",
   "errorCreateInviteNotAllowedGroup": "You are not allowed to create a new invite in this group.",
   "errorNoInviteFound": "No invite found with this token.",

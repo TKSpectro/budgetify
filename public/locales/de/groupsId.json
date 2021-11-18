@@ -4,26 +4,21 @@
   "transactionsNotFoundError": "Keine Transaktionen gefunden.",
   "thresholdsNotFoundError": "Keine Schwellenwerte gefunden.",
   "memberBalancesNotFoundError": "Keine Balancen von Mitgliedern gefunden.",
-
   "showing": "Zeige",
   "to": "bis",
   "of": "von",
   "transactions": "Transaktionen",
-
   "newThreshold": "Neuer Schwellenwert",
   "createThreshold": "Erstelle Schwellenwert",
   "createThresholdError": "Konnte Schwellenwert nicht erstellen.",
-
   "updateThreshold": "Aktualisiere Schwellenwert",
   "updateThresholdError": "Konnte Schwellenwert nicht aktualisieren.",
-
   "removeThreshold": "Schwellenwert entfernen",
   "removeThresholdDescription": "Sicher, dass dieser Schwellenwert entfernt werden soll?",
   "removeThresholdError": "Konnte Schwellenwert nicht entfernen.",
-
   "newTransaction": "Neue Transaktion",
   "createTransaction": "Erstelle Transaktion",
-  "createTransactionDescription": "You can switch between topping up your account (account balance) and buying food / taking money out of the group balance",
+  "createTransactionDescription": "Du kannst zwischen Account aufladen und Essen kaufen / Geld rausnehmen wechseln",
   "createTransactionError": "Konnte Transaktion nicht erstellen.",
   "topUpBalance": "Balance aufladen",
   "boughtFood": "Essen gekauft",

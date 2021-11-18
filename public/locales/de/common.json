@@ -54,26 +54,21 @@
   "imprint": "Impressum",
   "loadingError": "Fehler beim Laden der Daten.",
   "home": "Startseite",
-
   "//": "API ERRORS",
   "errorNotLoggedIn": "Sie sind nicht eingeloggt.",
   "errorNotAuthorized": "Sie sind nicht authorisiert.",
   "errorTokenNotValid": "Token ist nicht gültig. Bitte loggen Sie sich erneut ein.",
-
   "errorEmailOrPasswordWrong": "Email oder Passwort falsch.",
   "errorEmailAlreadyExists": "Es existiert bereits ein Konto mit dieser Email-Adresse.",
   "errorPasswordsNotMatching": "Passwörter stimmen nicht überein! Bitte erneut versuchen.",
-
   "errorSoleOwnerOfHousehold": "Ihnen gehören {{householdCount}} Haushalte. Bitte gehen Sie zu diesen und geben Sie einem anderen Nutzer die Besitzer Rolle. Die betroffenen Haushalte sind {{households}}",
   "errorNotAllowedPaymentCreation": "Ihnen ist es nicht erlaubt Zahlungen in diesem Haushalt zu erstellen.",
   "errorNotAllowedRecurringPaymentCreation": "Ihnen ist es nicht erlaubt wiederkehrende Zahlungen in diesem Haushalt zu erstellen.",
   "errorNotAllowedRecurringPaymentUpdating": "Ihnen ist es nicht erlaubt wiederkehrende Zahlungen in diesem Haushalt zu verändern.",
-
   "errorGroupNotFound": "Gruppe konnte nicht gefunden werden.",
   "errorLeaveGroupSoleOwner": "Sie können diese Gruppe nicht verlassen, da Sie der letzte Besitzer sind. Bitte geben sie einem anderen Nutzer die Besitzer Rolle.",
   "errorRemoveOwnerRoleNotAllowed": "Sie können die Besitzer Rolle nicht entfernen, da die Gruppe ansonsten keine Besizer mehr hätte.",
   "errorSoleOwnerOfGroup": "Ihnen gehören {{groupCount}} Gruppen. Bitte gehen Sie zu diesen und geben Sie einem anderen Nutzer die Besitzer Rolle. Die betroffenen Gruppen sind {{groups}}",
-
   "errorCreateInviteNotAllowedHousehold": "Ihnen ist es nicht erlaubt eine Einladung für diesen Haushalt zu erstellen.",
   "errorCreateInviteNotAllowedGroup": "Ihnen ist es nicht erlaubt eine Einladung für diese Gruppe zu erstellen.",
   "errorNoInviteFound": "Keine Einladung zu den gesendeten Token gefunden.",
