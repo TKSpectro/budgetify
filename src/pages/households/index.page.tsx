@@ -1,26 +1,15 @@
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import { useForm } from 'react-hook-form';
-import { HouseholdList } from '~/components/Household/HouseholdList';
-import { Container } from '~/components/UI/Container';
-import { Error } from '~/components/UI/Error';
-import { Input } from '~/components/UI/Input';
-import { Loader } from '~/components/UI/Loader';
-import { ModalForm } from '~/components/UI/ModalForm';
+import { HouseholdContainer } from '~/components/Index/HouseholdContainer';
 import { Household } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { authenticatedRoute } from '~/utils/auth';
-import { uuidRegex } from '~/utils/helper';
-import { UseInviteTokenMutationVariables } from '../groups/__generated__/index.page.generated';
 import {
-  CreateHouseholdMutation,
-  CreateHouseholdMutationVariables,
   HouseholdListQuery,
   HouseholdListQueryVariables,
-  UseInviteTokenMutation,
 } from './__generated__/index.page.generated';
 
 const HOUSEHOLD_LIST_QUERY = gql`
@@ -55,47 +44,12 @@ const CREATE_HOUSEHOLD_MUTATION = gql`
 `;
 
 export default function Households() {
-  const { t } = useTranslation(['households', 'common']);
+  const { t } = useTranslation(['common', 'households']);
 
   const { data, loading, error, refetch } = useQuery<
     HouseholdListQuery,
     HouseholdListQueryVariables
   >(HOUSEHOLD_LIST_QUERY);
-  const form = useForm<UseInviteTokenMutationVariables>({ defaultValues: { token: '' } });
-  const createHouseholdForm = useForm<CreateHouseholdMutationVariables>({
-    defaultValues: { name: '' },
-  });
-
-  const [UseInviteMutation, { error: useInviteError }] = useMutation<
-    UseInviteTokenMutation,
-    UseInviteTokenMutationVariables
-  >(USE_INVITE_TOKEN_MUTATION, {
-    onCompleted: () => {
-      refetch();
-      form.reset();
-    },
-    onError: () => {
-      form.reset();
-    },
-  });
-
-  const [createHouseholdMutation, { error: createHouseholdError }] = useMutation<
-    CreateHouseholdMutation,
-    CreateHouseholdMutationVariables
-  >(CREATE_HOUSEHOLD_MUTATION, {
-    onCompleted: () => {
-      refetch();
-    },
-    onError: () => {},
-  });
-
-  const onSubmitHandler = () => {
-    UseInviteMutation({ variables: { token: form.getValues('token') } });
-  };
-
-  const createHouseholdSubmitHandler = () => {
-    createHouseholdMutation({ variables: { ...createHouseholdForm.getValues() } });
-  };
 
   const households = data?.households || [];
 
@@ -104,54 +58,14 @@ export default function Households() {
       <Head>
         <title>{t('common:households')} | budgetify</title>
       </Head>
-      <Container title={t('common:households')}>
-        <Error title={t('common:loadingError')} error={error} />
-        <Error title={t('useInviteError')} error={useInviteError} />
-        <Error title={t('createHouseholdError')} error={createHouseholdError} />
-        <Error
-          title={t('noHouseholdsFoundError')}
-          error={!loading && !error && households.length === 0 ? '' : undefined}
-        />
-        <Loader loading={loading} />
 
-        <div className="flex justify-between mb-4">
-          <ModalForm
-            form={form}
-            buttonText={t('useInvite')}
-            buttonClassName="mr-2"
-            title={t('useInvite')}
-            onSubmit={onSubmitHandler}
-            submitText={t('useInvite')}
-          >
-            <Input
-              label={t('common:token')}
-              {...form.register('token', {
-                required: { value: true, message: t('common:tokenRequiredMessage') },
-                minLength: { value: 30, message: t('common:tokenLengthMessage') },
-                pattern: { value: uuidRegex, message: t('common:tokenPatternMessage') },
-              })}
-            ></Input>
-          </ModalForm>
-
-          <ModalForm
-            form={createHouseholdForm}
-            buttonText={t('createHousehold')}
-            title={t('createHousehold')}
-            onSubmit={createHouseholdSubmitHandler}
-            submitText={t('createHousehold')}
-          >
-            <Input
-              label="Name"
-              {...createHouseholdForm.register('name', {
-                required: { value: true, message: t('householdRequiredMessage') },
-                minLength: { value: 2, message: t('householdLengthMessage') },
-              })}
-            ></Input>
-          </ModalForm>
-        </div>
-
-        <HouseholdList households={households as Household[]} t={t} />
-      </Container>
+      <HouseholdContainer
+        households={households as Household[]}
+        loading={loading}
+        error={error}
+        refetch={refetch}
+        t={t}
+      />
     </>
   );
 }
