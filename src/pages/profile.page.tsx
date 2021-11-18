@@ -144,7 +144,7 @@ export default function Profile() {
       <Head>
         <title>{t('profile:pageTitle')} | budgetify</title>
       </Head>
-      <Container>
+      <Container title={t('profile:pageTitle')}>
         <Error title={t('loadingError')} error={error} />
         <Error title={t('profile:deleteAccountError')} error={deleteUserError} />
         <Error title={t('profile:logoutError')} error={logoutError} />
@@ -154,7 +154,6 @@ export default function Profile() {
         {!loading && !error && data && (
           <>
             <div className="mb-4">
-              <div className="font-semibold text-xl">{t('profile:pageTitle')}</div>
               <div className="text-lg font-medium">{t('name')}</div>
               <div className="overflow-auto ml-2">{me?.name}</div>
               <div className="text-lg font-medium">{t('email')}</div>
