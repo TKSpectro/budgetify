@@ -222,20 +222,22 @@ export default function Profile() {
                     })}
                   ></Input>
 
-                  <label>
+                  <div className="py-1 px-2 text-md font-semibold flex mt-2">
                     {t('profile:receiveNotifications')}
-                    <Switch
-                      isLeft={!!updateUserForm.watch('receiveNotifications')}
-                      onClick={() =>
-                        updateUserForm.setValue(
-                          'receiveNotifications',
-                          !updateUserForm.getValues('receiveNotifications'),
-                        )
-                      }
-                      leftIcon={<XIcon className="w-4 h-4 " />}
-                      rightIcon={<CheckIcon className="w-4 h-4 text-brand-400" />}
-                    />
-                  </label>
+                    <div className="ml-2 self-center">
+                      <Switch
+                        isLeft={!!updateUserForm.watch('receiveNotifications')}
+                        onClick={() =>
+                          updateUserForm.setValue(
+                            'receiveNotifications',
+                            !updateUserForm.getValues('receiveNotifications'),
+                          )
+                        }
+                        leftIcon={<XIcon className="w-4 h-4" />}
+                        rightIcon={<CheckIcon className="w-4 h-4 text-brand-400" />}
+                      />
+                    </div>
+                  </div>
                 </ModalForm>
               </div>
 
