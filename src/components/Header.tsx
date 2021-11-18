@@ -126,8 +126,9 @@ export function Header() {
                 <HeaderLink href="/auth/signup">Signup</HeaderLink>
               </>
             )}
-
-            <ThemeSwitch />
+            <div className="md:ml-4">
+              <ThemeSwitch />
+            </div>
           </div>
         </div>
       </nav>
