@@ -48,7 +48,7 @@ export function Header() {
           brand && ' text-white  bg-brand-500 hover:bg-opacity-70 dark:hover:bg-opacity-80',
           !brand &&
             !logo &&
-            ' text-gray-600 hover:bg-gray-300 hover:bg-opacity-100 dark:hover:bg-gray-700 dark:hover:bg-opacity-100 ',
+            ' text-gray-600 dark:text-gray-200 hover:bg-gray-300 hover:bg-opacity-100 dark:hover:bg-gray-700 dark:hover:bg-opacity-100 ',
           logo && 'text-2xl text-brand-500 dark:text-brand-500 font-bold',
         )}
         onClick={() => {
@@ -92,56 +92,39 @@ export function Header() {
               hidden: navBarCollapsed === false,
             })}
           >
-            {!router.query.householdId && isLoggedIn && (
-              <>
-                <HeaderLink href={'/households'} brand>
-                  {t('households')}
-                </HeaderLink>
-                <HeaderLink href={'/groups'} brand>
-                  {t('groups')}
-                </HeaderLink>
-              </>
-            )}
             {router.query.householdId && (
               <>
-                <HeaderLink href={'/households/' + router.query.householdId} brand>
+                <HeaderLink href={'/households/' + router.query.householdId}>
                   {t('dashboard')}
                 </HeaderLink>
                 <HeaderLink
                   href={'/households/' + router.query.householdId + '/payments'}
-                  className="hidden xl:block text-gray-600 dark:text-gray-200"
+                  className="hidden xl:block"
                 >
                   {t('payments')}
                 </HeaderLink>
                 <HeaderLink
                   href={'/households/' + router.query.householdId + '/recurringPayments'}
-                  className="hidden xl:block text-gray-600 dark:text-gray-200"
+                  className="hidden xl:block"
                 >
                   {t('recurringPayments')}
                 </HeaderLink>
-                <HeaderLink href={'/households'} className="text-gray-600 dark:text-gray-200">
-                  {t('households')}
-                </HeaderLink>
-                <HeaderLink href={'/groups'} className="text-gray-600 dark:text-gray-200">
-                  {t('groups')}
-                </HeaderLink>
+                <div className="w-0.5 rounded-md bg-gray-500 dark:bg-gray-200 opacity-50"></div>
+              </>
+            )}
+
+            {isLoggedIn && (
+              <>
+                <HeaderLink href={'/'}>{t('home')}</HeaderLink>
+                <HeaderLink href="/profile">{t('profile')}</HeaderLink>
               </>
             )}
 
             {!isLoggedIn && (
-              <HeaderLink href="/auth/login" className="text-gray-600 dark:text-gray-200">
-                Login
-              </HeaderLink>
-            )}
-            {!isLoggedIn && (
-              <HeaderLink href="/auth/signup" className="text-gray-600 dark:text-gray-200">
-                Signup
-              </HeaderLink>
-            )}
-            {isLoggedIn && (
-              <HeaderLink href="/profile" className="text-gray-600 dark:text-gray-200">
-                {t('profile')}
-              </HeaderLink>
+              <>
+                <HeaderLink href="/auth/login">Login</HeaderLink>
+                <HeaderLink href="/auth/signup">Signup</HeaderLink>
+              </>
             )}
 
             <ThemeSwitch />
