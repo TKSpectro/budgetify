@@ -12,9 +12,9 @@ export function HouseholdList({ households, t }: Props) {
     <div>
       {households?.map((household) => {
         return (
-          <div key={household?.id} className="mb-4 last:mb-0">
+          <div key={household?.id} className="last:mb-0">
             <Link href={`/households/${household?.id}`} noUnderline>
-              <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 rounded-lg hover:cursor-pointer">
+              <div className="border-b-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 hover:cursor-pointer">
                 <div className="text-xl">
                   {household?.name}
                   <span className="float-right hidden sm:block">

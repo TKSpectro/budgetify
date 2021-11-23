@@ -1,4 +1,5 @@
 import { ApolloError, gql, useMutation } from '@apollo/client';
+import { PlusIcon } from '@heroicons/react/outline';
 import { TFunction } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 import { Household } from '~/graphql/__generated__/types';
@@ -79,38 +80,13 @@ export function HouseholdContainer({ households, loading, error, refetch, t }: P
   };
 
   return (
-    <Container title={t('households')}>
-      <Error
-        title={t('home:householdsNotFoundError')}
-        error={households.length === 0 ? '' : undefined}
-      />
-      <Error title={t('useInviteError')} error={useInviteError} />
-      <Error title={t('createHouseholdError')} error={createHouseholdError} />
-      <Error title={t('loadingError')} error={error} />
-      <Loader loading={loading} />
-
-      <div className="flex justify-between mb-4">
-        <ModalForm
-          form={form}
-          buttonText={t('households:useInvite')}
-          buttonClassName="mr-2"
-          title={t('households:useInvite')}
-          onSubmit={onSubmitHandler}
-          submitText={t('households:useInvite')}
-        >
-          <Input
-            label={t('common:token')}
-            {...form.register('token', {
-              required: { value: true, message: t('common:tokenRequiredMessage') },
-              minLength: { value: 30, message: t('common:tokenLengthMessage') },
-              pattern: { value: uuidRegex, message: t('common:tokenPatternMessage') },
-            })}
-          ></Input>
-        </ModalForm>
-
+    <Container
+      title={t('households')}
+      action={
         <ModalForm
           form={createHouseholdForm}
-          buttonText={t('households:createHousehold')}
+          buttonText={<PlusIcon className="w-6 h-6" />}
+          buttonSquare
           title={t('households:createHousehold')}
           onSubmit={createHouseholdSubmitHandler}
           submitText={t('households:createHousehold')}
@@ -123,9 +99,42 @@ export function HouseholdContainer({ households, loading, error, refetch, t }: P
             })}
           ></Input>
         </ModalForm>
-      </div>
+      }
+    >
+      <div className="min-h-[20rem] relative">
+        <div className="pb-16">
+          <Error
+            title={t('home:householdsNotFoundError')}
+            error={households.length === 0 ? '' : undefined}
+          />
+          <Error title={t('useInviteError')} error={useInviteError} />
+          <Error title={t('createHouseholdError')} error={createHouseholdError} />
+          <Error title={t('loadingError')} error={error} />
+          <Loader loading={loading} />
 
-      <HouseholdList households={households} t={t} />
+          <HouseholdList households={households} t={t} />
+        </div>
+        {/* // TODO: Maybe move to profile */}
+        <div className="absolute bottom-0 w-full">
+          <ModalForm
+            form={form}
+            buttonText={t('households:useInvite')}
+            buttonClassName=" w-full"
+            title={t('households:useInvite')}
+            onSubmit={onSubmitHandler}
+            submitText={t('households:useInvite')}
+          >
+            <Input
+              label={t('common:token')}
+              {...form.register('token', {
+                required: { value: true, message: t('common:tokenRequiredMessage') },
+                minLength: { value: 30, message: t('common:tokenLengthMessage') },
+                pattern: { value: uuidRegex, message: t('common:tokenPatternMessage') },
+              })}
+            ></Input>
+          </ModalForm>
+        </div>
+      </div>
     </Container>
   );
 }

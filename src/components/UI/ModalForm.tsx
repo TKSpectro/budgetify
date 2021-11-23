@@ -12,6 +12,7 @@ export interface Props<T> {
   onClick?: () => void;
   buttonText: string | React.ReactNode;
   buttonClassName?: string;
+  buttonSquare?: boolean;
   children: ReactNode;
   form: UseFormReturn<T>;
 }
@@ -22,6 +23,7 @@ export interface Props<T> {
  * @param title bigger text at the top
  * @param onClick a function which gets called when the modal open button gets clicked
  * @param buttonText the text of the button which will be show if the modal is hidden
+ * @param buttonSquare button is shown in a square, mainly used for icons
  * @param submitText the text shown on the submit button inside the modal
  * @param children should contain all the custom Input components inside the form
  * @param form an instance of a react-hook-form which will contain the state of the whole form
@@ -30,7 +32,8 @@ export function ModalForm<T>({
   title,
   onSubmit,
   onClick = () => {},
-  buttonText,
+  buttonText = false,
+  buttonSquare,
   submitText = buttonText,
   buttonClassName,
   children,
@@ -58,6 +61,7 @@ export function ModalForm<T>({
           onClick();
           setShowModal(true);
         }}
+        square={buttonSquare}
       >
         {buttonText}
       </Button>

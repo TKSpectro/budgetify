@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { GroupContainer } from '~/components/Index/GroupContainer';
 import { HouseholdContainer } from '~/components/Index/HouseholdContainer';
 import { Informations } from '~/components/Index/Informations';
+import { Logo } from '~/components/UI/Logo';
 import { Group, Household } from '~/graphql/__generated__/types';
 import { preloadQuery } from '~/utils/apollo';
 import { HomeQuery, HomeQueryVariables } from './__generated__/index.page.generated';
@@ -56,22 +57,30 @@ export default function Home() {
       </Head>
 
       {loggedIn ? (
-        <div className="grid grid-cols-1 xl:grid-cols-2 lg:gap-x-8 overflow-auto md:mx-16 md:px-4">
-          <HouseholdContainer
-            households={households as Household[]}
-            loading={loading}
-            error={error}
-            refetch={refetch}
-            t={t}
-          />
-          <GroupContainer
-            groups={groups as Group[]}
-            loading={loading}
-            error={error}
-            refetch={refetch}
-            t={t}
-          />
-        </div>
+        <>
+          <div className="text-center mt-8 mb-8">
+            <Logo width="400" height="84" />
+            <h2 className="font-semibold text-gray-700 text-lg mt-4">
+              Improve your financial management
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 xl:grid-cols-2 lg:gap-x-8 overflow-auto sm:mx-8 lg:mx-64 md:px-4 border-t-2 border-gray-400">
+            <HouseholdContainer
+              households={households as Household[]}
+              loading={loading}
+              error={error}
+              refetch={refetch}
+              t={t}
+            />
+            <GroupContainer
+              groups={groups as Group[]}
+              loading={loading}
+              error={error}
+              refetch={refetch}
+              t={t}
+            />
+          </div>
+        </>
       ) : (
         <Informations />
       )}

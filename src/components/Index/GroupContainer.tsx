@@ -1,4 +1,5 @@
 import { ApolloError, gql, useMutation } from '@apollo/client';
+import { PlusIcon } from '@heroicons/react/outline';
 import { TFunction } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 import { Group } from '~/graphql/__generated__/types';
@@ -84,35 +85,13 @@ export function GroupContainer({ groups, loading, error, refetch, t }: Props) {
     });
   };
   return (
-    <Container title={t('groups')}>
-      <Error title={t('home:groupsNotFoundError')} error={groups.length === 0 ? '' : undefined} />
-      <Error title={t('groups:useInviteError')} error={inviteError} />
-      <Error title={t('groups:createGroupError')} error={createGroupError} />
-      <Error title={t('common:loadingError')} error={error} />
-
-      <Loader loading={loading} />
-
-      <div className="flex justify-between mb-4">
-        <ModalForm
-          form={form}
-          buttonText={t('groups:useInvite')}
-          buttonClassName="mr-2"
-          title={t('groups:useInvite')}
-          onSubmit={useInviteSubmitHandler}
-        >
-          <Input
-            label={t('common:token')}
-            {...form.register('token', {
-              required: { value: true, message: t('common:tokenRequiredMessage') },
-              minLength: { value: 30, message: t('common:tokenLengthMessage') },
-              pattern: { value: uuidRegex, message: t('common:tokenPatternMessage') },
-            })}
-          ></Input>
-        </ModalForm>
-
+    <Container
+      title={t('groups')}
+      action={
         <ModalForm
           form={createGroupForm}
-          buttonText={t('groups:createGroup')}
+          buttonText={<PlusIcon className="w-6 h-6" />}
+          buttonSquare
           title={t('groups:createGroup')}
           onSubmit={createGroupSubmitHandler}
         >
@@ -124,20 +103,52 @@ export function GroupContainer({ groups, loading, error, refetch, t }: Props) {
             })}
           ></Input>
         </ModalForm>
-      </div>
+      }
+    >
+      <div className="min-h-[20rem] relative">
+        <div className="pb-16">
+          <Error
+            title={t('home:groupsNotFoundError')}
+            error={groups.length === 0 ? '' : undefined}
+          />
+          <Error title={t('groups:useInviteError')} error={inviteError} />
+          <Error title={t('groups:createGroupError')} error={createGroupError} />
+          <Error title={t('common:loadingError')} error={error} />
 
-      {groups?.map((group) => {
-        return (
-          <div key={group?.id} className="mb-4 last:mb-0">
-            <Link href={`/groups/${group?.id}`} noUnderline>
-              <div className="border-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 rounded-lg hover:cursor-pointer">
-                <div className="text-xl">{group?.name}</div>
-                <span className="font-light">{t('groups:currentValue') + group?.value}€</span>
+          <Loader loading={loading} />
+
+          {groups?.map((group) => {
+            return (
+              <div key={group?.id} className="last:mb-0">
+                <Link href={`/groups/${group?.id}`} noUnderline>
+                  <div className="border-b-2 border-gray-500 dark:bg-gray-800 dark:border-brand-500 p-3 hover:cursor-pointer">
+                    <div className="text-xl">{group?.name}</div>
+                    <span className="font-light">{t('groups:currentValue') + group?.value}€</span>
+                  </div>
+                </Link>
               </div>
-            </Link>
-          </div>
-        );
-      })}
+            );
+          })}
+        </div>
+        <div className="absolute bottom-0 w-full">
+          <ModalForm
+            form={form}
+            buttonText={t('groups:useInvite')}
+            buttonClassName="w-full absolute bottom-0"
+            title={t('groups:useInvite')}
+            onSubmit={useInviteSubmitHandler}
+          >
+            <Input
+              label={t('common:token')}
+              {...form.register('token', {
+                required: { value: true, message: t('common:tokenRequiredMessage') },
+                minLength: { value: 30, message: t('common:tokenLengthMessage') },
+                pattern: { value: uuidRegex, message: t('common:tokenPatternMessage') },
+              })}
+            ></Input>
+          </ModalForm>
+        </div>
+      </div>
     </Container>
   );
 }
