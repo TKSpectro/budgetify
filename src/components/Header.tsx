@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { ComponentProps, useState } from 'react';
 import { ThemeSwitch } from './ThemeSwitch';
 import { Button } from './UI/Button';
+import { Logo } from './UI/Logo';
 import { MeQuery, MeQueryVariables } from './__generated__/Header.generated';
 
 interface Props extends ComponentProps<'a'> {
@@ -42,7 +43,7 @@ export function Header() {
     const content = (
       <a
         className={clsx(
-          'p-2 md:px-4 my-1 md:my-0 md:mx-2 text-center rounded transition-colors duration-300 ',
+          'text-center rounded transition-colors duration-300',
           className,
           !noBorder && ' border md:border-0 border-brand-500',
           brand && ' text-white  bg-brand-500 hover:bg-opacity-70 dark:hover:bg-opacity-80',
@@ -50,6 +51,7 @@ export function Header() {
             !logo &&
             ' text-gray-600 dark:text-gray-200 hover:bg-gray-300 hover:bg-opacity-100 dark:hover:bg-gray-700 dark:hover:bg-opacity-100 ',
           logo && 'text-2xl text-brand-500 dark:text-brand-500 font-bold',
+          !logo && 'p-2 md:px-4 my-1 md:my-0 md:mx-2',
         )}
         onClick={() => {
           if (window.screen.width < 768) toggleNavbarHandler();
@@ -75,8 +77,8 @@ export function Header() {
       <nav className="py-2 md:py-4">
         <div className="container px-4 mx-auto md:flex md:items-center">
           <div className="flex justify-between items-center">
-            <HeaderLink href="/" logo noBorder>
-              budgetify
+            <HeaderLink href="/" logo noBorder className=" flex ">
+              <Logo width="160" height="37" />
             </HeaderLink>
 
             <div className="md:hidden">
