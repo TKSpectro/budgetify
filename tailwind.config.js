@@ -15,6 +15,9 @@ module.exports = {
       ringColor: {
         DEFAULT: brandColor['500'],
       },
+      fontFamily: {
+        lato: ['Lato', 'sans-serif'],
+      },
     },
   },
   variants: {},
