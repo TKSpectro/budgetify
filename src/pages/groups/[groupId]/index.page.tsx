@@ -1,4 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
+import { CogIcon } from '@heroicons/react/outline';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -104,8 +105,8 @@ export default function GroupPage() {
       <Container
         title={group?.name}
         action={
-          <Link href={`${router.asPath}/manage`} asButton>
-            {t('common:manage')}
+          <Link href={router.asPath + '/manage'}>
+            <CogIcon className="w-8 h-8" />
           </Link>
         }
       >

@@ -1,4 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
+import { CogIcon } from '@heroicons/react/outline';
 import { endOfMonth, startOfDay, startOfMonth } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -94,18 +95,15 @@ export default function Household() {
 
       {!error && household && (
         <>
-          <Container>
-            <div className="md:flex items-center justify-between">
-              <div className="text-4xl lg:text-5xl text-brand-500 mb-4 md:mb-0">
-                {household.name}
-              </div>
-              <div className="">
-                <Link href={router.asPath + '/manage'} asButton>
-                  {t('common:manage')}
-                </Link>
-              </div>
-            </div>
-
+          <Container
+            title={household?.name}
+            titleClassName="text-4xl lg:text-5xl text-brand-500 mb-4 md:mb-0"
+            action={
+              <Link href={router.asPath + '/manage'}>
+                <CogIcon className="w-8 h-8" />
+              </Link>
+            }
+          >
             <div className="mt-4 md:mt-2 text-2xl lg:text-3xl">
               {t('totalBalance') + ' ' + roundOn2(sumOfAllPayments) + '€'}
             </div>
