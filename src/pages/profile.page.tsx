@@ -1,5 +1,5 @@
 import { gql, useApolloClient, useMutation, useQuery } from '@apollo/client';
-import { CheckIcon, XIcon } from '@heroicons/react/outline';
+import { CheckIcon, LogoutIcon, XIcon } from '@heroicons/react/outline';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -144,7 +144,14 @@ export default function Profile() {
       <Head>
         <title>{t('profile:pageTitle')} | budgetify</title>
       </Head>
-      <Container title={t('profile:pageTitle')}>
+      <Container
+        title={t('profile:pageTitle')}
+        action={
+          <Button onClick={logoutHandler} square>
+            <LogoutIcon className="w-6 h-6" />
+          </Button>
+        }
+      >
         <Error title={t('loadingError')} error={error} />
         <Error title={t('profile:deleteAccountError')} error={deleteUserError} />
         <Error title={t('profile:logoutError')} error={logoutError} />
@@ -177,10 +184,6 @@ export default function Profile() {
             </div>
 
             <div>
-              <Button onClick={logoutHandler} className="mr-4 mt-2 w-full sm:w-auto">
-                {t('logout')}
-              </Button>
-
               <div className="flex sm:block">
                 <Button
                   className="mt-2 mr-4 flex-grow sm:w-auto"
