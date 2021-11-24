@@ -1,142 +1,116 @@
 import {
-  AnnotationIcon,
-  GlobeAltIcon,
-  LightningBoltIcon,
-  ScaleIcon,
-} from '@heroicons/react/outline';
+  AdjustmentsIcon,
+  BellIcon,
+  BriefcaseIcon,
+  ChartPieIcon,
+  ChatAlt2Icon,
+  ExternalLinkIcon,
+  UserAddIcon,
+  ViewGridIcon,
+} from '@heroicons/react/solid';
+import { TFunction } from 'next-i18next';
+import { Container } from '../UI/Container';
 
-export function Informations() {
+interface Props {
+  t: TFunction;
+}
+
+export function Informations({ t }: Props) {
   const householdFeatures = [
     {
-      name: 'Quick Overview',
-      description:
-        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-      icon: GlobeAltIcon,
+      name: t('home:household1Title'),
+      description: t('home:household1Description'),
+      icon: ViewGridIcon,
     },
     {
-      name: 'Easy to use',
-      description:
-        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-      icon: ScaleIcon,
+      name: t('home:household2Title'),
+      description: t('home:household2Description'),
+      icon: ChartPieIcon,
     },
     {
-      name: 'Graphs',
-      description:
-        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-      icon: LightningBoltIcon,
+      name: t('home:household3Title'),
+      description: t('home:household3Description'),
+      icon: BriefcaseIcon,
     },
     {
-      name: 'Easy Management',
-      description:
-        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-      icon: AnnotationIcon,
+      name: t('home:household4Title'),
+      description: t('home:household4Description'),
+      icon: ChatAlt2Icon,
     },
   ];
 
   const groupFeatures = [
     {
-      name: 'Quick setup',
-      description:
-        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-      icon: LightningBoltIcon,
+      name: t('home:group1Title'),
+      description: t('home:group1Description'),
+      icon: AdjustmentsIcon,
     },
     {
-      name: 'Invite system',
-      description:
-        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-      icon: GlobeAltIcon,
+      name: t('home:group2Title'),
+      description: t('home:group2Description'),
+      icon: ExternalLinkIcon,
     },
     {
-      name: 'Transfers are instant',
-      description:
-        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-      icon: ScaleIcon,
+      name: t('home:group3Title'),
+      description: t('home:group3Description'),
+      icon: UserAddIcon,
     },
     {
-      name: 'Mobile notifications',
-      description:
-        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-      icon: AnnotationIcon,
+      name: t('home:group4Title'),
+      description: t('home:group4Description'),
+      icon: BellIcon,
     },
   ];
+
   return (
     <>
-      <div className="w-full text-center mt-16">
-        <div className="font-bold text-6xl lg:text-8xl text-brand-500">budgetify</div>
-        <div className="font-semibold text-2xl mt-8">Improve your financial management</div>
-      </div>
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:text-center">
-            <h2 className="text-base text-brand-500 font-semibold tracking-wide uppercase">
-              Households
-            </h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-              Managing money made easy
-            </p>
-            <p className="mt-4 max-w-2xl text-xl text-gray-500 dark:text-gray-400 lg:mx-auto">
-              Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam voluptatum
-              cupiditate veritatis in accusamus quisquam.
-            </p>
-          </div>
+      <div className="grid grid-cols-1 xl:grid-cols-2 lg:gap-x-8 overflow-auto sm:mx-8 lg:mx-[28rem] md:px-4 border-t-2 border-gray-400">
+        <Container title={t('common:households')}>
+          <>
+            <p className="text-center font-semibold">{t('home:householdText')}</p>
 
-          <div className="mt-10">
-            <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+            <dl className="mt-4">
               {householdFeatures.map((feature) => (
-                <div key={feature.name} className="relative">
+                <div key={feature.name} className="relative mb-4">
                   <dt>
-                    <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-brand-500 text-white">
-                      <feature.icon className="h-6 w-6" aria-hidden="true" />
+                    <div className="absolute flex items-center justify-center mt-1 h-8 w-8 text-brand-500">
+                      <feature.icon className="h-8 w-8" aria-hidden="true" />
                     </div>
-                    <p className="ml-16 text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                    <p className="ml-12 text-base leading-6 font-medium text-gray-900 dark:text-white">
                       {feature.name}
                     </p>
                   </dt>
-                  <dd className="mt-2 ml-16 text-base text-gray-500 dark:text-gray-400">
+                  <dd className="mt-1 ml-12 text-sm text-gray-500 dark:text-gray-400">
                     {feature.description}
                   </dd>
                 </div>
               ))}
             </dl>
-          </div>
-        </div>
-      </div>
+          </>
+        </Container>
+        <Container title={t('common:groups')}>
+          <>
+            <p className="text-center font-semibold">{t('home:groupText')}</p>
 
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:text-center">
-            <h2 className="text-base text-brand-500 font-semibold tracking-wide uppercase">
-              Groups
-            </h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-              Moneypools for all your vacations and group activities
-            </p>
-            <p className="mt-4 max-w-2xl text-xl text-gray-500 dark:text-gray-400 lg:mx-auto">
-              Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam voluptatum
-              cupiditate veritatis in accusamus quisquam.
-            </p>
-          </div>
-
-          <div className="mt-10">
-            <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+            <dl className="mt-4">
               {groupFeatures.map((feature) => (
-                <div key={feature.name} className="relative">
+                <div key={feature.name} className="relative mb-4">
                   <dt>
-                    <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-brand-500 text-white">
-                      <feature.icon className="h-6 w-6" aria-hidden="true" />
+                    <div className="absolute flex items-center justify-center mt-1 h-8 w-8 text-brand-500 dark:text-white">
+                      <feature.icon className="h-8 w-8" aria-hidden="true" />
                     </div>
-                    <p className="ml-16 text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                    <p className="ml-12 text-base leading-6 font-medium text-gray-900 dark:text-white">
                       {feature.name}
                     </p>
                   </dt>
-                  <dd className="mt-2 ml-16 text-base text-gray-500 dark:text-gray-400">
+                  <dd className="mt-1 ml-12 text-sm text-gray-500 dark:text-gray-400">
                     {feature.description}
                   </dd>
                 </div>
               ))}
             </dl>
-          </div>
-        </div>
+          </>
+        </Container>
       </div>
     </>
   );

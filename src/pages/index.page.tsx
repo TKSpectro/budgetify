@@ -1,7 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Head from 'next/head';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { GroupContainer } from '~/components/Index/GroupContainer';
@@ -52,37 +51,32 @@ export default function Home() {
 
   return (
     <div>
-      <Head>
-        <title>budgetify</title>
-      </Head>
+      <div className="text-center mt-8 mb-8">
+        <Logo width="400" height="84" />
+        <h2 className="font-semibold text-gray-700 dark:text-gray-200 text-lg mt-4">
+          Improve your financial management
+        </h2>
+      </div>
 
       {loggedIn ? (
-        <>
-          <div className="text-center mt-8 mb-8">
-            <Logo width="400" height="84" />
-            <h2 className="font-semibold text-gray-700 text-lg mt-4">
-              Improve your financial management
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 xl:grid-cols-2 lg:gap-x-8 overflow-auto sm:mx-8 lg:mx-64 md:px-4 border-t-2 border-gray-400">
-            <HouseholdContainer
-              households={households as Household[]}
-              loading={loading}
-              error={error}
-              refetch={refetch}
-              t={t}
-            />
-            <GroupContainer
-              groups={groups as Group[]}
-              loading={loading}
-              error={error}
-              refetch={refetch}
-              t={t}
-            />
-          </div>
-        </>
+        <div className="grid grid-cols-1 xl:grid-cols-2 lg:gap-x-8 overflow-auto sm:mx-8 lg:mx-64 md:px-4 border-t-2 border-gray-400">
+          <HouseholdContainer
+            households={households as Household[]}
+            loading={loading}
+            error={error}
+            refetch={refetch}
+            t={t}
+          />
+          <GroupContainer
+            groups={groups as Group[]}
+            loading={loading}
+            error={error}
+            refetch={refetch}
+            t={t}
+          />
+        </div>
       ) : (
-        <Informations />
+        <Informations t={t} />
       )}
     </div>
   );
