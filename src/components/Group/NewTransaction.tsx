@@ -1,6 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
-import { CheckIcon, MinusIcon, PlusIcon, XIcon } from '@heroicons/react/outline';
-import clsx from 'clsx';
+import { PlusIcon } from '@heroicons/react/outline';
 import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -9,7 +8,6 @@ import { TransactionType, User } from '~/graphql/__generated__/types';
 import { Error } from '../UI/Error';
 import { Input } from '../UI/Input';
 import { ModalForm } from '../UI/ModalForm';
-import { Switch } from '../UI/Switch';
 import { UserMultiSelect } from './UserMultiselect';
 import {
   CreateGroupTransactionMutation,
@@ -111,19 +109,30 @@ export function NewTransaction({ members, refetch, t }: Props) {
         description={t('createTransactionDescription')}
         onSubmit={onSubmitHandler}
       >
-        <label>
-          <span className={clsx(formStateIsCashout && 'text-gray-400')}>{t('topUpBalance')}</span> |
-          <span className={clsx(!formStateIsCashout && 'text-gray-400')}>
-            {' '}
-            {t('takeOutMoney')}/{t('boughtFood')}
-          </span>
-          <Switch
-            isLeft={formStateIsCashout}
-            onClick={() => setFormStateIsCashout(!formStateIsCashout)}
-            leftIcon={<PlusIcon className="w-4 h-4 " />}
-            rightIcon={<MinusIcon className="w-4 h-4 text-brand-400" />}
-          />
-        </label>
+        <div className="flex mb-2">
+          <label className="flex mr-4">
+            <input
+              type="radio"
+              name="mode"
+              checked={!formStateIsCashout}
+              onClick={() => setFormStateIsCashout(false)}
+              className="self-center"
+            />
+            <p className="ml-1">{t('topUpBalance')}</p>
+          </label>
+          <label className="flex">
+            <input
+              type="radio"
+              name="mode"
+              checked={formStateIsCashout}
+              onClick={() => setFormStateIsCashout(true)}
+              className="self-center"
+            />
+            <p className="ml-1">
+              {t('takeOutMoney')} | {t('boughtFood')}
+            </p>
+          </label>
+        </div>
 
         <Input
           label={t('common:name')}
@@ -134,23 +143,29 @@ export function NewTransaction({ members, refetch, t }: Props) {
         />
 
         {formStateIsCashout && (
-          <div className="mt-2">
-            <label>
-              <span className={clsx(formStateIsBuyingFood && 'text-gray-400')}>
-                {t('takeOutMoney')}
-              </span>{' '}
-              |
-              <span className={clsx(!formStateIsBuyingFood && 'text-gray-400')}>
-                {' '}
-                {t('boughtFood')}
-              </span>
-              <Switch
-                isLeft={formStateIsBuyingFood}
-                onClick={() => setFormStateIsBuyingFood(!formStateIsBuyingFood)}
-                leftIcon={<XIcon className="w-4 h-4 " />}
-                rightIcon={<CheckIcon className="w-4 h-4 text-brand-400" />}
-              />
-            </label>
+          <div className="mt-4 mb-2">
+            <div className="flex ">
+              <label className="flex mr-4">
+                <input
+                  type="radio"
+                  name="payMode"
+                  checked={!formStateIsBuyingFood}
+                  onClick={() => setFormStateIsBuyingFood(false)}
+                  className="self-center"
+                />
+                <p className="ml-1">{t('takeOutMoney')}</p>
+              </label>
+              <label className="flex">
+                <input
+                  type="radio"
+                  name="payMode"
+                  checked={formStateIsBuyingFood}
+                  onClick={() => setFormStateIsBuyingFood(true)}
+                  className="self-center"
+                />
+                <p className="ml-1"> {t('boughtFood')}</p>
+              </label>
+            </div>
           </div>
         )}
 
@@ -166,15 +181,15 @@ export function NewTransaction({ members, refetch, t }: Props) {
         />
 
         {formStateIsCashout && formStateIsBuyingFood && (
-          <div className="mt-2">
-            <label>
-              {t('allGroupMembers')}
-              <Switch
-                isLeft={formAllGroupMembers}
+          <div className="flex mt-4">
+            <label className="flex">
+              <input
+                type="checkbox"
+                className="self-center"
+                checked={formAllGroupMembers}
                 onClick={() => setFormAllGroupMembers(!formAllGroupMembers)}
-                leftIcon={<XIcon className="w-4 h-4 " />}
-                rightIcon={<CheckIcon className="w-4 h-4 text-brand-400" />}
               />
+              <p className="ml-1">{t('allGroupMembers')}</p>
             </label>
           </div>
         )}
