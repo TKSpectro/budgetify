@@ -16,7 +16,7 @@ export function Container({ title, titleClassName, action, children }: Props) {
   return (
     <div className="relative w-full mx-auto mb-4 sm:mt-8 p-6 sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl sm:rounded-xl shadow-lg bg-white dark:bg-gray-800 ">
       {(title || action) && (
-        <div className="lg:flex items-center justify-between mb-4">
+        <div className="flex flex-wrap items-center justify-between mb-4">
           {title && (
             <h1
               className={clsx(
@@ -27,7 +27,7 @@ export function Container({ title, titleClassName, action, children }: Props) {
               {title}
             </h1>
           )}
-          <div className="mt-4 lg:mt-0">{action}</div>
+          <div>{action}</div>
         </div>
       )}
       {children}
