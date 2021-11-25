@@ -97,7 +97,7 @@ export default function Household() {
         <>
           <Container
             title={household?.name}
-            titleClassName="text-4xl lg:text-5xl text-brand-500 mb-4 md:mb-0"
+            titleClassName="text-4xl lg:text-5xl text-brand-500"
             action={
               <Link href={router.asPath + '/manage'}>
                 <CogIcon className="w-8 h-8" />
