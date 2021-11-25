@@ -1,4 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
+import { PlusIcon } from '@heroicons/react/outline';
 import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -80,7 +81,8 @@ export function NewPayment({ categories, refetch, t }: Props) {
         form={form}
         onSubmit={onNewPaymentSubmit}
         title={t('newPayment')}
-        buttonText={t('newPayment')}
+        buttonText={<PlusIcon className="w-6 h-6" />}
+        buttonSquare
       >
         <div className="grid gap-4">
           <Input

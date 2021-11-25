@@ -1,4 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
+import { PlusIcon } from '@heroicons/react/outline';
 import { TFunction } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -91,7 +92,8 @@ export function NewRecurringPayment({ categories, refetch, t }: Props) {
         form={form}
         onSubmit={onSubmit}
         title={t('createRecurringPayment')}
-        buttonText={t('createRecurringPayment')}
+        buttonText={<PlusIcon className="w-6 h-6" />}
+        buttonSquare
       >
         <Input
           label={t('common:name')}
