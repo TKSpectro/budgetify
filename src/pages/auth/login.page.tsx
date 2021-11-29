@@ -1,4 +1,5 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
+import { AtSymbolIcon, LockClosedIcon } from '@heroicons/react/outline';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -70,6 +71,7 @@ export default function Login() {
             {...loginForm.register('email', {
               required: { value: true, message: t('emailMessage') },
             })}
+            icon={<AtSymbolIcon className="w-6 h-6" />}
           />
 
           <Input
@@ -79,6 +81,7 @@ export default function Login() {
             {...loginForm.register('password', {
               required: { value: true, message: t('passwordMessage') },
             })}
+            icon={<LockClosedIcon className="w-6 h-6" />}
           />
 
           <Button type="submit">{t('login')}</Button>
