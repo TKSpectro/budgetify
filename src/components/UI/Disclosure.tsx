@@ -22,7 +22,7 @@ export function Disclosure({ text, overflowText, showOpen, className, children }
 
   return (
     <>
-      <div className={'hover:cursor-pointer ' + className} onClick={() => setIsOpen(!isOpen)}>
+      <div className={clsx('hover:cursor-pointer ', className)} onClick={() => setIsOpen(!isOpen)}>
         {text}
         {overflowText && (
           <>
