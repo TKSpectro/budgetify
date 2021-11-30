@@ -24,7 +24,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
           <div className="absolute inset-y-0 pl-2 left-0 flex items-center pointer-events-none">
             {icon}
 
-            <div className="ml-1.5 w-[1px] h-full bg-gray-800"></div>
+            <div className="ml-1.5 w-[1px] h-full bg-opacity-50 bg-gray-800"></div>
           </div>
         )}
 
