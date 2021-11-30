@@ -3,7 +3,7 @@ import { ComponentProps, forwardRef, ReactNode } from 'react';
 import { InputError } from './Form';
 
 interface Props extends ComponentProps<'input'> {
-  label: string;
+  label?: string;
   className?: string;
   icon?: ReactNode;
 }
@@ -15,6 +15,23 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
   { label, type = 'text', className, icon, ...props },
   ref,
 ) {
+  if (type == 'radio' || type == 'checkbox') {
+    return (
+      <>
+        <input
+          className={clsx(
+            'bg-white text-brand-500 focus:border-brand-500 focus:ring-transparent self-center',
+          )}
+          type={type}
+          ref={ref}
+          {...props}
+        />
+
+        <InputError name={props.name} />
+      </>
+    );
+  }
+
   return (
     <label className={className}>
       <div className="py-1 px-2 text-md font-semibold ">{label}</div>

@@ -111,22 +111,20 @@ export function NewTransaction({ members, refetch, t }: Props) {
       >
         <div className="flex mb-2">
           <label className="flex mr-4">
-            <input
+            <Input
               type="radio"
               name="mode"
               checked={!formStateIsCashout}
               onClick={() => setFormStateIsCashout(false)}
-              className="self-center"
             />
             <p className="ml-1">{t('topUpBalance')}</p>
           </label>
           <label className="flex">
-            <input
+            <Input
               type="radio"
               name="mode"
               checked={formStateIsCashout}
               onClick={() => setFormStateIsCashout(true)}
-              className="self-center"
             />
             <p className="ml-1">
               {t('takeOutMoney')} | {t('boughtFood')}
@@ -146,22 +144,20 @@ export function NewTransaction({ members, refetch, t }: Props) {
           <div className="mt-4 mb-2">
             <div className="flex ">
               <label className="flex mr-4">
-                <input
+                <Input
                   type="radio"
                   name="payMode"
                   checked={!formStateIsBuyingFood}
                   onClick={() => setFormStateIsBuyingFood(false)}
-                  className="self-center"
                 />
                 <p className="ml-1">{t('takeOutMoney')}</p>
               </label>
               <label className="flex">
-                <input
+                <Input
                   type="radio"
                   name="payMode"
                   checked={formStateIsBuyingFood}
                   onClick={() => setFormStateIsBuyingFood(true)}
-                  className="self-center"
                 />
                 <p className="ml-1"> {t('boughtFood')}</p>
               </label>
@@ -183,9 +179,8 @@ export function NewTransaction({ members, refetch, t }: Props) {
         {formStateIsCashout && formStateIsBuyingFood && (
           <div className="flex mt-4">
             <label className="flex">
-              <input
+              <Input
                 type="checkbox"
-                className="self-center"
                 checked={formAllGroupMembers}
                 onClick={() => setFormAllGroupMembers(!formAllGroupMembers)}
               />
