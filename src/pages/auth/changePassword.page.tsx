@@ -54,7 +54,7 @@ export default function ChangePassword() {
       <Head>
         <title>{t('auth:changePassword')} | budgetify</title>
       </Head>
-      <Container title={t('auth:changePassword')}>
+      <Container title={t('auth:changePassword')} small>
         <Error title={t('auth:changePasswordError')} error={error} />
 
         {router?.query?.isOTP && (
