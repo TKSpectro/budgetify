@@ -58,7 +58,7 @@ export default function Login() {
       <Head>
         <title>{t('login')} | budgetify</title>
       </Head>
-      <Container title={t('login')}>
+      <Container title={t('login')} small>
         <div className="mb-2">
           <Error title={t('auth:loginError')} error={error} />
         </div>
@@ -86,10 +86,11 @@ export default function Login() {
 
           <Button type="submit">{t('login')}</Button>
         </Form>
-
-        <Link href="/auth/signup">{t('auth:noAccountText')}</Link>
-        <div>
-          <Link href="/auth/forgotPassword">{t('auth:forgotPasswordText')}</Link>
+        <div className="mt-2">
+          <Link href="/auth/signup">{t('auth:noAccountText')}</Link>
+          <div>
+            <Link href="/auth/forgotPassword">{t('auth:forgotPasswordText')}</Link>
+          </div>
         </div>
       </Container>
     </>

@@ -48,7 +48,7 @@ export default function ForgotPassword() {
       <Head>
         <title>{t('auth:forgotPassword')} | budgetify</title>
       </Head>
-      <Container title={t('auth:recoverPassword')}>
+      <Container title={t('auth:recoverPassword')} small>
         <Error title="Failed to request one-time-password." error={error} />
 
         <div className="font-medium text-md mb-2">{t('auth:recoverPasswordText')}</div>

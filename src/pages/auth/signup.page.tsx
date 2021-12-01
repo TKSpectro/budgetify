@@ -61,7 +61,7 @@ export default function Signup() {
       <Head>
         <title>{t('signup')} | budgetify</title>
       </Head>
-      <Container title={t('signup')}>
+      <Container title={t('signup')} small>
         <div className="mb-2">
           <Error title={t('auth:signupError')} error={error} />
         </div>
@@ -113,7 +113,9 @@ export default function Signup() {
           <Button type="submit">{t('signup')}</Button>
         </Form>
 
-        <Link href="/auth/login">{t('auth:alreadyHaveAccountText')}</Link>
+        <div className="mt-2">
+          <Link href="/auth/login">{t('auth:alreadyHaveAccountText')}</Link>
+        </div>
       </Container>
     </>
   );
