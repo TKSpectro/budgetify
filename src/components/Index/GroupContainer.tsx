@@ -104,6 +104,7 @@ export function GroupContainer({ groups, loading, error, refetch, t }: Props) {
           ></Input>
         </ModalForm>
       }
+      style={{ height: 'fit-content' }}
     >
       <div className="min-h-[20rem] relative">
         <div className="pb-16">

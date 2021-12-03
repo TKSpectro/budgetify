@@ -100,6 +100,7 @@ export function HouseholdContainer({ households, loading, error, refetch, t }: P
           ></Input>
         </ModalForm>
       }
+      style={{ height: 'fit-content' }}
     >
       <div className="min-h-[20rem] relative">
         <div className="pb-16">
