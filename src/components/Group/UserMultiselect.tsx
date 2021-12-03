@@ -76,6 +76,7 @@ export const UserMultiSelect = forwardRef<HTMLFormControlsCollection, Props>(
                       <div className="flex-1">
                         <input
                           placeholder=""
+                          disabled
                           className="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-gray-800"
                         />
                       </div>
