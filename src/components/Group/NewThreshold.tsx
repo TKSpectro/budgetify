@@ -76,7 +76,7 @@ export function NewThreshold({ refetch, t }: Props) {
         <Input
           label={t('common:value')}
           type="number"
-          step="any"
+          step="0.01"
           {...formCreateThreshold.register('value', {
             required: { value: true, message: t('common:valueMessage') },
             valueAsNumber: true,

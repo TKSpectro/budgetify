@@ -105,6 +105,7 @@ export function NewRecurringPayment({ categories, refetch, t }: Props) {
         <Input
           label={t('common:value')}
           type="number"
+          step="0.01"
           {...form.register('value', {
             required: { value: true, message: t('common:valueMessage') },
 

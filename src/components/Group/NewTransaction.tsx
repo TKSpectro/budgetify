@@ -168,7 +168,7 @@ export function NewTransaction({ members, refetch, t }: Props) {
         <Input
           label={t('common:value')}
           type="number"
-          step="any"
+          step="0.01"
           {...formCreateGroupTransaction.register('value', {
             required: { value: true, message: t('common:valueMessage') },
             min: { value: 0, message: t('valueMustBePositive') },

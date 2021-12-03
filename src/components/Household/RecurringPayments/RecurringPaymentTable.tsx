@@ -124,6 +124,7 @@ export function RecurringPaymentTable({ recurringPayments, categories, refetch, 
         <Input
           label={t('common:value')}
           type="number"
+          step="0.01"
           {...updateRecPaymentForm.register('value', {
             required: { value: true, message: t('common:valueMessage') },
             valueAsNumber: true,
