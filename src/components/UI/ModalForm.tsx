@@ -68,7 +68,7 @@ export function ModalForm<T>({
       {showModal && (
         <>
           <div className="text-left justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-            <div className="relative w-auto my-6 mx-auto max-w-sm md:max-w-lg z-40">
+            <div className="relative w-auto my-6 mx-auto max-w-sm md:max-w-lg z-40 sm:min-w-[26rem]">
               {/*content*/}
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white dark:bg-gray-900 outline-none focus:outline-none">
                 {/*header*/}
