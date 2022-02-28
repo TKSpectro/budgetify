@@ -67,7 +67,7 @@ export const Household = objectType({
             take: args.limit || undefined,
           });
 
-        if (args.calcBeforeStartDate) {
+        if (args.calcBeforeStartDate && payments.length > 0) {
           const beforePayments = await prisma.household
             .findUnique({ where: { id: source.id || undefined } })
             .payments({
